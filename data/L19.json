@@ -2,7 +2,18 @@
   "id": "L19",
   "title": "Software Testing in Practice",
   "subtitle": "From a production horror story to a working testing strategy: test types, TDD, coverage, CI gating, and progressive delivery techniques.",
-  "contentMarkdown": "## Software Testing in Practice\n\n### 1. Why Bother? A Case Study\n\n**The scenario:** an HR Portal was developed on a low-code/customisable platform (SharePoint), with a customisable data structure and workflows. It had no local development environment, extremely slow deployment, painful release cycles, and unhappy users.\n\n**Why it got so bad:**\n- Issues were only caught in production \u2014 never earlier.\n- Business logic was heavily coupled to the platform, making it hard to isolate and change safely.\n- The development environment was extremely inefficient (no fast local loop).\n- It was hard to work as a team \u2014 changes collided.\n- There was a **negative compounding effect**: each new problem made the next change riskier and slower.\n\n**Lessons:**\n- Your reputation is affected by the quality of the software you release.\n- The hard part of software engineering isn't writing the first version \u2014 it's **ensuring software keeps working correctly as it changes over time.**\n- More automated tests would have caught this earlier.\n\n**How automated tests would have helped:**\n- Issues get caught early in the development process, not in production.\n- Writing tests **forces you to abstract out external dependencies and isolate logic** (untestable code is usually a sign of tangled coupling).\n- Testing changes in a local development environment is much faster than testing in production.\n- Tests catch when one team member's changes interfere with and break another's code.\n- Testing has a **positive compounding effect** \u2014 the inverse of the horror story's negative one: good tests make each subsequent change safer and faster, not riskier and slower.\n\n### 2. Testing Attitude\n\n- Your attitude towards testing determines its value.\n- Good tests lead to **acceleration**, not overhead \u2014 a test suite is a fast feedback mechanism.\n- It helps you refactor and abstract dependencies in your code correctly.\n- It makes sure a growing codebase remains maintainable.\n- **Tests should not be an afterthought \u2014 they are development,** not something bolted on after \"the real work\" is done.\n\n### 3. Testing Concepts (the test types)\n\n- **Unit** \u2014 does this one piece of logic do what it claims?\n- **Integration** \u2014 do these pieces work together?\n- **Functional** \u2014 does this feature behave as intended?\n- **E2E (End-to-End)** \u2014 does the whole journey work, from the user's perspective?\n- **Load** \u2014 does it hold up when the users show up (i.e. under realistic/peak traffic)?\n\n### 4. Implementing Tests\n\n- Design code to be **testable** \u2014 testability is a design property, not something you retrofit for free.\n- **Name tests appropriately** \u2014 the name should immediately tell you what failed, without needing to read the test body.\n- Tests can serve as **self-documentation** of a system's intended behaviour \u2014 a well-named, well-written test tells a future reader what the code is supposed to do.\n\n### 5. Code Coverage\n\n- Code coverage is a metric showing **how much of your code is being exercised by tests.**\n- Tooling can show which lines of code are executed, and which branches are traversed, by the test suite.\n- An open question for any team: **what percentage of code must be covered** before a change is considered adequately tested? (There's no universal number \u2014 coverage is a signal, not a guarantee of correctness; 100% coverage does not mean zero bugs, and low coverage on critical logic is a red flag regardless of the overall percentage.)\n\n### 6. Test-Driven Development (TDD) \u2014 Red, Green, Refactor\n\n1. **Red** \u2014 write the test(s) first. They will fail, since the implementation doesn't exist yet.\n2. **Green** \u2014 implement just enough code to make the failing tests pass.\n3. **Refactor** \u2014 clean up the code (and/or the tests) now that you have passing tests as a safety net.\n\nA key benefit: **TDD eliminates premature optimisation** \u2014 you write the simplest code that satisfies the test, then improve it, rather than trying to design the \"perfect\" implementation upfront before you even know it behaves correctly.\n\n### 7. Testing Strategy\n\n**Continuous Integration:**\n- Tests should run on **every** code change.\n- Pull requests cannot succeed (cannot be merged) unless tests have passed.\n- This ensures teams can collaborate and deliver quality together \u2014 a shared, enforced quality gate rather than an individual discipline.\n\n**User Acceptance Testing (UAT):**\n- Not all testing can be automated \u2014 some features genuinely require human verification.\n- Humans can break things in unexpected ways. A really good manual tester is an extremely valuable team member, precisely because they find the paths automated tests didn't anticipate.\n- It's far better to catch an unexpected end-user action during testing than in production.\n\n### 8. Testing Strategy \u2014 Advanced\n\n- **Smoke tests** \u2014 a limited set of tests covering critical paths, used to quickly verify a deployment succeeded (i.e. \"did the basic things not catastrophically break\").\n- **Feature switches / dark features (feature flags)** \u2014 ship code to production without exposing it to users yet. This **decouples deployment from release** \u2014 the code can be deployed and verified safely, then \"released\" (turned on) independently, and rolled back instantly by flipping the flag rather than re-deploying.\n- **Canary releases** \u2014 roll a change out to a small subset of users/traffic first, to reduce risk and/or measure user reaction, before a full rollout.\n\n### 9. Key Takeaways\n\n- **Plan for testing** \u2014 have an explicit testing strategy, don't leave it implicit.\n- **Design for testability** \u2014 testable code is a design outcome, not an accident.\n- **Automated tests have a compounding effect** \u2014 good tests make future change safer and faster; poor/absent tests make future change riskier and slower (the horror story's negative compounding effect, inverted).\n- **Implement against tests** \u2014 write the test first (or alongside), and execute tests consistently (e.g. via CI on every change), not sporadically.\n",
+  "contentMarkdown": "## Software Testing in Practice\n\n### 1. Why Bother? A Case Study\n\n**The scenario:** an HR Portal was developed on a low-code/customisable platform (SharePoint), with a customisable data structure and workflows. It had no local development environment, extremely slow deployment, painful release cycles, and unhappy users.\n\n**Why it got so bad:**\n- Issues were only caught in production \u2014 never earlier.\n- Business logic was heavily coupled to the platform, making it hard to isolate and change safely.\n- The development environment was extremely inefficient (no fast local loop).\n- It was hard to work as a team \u2014 changes collided.\n- There was a **negative compounding effect**: each new problem made the next change riskier and slower.\n\n**Lessons:**\n- Your reputation is affected by the quality of the software you release.\n- The hard part of software engineering isn't writing the first version \u2014 it's **ensuring software keeps working correctly as it changes over time.**\n- More automated tests would have caught this earlier.\n\n**How automated tests would have helped:**\n- Issues get caught early in the development process, not in production.\n- Writing tests **forces you to abstract out external dependencies and isolate logic** (untestable code is usually a sign of tangled coupling).\n- Testing changes in a local development environment is much faster than testing in production.\n- Tests catch when one team member's changes interfere with and break another's code.\n- Testing has a **positive compounding effect** \u2014 the inverse of the horror story's negative one: good tests make each subsequent change safer and faster, not riskier and slower.\n\n```svg\n<svg viewBox=\"0 0 620 220\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"-apple-system,Segoe UI,sans-serif\">\n  <text x=\"150\" y=\"20\" text-anchor=\"middle\" fill=\"#f56363\" font-size=\"13\" font-weight=\"700\">Without tests (HR Portal)</text>\n  <polyline points=\"30,60 100,80 170,115 240,140 270,175\" fill=\"none\" stroke=\"#f56363\" stroke-width=\"3\"/>\n  <circle cx=\"30\" cy=\"60\" r=\"4\" fill=\"#f56363\"/><circle cx=\"270\" cy=\"175\" r=\"4\" fill=\"#f56363\"/>\n  <text x=\"30\" y=\"200\" fill=\"#9aa4b2\" font-size=\"11\">change 1</text>\n  <text x=\"230\" y=\"200\" fill=\"#9aa4b2\" font-size=\"11\">change 5</text>\n  <text x=\"150\" y=\"45\" text-anchor=\"middle\" fill=\"#626d7a\" font-size=\"11\">each change gets riskier & slower</text>\n\n  <line x1=\"330\" y1=\"20\" x2=\"330\" y2=\"200\" stroke=\"#262d37\" stroke-width=\"1\"/>\n\n  <text x=\"480\" y=\"20\" text-anchor=\"middle\" fill=\"#22c55e\" font-size=\"13\" font-weight=\"700\">With tests</text>\n  <polyline points=\"360,175 430,155 500,130 570,100 600,75\" fill=\"none\" stroke=\"#22c55e\" stroke-width=\"3\"/>\n  <circle cx=\"360\" cy=\"175\" r=\"4\" fill=\"#22c55e\"/><circle cx=\"600\" cy=\"75\" r=\"4\" fill=\"#22c55e\"/>\n  <text x=\"360\" y=\"200\" fill=\"#9aa4b2\" font-size=\"11\">change 1</text>\n  <text x=\"560\" y=\"200\" fill=\"#9aa4b2\" font-size=\"11\">change 5</text>\n  <text x=\"480\" y=\"45\" text-anchor=\"middle\" fill=\"#626d7a\" font-size=\"11\">each change gets safer & faster</text>\n</svg>\n<div class=\"diagram-caption\">The compounding effect: untested code gets harder to change over time; tested code gets easier</div>\n```\n\n### 2. Testing Attitude\n\n- Your attitude towards testing determines its value.\n- Good tests lead to **acceleration**, not overhead \u2014 a test suite is a fast feedback mechanism.\n- It helps you refactor and abstract dependencies in your code correctly.\n- It makes sure a growing codebase remains maintainable.\n- **Tests should not be an afterthought \u2014 they are development,** not something bolted on after \"the real work\" is done.\n\n### 3. Testing Concepts (the test types)\n\n- **Unit** \u2014 does this one piece of logic do what it claims?\n- **Integration** \u2014 do these pieces work together?\n- **Functional** \u2014 does this feature behave as intended?\n- **E2E (End-to-End)** \u2014 does the whole journey work, from the user's perspective?\n- **Load** \u2014 does it hold up when the users show up (i.e. under realistic/peak traffic)?\n\n> **Gap-fill \u2014 test doubles:** \"abstract out external dependencies and isolate logic\" (\u00a71) usually means replacing a real dependency with a **test double** in a unit test. The common vocabulary, worth knowing precisely: a **stub** returns a canned answer with no real logic; a **mock** is a stub that also verifies *how* it was called (e.g. \"was `save()` called exactly once?\"); a **fake** is a lightweight working implementation (e.g. an in-memory database) \u2014 real behaviour, just not production-grade. Testcontainers-style integration tests (used in the CI/CD material) deliberately avoid all three, using a *real* dependency instead.\n\n### 4. Implementing Tests\n\n- Design code to be **testable** \u2014 testability is a design property, not something you retrofit for free.\n- **Name tests appropriately** \u2014 the name should immediately tell you what failed, without needing to read the test body.\n- Tests can serve as **self-documentation** of a system's intended behaviour \u2014 a well-named, well-written test tells a future reader what the code is supposed to do.\n\n> **Gap-fill \u2014 the AAA pattern:** a common structure for writing a single, readable test is **Arrange, Act, Assert**: *Arrange* the inputs and test doubles, *Act* by calling the thing under test once, *Assert* the outcome. Keeping these three phases visually separate (even just with blank lines) makes a test easy to scan and directly supports the self-documentation goal above.\n\n### 5. Code Coverage\n\n- Code coverage is a metric showing **how much of your code is being exercised by tests.**\n- Tooling can show which lines of code are executed, and which branches are traversed, by the test suite.\n- An open question for any team: **what percentage of code must be covered** before a change is considered adequately tested? (There's no universal number \u2014 coverage is a signal, not a guarantee of correctness; 100% coverage does not mean zero bugs, and low coverage on critical logic is a red flag regardless of the overall percentage.)\n\n### 6. Test-Driven Development (TDD) \u2014 Red, Green, Refactor\n\n1. **Red** \u2014 write the test(s) first. They will fail, since the implementation doesn't exist yet.\n2. **Green** \u2014 implement just enough code to make the failing tests pass.\n3. **Refactor** \u2014 clean up the code (and/or the tests) now that you have passing tests as a safety net.\n\nA key benefit: **TDD eliminates premature optimisation** \u2014 you write the simplest code that satisfies the test, then improve it, rather than trying to design the \"perfect\" implementation upfront before you even know it behaves correctly.\n\n```svg\n<svg viewBox=\"0 0 360 320\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"-apple-system,Segoe UI,sans-serif\">\n  <defs>\n    <marker id=\"tdd-arrow\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\">\n      <path d=\"M0,0 L10,5 L0,10 z\" fill=\"#626d7a\"/>\n    </marker>\n  </defs>\n  <circle cx=\"180\" cy=\"90\" r=\"46\" fill=\"#12161b\" stroke=\"#f56363\" stroke-width=\"2.5\"/>\n  <text x=\"180\" y=\"85\" text-anchor=\"middle\" fill=\"#f56363\" font-size=\"15\" font-weight=\"700\">Red</text>\n  <text x=\"180\" y=\"103\" text-anchor=\"middle\" fill=\"#9aa4b2\" font-size=\"10\">write a failing test</text>\n\n  <circle cx=\"80\" cy=\"230\" r=\"46\" fill=\"#12161b\" stroke=\"#22c55e\" stroke-width=\"2.5\"/>\n  <text x=\"80\" y=\"225\" text-anchor=\"middle\" fill=\"#22c55e\" font-size=\"15\" font-weight=\"700\">Green</text>\n  <text x=\"80\" y=\"243\" text-anchor=\"middle\" fill=\"#9aa4b2\" font-size=\"10\">make it pass, simply</text>\n\n  <circle cx=\"280\" cy=\"230\" r=\"46\" fill=\"#12161b\" stroke=\"#4a90f8\" stroke-width=\"2.5\"/>\n  <text x=\"280\" y=\"225\" text-anchor=\"middle\" fill=\"#4a90f8\" font-size=\"15\" font-weight=\"700\">Refactor</text>\n  <text x=\"280\" y=\"243\" text-anchor=\"middle\" fill=\"#9aa4b2\" font-size=\"10\">clean up, safely</text>\n\n  <path d=\"M 150 120 A 130 130 0 0 0 95 195\" fill=\"none\" stroke=\"#626d7a\" stroke-width=\"2\" marker-end=\"url(#tdd-arrow)\"/>\n  <path d=\"M 125 235 A 155 155 0 0 0 235 235\" fill=\"none\" stroke=\"#626d7a\" stroke-width=\"2\" marker-end=\"url(#tdd-arrow)\"/>\n  <path d=\"M 265 195 A 130 130 0 0 0 210 120\" fill=\"none\" stroke=\"#626d7a\" stroke-width=\"2\" marker-end=\"url(#tdd-arrow)\"/>\n</svg>\n<div class=\"diagram-caption\">The TDD loop \u2014 Red, Green, Refactor, repeat for the next small piece of behaviour</div>\n```\n\n### 7. Testing Strategy\n\n**Continuous Integration:**\n- Tests should run on **every** code change.\n- Pull requests cannot succeed (cannot be merged) unless tests have passed.\n- This ensures teams can collaborate and deliver quality together \u2014 a shared, enforced quality gate rather than an individual discipline.\n\n**User Acceptance Testing (UAT):**\n- Not all testing can be automated \u2014 some features genuinely require human verification.\n- Humans can break things in unexpected ways. A really good manual tester is an extremely valuable team member, precisely because they find the paths automated tests didn't anticipate.\n- It's far better to catch an unexpected end-user action during testing than in production.\n\n### 8. Testing Strategy \u2014 Advanced\n\n- **Smoke tests** \u2014 a limited set of tests covering critical paths, used to quickly verify a deployment succeeded (i.e. \"did the basic things not catastrophically break\").\n- **Feature switches / dark features (feature flags)** \u2014 ship code to production without exposing it to users yet. This **decouples deployment from release** \u2014 the code can be deployed and verified safely, then \"released\" (turned on) independently, and rolled back instantly by flipping the flag rather than re-deploying.\n- **Canary releases** \u2014 roll a change out to a small subset of users/traffic first, to reduce risk and/or measure user reaction, before a full rollout.\n\n### 9. Key Takeaways\n\n- **Plan for testing** \u2014 have an explicit testing strategy, don't leave it implicit.\n- **Design for testability** \u2014 testable code is a design outcome, not an accident.\n- **Automated tests have a compounding effect** \u2014 good tests make future change safer and faster; poor/absent tests make future change riskier and slower (the horror story's negative compounding effect, inverted).\n- **Implement against tests** \u2014 write the test first (or alongside), and execute tests consistently (e.g. via CI on every change), not sporadically.\n",
+  "tldr": [
+    "Untested, coupled code has a **negative compounding effect**: each change gets riskier and slower. Tested code compounds positively.",
+    "Five test types answer five different questions: **Unit** (does this logic work?), **Integration** (do pieces work together?), **Functional** (does the feature behave?), **E2E** (does the journey work?), **Load** (does it hold up under traffic?).",
+    "**Test doubles**: a stub returns a canned answer; a mock also verifies *how* it was called; a fake is a lightweight real implementation (e.g. in-memory DB).",
+    "Testability is a **design property** \u2014 untestable code is a sign of tangled coupling, not a testing-tool failure.",
+    "**Coverage** measures what's *executed*, not what's *verified* \u2014 high coverage with weak assertions still ships bugs.",
+    "**TDD**: Red (write a failing test) \u2192 Green (simplest code to pass) \u2192 Refactor (clean up safely).",
+    "**CI gates merges** \u2014 PRs can't succeed unless tests pass; a check that isn't required will eventually be ignored.",
+    "Not everything can be automated \u2014 a good manual/UAT tester finds paths automated tests never anticipated.",
+    "**Smoke tests** verify a deployment; **feature flags** decouple deploy from release; **canary releases** roll out to a subset first."
+  ],
   "mcqs": [
     {
       "id": "m1",
@@ -305,6 +316,108 @@
       "id": "t12",
       "q": "Using test naming as self-documentation, rewrite the poorly-named test `test1()` \u2014 which checks that creating an order with a negative quantity throws a validation error \u2014 as a well-named test, and explain why the improved name better serves debugging.",
       "answer": "**Poorly named:**\n```js\ntest(\"test1\", () => {\n  expect(() => createOrder({ quantity: -1 })).toThrow();\n});\n```\n\n**Well named** (using a common `subject_condition_expectedResult` or plain-English style):\n```js\ntest(\"createOrder throws a validation error when quantity is negative\", () => {\n  expect(() => createOrder({ quantity: -1 })).toThrow(ValidationError);\n});\n```\n\n**Why this matters for debugging:** when this test fails in a CI run (perhaps months after it was written, and someone other than its original author is looking at the failure), the test runner's output typically shows only the **test name**, not necessarily the full test body, in a summary view \u2014 e.g. a CI dashboard listing \"\u274c createOrder throws a validation error when quantity is negative\" versus \"\u274c test1.\" The first tells the reader immediately, without opening the file, *exactly* what behaviour broke: order creation is no longer correctly rejecting negative quantities. The second tells them nothing \u2014 they have to go find the file, open it, read the implementation, and reconstruct what \"test1\" was even supposed to verify, which is pure wasted diagnostic time multiplied across every person who ever encounters this failure.\n\nThis is exactly the lecture's point that tests \"can serve as self-documentation of the behaviour of a system\" \u2014 a well-named test is simultaneously a piece of executable verification *and* a plain-English specification of one fact about how the system is supposed to behave, readable by anyone without needing to read the implementation."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "f1",
+      "term": "Unit Test",
+      "definition": "Does this one piece of logic do what it claims? Many, ms-fast, isolated."
+    },
+    {
+      "id": "f2",
+      "term": "Integration Test",
+      "definition": "Do these pieces work together? Real DB, real services, in-process."
+    },
+    {
+      "id": "f3",
+      "term": "E2E Test",
+      "definition": "Does the whole journey work, from the user's perspective? Few, slow, highest fidelity."
+    },
+    {
+      "id": "f4",
+      "term": "Load Test",
+      "definition": "Does the system hold up when the users actually show up (realistic/peak traffic)?"
+    },
+    {
+      "id": "f5",
+      "term": "Stub",
+      "definition": "A test double that returns a canned answer, with no real logic."
+    },
+    {
+      "id": "f6",
+      "term": "Mock",
+      "definition": "A stub that also verifies *how* it was called (e.g. was `save()` called exactly once?)."
+    },
+    {
+      "id": "f7",
+      "term": "Fake",
+      "definition": "A lightweight, working test double (e.g. an in-memory database) \u2014 real behaviour, not production-grade."
+    },
+    {
+      "id": "f8",
+      "term": "AAA Pattern",
+      "definition": "Arrange, Act, Assert \u2014 a common structure for writing one clear, readable test."
+    },
+    {
+      "id": "f9",
+      "term": "Testability",
+      "definition": "A design property of code, not something retrofitted for free \u2014 untestable code usually signals tangled coupling."
+    },
+    {
+      "id": "f10",
+      "term": "Code Coverage",
+      "definition": "A metric of how much code is *executed* by tests \u2014 a signal, not a guarantee of correctness."
+    },
+    {
+      "id": "f11",
+      "term": "TDD (Red-Green-Refactor)",
+      "definition": "Write a failing test (Red), write the simplest code to pass it (Green), then clean up safely (Refactor)."
+    },
+    {
+      "id": "f12",
+      "term": "Premature Optimisation",
+      "definition": "Designing the \"perfect\" implementation before you know it behaves correctly \u2014 TDD eliminates this by design."
+    },
+    {
+      "id": "f13",
+      "term": "Continuous Integration (CI)",
+      "definition": "Tests run on every code change; PRs cannot merge unless tests have passed."
+    },
+    {
+      "id": "f14",
+      "term": "User Acceptance Testing (UAT)",
+      "definition": "Human verification of features that can't be fully automated \u2014 humans break things in unexpected ways."
+    },
+    {
+      "id": "f15",
+      "term": "Smoke Test",
+      "definition": "A limited set of tests covering critical paths, used to quickly verify a deployment didn't catastrophically break."
+    },
+    {
+      "id": "f16",
+      "term": "Feature Flag (Dark Feature)",
+      "definition": "Ships code to production without exposing it to users \u2014 decouples deployment from release."
+    },
+    {
+      "id": "f17",
+      "term": "Canary Release",
+      "definition": "Rolls a change out to a small subset of users/traffic first, to reduce risk or measure reaction."
+    },
+    {
+      "id": "f18",
+      "term": "Positive Compounding Effect",
+      "definition": "Good tests make each subsequent change safer and faster \u2014 the inverse of the HR Portal's negative spiral."
+    },
+    {
+      "id": "f19",
+      "term": "Self-Documentation (via tests)",
+      "definition": "A well-named, well-written test tells a future reader what the code is supposed to do, without reading its body."
+    },
+    {
+      "id": "f20",
+      "term": "Ice-Cream Cone (anti-pattern)",
+      "definition": "A test suite with lots of E2E tests and few/no unit tests \u2014 slow, flaky CI (the inverse of a healthy pyramid)."
     }
   ]
 }

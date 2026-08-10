@@ -49,6 +49,43 @@ Because each service owns its own database (§2), a single ACID transaction span
 
 **Concrete example (echoing L22's Exercise A payment-gateway scenario):** an order-placement saga might be: (1) Order service creates the order in a "pending" state; (2) Payment service attempts to charge the customer; (3) if the charge fails, a compensating action fires — the Order service moves the order to "cancelled" rather than leaving it stuck in "pending" forever. This is the same *fault tolerance* tactic L22 covers (isolate the failing dependency, defer/compensate rather than silently losing the operation), applied specifically to a multi-service data-consistency problem.
 
+```svg
+<svg viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,sans-serif">
+  <defs>
+    <marker id="saga-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#626d7a"/>
+    </marker>
+  </defs>
+  <text x="150" y="20" text-anchor="middle" fill="#22c55e" font-size="12" font-weight="700">Choreography — no coordinator</text>
+  <rect x="30" y="40" width="80" height="40" rx="6" fill="#1a1f26" stroke="#22c55e"/>
+  <text x="70" y="64" text-anchor="middle" fill="#e8ecf1" font-size="10">Order</text>
+  <rect x="140" y="40" width="80" height="40" rx="6" fill="#1a1f26" stroke="#22c55e"/>
+  <text x="180" y="64" text-anchor="middle" fill="#e8ecf1" font-size="10">Payment</text>
+  <rect x="90" y="110" width="80" height="40" rx="6" fill="#1a1f26" stroke="#f56363"/>
+  <text x="130" y="134" text-anchor="middle" fill="#e8ecf1" font-size="10">Car (fails)</text>
+  <line x1="110" y1="60" x2="138" y2="60" stroke="#626d7a" stroke-width="1.5" marker-end="url(#saga-arrow)"/>
+  <text x="125" y="52" text-anchor="middle" fill="#626d7a" font-size="8">event</text>
+  <path d="M 175 82 Q 155 96 135 108" fill="none" stroke="#f56363" stroke-width="1.5" marker-end="url(#saga-arrow)"/>
+  <text x="240" y="140" fill="#9aa4b2" font-size="9">each service reacts to</text>
+  <text x="240" y="152" fill="#9aa4b2" font-size="9">events independently</text>
+
+  <text x="480" y="20" text-anchor="middle" fill="#4a90f8" font-size="12" font-weight="700">Orchestration — central coordinator</text>
+  <rect x="440" y="40" width="90" height="40" rx="6" fill="#12161b" stroke="#4a90f8" stroke-width="2"/>
+  <text x="485" y="64" text-anchor="middle" fill="#4a90f8" font-size="10" font-weight="700">Orchestrator</text>
+  <rect x="370" y="120" width="70" height="36" rx="6" fill="#1a1f26" stroke="#262d37"/>
+  <text x="405" y="142" text-anchor="middle" fill="#e8ecf1" font-size="9">Order</text>
+  <rect x="450" y="120" width="70" height="36" rx="6" fill="#1a1f26" stroke="#262d37"/>
+  <text x="485" y="142" text-anchor="middle" fill="#e8ecf1" font-size="9">Payment</text>
+  <rect x="530" y="120" width="70" height="36" rx="6" fill="#1a1f26" stroke="#f56363"/>
+  <text x="565" y="142" text-anchor="middle" fill="#e8ecf1" font-size="9">Car (fails)</text>
+  <line x1="460" y1="82" x2="410" y2="118" stroke="#4a90f8" stroke-width="1.5" marker-end="url(#saga-arrow)"/>
+  <line x1="485" y1="82" x2="485" y2="118" stroke="#4a90f8" stroke-width="1.5" marker-end="url(#saga-arrow)"/>
+  <line x1="500" y1="82" x2="555" y2="118" stroke="#4a90f8" stroke-width="1.5" marker-end="url(#saga-arrow)"/>
+  <text x="485" y="195" text-anchor="middle" fill="#9aa4b2" font-size="9">one service explicitly calls each step, in order</text>
+</svg>
+<div class="diagram-caption">Choreography: services react to each other's events with no central brain. Orchestration: one coordinator explicitly drives every step (and every compensation).</div>
+```
+
 ### 6. Resilience Patterns (Cross-Reference: L22's Tactics)
 
 These patterns exist specifically because of the **Eight Fallacies of Distributed Computing** (L22) — most directly fallacy #1, "the network is reliable," which is false, and a remote call to another microservice can fail, hang, or return slowly at any time.
@@ -62,6 +99,42 @@ These patterns exist specifically because of the **Eight Fallacies of Distribute
 | **Fallback** | Return a degraded-but-useful response when the primary path fails, instead of failing the whole request | L22's Netflix case study: "the page still renders, degraded" |
 
 **The connecting idea:** in a monolith, a function call either returns or the whole process crashes — there's no in-between. In microservices, a remote call has an entire spectrum of partial-failure modes (slow, down, flaky, returning garbage) that these patterns exist specifically to handle gracefully, rather than letting one failing service cascade into failing every service that depends on it (the "distributed monolith" risk from a different angle — cascading failure instead of coupled deployment).
+
+> **Gap-fill — the Circuit Breaker's three states:** a circuit breaker isn't just "on/off" — it's a small state machine, commonly tested as a diagram-labelling question. **Closed** = calls pass through normally; failures are counted. **Open** = too many failures tripped the breaker; calls fail immediately (fast-fail) without even attempting the network call, for a cooldown period. **Half-Open** = after the cooldown, a limited number of trial calls are let through to test whether the dependency has recovered — success closes the breaker again, failure re-opens it.
+
+```svg
+<svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,Segoe UI,sans-serif">
+  <defs>
+    <marker id="cb-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#9aa4b2"/>
+    </marker>
+  </defs>
+  <circle cx="90" cy="100" r="60" fill="#12161b" stroke="#22c55e" stroke-width="2.5"/>
+  <text x="90" y="95" text-anchor="middle" fill="#22c55e" font-size="14" font-weight="700">Closed</text>
+  <text x="90" y="113" text-anchor="middle" fill="#9aa4b2" font-size="9">calls pass through</text>
+
+  <circle cx="470" cy="100" r="60" fill="#12161b" stroke="#f56363" stroke-width="2.5"/>
+  <text x="470" y="95" text-anchor="middle" fill="#f56363" font-size="14" font-weight="700">Open</text>
+  <text x="470" y="113" text-anchor="middle" fill="#9aa4b2" font-size="9">fail fast, no call made</text>
+
+  <circle cx="280" cy="30" r="45" fill="#12161b" stroke="#f59e0b" stroke-width="2.5"/>
+  <text x="280" y="26" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700">Half-Open</text>
+  <text x="280" y="42" text-anchor="middle" fill="#9aa4b2" font-size="8">trial calls only</text>
+
+  <path d="M 145 90 Q 280 60 425 90" fill="none" stroke="#f56363" stroke-width="1.5" marker-end="url(#cb-arrow)"/>
+  <text x="280" y="70" text-anchor="middle" fill="#f56363" font-size="9">failure threshold hit</text>
+
+  <path d="M 250 65 Q 150 130 100 158" fill="none" stroke="#22c55e" stroke-width="1.5" marker-end="url(#cb-arrow)"/>
+  <text x="150" y="150" text-anchor="middle" fill="#22c55e" font-size="9">trial succeeds</text>
+
+  <path d="M 315 62 Q 400 130 445 158" fill="none" stroke="#f56363" stroke-width="1.5" marker-end="url(#cb-arrow)"/>
+  <text x="410" y="150" text-anchor="middle" fill="#f56363" font-size="9">trial fails</text>
+
+  <path d="M 425 130 Q 350 175 280 75" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#cb-arrow)"/>
+  <text x="330" y="180" text-anchor="middle" fill="#f59e0b" font-size="9">cooldown elapses</text>
+</svg>
+<div class="diagram-caption">The circuit breaker state machine — Closed → Open on repeated failure, Open → Half-Open after a cooldown, then back to Closed or Open based on the trial call</div>
+```
 
 ### 7. Observability in a Microservices System
 

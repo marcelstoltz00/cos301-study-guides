@@ -71,10 +71,25 @@
           code.push(lines[i]);
           i++;
         }
-        html += `<pre><code class="lang-${escapeHtml(lang || "text")}">${escapeHtml(
-          code.join("\n")
-        )}</code></pre>`;
+        if (lang === "svg") {
+          html += `<div class="diagram">${code.join("\n")}</div>`;
+        } else {
+          html += `<pre><code class="lang-${escapeHtml(lang || "text")}">${escapeHtml(
+            code.join("\n")
+          )}</code></pre>`;
+        }
         i++;
+        continue;
+      }
+
+      if (/^>\s?/.test(line)) {
+        flushPara();
+        const quote = [];
+        while (i < lines.length && /^>\s?/.test(lines[i])) {
+          quote.push(lines[i].replace(/^>\s?/, ""));
+          i++;
+        }
+        html += `<blockquote><p>${inline(quote.join(" "))}</p></blockquote>`;
         continue;
       }
 
@@ -183,6 +198,105 @@
   function renderContent(data) {
     const el = document.getElementById("content-body");
     if (el) el.innerHTML = renderMarkdown(data.contentMarkdown);
+  }
+
+  function renderTLDR(data) {
+    const el = document.getElementById("tldr-box");
+    if (!el || !data.tldr || !data.tldr.length) return;
+    el.innerHTML =
+      '<div class="tldr-box-header"><span class="tldr-badge">TL;DR</span><span class="label">If you remember nothing else from this lecture</span></div>' +
+      "<ul>" +
+      data.tldr.map((point) => `<li>${inline(point)}</li>`).join("") +
+      "</ul>";
+  }
+
+  /* ---------------- flashcards engine ---------------- */
+
+  function flashStorageKey(id) {
+    return `ct3-flash-${id}`;
+  }
+
+  function initFlashcards(data) {
+    if (!data.flashcards || !data.flashcards.length) return;
+    const key = flashStorageKey(data.id);
+    let state = storageGet(key) || { known: {}, order: null };
+    if (!state.order || state.order.length !== data.flashcards.length) {
+      state.order = shuffle(data.flashcards.map((c) => c.id));
+    }
+
+    const byId = {};
+    data.flashcards.forEach((c) => (byId[c.id] = c));
+
+    const grid = document.getElementById("flash-grid");
+    const counterEl = document.getElementById("flash-counter");
+    const total = data.flashcards.length;
+
+    function updateCounter() {
+      const n = Object.keys(state.known).filter((k) => state.known[k]).length;
+      counterEl.innerHTML = `<b>${n}</b> / ${total} marked known`;
+    }
+
+    function renderCard(id) {
+      const c = byId[id];
+      const card = document.createElement("div");
+      card.className = "flash-card" + (state.known[id] ? " known" : "");
+
+      const cardInner = document.createElement("div");
+      cardInner.className = "flash-card-inner";
+
+      const front = document.createElement("div");
+      front.className = "flash-face flash-front";
+      front.innerHTML = `<div class="flash-term">${inline(c.term)}</div><div class="flash-hint">click to reveal</div>`;
+
+      const back = document.createElement("div");
+      back.className = "flash-face flash-back";
+      const def = document.createElement("div");
+      def.className = "flash-def";
+      def.innerHTML = inline(c.definition);
+      back.appendChild(def);
+
+      const knowBtn = document.createElement("button");
+      knowBtn.className = "btn flash-know-btn";
+      knowBtn.textContent = state.known[id] ? "✓ Known" : "Mark known";
+      knowBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        state.known[id] = !state.known[id];
+        storageSet(key, state);
+        card.classList.toggle("known", !!state.known[id]);
+        knowBtn.textContent = state.known[id] ? "✓ Known" : "Mark known";
+        updateCounter();
+      });
+      back.appendChild(knowBtn);
+
+      cardInner.appendChild(front);
+      cardInner.appendChild(back);
+      card.appendChild(cardInner);
+
+      card.addEventListener("click", () => card.classList.toggle("flipped"));
+
+      return card;
+    }
+
+    function render() {
+      grid.innerHTML = "";
+      state.order.forEach((id) => grid.appendChild(renderCard(id)));
+      updateCounter();
+    }
+
+    document.getElementById("flash-shuffle").addEventListener("click", () => {
+      state.order = shuffle(state.order);
+      storageSet(key, state);
+      render();
+    });
+
+    document.getElementById("flash-reset").addEventListener("click", () => {
+      state.known = {};
+      storageSet(key, state);
+      render();
+    });
+
+    storageSet(key, state);
+    render();
   }
 
   /* ---------------- MCQ engine ---------------- */
@@ -371,8 +485,10 @@
     if (!dataEl) return;
     const data = JSON.parse(dataEl.textContent);
     initTabs();
+    renderTLDR(data);
     renderContent(data);
     initQuiz(data);
     initTech(data);
+    initFlashcards(data);
   });
 })();

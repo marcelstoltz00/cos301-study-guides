@@ -267,6 +267,154 @@ body {
   margin: var(--space-8) 0;
 }
 
+.content blockquote {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--warning);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+.content blockquote p:last-child { margin-bottom: 0; }
+.content blockquote strong { color: var(--text); }
+
+/* ---------- Diagrams ---------- */
+
+.diagram {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  text-align: center;
+}
+.diagram svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.diagram-caption {
+  margin-top: var(--space-3);
+  font-size: 12.5px;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* ---------- TL;DR box ---------- */
+
+.tldr-box {
+  background: linear-gradient(135deg, rgba(74,144,248,0.10), rgba(74,144,248,0.03));
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+.tldr-box-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.tldr-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: var(--accent);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.tldr-box-header span.label { font-size: 13px; color: var(--text-dim); font-weight: 600; }
+.tldr-box ul { margin: 0; padding-left: 20px; }
+.tldr-box li { margin-bottom: 6px; color: var(--text); font-size: 14.5px; }
+.tldr-box li:last-child { margin-bottom: 0; }
+.tldr-box li strong { color: #fff; }
+.tldr-box code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+/* ---------- Flashcards ---------- */
+
+.flash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.flash-card {
+  perspective: 1200px;
+  height: 160px;
+  cursor: pointer;
+}
+
+.flash-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 400ms;
+  transform-style: preserve-3d;
+}
+.flash-card.flipped .flash-card-inner { transform: rotateY(180deg); }
+
+.flash-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.flash-front {
+  background: var(--surface);
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+.flash-front .flash-term { font-size: 16px; font-weight: 700; color: var(--text); }
+.flash-front .flash-hint { margin-top: auto; font-size: 11px; color: var(--text-faint); }
+.flash-back {
+  background: var(--card);
+  border-color: var(--accent-dim);
+  transform: rotateY(180deg);
+  justify-content: center;
+}
+.flash-back .flash-def { font-size: 13.5px; color: var(--text-dim); line-height: 1.5; }
+.flash-back .flash-def code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.flash-card.known .flash-front { border-color: var(--success); }
+.flash-card.known .flash-front::after {
+  content: "✓ known";
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 11px;
+  color: var(--success);
+  font-family: var(--font-mono);
+}
+
+.flash-know-btn {
+  margin-top: var(--space-2);
+  align-self: flex-start;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
 /* ---------- Quiz (MCQ) ---------- */
 
 .quiz-header {
@@ -473,7 +621,16 @@ body {
 .lecture-card:hover { border-color: var(--accent); }
 .lecture-card .id { font-family: var(--font-mono); color: var(--accent); font-size: 13px; margin-bottom: var(--space-2); }
 .lecture-card h3 { margin: 0 0 var(--space-2); color: var(--text); font-size: 17px; }
-.lecture-card p { margin: 0; color: var(--text-dim); font-size: 13.5px; }
+.lecture-card p { margin: 0 0 var(--space-3); color: var(--text-dim); font-size: 13.5px; }
+.lecture-card .card-progress-bar { height: 5px; background: var(--card); border-radius: 999px; overflow: hidden; }
+.lecture-card .card-progress-fill { height: 100%; background: var(--accent); border-radius: 999px; width: 0%; transition: width 300ms; }
+.lecture-card .card-progress-label { margin-top: 6px; font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); }
+.overall-progress {
+  background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-6); margin-bottom: var(--space-6); display: flex; align-items: center; gap: var(--space-4);
+}
+.overall-progress .progress-bar { flex: 1; }
+.overall-progress .quiz-score { white-space: nowrap; }
 @media (max-width: 640px) { .lecture-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -501,21 +658,61 @@ body {
   <header class="hero">
     <div class="hero-eyebrow">COS301 &middot; Software Engineering</div>
     <h1>Class Test Study Guides — L17 to L25</h1>
-    <p>Content summaries, 20 shuffled MCQs, and 10+ in-depth technical questions per lecture. Progress is saved locally in your browser.</p>
+    <p>Content summaries, flashcards, 20 shuffled MCQs, and 12 in-depth technical questions per lecture. Progress is saved locally in your browser.</p>
   </header>
 
+  <div class="overall-progress">
+    <div class="progress-bar"><div id="overall-progress-fill" class="progress-bar-fill" style="width:0%"></div></div>
+    <div id="overall-progress-label" class="quiz-score">Loading progress…</div>
+  </div>
+
   <div class="lecture-grid">
-    <a class="lecture-card" href="L17.html"><div class="id">L17</div><h3>Brand Style Guides &amp; Design Systems + CI/CD Industry Best Practices</h3><p>The golden thread from values to code, design tokens and component contracts, and what separates decorative CI from a real merge-blocking pipeline.</p></a>
-<a class="lecture-card" href="L18.html"><div class="id">L18</div><h3>Domain Modelling Recap + Architecture Recap</h3><p>Entities vs value objects, UML relationships, and choosing between monoliths, microservices, event-driven, SOA, CQRS, and MVC-family patterns.</p></a>
-<a class="lecture-card" href="L19.html"><div class="id">L19</div><h3>Software Testing in Practice</h3><p>From a production horror story to a working testing strategy: test types, TDD, coverage, CI gating, and progressive delivery techniques.</p></a>
-<a class="lecture-card" href="L20.html"><div class="id">L20</div><h3>Designed for Humans — UI/UX Survival Guide for Developers</h3><p>Useful, usable, desirable: constraints, discoverability, feedback, the paradox of choice, visual hierarchy, typography, and colour contrast.</p></a>
-<a class="lecture-card" href="L21.html"><div class="id">L21</div><h3>DevOps &amp; DevSecOps</h3><p>The 8-step CI/CD infinite loop from Plan to Monitor, and integrating security throughout via CVE tracking, OWASP, SAST/DAST, and secret scanning.</p></a>
-<a class="lecture-card" href="L22.html"><div class="id">L22</div><h3>Practical Architectural Design</h3><p>Quantify, decide, communicate, enforce: quality attribute scenarios, ADRs, the eight fallacies of distributed computing, tactics vs. patterns, and fitness functions.</p></a>
-<a class="lecture-card" href="L23.html"><div class="id">L23</div><h3>Architecture in Practice</h3><p>Design considerations and best practices applied to two real systems: a high-performance event-driven road-security platform, and a resilient, modular financial-services platform.</p></a>
-<a class="lecture-card" href="L24.html"><div class="id">L24</div><h3>Security Testing — Red Team vs. Blue Team</h3><p>General security testing fundamentals: red/blue/purple teaming, the attack lifecycle, OWASP Top 10, and blue team defense concepts (SIEM, SOC, incident response).</p></a>
-<a class="lecture-card" href="L25.html"><div class="id">L25</div><h3>API Service Contracts</h3><p>OpenAPI vs. Swagger, contract-first vs. code-first development, mock servers, versioning, and capstone-project best practices for frontend/backend integration.</p></a>
-<a class="lecture-card" href="MS.html"><div class="id">MS</div><h3>Microservices Deep Dive (Bonus Synthesis Guide)</h3><p>Pulling together the microservices threads scattered across L18, L21, L22, and L23, plus standard industry patterns: sagas, service mesh, resilience, and observability.</p></a>
+    <a class="lecture-card" href="L17.html" data-id="L17" data-tech-total="12" data-flash-total="20"><div class="id">L17</div><h3>Brand Style Guides &amp; Design Systems + CI/CD Industry Best Practices</h3><p>The golden thread from values to code, design tokens and component contracts, and what separates decorative CI from a real merge-blocking pipeline.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L18.html" data-id="L18" data-tech-total="12" data-flash-total="20"><div class="id">L18</div><h3>Domain Modelling Recap + Architecture Recap</h3><p>Entities vs value objects, UML relationships, and choosing between monoliths, microservices, event-driven, SOA, CQRS, and MVC-family patterns.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L19.html" data-id="L19" data-tech-total="12" data-flash-total="20"><div class="id">L19</div><h3>Software Testing in Practice</h3><p>From a production horror story to a working testing strategy: test types, TDD, coverage, CI gating, and progressive delivery techniques.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L20.html" data-id="L20" data-tech-total="12" data-flash-total="20"><div class="id">L20</div><h3>Designed for Humans — UI/UX Survival Guide for Developers</h3><p>Useful, usable, desirable: constraints, discoverability, feedback, the paradox of choice, visual hierarchy, typography, and colour contrast.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L21.html" data-id="L21" data-tech-total="12" data-flash-total="20"><div class="id">L21</div><h3>DevOps &amp; DevSecOps</h3><p>The 8-step CI/CD infinite loop from Plan to Monitor, and integrating security throughout via CVE tracking, OWASP, SAST/DAST, and secret scanning.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L22.html" data-id="L22" data-tech-total="12" data-flash-total="21"><div class="id">L22</div><h3>Practical Architectural Design</h3><p>Quantify, decide, communicate, enforce: quality attribute scenarios, ADRs, the eight fallacies of distributed computing, tactics vs. patterns, and fitness functions.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L23.html" data-id="L23" data-tech-total="12" data-flash-total="15"><div class="id">L23</div><h3>Architecture in Practice</h3><p>Design considerations and best practices applied to two real systems: a high-performance event-driven road-security platform, and a resilient, modular financial-services platform.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L24.html" data-id="L24" data-tech-total="12" data-flash-total="20"><div class="id">L24</div><h3>Security Testing — Red Team vs. Blue Team</h3><p>General security testing fundamentals: red/blue/purple teaming, the attack lifecycle, OWASP Top 10, and blue team defense concepts (SIEM, SOC, incident response).</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L25.html" data-id="L25" data-tech-total="12" data-flash-total="17"><div class="id">L25</div><h3>API Service Contracts</h3><p>OpenAPI vs. Swagger, contract-first vs. code-first development, mock servers, versioning, and capstone-project best practices for frontend/backend integration.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="MS.html" data-id="MS" data-tech-total="12" data-flash-total="20"><div class="id">MS</div><h3>Microservices Deep Dive (Bonus Synthesis Guide)</h3><p>Pulling together the microservices threads scattered across L18, L21, L22, and L23, plus standard industry patterns: sagas, service mesh, resilience, and observability.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
   </div>
 </main>
+
+<script>
+(function () {
+  function get(key) {
+    try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+  }
+  var cards = document.querySelectorAll(".lecture-card[data-id]");
+  var totalPct = 0;
+  cards.forEach(function (card) {
+    var id = card.getAttribute("data-id");
+    var quiz = get("ct3-quiz-" + id);
+    var tech = get("ct3-tech-" + id);
+    var flash = get("ct3-flash-" + id);
+    var quizAnswered = quiz ? Object.keys(quiz.answers || {}).length : 0;
+    var quizTotal = quiz ? (quiz.order || []).length : 0;
+    var techReviewed = tech ? Object.keys(tech.reviewed || {}).filter(function (k) { return tech.reviewed[k]; }).length : 0;
+    var techTotal = card.getAttribute("data-tech-total") | 0;
+    var flashKnown = flash ? Object.keys(flash.known || {}).filter(function (k) { return flash.known[k]; }).length : 0;
+    var flashTotal = card.getAttribute("data-flash-total") | 0;
+    var doneParts = quizAnswered + techReviewed + flashKnown;
+    var totalParts = quizTotal + techTotal + flashTotal;
+    var pct = totalParts ? Math.round((doneParts / totalParts) * 100) : 0;
+    totalPct += pct;
+    var fill = card.querySelector(".card-progress-fill");
+    var label = card.querySelector(".card-progress-label");
+    if (fill) fill.style.width = pct + "%";
+    if (label) label.textContent = pct === 0 ? "Not started" : pct === 100 ? "Complete" : pct + "% complete";
+  });
+  var overallFill = document.getElementById("overall-progress-fill");
+  var overallLabel = document.getElementById("overall-progress-label");
+  var avg = cards.length ? Math.round(totalPct / cards.length) : 0;
+  if (overallFill) overallFill.style.width = avg + "%";
+  if (overallLabel) overallLabel.innerHTML = "<b>" + avg + "%</b> average progress across all guides";
+})();
+</script>
 </body>
 </html>
