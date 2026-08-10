@@ -1,0 +1,310 @@
+{
+  "id": "L17",
+  "title": "Brand Style Guides & Design Systems + CI/CD Industry Best Practices",
+  "subtitle": "The golden thread from values to code, design tokens and component contracts, and what separates decorative CI from a real merge-blocking pipeline.",
+  "contentMarkdown": "## Part A: Brand Style Guides & Design Systems\n\n### 1. Introduction \u2014 The Problem\n\nSoftware products are built by many hands.\n\n- **Without a system:** Three blues. Five button styles. Two date pickers. Every team reinvents the wheel. Designers and engineers speak different languages \u2014 designers ship the canvas, engineers consume it. Users feel the seams; the product feels stitched, not built.\n- **With a design system:** One source of truth. One voice. One product. Decisions are made once, then reused everywhere. The product feels deliberate \u2014 every screen part of the same story.\n\n### 2. The Golden Thread (central idea)\n\nA great product feels like one author wrote every word, drew every pixel, and shipped every line of code. That illusion is engineered.\n\nThe **golden thread** is a continuous chain of decisions running:\n\n`VALUES \u2192 VOICE \u2192 VISUAL \u2192 PATTERNS \u2192 CODE`\n(what we believe \u2192 how we speak \u2192 how we look \u2192 how we behave \u2192 how we ship)\n\n**Break the thread anywhere and the user feels it everywhere.**\n\n### 3. Terminology \u2014 Brand Style Guide vs. Design System\n\n| | Brand Style Guide | Design System |\n|---|---|---|\n| Nature | Strategic | Operational |\n| Description | The story of who we are | The toolkit that builds the product |\n| Format | Human-readable. Lives in a PDF or microsite | Executable. Lives in code, Figma, and Storybook |\n| Contains | Mission, values, voice, tone; logo usage rules and clear-space; colour palette and typography hierarchy; photography/illustration direction; examples of right and wrong usage | Design tokens (colour, spacing, type, motion); reusable components with documented APIs; patterns, layouts, and accessibility rules; versioning, contribution model, governance; same source of truth for design AND engineering |\n| Audience | Marketers, writers, agencies, designers | Designers, engineers, PMs |\n\n### 4. Brand Foundation (before any pixel exists)\n\n- **Purpose \u2014 why we exist:** the reason beyond profit; the change you want in the world (e.g. Stripe: \"increase the GDP of the internet\"; Patagonia: \"we're in business to save our home planet\").\n- **Values \u2014 what we believe:** non-negotiable principles that filter every decision \u2014 hiring, roadmap trade-offs, how you treat users when nobody's watching.\n- **Voice \u2014 how we sound, always:** the constant personality (calm expert? witty friend? direct technician?). Voice doesn't change between a marketing email and a 500 error message.\n- **Tone \u2014 how we sound, situationally:** voice's adjustable cousin. A celebration message is warm; a security alert is sober; an error is honest and helpful. Same person, different room.\n\n### 5. Typography \u2014 the invisible voice\n\nA typeface speaks before a single word is read. Type carries:\n- **Era** \u2014 a serif feels older than a geometric sans; you're locating yourself in time.\n- **Class/Trust** \u2014 display fonts read as luxury or shouting; a humanist sans feels like a person. Banks/governments lean on familiar serifs (subverting that has a cost).\n- **Information density** \u2014 x-height, tracking, and weight decide how \"busy\" your interface feels.\n\n**Type as a system** \u2014 a type scale is not a list of fonts; it's a relationship between sizes, weights, and line-heights: a hierarchy your eye can navigate without thinking.\n\nExample modular scale (1.250 ratio):\n\n| Token | Size / Line-height | Use |\n|---|---|---|\n| display | 48 / 56 | Display |\n| heading-1 | 32 / 40 | Heading 1 |\n| heading-2 | 24 / 32 | Heading 2 |\n| body-lg | 18 / 28 | Body large |\n| body | 16 / 24 | Body |\n| caption | 12 / 16 | Caption / meta |\n\nPrinciples:\n- **One scale for the whole product** \u2014 marketing pages and admin panels share the scale; hierarchy stops being a per-screen guess.\n- **Line-height is part of the token** \u2014 size without line-height is a half-decision; pair and ship them together.\n- **Weights are a ladder, not a buffet** \u2014 pick 2\u20133 weights (e.g. 400/600/700) and use them with intent.\n- **Reading width matters** \u2014 body text wants 50\u201375 characters per line; wider columns kill comprehension.\n\n### 6. Colour \u2014 from swatches to semantics\n\nColour is meaning, not decoration. Example role-based palette:\n\n| Role | primary | surface | card | accent | success | warning | error |\n|---|---|---|---|---|---|---|---|\n| Hex | #0B0E11 | #12161B | #1A1F26 | #4A90F8 | #22C55E | #F59E0B | #F56363 |\n| Meaning | background | secondary bg | tertiary bg | brand/action | positive state | caution state | negative state |\n\nPrinciples:\n- **Role over name** \u2014 name colours by job, not by hue. `color.action` beats `color.blue`; when you rebrand, `action` stays `action`, only the hex underneath changes once.\n- **60/30/10** \u2014 one dominant colour (carries the surface), one supporting (structures content), one accent (does the work: actions, focus, identity).\n- **Contrast is a requirement** \u2014 WCAG 4.5:1 for body text, 3:1 for large text. If your brand colour fails contrast, it isn't a brand colour for text \u2014 pair it with a tested neutral.\n\n### 7. Design Tokens \u2014 the bridge between design and code\n\nA **token** is a name for a decision. Once named, it can be referenced by Figma, CSS, Swift, Kotlin \u2014 every surface speaks the same language.\n\n```json\n{\n  \"color\": {\n    \"action\": { \"value\": \"#4A90F8\" },\n    \"surface\": { \"value\": \"#12161B\" },\n    \"text\": { \"value\": \"#E8ECF1\" }\n  },\n  \"space\": [0, 4, 8, 12, 16, 24, 32, 48],\n  \"radius\": { \"sm\": 4, \"md\": 8, \"lg\": 12 },\n  \"motion\": {\n    \"duration\": { \"fast\": 150, \"normal\": 250 },\n    \"easing\": { \"standard\": \"cubic-bezier(.2,0,0,1)\" }\n  }\n}\n```\n\nWhat tokens get you:\n- **One change, everywhere** \u2014 update the `action` token; every button, link, and focus ring follows. No find-and-replace across 40 components.\n- **Theming for free** \u2014 light/dark, brand variants, white-label all become token swaps, not parallel codebases.\n- **Platform agnostic** \u2014 tools like Style Dictionary export the same JSON to CSS, iOS, Android, Flutter. One source, many targets.\n\n### 8. Components \u2014 Atomic Design\n\nBrad Frost's mental model for composition \u2014 small things compose into big things:\n\n`ATOMS \u2192 MOLECULES \u2192 ORGANISMS \u2192 TEMPLATES \u2192 PAGES`\n\n| Level | Description | Example |\n|---|---|---|\n| Atoms | Indivisible primitives | Button, Input, Icon, Label, Token |\n| Molecules | Small functional units | Search field, Form row, Avatar+Name |\n| Organisms | Composed sections | Header, Card, Comment thread |\n| Templates | Page-level structure | Dashboard layout, Settings page |\n| Pages | Real content, real data | Stripe Dashboard \u203a Payments |\n\nThe point isn't the labels \u2014 it's: build small, well-tested pieces, then compose. Same as good software engineering.\n\n### 9. Component Anatomy \u2014 a component is a contract, not a sticker\n\nExample: the Button's contract (eight states, all documented) \u2014 what every team member can rely on without asking.\n\n```\n<Button variant intent size leadingIcon disabled loading onClick>\n```\n\n- **States:** default \u00b7 hover \u00b7 active \u00b7 focus \u00b7 disabled \u00b7 loading (+ variant overrides)\n- **Variants:** primary \u00b7 secondary \u00b7 ghost \u00b7 danger\n- **Accessibility:** real `<button>`, focus visible, keyboard activates, `aria-busy` when loading, label always present (icon-only \u21d2 `aria-label`)\n- **Do/Don't:** don't stack two primaries; don't use `disabled` in place of permission errors \u2014 say why instead.\n\n### 10. Structure & Motion \u2014 the systems most students forget\n\n- **Spacing (rhythm):** pick a base unit (commonly 4 or 8px) and use only multiples (`base \u00d7 n`: 4, 8, 12, 16, 24, 32...). The eye reads consistent spacing as \"designed\"; arbitrary spacing as \"rushed\".\n- **Layout (the grid):** columns, gutters, breakpoints (e.g. 12-column grid). Same content reflows across mobile/tablet/desktop without redesign, because the rules are explicit, not vibes.\n- **Motion (time as a dimension):** durations and easings are tokens too (e.g. fast 150ms, normal 250ms, slow 400ms \u2014 entrance/standard/exit easings). Motion communicates state changes the user would otherwise miss.\n\nEach of these gets a token system. Each one feeds the same golden thread.\n\n### 11. Accessibility \u2014 the floor, not the ceiling\n\nAccessibility is a system property \u2014 it can't be bolted on at the end; it must be baked into every token, component, and guideline.\n\n**POUR** \u2014 the four pillars of WCAG:\n- **Perceivable** \u2014 can users sense the content? Sufficient colour contrast (WCAG 2.2 AA = 4.5:1 body, 3:1 large). Alt text on meaningful images. Don't rely on colour alone to convey state.\n- **Operable** \u2014 can users drive the interface? Every interactive element reachable by keyboard. Visible, unambiguous focus rings. No keyboard traps.\n- **Understandable** \u2014 can users predict behaviour? Consistent navigation. Plain-language errors that explain what to do. Form fields with proper labels (placeholder is not a label).\n- **Robust** \u2014 will it work everywhere? Test with a real screen reader.\n\n### 12. Systems in the Wild (examples)\n\nPublic design systems worth reading: **Material 3** (Google \u2014 token-driven theming and motion), **Polaris** (Shopify \u2014 content guidelines, voice baked in), **Carbon** (IBM \u2014 enterprise scale, multi-framework, rigorous accessibility), **Atlassian Design** (excellent component docs, do/don't patterns), **Lightning** (Salesforce \u2014 token architecture across web/iOS/Android with theming), **Primer** (GitHub \u2014 pragmatic, opinionated, ships with the product daily), **Spectrum** (Adobe \u2014 cross-platform, math-driven type ramp, deep accessibility lib), **Base Web** (Uber \u2014 themeable React primitives, good code-level reading).\n\n**Closing idea:** A design system isn't UI. It's how a team agrees, in writing and in code, what \"good\" looks like.\n\n---\n\n## Part B: CI/CD Industry Best Practices\n\nObservations from student mini-projects, contrasted with what production CI/CD actually looks like.\n\n### 1. What was seen (anti-patterns in the wild)\n\n- CI pipelines that always go green, even when tests fail.\n- \"Integration\" tests that mock the database, so nothing integrates.\n- \"E2E\" tests that intercept every network call and assert on the mock.\n- Real test suites excluded from CI by configuration, not by intent.\n- Production Dockerfiles running dev-mode servers as the root user.\n- Hardcoded secrets, including factory-default credentials, in compose YAML.\n- Build artefacts that never leave CI \u2014 no CD pipeline at all.\n\n### 2. CI is a contract, not a decoration\n\nA green build means the code is mergeable. If it doesn't, CI is pointless. Three patterns that quietly break that contract:\n\n```yaml\n# 1. Suffix on the test command \u2014 every failure becomes exit 0\n- run: yarn test || true\n\n# 2. Workflow-level bypass \u2014 failures don't fail the job\n- name: Run tests\n  run: yarn test\n  continue-on-error: true\n\n# 3. Empty suite is a passing suite\n- run: jest --passWithNoTests\n```\n\n### 3. Branch protection is where CI gets its teeth\n\nA passing build with no required checks is just a notification.\n\n- On GitHub: **Settings \u2192 Branches \u2192 require status checks to pass before merging**.\n- Require: build, lint, type-check, unit, integration \u2014 make them all blocking.\n- Require linear history and a review. No force-pushes to main.\n- Industry rule of thumb: **if a check isn't required, assume it will eventually be ignored.**\n\n```yaml\nrequired_status_checks:\n  strict: true # branch must be up-to-date before merge\n  contexts:\n    - build\n    - lint\n    - test-unit\n    - test-integration\nrequired_pull_request_reviews:\n  required_approving_review_count: 1\n```\n\n### 4. If you mock the database, you are not integration testing\n\nFolders called `integration_tests/` where every test mocked Prisma/Supabase/the DB client are actually **controller-routing tests** \u2014 useful, but they don't exercise SQL, migrations, transactions, RLS, or unique constraints.\n\nAn integration test boots the real components, end to end, inside the process boundary. Industry standard: spin up a real, ephemeral Postgres as the test DB and seed it with test data (e.g. **Testcontainers**):\n\n```js\nimport { PostgreSqlContainer } from \"@testcontainers/postgresql\";\nlet container, pool;\nbeforeAll(async () => {\n  container = await new PostgreSqlContainer(\"postgres:16\").start();\n  pool = new Pool({ connectionString: container.getConnectionUri() });\n  await runMigrations(pool);\n});\nafterAll(async () => { await pool.end(); await container.stop(); });\ntest(\"creates and reads a fault\", async () => {\n  const id = await faultsRepo.create(pool, { ref: \"F-001\" });\n  expect((await faultsRepo.byId(pool, id)).ref).toBe(\"F-001\");\n});\n```\n\n### 5. End-to-end means end to end\n\nSuites where every API call was intercepted and replaced with a hardcoded response test your UI against your *imagination* of the backend, not the backend. The contract you actually need to verify (auth, status codes, error shapes) is exactly the part that was mocked away.\n\nReal E2E: a deployed-or-local stack with real services, real DB, real auth \u2014 driven from the browser. Only stub third-party services you don't control in CI:\n\n```js\n// ANTI-PATTERN \u2014 every response is invented\ncy.intercept('POST', '/api/login', { statusCode: 200, body: { token: 'abc' } });\n\n// CORRECT \u2014 only stub the third-party you can't control in CI\ncy.intercept('POST', 'https://api.stripe.com/**', { fixture: 'stripe-ok.json' });\ncy.visit('/login');\ncy.get('[data-test=email]').type('test@uni.ac.za');\ncy.get('[data-test=password]').type(Cypress.env('TEST_PW'));\ncy.get('[data-test=submit]').click();\ncy.url().should('include', '/dashboard'); // your real backend signed it\n```\n\n### 6. A test that cannot fail is not a test\n\nExamples seen: `expect(true).toBe(true)`, tests with no `expect()` at all, assertions on Tailwind class names, and `expect(...).not.toThrow` **without the parentheses** \u2014 that's a property reference, not a function call, so it never actually executes and always \"passes\".\n\nAssert **behaviour**, not implementation \u2014 test what the user sees or what the API returns, never the CSS class soup in between.\n\n```js\n// VACUOUS \u2014 passes no matter what\nexpect(true).toBe(true);\nexpect(thing).not.toThrow; // missing () \u2014 never executes\n\n// BRITTLE \u2014 restyle the page, suite goes red\nexpect(container.querySelector('.shadow-xl')).toBeInTheDocument();\n\n// BEHAVIOURAL \u2014 survives a redesign\nawait user.click(screen.getByRole('button', { name: /submit fault/i }));\nexpect(await screen.findByText(/reference: F-\\d+/)).toBeVisible();\n```\n\n### 7. The shape of a healthy test suite\n\nMany fast **unit** tests, fewer **integration** tests, a small number of true **E2E** tests (the \"testing pyramid\"):\n\n- **Unit** \u2014 many, ms-fast, isolated logic. Catch the most bugs per second of CI time.\n- **Integration** \u2014 real DB, real services, in-process. Catch wiring problems units miss.\n- **E2E** \u2014 few, slow, highest fidelity. Prove the system works for a real user; slow and flaky, so keep them few and meaningful.\n\nIf your suite is shaped like an **ice-cream cone** (lots of E2E, no units), CI gets slow and unreliable.\n\n### 8. Multi-stage builds \u2014 ship the binary, not the toolchain\n\nA single-stage image carries the compiler, build tools, source code, and devDependencies into production \u2014 2\u20133\u00d7 the size and a much larger attack surface (every extra binary is something an attacker can pivot through).\n\nMulti-stage: compile in a builder image, copy only runtime artefacts into a slim final image.\n\n```dockerfile\n# ---- builder ----\nFROM node:20-alpine AS builder\nWORKDIR /app\nCOPY package.json yarn.lock ./\nRUN yarn install --frozen-lockfile   # full deps, including dev\nCOPY . .\nRUN yarn build                       # emits ./dist\n\n# ---- runner ----\nFROM node:20-alpine AS runner\nWORKDIR /app\nENV NODE_ENV=production\nCOPY package.json yarn.lock ./\nRUN yarn install --frozen-lockfile --production   # prod deps only\nCOPY --from=builder /app/dist ./dist\nUSER node\nCMD [\"node\", \"dist/main.js\"]\n```\n\n### 9. Containers should not run as root\n\nBy default every process in a container runs as UID 0 (root inside the namespace). If anything breaks the isolation, the process is already root on the host \u2014 the worst case given for free.\n\n`node:20-alpine` ships a non-root `node` user (UID 1000) already \u2014 adding `USER node` is one line. Kubernetes restricted PodSecurity rejects root containers outright, as does CIS Docker Benchmark 4.1.\n\n**What is a container escape?** Containers share a kernel with the host. A container escape is a vulnerability \u2014 in the runtime (runc, containerd), the kernel, or a misconfigured mount \u2014 that lets a process inside the container reach the host. Real examples: CVE-2019-5736 (runc), CVE-2022-0185 (kernel fsconfig), CVE-2024-21626 (runc leaked file descriptors). If the container ran as root, the escaped process is root on the host; if it ran as UID 1000, it's an unprivileged user \u2014 much less interesting to an attacker.\n\n### 10. Secrets do not belong in your repo\n\nSeen: plaintext DB passwords in compose files, JWT secrets like `supersecret`, and canonical defaults like `minioadmin:minioadmin` exposed on host ports. Default credentials are scanned for continuously \u2014 by Shodan, by GitHub, by every script kiddie.\n\nInject secrets at runtime from a real secret store: GitHub Actions secrets for CI; Vault / AWS Secrets Manager / Doppler for prod. **Fail closed** \u2014 if a required secret is missing, crash the process; never fall back to a default.\n\n```yaml\n# ANTI-PATTERN \u2014 functional weak default; app starts on 'postgres' if env is missing\nDB_PASSWORD: ${DB_PASSWORD:-postgres}\n# CORRECT \u2014 no fallback. Compose interpolation fails the boot.\nDB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set}\n```\n\n```js\nconst jwtSecret = process.env.JWT_SECRET;\nif (!jwtSecret || jwtSecret.length < 32) {\n  throw new Error(\"JWT_SECRET missing or too short \u2014 refusing to start\");\n}\n```\n\n### 11. Pin everything you depend on\n\n`node:20-alpine` is a moving target \u2014 minor version, patch level, and Alpine release all float. `:latest` is worse: the same Dockerfile builds a different image every week.\n\nReproducible builds need a digest pin (`image@sha256:...`). Renovate or Dependabot can keep pinned digests up to date with a PR per bump. Same goes for GitHub Actions: pin `actions/checkout@<sha>`, not `@v4`.\n\n```dockerfile\n# floating \u2014 different image every week\nFROM node:20-alpine\n# better \u2014 patch-pin, but Alpine still floats\nFROM node:20.11.1-alpine3.19\n# best \u2014 content-addressed digest, byte-for-byte reproducible\nFROM node:20.11.1-alpine3.19@sha256:f4c96a28c0b2d8b4f1f4f2b3d5a...\n```\n\n```yaml\n# Same pattern in CI:\n- uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1\n```\n\n### 12. Limits and health checks \u2014 how the platform knows you're alive\n\nNo memory limit means one leaking container can OOM the entire host and take down every sibling service. No health check means `depends_on` waits for the container to *start*, not for it to be *ready to serve traffic*.\n\nA health check is an HTTP endpoint that returns 200 only when the app is actually serving \u2014 DB connected, migrations applied, queues subscribed. Industry treats **liveness** (am I alive?) and **readiness** (am I ready to take traffic?) as separate concerns \u2014 Kubernetes distinguishes them.\n\n```yaml\nservices:\n  api:\n    image: my-api@sha256:...\n    deploy:\n      resources:\n        limits: { cpus: \"1.0\", memory: \"512M\" }\n        reservations: { cpus: \"0.25\", memory: \"128M\" }\n    healthcheck:\n      test: [\"CMD\", \"wget\", \"-qO-\", \"http://localhost:3000/health\"]\n      interval: 10s\n      timeout: 3s\n      retries: 5\n      start_period: 20s # grace period during boot\n```\n\n### 13. Build the artefact once. Promote it through environments.\n\n**Anti-pattern:** rebuild the image for staging, rebuild it again for production \u2014 the thing you tested is not the thing you shipped.\n\n**Industry pattern:** one immutable artefact, tagged by commit SHA, promoted by changing *where it's deployed*, not by rebuilding. Tag images with the git SHA (optionally also a semver tag) \u2014 never just `:latest`. Sign the image (**cosign**), generate an SBOM (**syft**), scan for CVEs (**trivy**/**grype**) before promotion.\n\n```bash\n# build & push once, in CI on merge to main\ndocker buildx build \\\n  --platform linux/amd64,linux/arm64 \\\n  -t ghcr.io/org/api:${GITHUB_SHA} \\\n  -t ghcr.io/org/api:main \\\n  --push .\n\n# scan and sign\ntrivy image --exit-code 1 --severity HIGH,CRITICAL ghcr.io/org/api:${GITHUB_SHA}\ncosign sign --yes ghcr.io/org/api:${GITHUB_SHA}\n\n# deploy: change the tag in staging, then prod \u2014 never rebuild\nkubectl set image deploy/api api=ghcr.io/org/api:${GITHUB_SHA} -n staging\n```\n\n### 14. Supply chain security\n\nWhere industry has spent the last five years catching up to attackers:\n\n- **SBOM** (Software Bill of Materials) \u2014 a machine-readable inventory of every dependency in your image. Required by US Executive Order 14028 for federal vendors. Generate with `syft`.\n- **Image signing** \u2014 sign images with `cosign` and verify signatures at deploy time. Stops registry tampering.\n- **Dependency scanning** \u2014 Dependabot/Renovate for source deps; Trivy/Grype for OCI images. Run on every PR; block on Critical CVEs.\n- **Lockfiles** \u2014 commit them (`yarn.lock`, `package-lock.json`, `poetry.lock`). Without them, two builds an hour apart can pull different code.\n- **Real-world reminders:** SolarWinds (2020), event-stream npm (2018), xz-utils backdoor (2024) \u2014 the dependency you don't audit is someone else's attack vector.\n\n### 15. What a real pipeline looks like, end to end\n\n```\nLint + Type-check  \u2192  Unit  \u2192  Integration + Build  \u2192  Scan + Sign  \u2192  Deploy \u2192 staging \u2192 prod\n(seconds, never       (fast       (real DB, build the     (trivy,        (promote,\n skipped)              feedback,   image once)             cosign, SBOM)  don't rebuild)\n                       blocks PR)\n```\n\n- Every stage runs on every PR. Every stage is a required check.\n- Build the image **once**, in the integration stage. Scan and sign it. Promote that exact digest to staging, then to prod.\n- The slowest stage drives merge velocity \u2014 keep unit tests under 2 minutes, integration under 10.\n- If a stage flakes, fix the test or quarantine it. **Never** add `continue-on-error`.\n",
+  "mcqs": [
+    {
+      "id": "m1",
+      "q": "What is the \"golden thread\" in the context of design systems?",
+      "options": [
+        "A specific typography weight used in all headings",
+        "The continuous chain of decisions running from values, through voice, visual, and patterns, into code",
+        "A CSS class naming convention for atomic components",
+        "The primary brand colour token"
+      ],
+      "correct": 1,
+      "explanation": "The golden thread is VALUES \u2192 VOICE \u2192 VISUAL \u2192 PATTERNS \u2192 CODE. Break the thread anywhere and the user feels it everywhere."
+    },
+    {
+      "id": "m2",
+      "q": "Which statement best distinguishes a Brand Style Guide from a Design System?",
+      "options": [
+        "A Brand Style Guide is executable code; a Design System is a PDF",
+        "A Brand Style Guide is strategic and human-readable; a Design System is operational and executable, living in code, Figma, and Storybook",
+        "They are the same artifact under two different names",
+        "Design Systems are used only by marketers and agencies"
+      ],
+      "correct": 1,
+      "explanation": "Brand Style Guide = strategic, human-readable (mission, voice, logo rules). Design System = operational, executable (tokens, components, patterns) \u2014 the same source of truth for design AND engineering."
+    },
+    {
+      "id": "m3",
+      "q": "In the \"role over name\" colour principle, why is `color.action` preferred over `color.blue`?",
+      "options": [
+        "It is shorter to type in CSS",
+        "When the brand rebrands, `action` stays `action` \u2014 only the hex value underneath changes once, instead of renaming the token everywhere it's used",
+        "Blue fails WCAG contrast requirements by definition",
+        "CSS custom properties cannot contain literal colour names"
+      ],
+      "correct": 1,
+      "explanation": "Naming by job (role), not by hue, decouples the token's identity from its current visual value \u2014 a rebrand becomes a single value swap instead of a search-and-replace."
+    },
+    {
+      "id": "m4",
+      "q": "What does the 60/30/10 colour rule refer to?",
+      "options": [
+        "Contrast ratio thresholds for AA vs AAA compliance",
+        "One dominant colour that carries the surface, one supporting colour that structures content, one accent colour that does the work (actions, focus, identity)",
+        "The percentage split between light theme, dark theme, and system theme users",
+        "The weight distribution across a type scale's font weights"
+      ],
+      "correct": 1,
+      "explanation": "60/30/10 describes proportion of use, not literal percentages of screen pixels: one dominant, one supporting, one accent colour, each with a distinct job."
+    },
+    {
+      "id": "m5",
+      "q": "What is a design token, as defined in the lecture?",
+      "options": [
+        "A security credential used to authenticate against design tooling APIs",
+        "A name for a decision (e.g. a colour, spacing value, or duration) that can be referenced consistently across Figma, CSS, Swift, and Kotlin",
+        "A unique identifier assigned to every Figma file in a project",
+        "A unit test written for a UI component"
+      ],
+      "correct": 1,
+      "explanation": "A token names a decision once; every platform (design tool, web, iOS, Android) references that same name, so updating the value updates every consumer."
+    },
+    {
+      "id": "m6",
+      "q": "In Atomic Design, what sits between \"Atoms\" and \"Organisms\"?",
+      "options": [
+        "Templates",
+        "Pages",
+        "Molecules",
+        "Tokens"
+      ],
+      "correct": 2,
+      "explanation": "The chain is Atoms \u2192 Molecules \u2192 Organisms \u2192 Templates \u2192 Pages. Molecules are small functional units built from atoms (e.g. a search field = input + icon)."
+    },
+    {
+      "id": "m7",
+      "q": "Per WCAG 2.2 AA, what is the minimum contrast ratio required for normal body text?",
+      "options": [
+        "3:1",
+        "4.5:1",
+        "7:1",
+        "2:1"
+      ],
+      "correct": 1,
+      "explanation": "WCAG 2.2 AA requires 4.5:1 for body text and 3:1 for large text (typically \u226518pt or \u226514pt bold)."
+    },
+    {
+      "id": "m8",
+      "q": "What does the accessibility acronym POUR stand for?",
+      "options": [
+        "Predictable, Operable, Usable, Reliable",
+        "Perceivable, Operable, Understandable, Robust",
+        "Portable, Optimized, Uniform, Responsive",
+        "Positioned, Ordered, Universal, Readable"
+      ],
+      "correct": 1,
+      "explanation": "POUR is the four pillars of WCAG: Perceivable, Operable, Understandable, Robust."
+    },
+    {
+      "id": "m9",
+      "q": "Why should a type token always pair size with line-height (e.g. \"body: 16/24\") rather than setting them separately?",
+      "options": [
+        "Because CSS requires line-height to live in a separate stylesheet",
+        "Because size without line-height is a half-decision \u2014 pairing them guarantees consistent vertical rhythm wherever the token is used",
+        "Because browsers ignore any line-height value under 20px",
+        "Because design tools cannot export size and line-height independently"
+      ],
+      "correct": 1,
+      "explanation": "Line-height is part of the token, not an afterthought \u2014 shipping size and line-height together removes a per-usage guess and keeps rhythm consistent across the product."
+    },
+    {
+      "id": "m10",
+      "q": "Why is a component described as \"a contract, not a sticker\"?",
+      "options": [
+        "Because components require a signed legal licensing agreement before reuse",
+        "Because its documented states, variants, API, and accessibility behaviour are what every team member can rely on without asking \u2014 it's a functional agreement, not just a visual style",
+        "Because each component needs a signed-off design-review form",
+        "Because undocumented components cannot be reused across teams"
+      ],
+      "correct": 1,
+      "explanation": "The button example shows this: 8 documented states, a typed API, defined accessibility behaviour, and explicit do/don't rules \u2014 a reliable contract, not just how it looks."
+    },
+    {
+      "id": "m11",
+      "q": "Which CI configuration most directly breaks the principle that \"CI is a contract, not a decoration\"?",
+      "options": [
+        "run: yarn test with no modifiers",
+        "run: yarn test || true",
+        "Requiring status checks to pass before merge",
+        "Blocking merges on a failing lint stage"
+      ],
+      "correct": 1,
+      "explanation": "Appending `|| true` forces the step to exit 0 regardless of test outcome \u2014 the build goes green even when tests fail, silently breaking the merge contract."
+    },
+    {
+      "id": "m12",
+      "q": "Why does mocking the database inside an \"integration test\" fail to actually integration-test the system?",
+      "options": [
+        "Mocking is always slower than making real database calls",
+        "It never exercises real SQL, migrations, transactions, RLS, or unique constraints \u2014 it's really just a controller-routing test",
+        "Jest does not support mocking database clients",
+        "Mocked databases automatically fail CI linting rules"
+      ],
+      "correct": 1,
+      "explanation": "A test that mocks Prisma/Supabase/the DB client only proves the controller called the right method \u2014 it never proves the SQL, migration, or constraint actually behaves correctly."
+    },
+    {
+      "id": "m13",
+      "q": "What does the Testcontainers pattern shown in the lecture achieve for integration tests?",
+      "options": [
+        "It mocks the entire backend to make CI faster",
+        "It spins up a real, ephemeral Postgres instance so tests run real migrations and queries against a real database",
+        "It replaces the need for unit tests entirely",
+        "It intercepts and replaces all outbound network calls"
+      ],
+      "correct": 1,
+      "explanation": "Testcontainers boots a real, disposable Postgres container per test run, so integration tests exercise the actual database engine, not a stand-in."
+    },
+    {
+      "id": "m14",
+      "q": "In the Cypress example, why is intercepting `POST /api/login` with a hardcoded response an anti-pattern for E2E tests?",
+      "options": [
+        "Cypress does not support cy.intercept on POST requests",
+        "It tests the UI against an imagined backend rather than the real one, hiding exactly the contract (auth, status codes, error shapes) that needed verifying",
+        "It makes the test suite run twice as slow",
+        "It is not compliant with GDPR"
+      ],
+      "correct": 1,
+      "explanation": "Real E2E should drive a real backend. Stubbing the very endpoint under test replaces verification with invention \u2014 only third-party services outside your control should be stubbed."
+    },
+    {
+      "id": "m15",
+      "q": "What is wrong with the assertion `expect(thing).not.toThrow;` (no parentheses)?",
+      "options": [
+        "Nothing \u2014 it behaves identically to `toThrow()`",
+        "It's a property reference, not a function call, so the assertion body never executes and the test always appears to pass",
+        "It throws a TypeScript compile error",
+        "It only works inside async test functions"
+      ],
+      "correct": 1,
+      "explanation": "Without `()`, `.not.toThrow` just reads a property off the matcher object \u2014 no assertion runs, so the test is vacuously green no matter what `thing` does."
+    },
+    {
+      "id": "m16",
+      "q": "What is the ideal shape of a healthy automated test suite, per the testing pyramid discussed in the lecture?",
+      "options": [
+        "Mostly E2E tests with very few unit tests (the \"ice-cream cone\")",
+        "Roughly equal numbers of unit, integration, and E2E tests",
+        "Many fast unit tests, fewer integration tests, and a small number of true E2E tests",
+        "Only E2E tests, since they have the highest fidelity"
+      ],
+      "correct": 2,
+      "explanation": "Unit tests are many and ms-fast (catch the most bugs per second of CI time); integration tests are fewer; E2E tests are few, slow, and highest-fidelity."
+    },
+    {
+      "id": "m17",
+      "q": "What is the main size/security benefit of a multi-stage Docker build?",
+      "options": [
+        "It automatically encrypts all environment variables at rest",
+        "The final runtime image excludes the compiler, build tools, and source code, reducing image size and attack surface",
+        "It removes the need for a Dockerfile entirely",
+        "It allows the container to run without any base image"
+      ],
+      "correct": 1,
+      "explanation": "The builder stage compiles the app; only the compiled runtime artefacts are copied into a slim final image, leaving the toolchain and devDependencies behind."
+    },
+    {
+      "id": "m18",
+      "q": "Why is running a container as a non-root user (e.g. adding `USER node`) important?",
+      "options": [
+        "It's a condition of Docker Hub's licensing terms",
+        "If a container escape occurs, a non-root process is only an unprivileged user on the host, not root",
+        "Root users are physically unable to bind to network ports inside a container",
+        "It reduces the final Docker image's file size"
+      ],
+      "correct": 1,
+      "explanation": "Containers share the host kernel. If the isolation is ever broken (a container escape), a process that was root inside the container is root on the host \u2014 running as UID 1000 instead removes that worst case."
+    },
+    {
+      "id": "m19",
+      "q": "What does \"fail closed\" mean when handling a missing required secret like `JWT_SECRET`?",
+      "options": [
+        "The application should silently continue using a hardcoded default value",
+        "The application should log a warning but keep running normally",
+        "The application should refuse to start / crash immediately rather than fall back to an insecure default",
+        "The secret should be requested interactively from whoever starts the process"
+      ],
+      "correct": 2,
+      "explanation": "Falling back to a default (e.g. `DB_PASSWORD:-postgres`) creates a functional-but-insecure system. Failing closed means the process refuses to boot without a real secret."
+    },
+    {
+      "id": "m20",
+      "q": "In the \"build once, promote through environments\" pattern, what anti-pattern is being avoided?",
+      "options": [
+        "Using Docker containers at all",
+        "Rebuilding the image separately for staging and for production, so the artefact that was actually tested isn't the one that ships",
+        "Tagging container images with the git commit SHA",
+        "Running a Trivy vulnerability scan before deployment"
+      ],
+      "correct": 1,
+      "explanation": "Rebuilding per environment risks drift between what was tested and what ships. The correct pattern builds one immutable, signed artefact and promotes that exact digest through staging into production."
+    }
+  ],
+  "techQuestions": [
+    {
+      "id": "t1",
+      "q": "Explain the \"golden thread\" concept in your own words, then describe a concrete scenario where the thread breaks between Voice and the actual product UI, and what the user experiences as a result.",
+      "answer": "The golden thread is the idea that a coherent product is the result of one continuous, engineered chain of decisions: **values \u2192 voice \u2192 visual \u2192 patterns \u2192 code**. Nothing about consistency is accidental \u2014 every layer is derived from the one before it, so the product \"feels like one author wrote every word, drew every pixel, and shipped every line of code.\"\n\n**Example of a broken link (Voice \u2192 Visual/Code):** A fintech startup's marketing site has a warm, plain-language voice (\"Oops, that didn't work \u2014 let's try again\"). But its actual product, built by a separate engineering team under deadline pressure, ships raw framework error messages like `Error: Request failed with status code 500` in a browser `alert()`.\n\n**What the user feels:** the illusion breaks. The brand felt human and considered on the landing page, then cold and unfinished the moment something goes wrong inside the actual product. The user doesn't consciously think \"the voice token wasn't propagated to error states\" \u2014 they just feel like they're using two different products stitched together, and trust erodes. This is exactly the lecture's point: **break the thread anywhere and the user feels it everywhere**, even in places (like an error dialog) that a team might not think of as \"brand."
+    },
+    {
+      "id": "t2",
+      "q": "A junior designer argues: \"We already have a PDF brand guide, so we don't need a design system.\" Explain why this is flawed, using the strategic vs. operational distinction.",
+      "answer": "A Brand Style Guide and a Design System solve different problems and are not substitutes for each other.\n\n- The **Brand Style Guide** is **strategic** \u2014 it answers \"who are we?\" (mission, values, voice, tone, logo usage, colour palette, photography direction). It's human-readable, lives in a PDF or microsite, and its audience is marketers, writers, agencies, and designers.\n- The **Design System** is **operational** \u2014 it answers \"how do we actually build the product?\" (design tokens, reusable components with documented APIs, patterns, layouts, accessibility rules, versioning/governance). It's executable, lives in code/Figma/Storybook, and its audience is designers, engineers, and PMs.\n\nA PDF brand guide cannot be imported into a codebase, cannot enforce that a button always renders with the right states, and cannot guarantee that \"primary blue\" resolves to the same hex value across web, iOS, and Android. Without the design system layer, every engineering team re-interprets the PDF independently \u2014 which recreates exactly the problem design systems exist to solve: \"three blues, five button styles, two date pickers.\" The PDF describes *intent*; the design system is what makes that intent *executable and consistent* in the actual shipped product."
+    },
+    {
+      "id": "t3",
+      "q": "Design a minimal design token JSON structure for an app that needs: an action colour, a surface colour, a spacing scale, and one motion duration. Then explain what \"platform agnostic\" means for this file and how a tool like Style Dictionary uses it.",
+      "answer": "```json\n{\n  \"color\": {\n    \"action\":  { \"value\": \"#4A90F8\" },\n    \"surface\": { \"value\": \"#12161B\" }\n  },\n  \"space\": [0, 4, 8, 12, 16, 24, 32, 48],\n  \"motion\": {\n    \"duration\": { \"normal\": 250 }\n  }\n}\n```\n\n**Platform agnostic** means this file makes no assumptions about *where* it will be consumed \u2014 it's just named decisions (JSON, the most portable structured format), not CSS variables, not a Swift enum, not an Android XML resource. The same source file can be transformed into whatever format each platform actually needs.\n\n**How Style Dictionary uses it:** it reads this single JSON source of truth and generates platform-specific output for every target \u2014 e.g. `--color-action: #4A90F8;` for CSS/web, a `UIColor` extension for iOS/Swift, a `colorAction` resource for Android/Kotlin, and a Flutter `Color` constant. If the action colour changes, you edit one value in one file and rerun the build \u2014 every platform's generated code updates automatically, instead of manually chasing down and editing four separate hardcoded values across four codebases."
+    },
+    {
+      "id": "t4",
+      "q": "Using Atomic Design terminology, classify each of the following, and justify each classification: (a) a single icon, (b) a search input field, (c) a product card containing an image, price, and a button, (d) a dashboard layout grid, (e) a live checkout page.",
+      "answer": "- **(a) Single icon \u2192 Atom.** It's an indivisible primitive \u2014 it can't be broken down further and carries no internal composition of other components (same tier as Button, Input, Label, Token).\n- **(b) Search input field \u2192 Molecule.** The lecture explicitly gives \"search field\" as a molecule example \u2014 it's a small functional unit, typically an Input atom combined with an Icon atom (and sometimes a Button atom), working together to do one job.\n- **(c) Product card (image + price + button) \u2192 Organism.** It's a composed section built from multiple molecules/atoms (an Image, a price Label, a Button) assembled into a self-contained, recognizable UI block \u2014 comparable to the lecture's \"Card\" and \"Header\" organism examples.\n- **(d) Dashboard layout grid \u2192 Template.** It defines page-level structure and placement of organisms/regions, but without real content \u2014 a skeleton, not a finished page. Matches the lecture's \"Dashboard layout, Settings page\" template examples.\n- **(e) Live checkout page \u2192 Page.** It's a template populated with real content and real data (actual cart items, actual prices, an actual user session) \u2014 the lecture's distinction between Templates (structure) and Pages (real content, real data)."
+    },
+    {
+      "id": "t5",
+      "q": "A Button component in your codebase only documents two states \u2014 default and hover \u2014 and has no accessibility notes. Using the \"a component is a contract, not a sticker\" framing, explain what's missing and what concrete risks this creates for teams that consume it.",
+      "answer": "A fully-specified component contract (per the lecture's Button example) documents: **all interactive states** (default, hover, active, focus, disabled, loading, + variant overrides), a **typed API** (`variant`, `intent`, `size`, `leadingIcon`, `disabled`, `loading`, `onClick`), and **accessibility behaviour** (real `<button>` element, visible focus ring, keyboard activation, `aria-busy` while loading, and an always-present label \u2014 `aria-label` for icon-only buttons).\n\n**What's missing here:** active/pressed state, focus state, disabled state, loading state, and any accessibility guarantees at all.\n\n**Concrete risks this creates:**\n1. **Inconsistent behaviour across teams** \u2014 without a documented `active`/`focus` state, one team ships a button with no visible focus ring while another adds their own ad-hoc one; the product no longer looks like one system.\n2. **Silent accessibility failures** \u2014 no documented keyboard/ARIA behaviour means engineers under deadline pressure will likely ship a `<div onClick>` instead of a real `<button>`, breaking keyboard operability (an \"Operable\" failure under WCAG POUR) and screen reader support.\n3. **No way to represent async/loading actions correctly** \u2014 without a `loading` state and `aria-busy`, every team either invents their own spinner pattern or leaves the user with no feedback that a click registered, which also risks duplicate submissions from repeated clicks.\n4. **Misuse of `disabled`** \u2014 the lecture explicitly warns \"don't use disabled in place of permission errors, say why\" \u2014 without that guidance documented, a team might disable a button silently instead of showing an explanatory message, confusing users.\n\nIn short: an underspecified component isn't a smaller version of the contract \u2014 it's an *unenforceable* one, so every consuming team fills the gaps differently, which is precisely the fragmentation design systems exist to prevent."
+    },
+    {
+      "id": "t6",
+      "q": "Explain why `run: yarn test || true` and `continue-on-error: true` both break the fundamental contract of CI, even though the pipeline still technically \"runs the tests.\"",
+      "answer": "CI's entire value proposition rests on one guarantee: **a green build means the code is mergeable.** Everything downstream \u2014 branch protection, reviewer confidence, deploy automation \u2014 depends on that signal being trustworthy.\n\n- `yarn test || true` appends a fallback command that always exits 0. Bash `||` means \"if the left side fails, run the right side instead\" \u2014 and `true` always succeeds. So no matter how many tests fail, the *step's* exit code is 0, and the job reports success.\n- `continue-on-error: true` operates at the workflow level: even if the step's exit code correctly reports failure, GitHub Actions is told to mark the *job* as passed anyway and continue the workflow.\n\nIn both cases, the tests still literally execute \u2014 output, failures, and all \u2014 but the causal link between \"tests failed\" and \"the build fails\" is severed. The pipeline becomes a **decoration**: it looks like verification is happening, but the merge gate never actually gates anything. This is worse than having no tests at all, because it creates false confidence \u2014 a reviewer sees a green checkmark and assumes correctness, when the checkmark has been engineered to always appear regardless of the underlying test result."
+    },
+    {
+      "id": "t7",
+      "q": "You inherit a repo with a folder called `integration_tests/` where every test mocks the Postgres client via `jest.mock('pg')`. Explain why this isn't a true integration test, what class of bugs it will miss, and sketch how you'd convert one test to use Testcontainers instead.",
+      "answer": "**Why it isn't integration testing:** mocking the database client means the test only verifies that your application code *called the mock with the expected arguments* \u2014 it never actually talks to a database engine. That's a controller/routing test wearing an integration test's name.\n\n**What it will miss:**\n- SQL syntax errors that only surface when a real query planner parses them\n- Migration ordering bugs / missing migrations\n- Transaction and rollback behaviour under concurrent access\n- Row-Level Security (RLS) policy violations\n- Unique/foreign-key constraint violations\n- Type coercion mismatches between your ORM's assumptions and the actual column types\n\nNone of these can be caught by a mock, because a mock has no schema, no constraints, and no query engine \u2014 it only returns whatever canned response you told it to return.\n\n**Conversion sketch (Testcontainers):**\n\n```js\nimport { PostgreSqlContainer } from \"@testcontainers/postgresql\";\n\nlet container, pool;\n\nbeforeAll(async () => {\n  container = await new PostgreSqlContainer(\"postgres:16\").start();\n  pool = new Pool({ connectionString: container.getConnectionUri() });\n  await runMigrations(pool);   // run the REAL migrations against the REAL db\n});\n\nafterAll(async () => {\n  await pool.end();\n  await container.stop();\n});\n\ntest(\"creates and reads a fault\", async () => {\n  // no jest.mock('pg') anywhere \u2014 this hits a real, ephemeral Postgres\n  const id = await faultsRepo.create(pool, { ref: \"F-001\" });\n  expect((await faultsRepo.byId(pool, id)).ref).toBe(\"F-001\");\n});\n```\n\nThe key change: delete the `jest.mock('pg')` call entirely, boot a real, disposable Postgres container per test run, run the actual migration files against it, and let `faultsRepo` execute real SQL. The test is slower than a mocked version, but it now actually proves the repository layer works against a real database engine."
+    },
+    {
+      "id": "t8",
+      "q": "Identify what's wrong with each of the following three test snippets, and rewrite the third one as a proper behavioural assertion.\n\n```\nexpect(true).toBe(true);\nexpect(result).not.toThrow;\nexpect(container.querySelector('.shadow-xl')).toBeInTheDocument();\n```",
+      "answer": "**1. `expect(true).toBe(true);`** \u2014 This is a **vacuous assertion**. It compares a literal to itself and can never fail regardless of what the code under test actually does. It provides zero verification value; it exists only to make a test \"pass\" without testing anything.\n\n**2. `expect(result).not.toThrow;`** \u2014 Missing the function-call parentheses `()`. Without them, this just reads the `.toThrow` property off the assertion object \u2014 it never actually invokes the matcher, so the assertion body never runs. The test always reports green no matter what `result` does, identical in effect to snippet 1.\n\n**3. `expect(container.querySelector('.shadow-xl')).toBeInTheDocument();`** \u2014 This is a **brittle, implementation-coupled** assertion: it tests for the presence of a specific Tailwind utility *class name*, not for anything the user actually experiences. The moment someone restyles the component (e.g. swaps `shadow-xl` for `shadow-lg`, or migrates away from Tailwind), the test fails even though the feature works perfectly \u2014 a false negative that erodes trust in the suite.\n\n**Rewritten as a behavioural assertion** \u2014 test what the user sees/does, not the CSS underneath:\n\n```js\n// BEHAVIOURAL \u2014 survives a redesign, verifies real user-visible behaviour\nawait user.click(screen.getByRole('button', { name: /submit fault/i }));\nexpect(await screen.findByText(/reference: F-\\d+/)).toBeVisible();\n```\n\nThis asserts on role/accessible-name and on visible text content \u2014 both of which are what an actual user (or screen reader) perceives \u2014 rather than an implementation detail like a class name."
+    },
+    {
+      "id": "t9",
+      "q": "Explain the difference between liveness and readiness health checks, and why conflating them is a problem for a service that runs database migrations on startup.",
+      "answer": "- **Liveness** answers: *\"Is the process alive at all?\"* \u2014 has it deadlocked, crashed, or hung. If liveness fails, the orchestrator's correct response is usually to restart the container.\n- **Readiness** answers: *\"Is the process currently able to serve traffic correctly?\"* \u2014 is the DB connection established, are migrations applied, are queues subscribed. If readiness fails, the correct response is to **stop routing traffic to it**, without necessarily restarting it.\n\n**Why conflating them breaks a service that runs migrations on startup:** if you only have a single check (or if `depends_on` merely waits for the container process to *start*, as the lecture warns), the orchestrator will consider the service \"up\" and begin routing live user requests to it the instant the process boots \u2014 even though it's still mid-migration and not yet connected to the database. Requests hit an app that isn't ready, producing 500 errors or connection failures during every deploy.\n\nWorse, if that single conflated check is treated as a *liveness* probe, an orchestrator might interpret \"still migrating, not yet responding 200\" as \"the process is unhealthy\" and **kill and restart the container** mid-migration \u2014 potentially restarting the migration repeatedly and never letting it complete.\n\n**The fix**, as in the lecture's example, is a dedicated `/health` endpoint that only returns 200 once the app is actually serving (DB connected, migrations applied, queues subscribed), combined with a `start_period` grace window so the platform doesn't prematurely restart the container while it's still legitimately starting up."
+    },
+    {
+      "id": "t10",
+      "q": "A Dockerfile uses `FROM node:20-alpine`. Using the three-tier pinning example from the lecture (floating / patch-pinned / digest-pinned), explain what could go wrong if this image is rebuilt six months from now, and how digest pinning combined with Renovate/Dependabot solves it.",
+      "answer": "`node:20-alpine` is a **floating** tag \u2014 it always resolves to whatever the *current* build of Node 20 on the *current* Alpine release happens to be. Six months from now, rebuilding the exact same Dockerfile pulls a different underlying image: a different Node 20.x patch version, and possibly a different Alpine base release entirely, since both continue to be updated behind that same tag.\n\n**What can go wrong:** a subtle behavioural change in a Node patch release, a changed default OpenSSL version in the new Alpine base, or a transitively updated system library can all cause the \"same\" build to behave differently, fail to build, or introduce a new vulnerability \u2014 with no corresponding change in your own source code. This breaks reproducibility: you can no longer say \"this exact image is what we tested,\" because rebuilding produces a different artefact than what shipped originally.\n\n**The three tiers:**\n```dockerfile\nFROM node:20-alpine                                          # floating\nFROM node:20.11.1-alpine3.19                                 # patch-pinned, but Alpine base can still float\nFROM node:20.11.1-alpine3.19@sha256:f4c96a28c0b2d8b4f1f4f2b3d5a...  # digest-pinned \u2014 byte-for-byte reproducible\n```\nOnly the digest-pinned form guarantees that \"rebuild in six months\" produces the *exact same bytes* as today, because a SHA-256 digest is content-addressed \u2014 it cannot silently point to different content later, unlike a tag.\n\n**Why this doesn't mean freezing forever:** pinning by itself would leave you stuck on a vulnerable image indefinitely. Renovate or Dependabot solve that by automatically opening a pull request whenever a newer digest is available for your pinned base image \u2014 so upgrades become an explicit, reviewed, tested change (a PR you can see in git history and roll back), rather than a silent difference that appears the next time someone happens to rebuild."
+    },
+    {
+      "id": "t11",
+      "q": "Describe, end to end, the ideal CI/CD pipeline stage sequence from the lecture's closing diagram, and explain why \"build the image once\" is a non-negotiable rule rather than a nice-to-have.",
+      "answer": "**The stage sequence:**\n\n```\nLint + Type-check \u2192 Unit tests \u2192 Integration tests + Build \u2192 Scan + Sign \u2192 Deploy: staging \u2192 prod\n```\n\n- **Lint + Type-check** \u2014 runs in seconds, never skipped, catches trivial errors before anything expensive runs.\n- **Unit** \u2014 fast feedback (ms-fast, many tests), blocks the PR quickly.\n- **Integration + Build** \u2014 spins up real dependencies (real DB via Testcontainers etc.), and this is the stage where the actual deployable image gets built.\n- **Scan + Sign** \u2014 Trivy/Grype scan the just-built image for CVEs, `cosign` signs it, an SBOM is generated with `syft`.\n- **Deploy** \u2014 the exact scanned-and-signed digest is promoted first to staging, then to production, by changing which tag/digest is deployed \u2014 never by rebuilding.\n\nEvery stage runs on every PR, and every stage is a **required** status check (per the branch protection discussion) \u2014 an optional check will eventually be ignored.\n\n**Why \"build the image once\" is non-negotiable:** if staging and production are built from separate `docker build` invocations \u2014 even from the identical Dockerfile and identical source commit \u2014 there is no guarantee they produce byte-identical images. Base image tags can float, build caches can differ, and non-deterministic build steps can produce subtly different artefacts each time. If that happens, **the thing you tested in CI (scanned, signed, validated) is not provably the same thing that ends up running in production** \u2014 you've re-introduced exactly the \"untrusted artefact\" problem that scanning and signing exist to eliminate. Building once and promoting the same immutable, signed digest through every environment is what makes \"we tested this\" and \"this is what's running\" the same true statement."
+    },
+    {
+      "id": "t12",
+      "q": "Explain what an SBOM is, why it has become a compliance requirement in some contexts (citing the lecture's example), and how it relates to real-world supply-chain incidents like the xz-utils backdoor.",
+      "answer": "An **SBOM (Software Bill of Materials)** is a machine-readable inventory of every dependency that goes into a built artefact \u2014 every library, its version, and (ideally) its provenance \u2014 analogous to an ingredients list. In the lecture's toolchain, it's generated with **syft**.\n\n**Why it's a compliance requirement:** the lecture cites **US Executive Order 14028**, which requires an SBOM from vendors selling software to the US federal government. The motivation is that organisations were routinely shipping software built from dozens or hundreds of transitive dependencies they had no visibility into \u2014 if one of those dependencies were later found to be malicious or vulnerable, there was no fast way to even know which of your production systems were affected. An SBOM turns \"do we use library X anywhere?\" from a multi-day forensic exercise into a instant, queryable lookup.\n\n**Relation to xz-utils (2024):** a maintainer account for the widely-used `xz-utils` compression library (a transitive dependency of OpenSSH on many Linux distributions) was compromised over a long social-engineering campaign, and a backdoor was inserted into the library's build scripts, intended to allow remote SSH authentication bypass. This is precisely the class of incident an SBOM-driven process helps contain: organisations with accurate SBOMs across their fleet could immediately identify every image and system containing the affected `xz-utils` version and patch or roll back, rather than having to manually audit every deployed artefact to even find out if they were exposed. Combined with dependency scanning (Trivy/Grype) and lockfiles, the SBOM is the record that makes a rapid, confident response to a supply-chain compromise possible \u2014 the same category of lesson drawn from SolarWinds (2020) and the event-stream npm incident (2018)."
+    }
+  ]
+}

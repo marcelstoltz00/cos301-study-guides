@@ -1,0 +1,310 @@
+{
+  "id": "L20",
+  "title": "Designed for Humans \u2014 UI/UX Survival Guide for Developers",
+  "subtitle": "Useful, usable, desirable: constraints, discoverability, feedback, the paradox of choice, visual hierarchy, typography, and colour contrast.",
+  "contentMarkdown": "## Designed for Humans \u2014 The UI/UX Survival Guide for Developers\n\n### 1. Why Design Matters for Developers\n\nDevelopers tend to focus purely on functionality: does it work? Is it fast? Are all the features there? But **users experience software differently** \u2014 they experience the *design*, not the implementation.\n\n- When done right, good design is **invisible**.\n- When done wrong, bad design is **frustrating**.\n- If a product frustrates users enough, **they stop using it.**\n\nIt's worth caring about the user experience of your software, not just its correctness or feature completeness.\n\n### 2. Properties of a Good Product\n\nA great user experience sits at the intersection of three properties:\n\n- **Useful** \u2014 does it solve a real problem?\n- **Usable** \u2014 can people actually operate it successfully?\n- **Desirable** \u2014 do people want to use it (is it pleasant, well-crafted)?\n\n---\n\n## Part A: How to Design *Usable* Products \u2014 \"Don't Make Me Think\"\n\n### 3. User-Centred Thinking (the biggest mindset shift in UX)\n\n- Stop thinking about **how the system works** (the implementation model).\n- Start thinking about **what goal the user wants to achieve** (the user's mental model).\n- **Implementation model** \u2192 how the code actually works internally.\n- **User mental model** \u2192 how the user *thinks* it works, based on what they can see and predict.\n- **Your product is not the goal** \u2014 the user's goal is the goal; your product is only a means to it.\n\n### 4. Constraints\n\nConstraints prevent users from performing certain (invalid) actions. **Good design prevents mistakes before they happen**, instead of showing an error message after the mistake was already made \u2014 it guides users toward valid actions in the first place.\n\n**Benefits of constraints:**\n- Reduce confusion and decision-making effort.\n- Make interfaces feel safer and more predictable.\n\n**Example:** a free-text date-of-birth field (e.g. typing \"16 Apr 2003\") can be entered in an ambiguous or wrong format, triggering an error message (\"Wrong format. Try again.\") only after the user submits. A **constrained** input \u2014 a structured date picker/calendar widget \u2014 makes it *impossible* to enter an invalid format in the first place, because the only actions available are valid ones.\n\n### 5. Discoverability\n\n**Make the possible actions obvious.** Users should not have to stop and think about how your interface works. Good discoverability means users can:\n\n- Easily see the available actions.\n- Predict what will happen *before* clicking.\n- Explore the interface without fear of breaking something.\n\n**Good interfaces communicate how they work.** A classic failure case: a row of unlabeled icons that give no visual cue as to what each one does (the user is left wondering \"what do these do?\") \u2014 versus clearly labelled actions like \"Add,\" \"Edit,\" \"Delete,\" \"More actions,\" which are self-explanatory without needing to be clicked to find out.\n\n### 6. Feedback\n\n**Users should always know what is going on.** Every action should have a **visible response**:\n\n- Loading a page? \u2192 show a skeleton screen.\n- Clicked a button? \u2192 show a spinner (or other busy indicator).\n\nThe interface should show the current state of the system at all times \u2014 the user should **not need to remember** what happened; the interface should give them the answer directly.\n\n**Example failure:** a user clicks \"Create task,\" gets no visible response, and is left wondering \"did it work?\" for five full seconds before anything confirms success. The fix: **immediately** show a busy state the instant the action is triggered, then show a clear confirmation (e.g. an alert/toast: \"Task created\") once it completes.\n\nGood feedback makes an app feel **responsive and predictable.**\n\n### 7. The Paradox of Choice\n\n**Common misconception:** more options \u2192 more freedom \u2192 more power to the user.\n\n**The actual paradox:** more options \u2192 **fewer actions taken** \u2192 **less power to the user.** Overwhelming users with too many simultaneous choices increases decision-making effort to the point that they take less action overall, not more.\n\n**Good design reduces the number of decisions a user has to make at once**, via **progressive disclosure**:\n- Show only the most relevant choices upfront.\n- Reveal more options only when the user actually looks for them (e.g. behind a \"More options\" or secondary menu), rather than presenting every possible action at once.\n\n---\n\n## Part B: How to Design *Desirable* Products \u2014 \"Make It Easy on the Eyes\"\n\n### 8. Visual Hierarchy\n\nVisual hierarchy is about creating structure in an interface so the eye knows what matters most.\n\n**Common mistakes:**\n- Bright colours everywhere.\n- Large or bold text everywhere.\n- **If everything is emphasized, nothing is emphasized.**\n\n**Create hierarchy using:** spacing, size, weight, and colour \u2014 applied selectively, not uniformly.\n\n### 9. Whitespace\n\n**Use plenty of whitespace to let your interface breathe.** Cramped interfaces with no breathing room between elements feel cluttered and harder to scan, even if the actual content is identical to a version with generous spacing.\n\n### 10. Ambiguous Spacing (Proximity)\n\n**Related items should have less space between them than unrelated items.** For example, a \"First name\" label and its input field should sit close together (they're related), while the gap before the next unrelated field group (\"Last name,\" \"Email\") should be visibly larger \u2014 spacing itself communicates grouping, independent of any other visual cue.\n\n### 11. Font Pairings\n\nChoose **one or two fonts** that work well together, and use different **weights** for variation rather than introducing more typefaces. A common pairing pattern: a serif font for headings paired with a sans-serif font for body text, or vice versa (e.g. \"Inter & Roboto,\" \"DM Serif & Inter,\" \"Roboto Mono & IBM Plex Serif\"). (Tools like FontPair can help find pairing ideas.)\n\n### 12. Line Heights\n\n**Paragraphs need larger line heights than headings or buttons.** A line height that's too tight (e.g. 1.0\u00d7) makes body text feel cramped and harder to read; a line height that's too loose (e.g. 2.0\u00d7) makes lines feel disconnected from each other. A middle value (e.g. ~1.5\u00d7 for body text) is typically \"just right\" \u2014 while headings and short UI text (buttons) generally want tighter line heights than long-form paragraphs.\n\n### 13. Line Lengths\n\n**Avoid long lines of unbroken text longer than roughly 80 characters per line.** A paragraph spanning ~120 characters per line forces the eye to travel further and makes it easier to lose your place between lines; constraining body text to roughly ~80 characters per line (e.g. via a max-width on the text container) keeps reading comfortable.\n\n### 14. Colour\n\n**Use colour sparingly, and prefer a limited palette with shades** of a small number of hues, rather than many competing colours. A UI redesigned with a disciplined, limited colour palette communicates state and hierarchy more clearly than one where every element uses a different, arbitrary colour.\n\n### 15. Colour Palettes\n\nUse existing, tested colour palettes to more easily produce a cohesive, attractive design rather than picking colours ad hoc. (Tools like Coolors can help generate/explore palettes.)\n\n### 16. Colour Contrast\n\n**Ensure text has sufficient contrast with the background it's placed on.** Low-contrast text (e.g. light gray text on a white background) can be difficult or impossible to read for many users, even when it looks acceptable to the designer's own eyes/screen.\n\n**Contrast checkers** remove the guesswork \u2014 WCAG defines explicit contrast ratio thresholds:\n\n| Level | Normal text | Large text |\n|---|---|---|\n| AA | 4.5:1 | 3:1 |\n| AAA | 7:1 | 4.5:1 |\n\n(Tools like the WebAIM colour contrast checker can measure a specific foreground/background pair against these thresholds.)\n\n### 17. Style Guides\n\nA style guide provides rules and guidelines for creating consistent designs. **Limits choices \u2192 easier decisions \u2192 faster development.** A style guide typically covers: colours, typography, spacing, icons, and illustrations \u2014 giving the whole team a single reference instead of re-deciding these choices for every new screen.\n\n### 18. Further Reading\n\nRecommended books referenced for going deeper on this material: *The Design of Everyday Things* (Don Norman), *Don't Make Me Think* (Steve Krug), *Thinking with Type* (Ellen Lupton).\n",
+  "mcqs": [
+    {
+      "id": "m1",
+      "q": "According to the lecture, what do developers tend to focus on, in contrast to how users actually experience software?",
+      "options": [
+        "Colour palettes and typography",
+        "Whether it works, is fast, and has all the features \u2014 while users experience the design, not the implementation",
+        "User research and interviews",
+        "Marketing and branding"
+      ],
+      "correct": 1,
+      "explanation": "The lecture opens by contrasting developer questions (\"does it work? is it fast? are all the features there?\") with the fact that users experience software differently, through its design."
+    },
+    {
+      "id": "m2",
+      "q": "What happens \"when design is done right,\" per the lecture?",
+      "options": [
+        "It becomes the most noticeable part of the product",
+        "It becomes invisible",
+        "It requires constant onboarding tutorials",
+        "It increases the number of features"
+      ],
+      "correct": 1,
+      "explanation": "\"When done right, good design is invisible\" \u2014 versus \"when done wrong, bad design is frustrating.\""
+    },
+    {
+      "id": "m3",
+      "q": "Which three properties together define a great user experience, per the lecture?",
+      "options": [
+        "Fast, Cheap, Scalable",
+        "Useful, Usable, Desirable",
+        "Secure, Available, Reliable",
+        "Colourful, Animated, Modern"
+      ],
+      "correct": 1,
+      "explanation": "The lecture frames a great user experience as the intersection of Useful, Usable, and Desirable."
+    },
+    {
+      "id": "m4",
+      "q": "What is the \"biggest mindset shift\" the lecture describes for user-centred design?",
+      "options": [
+        "Moving from an implementation model (how the code works) to a user mental model (how the user thinks it works)",
+        "Moving from waterfall to agile development",
+        "Moving from manual testing to automated testing",
+        "Moving from monolith to microservices"
+      ],
+      "correct": 0,
+      "explanation": "The lecture explicitly names this shift \u2014 from implementation model to user mental model \u2014 as user-centred design's biggest mindset change."
+    },
+    {
+      "id": "m5",
+      "q": "What is the purpose of a \"constraint\" in UI design, per the lecture?",
+      "options": [
+        "To limit the number of features a product can have",
+        "To prevent users from performing invalid actions, guiding them toward valid ones before a mistake happens",
+        "To reduce server load by limiting requests",
+        "To enforce a strict corporate colour palette"
+      ],
+      "correct": 1,
+      "explanation": "\"Good design prevents mistakes before they happen\" by constraining what actions are even possible, rather than showing errors after the fact."
+    },
+    {
+      "id": "m6",
+      "q": "In the date-of-birth example, why is a calendar/date-picker widget preferred over a free-text field validated after submission?",
+      "options": [
+        "It's faster for the server to process",
+        "It constrains input so an invalid format is impossible to enter in the first place, rather than catching the mistake after it's made",
+        "It removes the need for any error handling code",
+        "It looks more visually appealing regardless of usability"
+      ],
+      "correct": 1,
+      "explanation": "The picker is a constraint \u2014 every option it offers is inherently valid, so there's no invalid-format mistake to make at all."
+    },
+    {
+      "id": "m7",
+      "q": "What does \"discoverability\" mean in interface design?",
+      "options": [
+        "Making the possible actions in an interface obvious, so users can predict outcomes without needing to experiment",
+        "Making a product easier for search engines to index",
+        "Hiding advanced features so beginners aren't overwhelmed",
+        "Automatically discovering user preferences via analytics"
+      ],
+      "correct": 0,
+      "explanation": "Discoverability is about users being able to easily see available actions and predict what will happen before clicking \u2014 good interfaces communicate how they work."
+    },
+    {
+      "id": "m8",
+      "q": "Which example illustrates poor discoverability, per the lecture?",
+      "options": [
+        "Clearly labelled \"Add,\" \"Edit,\" \"Delete\" buttons",
+        "A row of unlabeled icons that give no clue what each one does",
+        "A calendar widget for date selection",
+        "A skeleton loading screen"
+      ],
+      "correct": 1,
+      "explanation": "Unlabeled icons force the user to guess or click to find out \u2014 the opposite of discoverable."
+    },
+    {
+      "id": "m9",
+      "q": "What is the core principle behind the lecture's \"Feedback\" guidance?",
+      "options": [
+        "Users should always know what is going on; every action should have a visible response",
+        "Feedback forms should be shown after every user session",
+        "Errors should never be shown to users",
+        "Feedback is only necessary for destructive actions"
+      ],
+      "correct": 0,
+      "explanation": "\"Users should always know what is going on. Every action should have a visible response\" is the section's core statement."
+    },
+    {
+      "id": "m10",
+      "q": "In the \"Create task\" example, what was the actual UX failure?",
+      "options": [
+        "The task was never created",
+        "There was no visible response for 5 seconds after clicking, leaving the user unsure whether it worked",
+        "The button was mislabeled",
+        "The confirmation alert appeared before the click"
+      ],
+      "correct": 1,
+      "explanation": "The example shows a user waiting 5 seconds with no feedback, wondering \"did it work?\" \u2014 the fix is showing an immediate busy state, then a completion alert."
+    },
+    {
+      "id": "m11",
+      "q": "What is the \"Paradox of Choice\" as described in the lecture?",
+      "options": [
+        "More options always lead to more user satisfaction",
+        "More options can lead to fewer actions taken and less power to the user, contrary to the common assumption that more options means more freedom",
+        "Users prefer having zero options at all",
+        "Fewer options always confuse users more"
+      ],
+      "correct": 1,
+      "explanation": "The lecture contrasts the common misconception (more options \u2192 more power) with the actual paradox (more options \u2192 fewer actions taken \u2192 less power)."
+    },
+    {
+      "id": "m12",
+      "q": "What technique does the lecture recommend to counter the paradox of choice?",
+      "options": [
+        "Progressive disclosure \u2014 show only the most relevant choices, revealing more when the user looks for them",
+        "Displaying every possible option on the main screen at once",
+        "Removing all customization options permanently",
+        "Requiring users to complete a tutorial before seeing any options"
+      ],
+      "correct": 0,
+      "explanation": "Progressive disclosure is named directly as the technique to reduce the number of decisions a user has to make at once."
+    },
+    {
+      "id": "m13",
+      "q": "According to the lecture's visual hierarchy guidance, what happens if everything on a screen is emphasized (bright colours, bold/large text everywhere)?",
+      "options": [
+        "Users find the screen more engaging and take more action",
+        "Nothing is effectively emphasized \u2014 hierarchy is lost",
+        "Accessibility automatically improves",
+        "Load times increase significantly"
+      ],
+      "correct": 1,
+      "explanation": "\"If everything is emphasized, nothing is emphasized\" is stated directly as the core problem with these common mistakes."
+    },
+    {
+      "id": "m14",
+      "q": "Which four tools does the lecture list for creating visual hierarchy?",
+      "options": [
+        "Font size, animation, sound, motion",
+        "Spacing, size, weight, and colour",
+        "Icons, illustrations, photography, video",
+        "Margins, borders, shadows, gradients"
+      ],
+      "correct": 1,
+      "explanation": "The lecture lists spacing, size, weight, and colour as the tools for creating visual hierarchy."
+    },
+    {
+      "id": "m15",
+      "q": "What does the \"ambiguous spacing\" principle state about related vs. unrelated items?",
+      "options": [
+        "Related items should have more space between them than unrelated items",
+        "Related items should have less space between them than unrelated items, so spacing itself communicates grouping",
+        "All items should have identical spacing regardless of relationship",
+        "Spacing has no effect on perceived grouping"
+      ],
+      "correct": 1,
+      "explanation": "The lecture's proximity principle: less space signals a relationship (e.g. a label and its input), more space signals separation between groups."
+    },
+    {
+      "id": "m16",
+      "q": "Per the lecture, what line length is recommended to keep body text comfortable to read?",
+      "options": [
+        "Roughly 80 characters per line",
+        "Roughly 200 characters per line",
+        "Exactly 40 characters per line",
+        "No limit \u2014 longer lines are always better for information density"
+      ],
+      "correct": 0,
+      "explanation": "The lecture explicitly recommends avoiding lines longer than roughly 80 characters, contrasting it with a harder-to-read ~120 character example."
+    },
+    {
+      "id": "m17",
+      "q": "What line-height guidance does the lecture give for paragraphs versus headings/buttons?",
+      "options": [
+        "Headings need larger line heights than paragraphs",
+        "Paragraphs need larger line heights than headings or buttons",
+        "All text should use the same line height for consistency",
+        "Line height should always be set to exactly 1.0x"
+      ],
+      "correct": 1,
+      "explanation": "\"Paragraphs need larger line heights than headings or buttons\" \u2014 with the lecture showing 1.0x as too tight and 2.0x as too loose for body text."
+    },
+    {
+      "id": "m18",
+      "q": "Per the WCAG contrast table shown in the lecture, what is the minimum contrast ratio for AA-level normal text?",
+      "options": [
+        "3:1",
+        "4.5:1",
+        "7:1",
+        "2:1"
+      ],
+      "correct": 1,
+      "explanation": "AA normal text requires 4.5:1 (AA large text requires 3:1; AAA normal requires 7:1, AAA large requires 4.5:1)."
+    },
+    {
+      "id": "m19",
+      "q": "What is the core benefit of a design style guide, per the lecture?",
+      "options": [
+        "It replaces the need for a design system entirely",
+        "Limits choices \u2192 easier decisions \u2192 faster development, by giving a shared reference for colours, typography, spacing, icons, and illustrations",
+        "It is only useful for marketing materials",
+        "It eliminates the need for whitespace guidelines"
+      ],
+      "correct": 1,
+      "explanation": "\"Limits choices \u2192 Easier decisions \u2192 Faster development\" is stated directly as the style guide's value."
+    },
+    {
+      "id": "m20",
+      "q": "Which statement best summarizes the relationship between \"useful,\" \"usable,\" and \"desirable\" as described in the lecture?",
+      "options": [
+        "A product only needs to be useful to succeed",
+        "All three combine to create a great user experience \u2014 solving a real problem (useful) isn't enough if people can't operate it (usable) or don't want to (desirable)",
+        "Desirable products don't need to be usable",
+        "Usability and desirability are the same property under different names"
+      ],
+      "correct": 1,
+      "explanation": "The lecture frames great UX as the combination of all three properties together, not any single one in isolation."
+    }
+  ],
+  "techQuestions": [
+    {
+      "id": "t1",
+      "q": "Explain the difference between the \"implementation model\" and the \"user mental model\" using a concrete example from a search feature. Why does designing to the user's mental model require you to actively set aside knowledge of how your own code works?",
+      "answer": "The **implementation model** is how the system actually works internally \u2014 e.g. a search feature that, under the hood, tokenizes the query, checks it against an inverted index, ranks results by a TF-IDF score, and only matches documents containing the exact indexed tokens. The **user mental model** is how the user *imagines* it works based on what they can observe \u2014 most users assume \"search\" means \"find things related to what I typed,\" including near-misses, synonyms, and typos, regardless of what indexing strategy sits underneath.\n\n**Concrete mismatch:** a user searches \"recieve\" (a common misspelling) expecting to find documents about \"receive.\" If the implementation is a literal exact-token index, it returns zero results \u2014 which is *correct* relative to the implementation model, but a *failure* relative to the user's mental model, because the user has no idea (and shouldn't need to know) that the system only does exact token matching. From the user's perspective, the search feature is simply \"broken.\"\n\n**Why you have to actively set aside implementation knowledge:** as the developer, you *know* why zero results came back \u2014 you know exactly which index, which tokenizer, which edge case caused it. That knowledge makes the behaviour feel reasonable to you, because you can explain it. The user has none of that context \u2014 they only see \"I typed something reasonable and got nothing.\" Designing for the user's mental model means evaluating the interface as if you had never seen the implementation: does \"zero results, no suggestions, no fuzzy matching\" make sense to someone who has no idea an inverted index exists? Once you frame it that way, the fix (fuzzy matching, \"did you mean,\" partial matches) becomes obviously necessary \u2014 a fix that's easy to overlook if you keep reasoning from the implementation model, where the current behaviour already makes perfect sense to you."
+    },
+    {
+      "id": "t2",
+      "q": "Design a set of constraints for a \"create password\" input field that prevent common invalid submissions *before* they happen, rather than showing an error after submission. List at least three constraints and the specific mistake each one prevents.",
+      "answer": "1. **Live requirement checklist that updates as the user types** (e.g. \u2705 8+ characters, \u2705 one number, \u2b1c one symbol) \u2014 this prevents the mistake of a user submitting a password that fails requirements without knowing *which* requirement failed, since they see the gap in real time rather than getting a generic post-submit rejection.\n\n2. **Disable the \"Create account\" submit button until all requirements are met** \u2014 this prevents the mistake of submitting an invalid password at all; the invalid state is simply unreachable rather than reachable-then-rejected, matching the lecture's principle that good design prevents mistakes before they happen rather than showing errors after.\n\n3. **A visible show/hide toggle on the password field** (rather than only masked dots) \u2014 this prevents the mistake of a user mistyping a password they can't see, especially on mobile where typos are common; letting them verify what they actually typed avoids a downstream \"wrong password\" login failure caused purely by an earlier, undetected typo.\n\n4. *(bonus)* **A confirm-password field with real-time match indication** (e.g. a green checkmark the instant both fields match, rather than only on submit) \u2014 prevents the mistake of submitting mismatched passwords, catching the error at the moment it's still cheap to fix (before moving on to the next field) rather than after the whole form is submitted.\n\nEach of these follows the same underlying pattern from the lecture: instead of *validating after the fact and reporting an error*, the interface *constrains what can be submitted* or *gives real-time visibility* so the invalid state is either impossible or immediately obvious, well before the user commits to submitting."
+    },
+    {
+      "id": "t3",
+      "q": "A dropdown menu uses six unlabeled icons in a row with no text or tooltips. Using the lecture's discoverability qualities, explain what's wrong and redesign it \u2014 naming the three specific discoverability qualities your redesign restores.",
+      "answer": "**What's wrong:** the lecture defines good discoverability as users being able to (1) easily see the available actions, (2) predict what will happen before clicking, and (3) explore the interface without fear of breaking something. Six unlabeled icons fail all three: a user can *see* that six things exist, but not what they *do* (fails \"easily see the available actions\" in any meaningful sense \u2014 seeing a shape isn't the same as understanding an action); they cannot predict the outcome of clicking any of them without already knowing the icon convention or clicking to find out; and because they can't predict the outcome, cautious users will often avoid clicking unfamiliar icons entirely for fear of triggering something destructive (fails \"explore without fear\").\n\n**Redesign:** replace bare icons with icon **+ text label** pairs (e.g. a trash icon paired with the word \"Delete,\" a pencil icon paired with \"Edit\"), or at minimum add on-hover tooltips that reveal the label before a click commits to the action. For less common actions, group them behind a single, clearly labelled \"More actions\" affordance (an overflow menu) rather than cluttering the primary row \u2014 this matches the lecture's own example of \"Add / Edit / Delete / More actions\" as the discoverable version of the same set of capabilities.\n\n**Discoverability qualities restored:**\n1. **Easily see the available actions** \u2014 text labels make each action's purpose immediately legible, not just its existence.\n2. **Predict what will happen before clicking** \u2014 a labelled \"Delete\" button removes any ambiguity about the consequence of clicking it.\n3. **Explore without fear** \u2014 once outcomes are predictable, users no longer need to avoid the interface out of caution; they can act confidently."
+    },
+    {
+      "id": "t4",
+      "q": "Explain why \"the interface should give the answer\" is central to good feedback design, using the lecture's \"Create task\" 5-second-delay example. Redesign that flow using the specific feedback techniques the lecture names.",
+      "answer": "\"The interface should give the answer\" means the burden of tracking system state should sit with the interface, not the user's memory. In the lecture's example, a user clicks \"Create task\" and then waits five full seconds with **no visual change at all** \u2014 during that gap, the user has to mentally hold the question \"did it work?\" themselves, because the interface gave them nothing to look at that answers it. This is the opposite of good feedback: the system knows exactly what state it's in (request sent, pending, succeeded) at every instant, but none of that state is being communicated, so the user is forced to *guess* or *remember* rather than simply *look and know*.\n\n**Redesign using the lecture's named techniques:**\n1. **Immediately show a busy state** the instant the click registers \u2014 e.g. the \"Create task\" button itself switches to a spinner (or becomes disabled with a loading indicator) the moment it's clicked, so the user has instant confirmation the click was received, with zero perceptible gap.\n2. If the response takes long enough that the resulting content needs to render in, use a **skeleton screen** for the area where the new task will appear, rather than a blank space \u2014 this signals \"content is coming, here specifically\" rather than leaving an ambiguous empty gap.\n3. **Show a clear completion signal once done** \u2014 e.g. a toast/alert reading \"Task created,\" and/or the new task visibly appearing in the task list \u2014 so the end of the waiting period is just as clearly communicated as its start.\n\nWith this redesign, at every point during the five seconds, the interface is *actively answering* \"what's happening right now?\" \u2014 spinner \u2192 (optional skeleton) \u2192 confirmation \u2014 rather than leaving that question to the user's memory and patience, which is exactly the shift the lecture is describing."
+    },
+    {
+      "id": "t5",
+      "q": "A checkout flow shows 15 payment method icons simultaneously on the first screen. Using the Paradox of Choice and progressive disclosure, redesign the flow to reduce decision load while still supporting all 15 methods.",
+      "answer": "**Diagnosing the problem:** per the lecture, presenting 15 simultaneous options doesn't give users more power \u2014 it triggers the paradox of choice, where the cognitive load of evaluating 15 unfamiliar or irrelevant options (most users only ever use one or two payment methods) causes hesitation, and some users abandon checkout entirely rather than work through all 15 options to find the one they actually want.\n\n**Redesign using progressive disclosure:**\n1. **Show only the 2\u20133 most commonly used methods by default** (e.g. Card, popular local mobile payment method, PayPal) as large, clearly labelled primary buttons \u2014 covering the overwhelming majority of real usage with minimal decision effort.\n2. **Add a single, clearly labelled \"More payment options\" expander/link** below those primary choices, which reveals the remaining 12 methods only when a user actively looks for them \u2014 exactly the lecture's phrasing: \"reveal more options when the user looks for it.\"\n3. Within the expanded list, group related methods (e.g. all bank transfer options together, all buy-now-pay-later options together) so that even the \"more options\" view isn't itself a flat, undifferentiated wall of 12 equally-weighted choices \u2014 applying the same hierarchy principles (grouping via spacing) to the secondary layer.\n\n**Outcome:** all 15 methods remain fully supported and reachable \u2014 nothing is removed \u2014 but the *default* decision surface shrinks from 15 simultaneous choices to 2\u20133, which per the paradox of choice should increase the proportion of users who actually complete checkout, since the common case requires almost no deliberation while the uncommon case remains one click away."
+    },
+    {
+      "id": "t6",
+      "q": "Explain the relationship between visual hierarchy and \"if everything is emphasized, nothing is emphasized,\" using a concrete before/after example of a pricing page redesigned to have one clear primary call-to-action.",
+      "answer": "Visual hierarchy exists to tell the eye, at a glance, what matters most on a screen \u2014 but hierarchy is inherently a *relative*, not absolute, property: something can only look \"most important\" by looking *more* emphasized than its neighbours. If every element on the page is bold, brightly coloured, and large, there is no longer any relative difference between elements \u2014 every element is competing at the same visual \"volume,\" so the eye has no signal for where to look first. Maximizing emphasis everywhere paradoxically destroys hierarchy rather than reinforcing it.\n\n**Before:** a pricing page has three plan cards \u2014 Basic, Pro, Enterprise \u2014 where all three \"Choose Plan\" buttons are the same solid, bright accent colour and same bold weight, and the price text on all three cards is the same large, bold font size. Every card visually shouts \"look at me\" equally, so a user scanning the page gets no cue about which plan the business actually wants to highlight (e.g. the \"Pro\" plan, which is the best-margin, most-recommended option) \u2014 they're left to compare all three equally from scratch.\n\n**After:** only the \"Pro\" plan's card uses the solid accent-colour \"Choose Plan\" button and a \"Most Popular\" label in a distinct colour; the Basic and Enterprise cards use a lower-contrast, outlined/ghost button style and muted card backgrounds. The Pro plan's price is set slightly larger/bolder than the other two. Now the page has one unambiguous focal point \u2014 a user's eye lands on Pro first, exactly matching visual weight to actual priority \u2014 while Basic and Enterprise remain fully visible and selectable, just visually secondary. This is the practical meaning of \"create hierarchy using spacing, size, weight, and colour\": applied *selectively* to the one thing that should stand out, not uniformly across everything."
+    },
+    {
+      "id": "t7",
+      "q": "Explain the \"ambiguous spacing\" (proximity) principle, and describe how you'd redesign a settings page where every field currently has identical 24px spacing between them, regardless of logical grouping.",
+      "answer": "The proximity/ambiguous-spacing principle states that **related items should have less space between them than unrelated items** \u2014 spacing itself is a communication channel that signals grouping, entirely independent of any label, border, or background colour. When every element on a page uses identical spacing, that channel goes silent: nothing in the layout tells the eye which fields belong together and which don't, so the user has to read every label individually to reconstruct the groupings that spacing could have communicated instantly.\n\n**Diagnosing the current settings page:** with flat 24px spacing everywhere, a \"First name\" field and its logically-paired \"Last name\" field sit exactly as far apart as \"Last name\" is from the unrelated \"Email notifications\" toggle below it. Visually, the page reads as one undifferentiated list of fields rather than as distinct, related groups (e.g. \"Personal Info\" vs. \"Notification Preferences\").\n\n**Redesign:**\n1. **Tighten spacing within a logical group** \u2014 e.g. reduce the gap between \"First name\" and \"Last name\" (both part of \"Personal Info\") to something noticeably smaller, such as 8\u201312px.\n2. **Widen spacing between groups** \u2014 increase the gap before an unrelated group (e.g. before \"Notification Preferences\" begins) to something noticeably larger than the intra-group spacing, such as 40\u201348px.\n3. *(optional reinforcement, not a substitute)* add group headings (\"Personal Info,\" \"Notification Preferences\") \u2014 but note that per the lecture's principle, the spacing difference alone should already make the grouping visually apparent even before a user reads any heading text; headings reinforce the grouping, they don't have to carry it alone."
+    },
+    {
+      "id": "t8",
+      "q": "A body of text is set at 120 characters per line with a line-height of 1.0x. Using the lecture's line-length and line-height guidance, explain the two separate readability problems this creates and how you'd fix each independently.",
+      "answer": "These are two **separate** problems, addressed by two **separate** properties, and fixing one does not fix the other.\n\n**Problem 1 \u2014 line length (120 characters):** the lecture recommends body text stay around ~80 characters per line; 120 characters is well beyond that. At this width, the eye has to travel much further horizontally to read a single line, and \u2014 critically \u2014 when the eye jumps back to the start of the *next* line, it's easy to lose track of which line it just finished, especially over a long paragraph. This is purely a horizontal-measure problem: how wide the text column is.\n\n**Fix:** constrain the text container's width (e.g. via a `max-width` in CSS, roughly matching a ~75\u201380 character measure at the given font size) so lines wrap sooner \u2014 independent of any line-height change.\n\n**Problem 2 \u2014 line height (1.0x):** the lecture explicitly calls 1.0x line height \"too tight\" for paragraph text. At 1.0x, consecutive lines sit close enough vertically that they can visually crowd into each other, making it harder for the eye to track a single line as a distinct unit as it scans down the paragraph \u2014 a purely *vertical* spacing problem, unrelated to how wide each line is.\n\n**Fix:** increase line-height toward the lecture's \"just right\" example for paragraph text (around 1.5x), independent of the line-length fix \u2014 a paragraph can have a perfectly reasonable 80-character line length and still feel cramped if the line-height is 1.0x, and conversely a paragraph with generous 1.5x line-height can still be hard to read if each line is 120 characters wide. Both need to be corrected, and correcting only one leaves the other problem fully intact."
+    },
+    {
+      "id": "t9",
+      "q": "Explain why the lecture recommends checking colour contrast with a tool rather than relying on visual judgement alone. Then, using the lecture's WCAG contrast table, determine whether each of the following passes AA for normal text: (a) 3.2:1, (b) 4.8:1, (c) 7.5:1.",
+      "answer": "**Why use a tool instead of visual judgement:** the lecture frames contrast checkers as removing \"the guesswork\" \u2014 and for good reason. A designer's own perception of whether text is \"readable enough\" is unreliable for several reasons: their screen's brightness/calibration affects perceived contrast, they already know what the text says (so partially-illegible text still \"reads\" fine to them because they're not actually parsing it fresh), and \u2014 most importantly \u2014 a meaningful proportion of users have lower-contrast-sensitivity vision (including many forms of colour vision deficiency and age-related vision changes) for whom a combination that looks \"obviously fine\" to a designer with typical vision may be genuinely difficult or impossible to read. A contrast ratio is an objective, measurable number computed from the actual luminance values of the two colours \u2014 it doesn't depend on any individual's screen, familiarity with the text, or vision \u2014 which is exactly why it's checked with a tool rather than trusted to a subjective \"looks fine to me.\"\n\n**Applying the AA normal-text threshold (4.5:1) from the lecture's table:**\n- **(a) 3.2:1 \u2014 Fails AA for normal text** (needs 4.5:1). Note it *would* pass AA for large text, since that threshold is only 3:1 \u2014 so this ratio could still be acceptable if used for large/heading text, just not for body copy.\n- **(b) 4.8:1 \u2014 Passes AA for normal text** (4.8 \u2265 4.5), but does not reach AAA for normal text, which requires 7:1.\n- **(c) 7.5:1 \u2014 Passes both AA and AAA for normal text** (7.5 \u2265 7:1, the AAA threshold), the highest bar in the lecture's table."
+    },
+    {
+      "id": "t10",
+      "q": "Explain how a design style guide reduces development time, and connect it to the design tokens / design systems material from L17 \u2014 what's the relationship between the \"style guide\" described in this lecture and the \"Design System\" described in L17?",
+      "answer": "**Why a style guide speeds up development:** the lecture's stated chain is \"limits choices \u2192 easier decisions \u2192 faster development.\" Without a style guide, every new screen or feature requires someone to re-decide, from scratch, questions like \"what blue do we use for links here?\" or \"how much padding goes around this card?\" \u2014 decisions that take time, invite inconsistency (different developers making different micro-decisions), and often require design review/back-and-forth to settle. A style guide pre-answers those questions once, centrally, so building a new screen becomes an act of *applying* existing rules rather than *inventing* new ones each time.\n\n**Relationship to L17's Design System material:** this lecture's \"style guide\" (covering colours, typography, spacing, icons, illustrations) maps closely onto what L17 calls the **Design Token** layer of a Design System \u2014 both are about centrally defining and reusing visual decisions rather than re-deciding them per screen. However, L17 draws a sharper, more formal distinction that this lecture doesn't fully separate out:\n\n- L17's **Brand Style Guide** = strategic, human-readable (mission, voice, logo rules, colour palette *description*) \u2014 closer to what this lecture would call reference documentation.\n- L17's **Design System** = operational, *executable* \u2014 the same colour/spacing/typography rules encoded as actual **design tokens** consumable by code (Figma, CSS, Swift, Kotlin), plus reusable, documented components built from those tokens.\n\nThis lecture's \"style guide\" sits conceptually between the two, but leans toward L17's Design System in *spirit* \u2014 the explicit goal (\"limits choices, faster development\") is about making consistent decisions *executable and reusable*, not just documented for reference. In short: this lecture's UI/UX \"style guide\" and L17's \"Design System\" describe the same underlying idea (centrally defined, reusable visual decisions) from two different angles \u2014 one focused on the usability/consistency payoff for the end product, the other on the token/component infrastructure that makes that consistency achievable across a whole engineering organization."
+    },
+    {
+      "id": "t11",
+      "q": "Using the \"useful / usable / desirable\" framework, evaluate a hypothetical tax-filing app that correctly calculates taxes (useful) but has a confusing 12-step wizard with no progress feedback (a usability failure) and a dated, cluttered visual design (a desirability failure). Why doesn't \"useful\" alone guarantee product success?",
+      "answer": "**Useful:** the app correctly calculates taxes \u2014 it solves the actual underlying problem the user came for. By the lecture's definition, this box is checked.\n\n**Usable \u2014 failing:** a 12-step wizard with no progress feedback violates several of the lecture's usability principles at once. There's no discoverability (users can't predict how many steps remain or what's coming next), no feedback (the interface doesn't show current state \u2014 \"step 4 of 12\" style progress indication is exactly the kind of \"the interface should give the answer\" signal that's missing), and quite possibly a paradox-of-choice problem if steps present many simultaneous fields rather than progressively disclosing what's relevant. A user can be fully capable of using the app in principle, but the friction of not knowing where they are or how much is left makes the experience feel effortful and uncertain.\n\n**Desirable \u2014 failing:** a dated, cluttered visual design (per the visual hierarchy/whitespace/colour sections) makes the product feel untrustworthy and unpleasant to spend time in \u2014 for something as sensitive as taxes, a cluttered interface can actively undermine user confidence in the calculations themselves, even if those calculations are correct.\n\n**Why \"useful\" alone doesn't guarantee success:** this is exactly the lecture's opening argument \u2014 developers tend to focus on \"does it work, is it fast, are all the features there\" (i.e. usefulness), but users experience the *design* of the product, not its internal correctness. A user who gets lost in a confusing 12-step flow, unsure if their progress is saved, in an interface that looks untrustworthy, will likely abandon the app mid-flow regardless of how mathematically correct the underlying tax engine is \u2014 \"if a product frustrates us enough, we stop using it,\" independent of whether it was technically capable of solving the problem. Usefulness is necessary but not sufficient; usability and desirability determine whether users actually get to (and stay long enough to) benefit from that usefulness at all."
+    },
+    {
+      "id": "t12",
+      "q": "A developer claims: \"Constraints limit user freedom, so removing all input restrictions maximizes usability.\" Critique this claim using the lecture's actual framing of constraints and the Paradox of Choice.",
+      "answer": "This claim conflates two different things the lecture explicitly distinguishes: *restricting what a user can express/want* versus *preventing invalid or erroneous input*. The lecture's constraints (like the date-picker example) don't limit what outcome a user can achieve \u2014 a date picker doesn't stop a user from selecting any valid date they want. What it removes is the ability to enter an *invalid* value (a malformed date string) in the first place. Removing that constraint doesn't grant the user more real freedom \u2014 it just reintroduces a class of mistake (typos, ambiguous formats) that a well-designed interface would have made structurally impossible. The lecture is explicit that this is a *benefit*: \"good design prevents mistakes before they happen,\" and constraints \"reduce confusion and decision-making effort\" and \"make interfaces feel safer and more predictable\" \u2014 the opposite of a usability cost.\n\nThe **Paradox of Choice** section directly undercuts the \"more freedom = more usable\" half of the claim too: the lecture shows that more unconstrained options empirically lead to **fewer actions taken and less power to the user**, not more \u2014 because unconstrained freedom raises the cognitive cost of deciding what to do. An input with zero restrictions (e.g. a free-text field for something that has a small set of valid values, like a country selector) doesn't make the user more powerful; it makes every entry a small, effortful decision-and-error-recovery cycle instead of a fast, safe selection from valid options.\n\n**The correct framing:** constraints and freedom aren't opposites on a single dial where removing constraints always increases usability. Well-designed constraints remove *invalid* possibilities while preserving full access to *valid* ones \u2014 which the lecture frames as making the interface both safer and, via reduced decision load, more usable, not less."
+    }
+  ]
+}

@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture in Practice — CT3 Study Guide</title>
+<style>
+/* ============================================================
+   CT3 Study Guides — shared dark academic theme
+   Identical across every lecture file. Edit here, regenerate all.
+   ============================================================ */
+
+:root {
+  --bg: #0b0e11;
+  --surface: #12161b;
+  --card: #1a1f26;
+  --card-border: #262d37;
+  --text: #e8ecf1;
+  --text-dim: #9aa4b2;
+  --text-faint: #626d7a;
+  --accent: #4a90f8;
+  --accent-dim: #2c5aa8;
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --warning: #f59e0b;
+  --error: #f56363;
+  --error-bg: rgba(245, 99, 99, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Nav ---------- */
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 14, 17, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.topnav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.topnav-brand {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topnav-brand span { color: var(--accent); }
+
+.topnav-links {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+}
+
+.topnav-links::-webkit-scrollbar { height: 4px; }
+.topnav-links::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 2px; }
+
+.topnav-links a {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--easing), color var(--duration-fast) var(--easing);
+}
+
+.topnav-links a:hover { background: var(--card); color: var(--text); }
+.topnav-links a.active { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Layout ---------- */
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) 120px;
+}
+
+.hero {
+  margin-bottom: var(--space-8);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.hero h1 {
+  font-size: 30px;
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.hero p {
+  color: var(--text-dim);
+  font-size: 16px;
+  margin: 0;
+}
+
+.section-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 53px;
+  background: var(--bg);
+  z-index: 50;
+  padding-top: var(--space-2);
+}
+
+.section-tab {
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--duration-fast) var(--easing);
+}
+
+.section-tab:hover { color: var(--text); }
+.section-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.section-panel { display: none; }
+.section-panel.active { display: block; animation: fadein var(--duration-normal) var(--easing); }
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Content (rendered markdown) ---------- */
+
+.content h2 {
+  font-size: 22px;
+  margin: var(--space-8) 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--card-border);
+  letter-spacing: -0.005em;
+}
+.content h2:first-child { margin-top: 0; }
+
+.content h3 {
+  font-size: 17px;
+  color: var(--accent);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.content p { color: var(--text); margin: 0 0 var(--space-4); }
+.content strong { color: #fff; font-weight: 600; }
+.content ul, .content ol { margin: 0 0 var(--space-4); padding-left: 22px; color: var(--text); }
+.content li { margin-bottom: var(--space-1); }
+.content li strong { color: var(--text); }
+
+.content code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.content pre {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin: 0 0 var(--space-4);
+}
+
+.content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #d8dee9;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-4);
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+}
+
+.content th, .content td {
+  border: 1px solid var(--card-border);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.content th {
+  background: var(--card);
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.content tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+.content hr {
+  border: none;
+  border-top: 1px solid var(--card-border);
+  margin: var(--space-8) 0;
+}
+
+/* ---------- Quiz (MCQ) ---------- */
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.quiz-score {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.quiz-score b { color: var(--text); }
+
+.progress-bar {
+  height: 6px;
+  background: var(--card);
+  border-radius: 999px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 120px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width var(--duration-normal) var(--easing);
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing);
+}
+.btn:hover { background: #232a33; border-color: #38414d; }
+.btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-accent:hover { background: #3a7de0; }
+
+.mcq-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.mcq-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.mcq-q .mcq-index {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  flex: none;
+}
+
+.mcq-options { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.mcq-option {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing);
+}
+
+.mcq-option:hover:not(:disabled) { border-color: var(--accent); }
+.mcq-option:disabled { cursor: default; }
+
+.mcq-option.correct { background: var(--success-bg); border-color: var(--success); color: #baf7cf; }
+.mcq-option.incorrect { background: var(--error-bg); border-color: var(--error); color: #ffc9c9; }
+.mcq-option.reveal-correct { border-color: var(--success); color: #baf7cf; }
+
+.mcq-explanation {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  display: none;
+}
+.mcq-explanation.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.mcq-explanation b { color: var(--text); }
+
+/* ---------- Tech questions ---------- */
+
+.tech-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.tech-q-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.tech-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  gap: var(--space-2);
+}
+.tech-q .mcq-index { color: var(--accent); font-family: var(--font-mono); flex: none; }
+
+.tech-reviewed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+  flex: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.tech-reviewed-label input { accent-color: var(--accent); }
+
+.tech-answer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--card-border);
+  display: none;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.tech-answer.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.tech-answer p { margin: 0 0 var(--space-3); color: var(--text-dim); }
+.tech-answer ul { margin: 0 0 var(--space-3); padding-left: 20px; }
+.tech-answer strong { color: var(--text); }
+.tech-answer code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.reveal-btn {
+  margin-top: var(--space-4);
+}
+
+/* ---------- Footer ---------- */
+
+.page-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.page-footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.page-footer a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .page { padding: var(--space-6) var(--space-4) 100px; }
+  .hero h1 { font-size: 24px; }
+  .section-tabs { top: 49px; }
+}
+
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a>
+    <div class="topnav-links">
+      <a href="index.html" class="">Home</a>
+<a href="L17.html" class="">L17 · Design Systems & CI</a>
+<a href="L18.html" class="">L18 · Domain Modelling & Architectures</a>
+<a href="L19.html" class="">L19 · Software Testing in Practice</a>
+<a href="L20.html" class="">L20 · Designed for Humans</a>
+<a href="L21.html" class="">L21 · DevOps & DevSecOps</a>
+<a href="L22.html" class="">L22 · Practical Architectural Design</a>
+<a href="L23.html" class="active">L23 · Architecture in Practice</a>
+<a href="L24.html" class="">L24 · Security Testing</a>
+<a href="L25.html" class="">L25 · Service Contracts</a>
+<a href="MS.html" class="">Bonus · Microservices Deep Dive</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <header class="hero">
+    <div class="hero-eyebrow">L23 &middot; Software Engineering</div>
+    <h1>Architecture in Practice</h1>
+    <p>Design considerations and best practices applied to two real systems: a high-performance event-driven road-security platform, and a resilient, modular financial-services platform.</p>
+  </header>
+
+  <div class="section-tabs">
+    <button class="section-tab active" data-target="panel-content">Study Content</button>
+    <button class="section-tab" data-target="panel-mcq">MCQs (20)</button>
+    <button class="section-tab" data-target="panel-tech">Technical Questions (12)</button>
+  </div>
+
+  <section id="panel-content" class="section-panel active">
+    <div id="content-body" class="content"></div>
+  </section>
+
+  <section id="panel-mcq" class="section-panel">
+    <div id="mcq-panel-top" class="quiz-header">
+      <div class="progress-bar"><div id="quiz-progress-fill" class="progress-bar-fill" style="width:0%"></div></div>
+      <div id="quiz-score" class="quiz-score">0 / 0 correct</div>
+      <button id="quiz-reset" class="btn">Shuffle &amp; reset quiz</button>
+    </div>
+    <div id="mcq-list"></div>
+  </section>
+
+  <section id="panel-tech" class="section-panel">
+    <div class="quiz-header">
+      <div id="tech-counter" class="quiz-score">0 / 12 marked reviewed</div>
+    </div>
+    <div id="tech-list"></div>
+  </section>
+
+  <footer class="page-footer">
+    <a href="L22.html">&larr; L22</a>
+    <a href="L24.html">L24 &rarr;</a>
+  </footer>
+</main>
+
+<script id="lecture-data" type="application/json">{"id": "L23", "title": "Architecture in Practice", "subtitle": "Design considerations and best practices applied to two real systems: a high-performance event-driven road-security platform, and a resilient, modular financial-services platform.", "contentMarkdown": "## Architecture in Practice \u2014 Built to Last\n\n### 1. Design Considerations\n\nBest practices when approaching architecture:\n- **Determine the non-functional requirements early.**\n- **Architecture design first, tech choices later** \u2014 decide the structure and responsibilities before picking specific frameworks/products.\n- **Avoid over-engineering.**\n- **Consider the implementation teams' structure** (their skills, size, and organization shape what architecture they can actually deliver and operate).\n\n**Design considerations to weigh for any system:**\n- Security\n- Maintainability\n- Scalability\n- Reliability & Availability\n- Extensibility\n- Teams and collaboration\n\n---\n\n## Case Study 1: Road Security (Success Factors: Performance & Scalability)\n\n### 2. Problem Domain\n\nA road-security system aimed at making South Africa safer:\n- Performs **license plate lookups** to identify warnings on a vehicle and/or driver.\n- The South African Police Service (**SAPS**) can subscribe for **notifications** of vehicle sightings (i.e. get alerted when a flagged plate is seen again).\n\n### 3. Design Challenges\n\n- **Sub-second response times**, with **asynchronous responses** where needed.\n- **Scalability** for increased request volumes.\n- **Compatibility** with various client environments (different agencies/devices integrating with the system).\n\n### 4. Design: High-Performance, Scalable, Event-Driven Architecture\n\n**Overall architecture shape:** Clients connect through a **Communications** layer, which talks to an **Enterprise Message Bus (EMB)** at the center of the system. The message bus routes messages out to, and receives results back from, four surrounding components:\n- **Request Processing** \u2194 **License Queries** (the \"query\" side of the flow)\n- **Response Processing** \u2194 **Notifications** (the \"result\" side of the flow)\n\nAll four surrounding components communicate with each other only through the central Enterprise Message Bus \u2014 none of them call each other directly.\n\n### 5. Component: Clients\n\n**Key considerations:** varying client technologies; sub-second response times required.\n\n**Design decisions:** use **web sockets** as the communication protocol; clients are free to decide which tech stack they implement this with on their end (the protocol is the contract, not the language/framework).\n\n### 6. Component: Communications\n\n**Key considerations:** thousands of simultaneous connections; authentication and authorization; two-way communication; scaling *stateful* services (a websocket connection is inherently stateful \u2014 tied to a specific server instance).\n\n**Design decisions:**\n- Web sockets for communication (enabling genuine two-way, low-latency messaging, unlike simple request/response HTTP).\n- Authentication through **issued certificates** (rather than e.g. username/password per message).\n- A **Redis cache** to share state *between multiple instances* of the communications service \u2014 since a client's websocket connection is pinned to one specific server instance, but the system runs many instances, Redis lets those instances coordinate (e.g. to know which instance holds which client's connection).\n\n### 7. Component: Request Processing\n\n**Key considerations:** determine which sources need to be queried for a given request; specify whether responses should be combined or returned separately.\n\n**Design decisions:**\n- Receive **one** incoming request, then create separate messages for each operation that needs to happen \u2014 enabling those operations to run **in parallel** rather than sequentially.\n- Create a **unique identifier** (correlation ID) attached to those messages, so that if configured, the separate results can later be **combined** back into one response tied to the original request.\n\n### 8. Component: License Queries\n\n**Key considerations:** this component has the **most significant impact on response times** (it's doing the actual lookup work); it needs to be **extensible** (new data sources will be added over time).\n\n**Design decisions:**\n- **Query sources in parallel** (rather than one at a time) to minimize total response time.\n- **Add new query sources as new services**, without impacting or requiring changes to the existing sources \u2014 new lookup sources plug in independently.\n\n### 9. Component: Response Processing\n\n**Key considerations:** responses may need to be separated or combined (depending on the original request's configuration); the system experiences **very high load**; scaling *stateful* services is again a concern here (building up a combined response requires tracking partial state until all parallel queries return).\n\n**Design decisions:**\n- Each individual response should **already contain information about how to combine it** with others (i.e. carry its own correlation/combination metadata, rather than requiring a separate lookup).\n- A **Redis cache** is used to build up the combined-response state across the parallel results as they arrive, before the fully combined response is sent back.\n\n### 10. Component: Notifications\n\n**Key considerations:** clients can **subscribe** to be alerted on specific license plate \"hits\" (sightings); the system needs to be **extensible** to support additional notification methods over time (e.g. SMS, push, email, a SAPS-specific integration).\n\n**Design decisions:**\n- Notifications are sent **in parallel**, specifically so that sending a notification does **not** impact the response time of the original query that's still in flight.\n- **Add new notification methods as new services**, without impacting the existing notification services \u2014 the same extensibility principle used for License Queries.\n\n---\n\n## Case Study 2: Financial Services (Success Factors: Maintainability, Availability & Resilience)\n\n### 11. Problem Domain\n\nA large financial-services **group organisation with multiple subsidiaries** (\"sub-businesses\"), requiring a **unified user experience** across them \u2014 despite each subsidiary potentially having its own subsystems, data, and security architecture.\n\n### 12. Design Considerations\n\n- Security & data protection\n- Maintainability\n- Resilience\n- Availability (deployment/DevOps concerns)\n\n### 13. Design: Highly-Available, Resilient, Modular Service-Oriented Architecture\n\n**Overall architecture shape:** client entry points \u2014 several web **Modules** (one per subsidiary/business unit) and a **Mobile App** \u2014 all route through a single **API Gateway**. The gateway talks to an **Identity** service (handling authentication/authorization for every request) and routes requests onward to the appropriate **Domain Service** (Domain Service-1, Domain Service-2, ... Domain Service-n \u2014 one per business domain). Domain Service-1 and Domain Service-2 share a **Cache**, which in turn connects to a **domain-specific policy engine**. Domain Service-n connects onward to its own **domain-specific back-end service**. Each domain service, and the resources behind it, stays logically separated from the others, even though all requests enter through the same gateway.\n\n### 14. Design Area: Security & Data Protection\n\n**Key considerations:** highly sensitive user data; authorization/authentication needed consistently across every subsidiary's traffic.\n\n**Design decisions:**\n- **Identity management** \u2014 a dedicated identity service (as shown centrally in the architecture) rather than each subsidiary handling auth independently.\n- **Single Sign-On (SSO)** \u2014 one login session works across all the subsidiaries/modules, delivering the \"unified user experience\" the problem domain calls for.\n\n### 15. Design Area: Maintainability\n\n**Key considerations:** multiple development teams (likely one per subsidiary); multiple subsystems that need to evolve independently.\n\n**Design decisions:** **modularisation / micro-frontends** \u2014 each subsidiary's UI module can be built, changed, and deployed largely independently by its own team, while still composing into one unified application for the end user.\n\n### 16. Design Area: Resilience\n\n**Key considerations:** susceptibility to **existing integration challenges** (a large group organisation likely has legacy or third-party systems behind each domain service that aren't fully reliable).\n\n**Design decisions:**\n- **Caching** \u2014 reduces how often the system needs to depend on a potentially-unreliable downstream integration to answer a request.\n- **Timeouts / retries / backoff strategies** \u2014 the standard tactics for tolerating a slow or intermittently-failing dependency, rather than letting one failing integration cascade into a full request failure.\n\n### 17. Design Area: Availability\n\n**Key considerations:** the application is a **24/7 service portal** and therefore cannot be down or unavailable at any time.\n\n**Design decisions:** the **blue/green deployment strategy** \u2014 two identical production environments exist (\"blue\" = the currently live version, \"green\" = the newly deployed version). A router sits in front of both; it currently directs all live user traffic to the blue (production) environment while the new version is deployed and can be verified in the green environment. When ready, the router switches traffic over to green \u2014 achieving a release with effectively zero downtime, since the previously-live environment (now idle) can also serve as an instant rollback target if needed.\n\n---\n\n## Tools & Techniques\n\n### 18. Design and Modelling Tools\n\n- **UML** (Unified Modelling Language)\n- **Sequence diagrams**\n- **C4 Model**\n- **Infrastructure diagrams**\n\n### 19. What These Tools Are Useful For\n\n- Communicating structure, data, infrastructure, technology choice, scope, and abstraction to different audiences.\n- Visualizing system structure.\n- **Identifying risks early** \u2014 a diagram often surfaces a missing consideration before any code is written.\n- Ensuring consistency across the solution \u2014 a shared, explicit reference that different teams building different parts of the system can align to.\n", "mcqs": [{"id": "m1", "q": "What are the two success factors for Case Study 1 (Road Security)?", "options": ["Security and maintainability", "Performance and scalability", "Availability and resilience", "Extensibility and teams collaboration"], "correct": 1, "explanation": "Case Study 1 is explicitly framed around performance and scalability."}, {"id": "m2", "q": "What are the two success factors for Case Study 2 (Financial Services)?", "options": ["Performance and scalability", "Maintainability, availability, and resilience", "Security and extensibility", "Teams and collaboration only"], "correct": 1, "explanation": "Case Study 2 is explicitly framed around maintainability, availability, and resilience."}, {"id": "m3", "q": "Per the lecture's best practices, what should happen before technology choices are made?", "options": ["Team hiring", "Architecture design", "Budget approval", "User acceptance testing"], "correct": 1, "explanation": "\"Architecture design first, tech choices later\" is listed as a core best practice."}, {"id": "m4", "q": "In Case Study 1's architecture, what does the Enterprise Message Bus connect?", "options": ["Only the client and the license database", "Request Processing, License Queries, Response Processing, and Notifications \u2014 none of which call each other directly", "Only SAPS to the notification service", "The mobile app to the API gateway"], "correct": 1, "explanation": "All four surrounding components communicate only through the central Enterprise Message Bus, not directly with each other."}, {"id": "m5", "q": "Why did Case Study 1 choose web sockets as the communication protocol between clients and the system?", "options": ["Web sockets require less bandwidth than any other protocol", "It enables two-way, low-latency communication and lets clients decide their own tech stack against a shared protocol", "Web sockets are the only protocol that supports HTTPS", "It removes the need for authentication entirely"], "correct": 1, "explanation": "Web sockets support the required sub-second, two-way communication while remaining tech-stack-agnostic for clients."}, {"id": "m6", "q": "Why does the Communications component in Case Study 1 need a Redis cache shared between instances?", "options": ["To store license plate lookup results permanently", "Because websocket connections are stateful and pinned to a specific server instance, so instances need a way to coordinate/share that state", "To cache SAPS notification preferences only", "To replace the Enterprise Message Bus entirely"], "correct": 1, "explanation": "A websocket connection is tied to the specific instance that accepted it; Redis lets multiple instances share/coordinate that state."}, {"id": "m7", "q": "In Request Processing, why does the system create a unique identifier for messages spawned from one incoming request?", "options": ["To comply with POPIA", "To ensure the separate parallel results can later be combined back into one response tied to the original request, if configured", "To rate-limit the number of requests per client", "To generate billing records"], "correct": 1, "explanation": "The unique identifier is explicitly for correlating and combining parallel results back to the originating request."}, {"id": "m8", "q": "Why is License Queries described as having \"the most significant impact to response times\"?", "options": ["It's the only component that uses a database", "It performs the actual lookup work across data sources, and is queried in parallel specifically to minimize the total response time", "It handles client authentication", "It runs the notification logic"], "correct": 1, "explanation": "License Queries does the core lookup work; parallelizing it directly targets the sub-second response time requirement."}, {"id": "m9", "q": "How does License Queries achieve extensibility, per the case study?", "options": ["By requiring a full system redeploy whenever a new source is added", "By adding new query sources as new services, without impacting existing sources", "By hardcoding all sources into one monolithic query function", "By removing old sources whenever a new one is added"], "correct": 1, "explanation": "New query sources are added as independent new services, leaving existing sources untouched."}, {"id": "m10", "q": "Why are notifications sent in parallel rather than as part of the main response flow?", "options": ["To reduce infrastructure costs", "So that sending a notification does not impact the response time of the original query still in flight", "Because SAPS requires notifications to be delayed by law", "To allow notifications to be sent before the query completes"], "correct": 1, "explanation": "Parallelizing notifications explicitly protects the response-time budget of the original query."}, {"id": "m11", "q": "What core architectural style does Case Study 1 use overall?", "options": ["A layered monolith", "A high-performance, scalable, event-driven architecture centered on a message bus", "A peer-to-peer architecture with no central coordination", "A single synchronous REST API with no messaging"], "correct": 1, "explanation": "The case study's own \"Design\" slide states this directly."}, {"id": "m12", "q": "In Case Study 2, what problem does the \"unified user experience\" requirement create, given the organisation's structure?", "options": ["The subsidiaries have identical systems already, so no integration is needed", "Multiple subsidiaries each have their own subsystems/data/security architecture, but must present as one coherent experience to the user", "It requires removing all subsidiaries into a single company", "It only affects the mobile app, not the web modules"], "correct": 1, "explanation": "The Problem Domain explicitly frames this tension: multiple independent subsystems, one unified experience."}, {"id": "m13", "q": "What is the role of the API Gateway in Case Study 2's architecture?", "options": ["It replaces the need for an Identity service", "It is the single entry point that client modules and the mobile app route through, which then talks to Identity and routes to the appropriate Domain Service", "It directly stores all subsidiary data", "It only handles notifications"], "correct": 1, "explanation": "All client modules and the mobile app route through the API Gateway, which coordinates with Identity and dispatches to domain services."}, {"id": "m14", "q": "How does Case Study 2 achieve a \"unified user experience\" from a security perspective?", "options": ["Each subsidiary maintains a fully separate login system", "Identity management combined with Single Sign-On (SSO), so one login session works across all subsidiaries/modules", "By disabling authentication for internal users", "By using a different identity provider per domain service"], "correct": 1, "explanation": "SSO + centralized identity management is the specific design decision listed for security & data protection."}, {"id": "m15", "q": "What design decision addresses Case Study 2's maintainability concern (multiple dev teams, multiple subsystems)?", "options": ["Merging all teams into a single team", "Modularisation / micro-frontends, allowing each subsidiary's module to be built and deployed largely independently", "Rewriting all subsystems in the same programming language", "Requiring all teams to share one deployment pipeline with no independence"], "correct": 1, "explanation": "Modularisation/micro-frontends is explicitly listed as the maintainability design decision."}, {"id": "m16", "q": "Why does Case Study 2 use caching and timeout/retry/backoff strategies specifically for resilience?", "options": ["To reduce hosting costs only", "To reduce dependence on, and tolerate failures/slowness from, existing (potentially unreliable) downstream integrations", "Because the mobile app cannot support HTTPS", "To replace the API Gateway"], "correct": 1, "explanation": "The resilience section is framed specifically around \"susceptibility to existing integration challenges\"."}, {"id": "m17", "q": "What deployment strategy did Case Study 2 use to meet its 24/7 availability requirement, and how does it work?", "options": ["Canary release \u2014 gradually shifting a small percentage of traffic to the new version", "Blue/green deployment \u2014 a router directs traffic to one of two identical environments, switching to the new (\"green\") version once verified, with the old one available as an instant rollback target", "A single environment with scheduled downtime windows", "Feature flags with no separate environments"], "correct": 1, "explanation": "The Availability section names blue/green deployment specifically, with a router switching traffic between two environments."}, {"id": "m18", "q": "Which of the following is NOT listed among the lecture's design and modelling tools?", "options": ["UML", "Sequence diagrams", "C4 Model", "Gantt charts"], "correct": 3, "explanation": "The lecture lists UML, sequence diagrams, C4 Model, and infrastructure diagrams \u2014 not Gantt charts (a project-scheduling tool, not an architecture-modelling one)."}, {"id": "m19", "q": "What is one specific value of using diagramming/modelling tools like C4 or infrastructure diagrams, per the lecture?", "options": ["They eliminate the need for any written documentation", "They help identify risks early and ensure consistency across the solution", "They are only useful after a system has already failed in production", "They replace the need for architecture decision records"], "correct": 1, "explanation": "\"Identifying risks early\" and \"ensuring consistency across the solution\" are explicitly listed benefits."}, {"id": "m20", "q": "Comparing the two case studies, what is the key structural difference in how each handles growth/change over time?", "options": ["Case Study 1 extends by adding new services (query sources, notification methods) without touching existing ones; Case Study 2 extends by modularising the frontend per subsidiary team while funneling all traffic through one gateway", "Both case studies use exactly the same architecture with different names", "Case Study 1 has no extensibility mechanism at all", "Case Study 2 relies entirely on a message bus like Case Study 1"], "correct": 0, "explanation": "Case Study 1's extensibility is service-addition around a message bus; Case Study 2's is frontend modularisation around a gateway \u2014 different mechanisms for different goals (scalability vs. multi-team maintainability)."}], "techQuestions": [{"id": "t1", "q": "Explain why Case Study 1 chose an event-driven, message-bus-centered architecture instead of having Request Processing call License Queries and Notifications directly via synchronous calls. What specific requirements from the Design Challenges section does this choice address?", "answer": "A direct synchronous call chain (Request Processing \u2192 License Queries \u2192 wait for result \u2192 Response Processing \u2192 Notifications, each waiting on the previous) would force the total response time to be the *sum* of every step's latency, and would mean a slowdown or failure in any one component (e.g. one slow license data source) directly blocks and delays everything downstream of it, including the client's response.\n\nRouting everything through a central Enterprise Message Bus, with each component only publishing/consuming messages rather than calling each other directly, addresses the Design Challenges section directly:\n\n- **Sub-second response times and asynchronous responses:** because components communicate via messages rather than blocking calls, License Queries can query multiple data sources genuinely *in parallel* (each firing off independently through the bus) instead of sequentially, and Notifications can fire off *after* or *alongside* the response without making the client wait for it \u2014 directly enabling the \"asynchronous responses\" requirement.\n- **Scalability for increased request volumes:** a message bus decouples the *rate* at which requests arrive from the *rate* at which each component processes them \u2014 components can be scaled independently (e.g. running more License Queries instances during a load spike) without needing every other component to scale in lockstep, which a tightly-coupled synchronous call chain would require.\n- **Compatibility with various client environments:** because the internal components communicate via the bus rather than being directly wired to client-facing logic, the client-facing Communications layer can evolve or support new client integrations without requiring changes to the internal processing components \u2014 the message-based contract insulates one side from changes on the other.\n\nIn short, event-driven, message-bus-centered design converts a fragile, latency-additive call chain into a set of independently-scalable, independently-evolvable components \u2014 exactly what \"high performance, scalable, event-driven architecture\" is stated to deliver."}, {"id": "t2", "q": "Walk through what happens, end to end, when a client submits a license plate lookup request in Case Study 1's architecture \u2014 from Clients through to the client receiving a combined response \u2014 naming each component involved and its role.", "answer": "1. **Clients** \u2014 a client (using whatever tech stack it chooses) opens a web socket connection and sends the lookup request.\n2. **Communications** \u2014 receives the request over the web socket. The client's identity/session has been authenticated via an issued certificate. If this Communications instance doesn't already hold the relevant connection state, it can coordinate via the shared **Redis cache** with other instances. The request is handed off onto the **Enterprise Message Bus**.\n3. **Enterprise Message Bus** \u2014 routes the incoming request message to **Request Processing**.\n4. **Request Processing** \u2014 receives the single incoming request and determines which sources need to be queried and whether the responses should be combined. It creates separate messages \u2014 one per operation that needs to happen \u2014 each tagged with a shared unique identifier (correlation ID), and publishes them back onto the bus.\n5. **Enterprise Message Bus** \u2014 routes each of those messages to **License Queries**.\n6. **License Queries** \u2014 queries the relevant data sources **in parallel** (since this component has the biggest impact on response time), and publishes each result back onto the bus, each result still carrying the shared correlation ID.\n7. **Enterprise Message Bus** \u2014 routes each result to **Response Processing**.\n8. **Response Processing** \u2014 since each result already carries information about how to combine it, Response Processing uses the **Redis cache** to accumulate the partial results under the shared correlation ID as they arrive, until all expected parallel results are in, then assembles the final combined response.\n9. **In parallel**, if the lookup produces a \"hit\" a SAPS subscriber cares about \u2014 **Notifications** is triggered (via the bus, independently, so it does not delay the main response) to alert the subscribed party.\n10. **Enterprise Message Bus** \u2014 routes the completed combined response back to **Communications**.\n11. **Communications** \u2014 pushes the response back down the client's open web socket connection.\n12. **Clients** \u2014 receives the response.\n\nThroughout, no component in steps 4\u20139 ever calls another directly \u2014 every hop goes through the Enterprise Message Bus, which is what allows steps 6 (parallel queries) and 9 (parallel notification) to happen without blocking the main response path."}, {"id": "t3", "q": "Case Study 1 uses Redis in two different places (Communications and Response Processing) for two different reasons. Explain both uses and why they're actually solving different problems despite using the same technology.", "answer": "**Redis in Communications \u2014 solving a *connection-affinity* problem.** A web socket is a long-lived, stateful connection between one specific client and one specific server instance \u2014 once established, that connection \"lives\" on that particular instance's memory. But the system runs multiple instances of the Communications service for scalability, and a response destined for a given client might be generated by a completely different part of the system that has no direct knowledge of *which* Communications instance is currently holding that client's connection. Redis here acts as **shared coordination state across instances** \u2014 e.g. a lookup table mapping \"this client/session\" \u2192 \"this specific Communications instance,\" so that when a response needs to be pushed back to a client, the system can find the right instance to hand it to. The problem being solved: *how do multiple stateless-from-the-outside instances share knowledge about which one is holding a particular piece of client-specific state.*\n\n**Redis in Response Processing \u2014 solving a *partial-result accumulation* problem.** Because License Queries fires off multiple parallel queries for a single original request, results for that one request arrive back at Response Processing independently and at different times \u2014 not as one bundle. Response Processing needs somewhere to hold \"results received so far for correlation ID X\" until all expected results have arrived and can be combined into one final response. Redis here acts as a **temporary accumulator/buffer keyed by correlation ID**, holding in-progress combined state that would otherwise have no natural home (it's not a single request's local memory, since results can arrive at different Response Processing instances; it's not permanent data, since it's discarded once combined). The problem being solved: *how do independently-arriving partial results, potentially processed by different service instances, get assembled into one coherent response.*\n\n**Why they're different despite both being \"Redis\":** the Communications use case is about **routing/addressing** \u2014 figuring out *where* a piece of state currently lives so a message can reach the right place. The Response Processing use case is about **temporary aggregation** \u2014 accumulating multiple related pieces of data together over a short window before they're combined and then discarded. Both problems share the underlying need for a fast, shared, cross-instance store (which is why the same technology, Redis, solves both) but the *shape* of the data and the *reason* it needs to be shared are fundamentally different \u2014 one is \"who owns this connection,\" the other is \"what pieces of this response have I collected so far.\""}, {"id": "t4", "q": "Explain the extensibility pattern shared by both License Queries and Notifications (\"add new X as new services, without impacting existing ones\"). What underlying architectural property must be true of the system for this pattern to actually work as claimed?", "answer": "**The pattern:** both components state that new capability (a new data source to query, or a new notification delivery method) is added as an entirely **new, independent service**, rather than by modifying the existing source/method's code or the code that coordinates between them. Concretely, adding a new license data source means standing up a new service that plugs into the existing \"query sources in parallel\" mechanism via the message bus, without editing the existing sources' services at all; adding a new notification channel (say, a new integration for a specific agency's system) means standing up a new notification service that subscribes to the same \"hit\" events, without editing the existing SMS/email/push notification services.\n\n**The underlying architectural property this requires: loose coupling via the message bus, with no direct dependencies between sibling services.** For \"add a new X without impacting existing X's\" to genuinely hold (and not just be an aspiration), the following must be true:\n1. **Existing sources/methods must not know about each other, and must not know how many siblings exist.** If License Query Source A's code contained any reference to Source B (e.g. \"wait for B to also finish\"), adding Source C would risk needing changes to that logic. Because coordination happens *only* via the message bus and correlation IDs (which are inherently designed to tolerate an arbitrary, even variable, number of parallel results), a new source can simply start publishing results under the same correlation-ID scheme without any existing source's code changing.\n2. **The message bus's contract (message shape, correlation ID scheme) must be stable and generic enough to accommodate a new participant without renegotiation.** If Response Processing's combination logic hardcoded \"expect exactly 3 results,\" adding a 4th source would break it \u2014 the combination logic instead has to be written generically against \"however many results arrive under this correlation ID,\" which is what actually makes new sources addable without touching existing code.\n\nIf either property were false \u2014 if services had hidden dependencies on each other, or if the message contract assumed a fixed, hardcoded set of participants \u2014 then \"add a new service without impacting existing ones\" would be false in practice, even though it might be true in principle for how the new service itself is built."}, {"id": "t5", "q": "In Case Study 2, explain why a single, centralized API Gateway plus Identity service was chosen instead of each subsidiary/domain service handling its own authentication independently. Connect this to the \"unified user experience\" requirement.", "answer": "**Why not per-subsidiary authentication:** if each subsidiary's domain service handled its own login/authentication independently, a user interacting with multiple subsidiaries (e.g. checking their banking account, then their insurance policy, then their investment portfolio, all part of the same financial-services group) would have to log in separately to each one \u2014 different credentials, different sessions, potentially different password policies and account-recovery flows across subsidiaries. This directly contradicts the \"unified user experience\" requirement: from the user's perspective, they are one customer of one group, not five customers of five unrelated systems that happen to share a parent company.\n\n**Why the centralized approach solves this:** by routing every client entry point (the web Modules and the Mobile App) through a single **API Gateway**, and having that gateway consult one shared **Identity** service for every request, the system guarantees that authentication happens exactly once, in exactly one place, using exactly one identity \u2014 regardless of which downstream Domain Service the request is ultimately routed to. This is what makes **Single Sign-On (SSO)** genuinely possible: a user logs in once, the gateway/identity layer establishes their session, and every subsequent request \u2014 whether it's headed to Domain Service-1 or Domain Service-n \u2014 is authenticated against that same session without asking the user to log in again.\n\n**Connection to \"unified user experience\":** the user experience of \"feeling like one company\" isn't just a visual/branding concern \u2014 it's structurally enabled by this specific architectural decision. If authentication were decentralized, no amount of consistent visual design across the subsidiary modules would produce a unified experience, because the *functional* experience (having to repeatedly log in, potentially seeing inconsistent security prompts, being logged out of one subsidiary while still logged into another) would betray the underlying fragmentation immediately. Centralizing identity at the gateway is precisely the architectural mechanism that makes the *experiential* goal (feels like one product) achievable, given the *organizational* reality (is actually several separate subsystems)."}, {"id": "t6", "q": "Explain the blue/green deployment strategy in detail using Case Study 2's design, including what happens to the \"blue\" environment after a successful switch to \"green,\" and why this specifically satisfies a 24/7 availability requirement better than deploying updates directly onto the single production environment.", "answer": "**How it works:** two fully identical production-capable environments exist simultaneously \u2014 call the currently-live one \"blue\" (running the current, already-verified version) and the newly-deployed one \"green\" (running the new version about to be released). A router sits in front of both, and initially directs 100% of real user traffic to blue while green is deployed and can be independently verified (health checks, smoke tests) without being exposed to any live user at all. Once green is confirmed healthy, the router's configuration is changed to direct traffic to green instead of blue \u2014 a traffic-routing change, not a new deployment or a restart of anything user-facing.\n\n**What happens to blue afterward:** blue doesn't disappear the instant the switch happens \u2014 it typically stays running, now idle (receiving no live traffic), for a period after the cutover. This serves as an **instant rollback target**: if a problem with the new version only becomes apparent under real production load (something the pre-switch verification of green didn't catch), the router can simply be pointed back at blue \u2014 which is still fully running the previous, known-good version \u2014 with no redeploy, no rebuild, and no downtime, since blue was never actually torn down. Only once green has been running successfully in production for a confidence period is blue actually decommissioned/replaced, ready to become the \"green\" target for the *next* release.\n\n**Why this specifically satisfies the 24/7 requirement better than deploying updates directly onto the single production environment:** a direct in-place deployment (stopping the current production instances, deploying new code onto them, restarting) necessarily has some window \u2014 however small \u2014 where the application is either unavailable or in an inconsistent, half-updated state, which directly violates \"cannot be down/unavailable at any time.\" It also has no cheap rollback: if the new version is broken, recovering means deploying the *previous* version's code back onto the same environment, which takes real time and involves another window of disruption. Blue/green removes both problems at once: the traffic switch itself is close to instantaneous (a routing change, not a redeploy), and a broken release can be reversed just as fast, by switching the router back \u2014 directly matching the stated 24/7-availability constraint in a way an in-place deployment structurally cannot."}, {"id": "t7", "q": "Case Study 2 lists \"susceptibility to existing integration challenges\" as a key resilience consideration. Using a concrete example scenario (one subsidiary's legacy back-end system is slow), explain how caching and timeout/retry/backoff strategies work together to prevent this from cascading into a full outage.", "answer": "**Scenario:** one subsidiary's domain-specific back-end service \u2014 a legacy system the group organisation inherited, outside the new architecture's control \u2014 starts responding slowly (say, 8 seconds instead of its usual 200ms) due to its own internal issues.\n\n**Without any of the listed resilience decisions:** every request that needs data from this slow back-end would hang for the full 8 seconds. If the front-end/API Gateway/domain service making these calls has a limited pool of worker threads or connections, and enough concurrent requests are all stuck waiting on this one slow dependency, that pool can become fully exhausted \u2014 at which point *even requests to entirely unrelated, perfectly healthy subsidiaries* can't get a free worker to be processed, because the pool is saturated with requests stuck waiting on the one slow system. A single slow dependency has now taken down the whole platform's availability \u2014 exactly the \"cascading failure\" resilience is meant to prevent.\n\n**How caching helps:** if the domain service in front of this back-end caches recently-fetched data (per the lecture's \"Caching\" resilience decision), a meaningful fraction of requests for that subsidiary's data can be served directly from the cache without ever touching the slow back-end at all during the incident \u2014 reducing how many requests are exposed to the slowness in the first place.\n\n**How timeouts help:** rather than waiting indefinitely (or for the full 8 seconds) on the slow back-end, a request that doesn't get a response within a defined timeout (say, 2 seconds) gives up and returns promptly \u2014 either with a cached/stale value, a clear \"temporarily unavailable\" response for that subsidiary's specific feature, or an error the calling module can handle gracefully. This bounds the worst-case impact per request instead of letting it grow unbounded, and frees up the worker/connection pool much sooner.\n\n**How retries with backoff help:** for calls that fail due to a transient issue (rather than a sustained one), retrying \u2014 but with an increasing delay between attempts (backoff) rather than immediately hammering the already-struggling back-end again \u2014 gives the failing system a chance to recover rather than adding to the load that's causing its slowness in the first place, while still eventually succeeding for the specific request without requiring a human to intervene.\n\n**Together:** caching reduces how many requests are exposed to the slow dependency at all; timeouts bound how much damage each exposed request can do to the shared resource pool; retries with backoff let transient failures resolve themselves without either giving up too early or making the underlying problem worse. The combination is what keeps one subsidiary's legacy-system slowness contained to that subsidiary's specific feature, rather than exhausting shared resources and taking down the whole 24/7 portal."}, {"id": "t8", "q": "Both case studies list \"scaling stateful services\" as a challenge (Communications and Response Processing in Case Study 1). Explain what makes a stateful service harder to scale than a stateless one, and why Redis specifically was chosen as the solution in both cases.", "answer": "**Why stateless services are easy to scale:** a stateless service instance holds no memory of anything between requests \u2014 every request carries (or can be looked up from a shared, external source) everything the instance needs to handle it. This means any incoming request can be routed to **any** available instance, and instances can be freely added or removed (e.g. by a load balancer or autoscaler) without any coordination problem, because no instance is \"special\" \u2014 they're all interchangeable.\n\n**Why stateful services are hard to scale:** a stateful service instance holds meaningful data in its own memory that isn't available anywhere else \u2014 a websocket connection object (Communications) or a partially-accumulated set of parallel results for one in-flight request (Response Processing) exist, at least momentarily, *only* on the specific instance that's handling them. This breaks the \"any instance can handle any request\" assumption: a message destined for a specific client's open connection has to somehow find the *specific* Communications instance holding that connection; a partial result for a specific correlation ID has to somehow reach the *specific* Response Processing instance that's already accumulated the other partial results for that same ID. Naively adding more instances doesn't help route around this \u2014 it makes the \"which instance has what\" problem worse, since there are now more possible places the needed state could be.\n\n**Why Redis specifically solves this:** Redis provides a **fast, shared, external store that all instances can read from and write to**, effectively externalizing the state that would otherwise be trapped inside one specific instance's memory. Instead of \"instance B needs to somehow ask instance A directly for its in-memory state\" (which would require instances to discover and talk to each other \u2014 a much harder coordination problem), every instance can instead read/write to the same shared Redis store: Communications instances can look up \"which instance holds this client's connection\" via Redis rather than needing direct instance-to-instance knowledge; Response Processing instances can read/write the accumulating combined-response state via Redis rather than needing the specific instance that received the first partial result to also be the one that receives the last. Redis's speed (in-memory, low-latency) matters specifically because this lookup/accumulation now sits on the critical path of every request \u2014 a slow external store would reintroduce the very latency problem (sub-second response times) the architecture is trying to solve. In effect, Redis converts \"many stateful instances that can't be freely load-balanced\" into \"many effectively-stateless instances plus one shared, fast, external state store\" \u2014 restoring the scalability property that pure statelessness would have given for free."}, {"id": "t9", "q": "Explain why Case Study 1's design explicitly separates \"Response Processing\" from \"Notifications\" as two distinct components rather than having Response Processing directly trigger notifications inline. What benefit does keeping them separate but parallel provide?", "answer": "**Why not inline:** if Response Processing, upon assembling a combined result, directly and synchronously called out to send a notification (e.g. alerting SAPS of a hit) as part of producing its response to the client, two problems would follow. First, the client's response time would now include however long it takes to actually deliver the notification (which might involve a third-party SMS gateway, push notification service, or SAPS-specific integration with its own latency and reliability characteristics) \u2014 directly working against the sub-second response time requirement. Second, if the notification delivery step failed or was slow, it's unclear whether that should also fail or delay the client's own response, even though the two concerns (answering the client's lookup, and separately alerting a subscriber) are logically independent.\n\n**The benefit of keeping them separate but parallel:** by treating Notifications as its own component, triggered independently via the message bus rather than as a synchronous step inside Response Processing's own logic, the two concerns become genuinely decoupled:\n1. **Independent performance characteristics:** the client's response time depends only on how fast Response Processing can assemble the combined result \u2014 not on how fast or reliable any specific notification channel happens to be at that moment. This directly matches the stated design decision: \"parallel to sending notifications, to not impact response times.\"\n2. **Independent failure isolation:** if a notification fails to send (e.g. a third-party SMS provider is down), that failure is contained to the Notifications component and doesn't propagate back to affect the client's own successful lookup response \u2014 the client still gets their answer even if the (logically separate) notification to SAPS temporarily fails.\n3. **Independent extensibility:** exactly as with License Queries, new notification methods can be added as new services subscribing to the same \"hit\" events, without needing Response Processing's code (which has an entirely different job \u2014 combining query results) to know or care how many notification channels currently exist, or to be modified every time one is added.\n\nIn short, separating them is what allows each component to be optimized, scaled, and evolved according to its own concern \u2014 \"answer the client fast\" and \"alert subscribers reliably\" \u2014 without either concern's requirements (or failures) contaminating the other."}, {"id": "t10", "q": "Using the lecture's \"architecture design first, tech choices later\" best practice, critique a hypothetical team that starts a project by first deciding \"we'll use Kafka and Redis and Kubernetes\" before defining what the system's non-functional requirements even are.", "answer": "**The core problem:** picking specific technologies before the architecture (and before the non-functional requirements that architecture is meant to satisfy) is decided inverts the correct order of reasoning the lecture prescribes: **determine the non-functional requirements early**, then let those requirements drive the architectural design, and only then select specific technologies to implement that design. A team that starts with \"we'll use Kafka and Redis and Kubernetes\" has picked the *how* before establishing the *why* \u2014 they don't yet know what quality attributes (performance targets, scalability needs, consistency requirements, team size/skill constraints) actually justify those specific choices, because those requirements haven't been articulated yet.\n\n**Concrete risks this creates, referencing both case studies:**\n1. **Kafka might be the wrong tool, or an unjustified one.** Case Study 1 chose an event-driven architecture with an Enterprise Message Bus specifically *because* the design challenges (sub-second response times, scalability, parallel processing) demanded loose coupling between components. If a hypothetical team picks Kafka first, without first confirming their own system actually has a similar need for asynchronous, high-throughput, multi-consumer messaging, they may be adopting real operational complexity (a distributed log, partition management, consumer group coordination) for a system that would have been perfectly well served by a much simpler direct API call \u2014 over-engineering, which is explicitly named as a best practice to avoid.\n2. **Redis might be solving the wrong problem, or no problem at all.** In the case studies, Redis was chosen specifically to solve a *named* problem \u2014 sharing state for stateful, horizontally-scaled services. A team that picks Redis upfront, without first identifying whether they even have stateful services that need to scale across multiple instances, risks bolting on a caching/state layer that adds an operational dependency (Redis itself needs to be run, monitored, and kept available) without a corresponding, articulated need.\n3. **Kubernetes' operational cost may not match the team's actual scale or team skill.** Choosing a specific orchestration platform before knowing the system's actual availability, scaling, and deployment requirements (e.g. do we even need blue/green across many replicas, or would a much simpler deployment target suffice) risks taking on infrastructure complexity the team may not have the skill or headcount to operate well \u2014 directly ignoring the best practice to \"consider implementation teams' structure.\"\n\n**What the correct order would look like:** first establish requirements (e.g. \"sub-second response, must scale to N concurrent requests, must support various client environments\" \u2014 exactly Case Study 1's stated Design Challenges), then design an architecture that satisfies them (e.g. \"an event-driven architecture with a central message bus, parallel query processing\"), and only *then* evaluate which specific technology (Kafka, RabbitMQ, AWS SQS, or something else) best implements the message-bus role that the *architecture* \u2014 not a pre-existing preference \u2014 actually calls for."}, {"id": "t11", "q": "Design a reasoning process for how you would extend Case Study 1's architecture to add a new capability: \"vehicle owners can dispute an incorrect flag on their license plate.\" Identify which existing component(s) this touches and whether any new component is needed, following the extensibility pattern already established.", "answer": "**Framing the new capability against the existing architecture:** a dispute is fundamentally a new kind of *inbound* interaction \u2014 a vehicle owner submitting information, rather than an outbound license lookup \u2014 so it doesn't fit neatly into \"License Queries\" (which is about *querying* existing data) or \"Notifications\" (which is about *outbound* alerts). This suggests it's a genuinely new capability rather than a variation on an existing one.\n\n**Which existing components are touched:**\n- **Clients / Communications:** a vehicle owner needs a client interface to submit a dispute \u2014 this reuses the existing Clients/Communications pattern (web sockets, client's choice of tech stack), since the same \"varying technologies, need low-latency two-way communication\" considerations plausibly apply here too (e.g. the owner may want to see near-real-time status updates on their dispute).\n- **Request Processing:** a dispute submission is still fundamentally \"one incoming request that needs to trigger downstream operations\" \u2014 Request Processing's existing role (receive one request, spin up messages for whatever needs to happen in parallel, tag with a correlation ID) fits a dispute submission just as well as it fits a lookup request; no change to Request Processing's own logic should be needed, only a new kind of message type it can route.\n\n**Whether a new component is needed:** yes \u2014 following the extensibility pattern already established for License Queries and Notifications (\"add new X as a new service, without impacting existing ones\"), the correct approach is to introduce a **new service** \u2014 e.g. a \"Dispute Management\" service \u2014 that:\n- Subscribes to dispute-related messages from the Enterprise Message Bus (just as License Queries subscribes to lookup-related messages).\n- Owns its own data (dispute records, statuses, supporting evidence) independently of the existing License Queries data sources.\n- Can independently trigger its own downstream events (e.g. publishing a \"dispute status changed\" event) that the *existing* Notifications component can subscribe to and act on \u2014 reusing Notifications rather than duplicating notification logic, since Notifications' job (deliver an alert to a subscribed party) is generic enough to apply to dispute status changes too, not just license plate hits.\n\n**Why this respects the existing extensibility pattern:** exactly as with adding a new License Query source, this new Dispute Management service plugs into the bus using the same message-based contract every other component already uses \u2014 no existing component's internal logic needs to change, because none of them have any hardcoded assumption about what the full set of message types or services in the system is. The one exception worth flagging explicitly: Notifications' event-subscription logic would need to be extended to *recognize* a new event type (\"dispute status changed\") \u2014 a small, additive change to what it listens for, not a change to how it fundamentally works, consistent with the case study's own framing of extensibility as \"without impacting existing sources,\" not \"with literally zero code ever touched anywhere.\""}, {"id": "t12", "q": "Explain how the C4 Model and infrastructure diagrams serve different purposes among the design and modelling tools listed. Which would you use to communicate Case Study 2's architecture to a new engineering team member, versus to a compliance auditor asking where sensitive data is stored?", "answer": "**What the C4 Model is for:** the C4 Model (Context, Containers, Components, Code) is specifically designed to communicate a system's *logical software architecture* at multiple, progressively zoomed-in levels of abstraction \u2014 starting from \"how does this system fit into the world\" (Context: e.g. the mobile app and web modules, the API Gateway, external actors) down to \"what are the deployable units and their responsibilities\" (Containers: e.g. the API Gateway, Identity service, each Domain Service) and further into internal component structure if needed. Its core value is letting you choose the *right altitude* of detail for a given audience, without drowning them in either too little or too much information.\n\n**What infrastructure diagrams are for:** these focus specifically on the *physical/operational* deployment reality \u2014 which services run on which servers/containers/regions, how networking and load balancing is configured, where data physically lives (which database instance, which region, which storage tier), and how the blue/green environments are provisioned. This is a different concern from the C4 Model's logical-architecture focus \u2014 two components that are logically well-separated in a C4 diagram could, in principle, still be deployed onto shared infrastructure, and an infrastructure diagram is what would reveal that.\n\n**For a new engineering team member:** the **C4 Model**, likely starting at the Container level, is the better fit. A new engineer needs to build a mental map of \"what are the moving pieces and how do they relate\" \u2014 e.g. \"the Mobile App and web Modules talk to the API Gateway, which talks to Identity and routes to Domain Services, some of which share a Cache\" \u2014 exactly the level of logical structure the case study's own architecture description operates at. This orients them to the *system's design intent* before they need to know exactly which physical servers anything runs on.\n\n**For a compliance auditor asking where sensitive data is stored:** an **infrastructure diagram** (potentially combined with data-flow annotations) is the better fit. The auditor's question is fundamentally about physical reality and data residency/protection \u2014 which specific database or storage system holds sensitive user data, in which region, behind what network boundary, with what encryption \u2014 not about the logical relationships between software components. A C4 diagram might show that \"Domain Service-1 talks to the Cache,\" but it typically won't answer \"and which physical data store, in which jurisdiction, does that data ultimately persist to, and is it encrypted at rest\" \u2014 that's precisely the physical/operational detail an infrastructure diagram is meant to capture, and precisely what a compliance answer needs to be grounded in."}]}</script>
+<script>
+/* ============================================================
+   CT3 Study Guides — shared app engine
+   Identical across every lecture file. Reads window.LECTURE_DATA.
+   ============================================================ */
+
+(function () {
+  "use strict";
+
+  /* ---------------- tiny markdown renderer ---------------- */
+  /* Supports: ## / ### headers, **bold**, `code`, ```fenced code```,
+     GFM pipe tables, "- " unordered lists, "---" hr, paragraphs. */
+
+  function escapeHtml(s) {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function inline(s) {
+    let out = escapeHtml(s);
+    out = out.replace(/`([^`]+)`/g, "<code>$1</code>");
+    out = out.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    return out;
+  }
+
+  function renderTable(rows) {
+    const header = rows[0];
+    const body = rows.slice(2);
+    const cell = (r) =>
+      r
+        .trim()
+        .replace(/^\|/, "")
+        .replace(/\|$/, "")
+        .split("|")
+        .map((c) => c.trim());
+    let html = "<table><thead><tr>";
+    cell(header).forEach((c) => (html += `<th>${inline(c)}</th>`));
+    html += "</tr></thead><tbody>";
+    body.forEach((r) => {
+      html += "<tr>";
+      cell(r).forEach((c) => (html += `<td>${inline(c)}</td>`));
+      html += "</tr>";
+    });
+    html += "</tbody></table>";
+    return html;
+  }
+
+  function renderMarkdown(md) {
+    const lines = md.replace(/\r\n/g, "\n").split("\n");
+    let html = "";
+    let i = 0;
+    let para = [];
+
+    function flushPara() {
+      if (para.length) {
+        html += `<p>${inline(para.join(" "))}</p>`;
+        para = [];
+      }
+    }
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      if (/^```/.test(line)) {
+        flushPara();
+        const lang = line.replace(/^```/, "").trim();
+        const code = [];
+        i++;
+        while (i < lines.length && !/^```/.test(lines[i])) {
+          code.push(lines[i]);
+          i++;
+        }
+        html += `<pre><code class="lang-${escapeHtml(lang || "text")}">${escapeHtml(
+          code.join("\n")
+        )}</code></pre>`;
+        i++;
+        continue;
+      }
+
+      if (/^\s*\|/.test(line) && i + 1 < lines.length && /^\s*\|?\s*-+\s*(\|\s*-+\s*)*\|?\s*$/.test(lines[i + 1])) {
+        flushPara();
+        const rows = [];
+        while (i < lines.length && /^\s*\|/.test(lines[i])) {
+          rows.push(lines[i]);
+          i++;
+        }
+        html += renderTable(rows);
+        continue;
+      }
+
+      if (/^###\s+/.test(line)) {
+        flushPara();
+        html += `<h3>${inline(line.replace(/^###\s+/, ""))}</h3>`;
+        i++;
+        continue;
+      }
+
+      if (/^##\s+/.test(line)) {
+        flushPara();
+        html += `<h2>${inline(line.replace(/^##\s+/, ""))}</h2>`;
+        i++;
+        continue;
+      }
+
+      if (/^-\s+/.test(line)) {
+        flushPara();
+        const items = [];
+        while (i < lines.length && /^-\s+/.test(lines[i])) {
+          items.push(lines[i].replace(/^-\s+/, ""));
+          i++;
+        }
+        html += "<ul>" + items.map((it) => `<li>${inline(it)}</li>`).join("") + "</ul>";
+        continue;
+      }
+
+      if (/^---+\s*$/.test(line)) {
+        flushPara();
+        html += "<hr>";
+        i++;
+        continue;
+      }
+
+      if (line.trim() === "") {
+        flushPara();
+        i++;
+        continue;
+      }
+
+      para.push(line.trim());
+      i++;
+    }
+    flushPara();
+    return html;
+  }
+
+  /* ---------------- utils ---------------- */
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function storageGet(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function storageSet(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {
+      /* ignore quota / private-mode errors */
+    }
+  }
+
+  /* ---------------- tabs ---------------- */
+
+  function initTabs() {
+    const tabs = document.querySelectorAll(".section-tab");
+    const panels = document.querySelectorAll(".section-panel");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active"));
+        panels.forEach((p) => p.classList.remove("active"));
+        tab.classList.add("active");
+        document.getElementById(tab.dataset.target).classList.add("active");
+        window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+      });
+    });
+  }
+
+  /* ---------------- content ---------------- */
+
+  function renderContent(data) {
+    const el = document.getElementById("content-body");
+    if (el) el.innerHTML = renderMarkdown(data.contentMarkdown);
+  }
+
+  /* ---------------- MCQ engine ---------------- */
+
+  function mcqStorageKey(id) {
+    return `ct3-quiz-${id}`;
+  }
+
+  function newMcqState(data) {
+    const ids = data.mcqs.map((q) => q.id);
+    const order = shuffle(ids);
+    const optionOrder = {};
+    data.mcqs.forEach((q) => {
+      optionOrder[q.id] = shuffle(q.options.map((_, idx) => idx));
+    });
+    return { order, optionOrder, answers: {} };
+  }
+
+  function initQuiz(data) {
+    const key = mcqStorageKey(data.id);
+    let state = storageGet(key);
+    if (!state || !state.order || state.order.length !== data.mcqs.length) {
+      state = newMcqState(data);
+      storageSet(key, state);
+    }
+
+    const byId = {};
+    data.mcqs.forEach((q) => (byId[q.id] = q));
+
+    const list = document.getElementById("mcq-list");
+    const scoreEl = document.getElementById("quiz-score");
+    const barEl = document.getElementById("quiz-progress-fill");
+    const total = data.mcqs.length;
+
+    function updateScore() {
+      const answeredIds = Object.keys(state.answers);
+      const correctCount = answeredIds.filter((id) => state.answers[id].correct).length;
+      scoreEl.innerHTML = `<b>${correctCount}</b> / ${answeredIds.length} correct &nbsp;·&nbsp; ${answeredIds.length} / ${total} answered`;
+      barEl.style.width = `${(answeredIds.length / total) * 100}%`;
+    }
+
+    function renderQuestion(qid, displayIndex) {
+      const q = byId[qid];
+      const wrap = document.createElement("div");
+      wrap.className = "mcq-card";
+      const already = state.answers[qid];
+
+      const qEl = document.createElement("p");
+      qEl.className = "mcq-q";
+      qEl.innerHTML = `<span class="mcq-index">${displayIndex + 1}.</span><span>${inline(q.q)}</span>`;
+      wrap.appendChild(qEl);
+
+      const optsWrap = document.createElement("div");
+      optsWrap.className = "mcq-options";
+
+      const order = state.optionOrder[qid];
+      order.forEach((origIdx) => {
+        const btn = document.createElement("button");
+        btn.className = "mcq-option";
+        btn.innerHTML = inline(q.options[origIdx]);
+        btn.disabled = !!already;
+
+        if (already) {
+          if (origIdx === q.correct) btn.classList.add("correct");
+          else if (origIdx === already.chosen) btn.classList.add("incorrect");
+        }
+
+        btn.addEventListener("click", () => {
+          if (state.answers[qid]) return;
+          const correct = origIdx === q.correct;
+          state.answers[qid] = { chosen: origIdx, correct };
+          storageSet(mcqStorageKey(data.id), state);
+
+          Array.from(optsWrap.children).forEach((b) => (b.disabled = true));
+          if (correct) {
+            btn.classList.add("correct");
+          } else {
+            btn.classList.add("incorrect");
+            Array.from(optsWrap.children)[order.indexOf(q.correct)].classList.add("reveal-correct");
+          }
+          expl.classList.add("show");
+          updateScore();
+        });
+
+        optsWrap.appendChild(btn);
+      });
+
+      wrap.appendChild(optsWrap);
+
+      const expl = document.createElement("div");
+      expl.className = "mcq-explanation" + (already ? " show" : "");
+      expl.innerHTML = `<b>Why:</b> ${inline(q.explanation)}`;
+      wrap.appendChild(expl);
+
+      return wrap;
+    }
+
+    function render() {
+      list.innerHTML = "";
+      state.order.forEach((qid, idx) => list.appendChild(renderQuestion(qid, idx)));
+      updateScore();
+    }
+
+    document.getElementById("quiz-reset").addEventListener("click", () => {
+      state = newMcqState(data);
+      storageSet(key, state);
+      render();
+      document.getElementById("mcq-panel-top").scrollIntoView({ behavior: "smooth" });
+    });
+
+    render();
+  }
+
+  /* ---------------- technical questions engine ---------------- */
+
+  function techStorageKey(id) {
+    return `ct3-tech-${id}`;
+  }
+
+  function initTech(data) {
+    const key = techStorageKey(data.id);
+    let state = storageGet(key) || { reviewed: {} };
+
+    const list = document.getElementById("tech-list");
+    const counterEl = document.getElementById("tech-counter");
+    const total = data.techQuestions.length;
+
+    function updateCounter() {
+      const n = Object.keys(state.reviewed).filter((k) => state.reviewed[k]).length;
+      counterEl.innerHTML = `<b>${n}</b> / ${total} marked reviewed`;
+    }
+
+    data.techQuestions.forEach((tq, idx) => {
+      const wrap = document.createElement("div");
+      wrap.className = "tech-card";
+
+      const row = document.createElement("div");
+      row.className = "tech-q-row";
+
+      const qEl = document.createElement("p");
+      qEl.className = "tech-q";
+      qEl.innerHTML = `<span class="mcq-index">${idx + 1}.</span><span>${inline(tq.q)}</span>`;
+      row.appendChild(qEl);
+
+      const label = document.createElement("label");
+      label.className = "tech-reviewed-label";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = !!state.reviewed[tq.id];
+      cb.addEventListener("change", () => {
+        state.reviewed[tq.id] = cb.checked;
+        storageSet(key, state);
+        updateCounter();
+      });
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode("reviewed"));
+      row.appendChild(label);
+
+      wrap.appendChild(row);
+
+      const revealBtn = document.createElement("button");
+      revealBtn.className = "btn reveal-btn";
+      revealBtn.textContent = "Reveal model answer";
+
+      const answerEl = document.createElement("div");
+      answerEl.className = "tech-answer";
+      answerEl.innerHTML = renderMarkdown(tq.answer);
+
+      revealBtn.addEventListener("click", () => {
+        const showing = answerEl.classList.toggle("show");
+        revealBtn.textContent = showing ? "Hide model answer" : "Reveal model answer";
+      });
+
+      wrap.appendChild(revealBtn);
+      wrap.appendChild(answerEl);
+      list.appendChild(wrap);
+    });
+
+    updateCounter();
+  }
+
+  /* ---------------- boot ---------------- */
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const dataEl = document.getElementById("lecture-data");
+    if (!dataEl) return;
+    const data = JSON.parse(dataEl.textContent);
+    initTabs();
+    renderContent(data);
+    initQuiz(data);
+    initTech(data);
+  });
+})();
+
+</script>
+</body>
+</html>

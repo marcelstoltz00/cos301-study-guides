@@ -1,0 +1,310 @@
+{
+  "id": "L21",
+  "title": "DevOps & DevSecOps",
+  "subtitle": "The 8-step CI/CD infinite loop from Plan to Monitor, and integrating security throughout via CVE tracking, OWASP, SAST/DAST, and secret scanning.",
+  "contentMarkdown": "## DevOps & DevSecOps \u2014 IT, Development, and Security Combined\n\n---\n\n## Part A: Introduction to DevOps\n\n### 1. The CI/CD Infinite Loop\n\nDevOps is commonly visualized as an **infinite loop** of eight phases, split into two halves:\n\n- **CI (Continuous Integration) half:** Plan \u2192 Code \u2192 Build \u2192 Test\n- **CD (Continuous Delivery/Deployment) half:** Release \u2192 Deploy \u2192 Operate \u2192 Monitor\n\nThe loop is continuous \u2014 insights from Monitor feed back into the next Plan phase, and the cycle repeats indefinitely rather than ending at \"deploy.\"\n\n### 2. Step 1 \u2014 Plan\n\nPlanning happens in a work-tracking tool (e.g. Azure DevOps Boards) as a structured work item \u2014 a user story with:\n- A **description** written from the user's perspective (e.g. \"As an authenticated user, I want to see all my accounts and their balances on a dashboard\"), including acceptance criteria embedded in the description (e.g. \"API call failure shows user-friendly error; page loads within 2 seconds\").\n- **Planning fields**: story points, priority, and risk \u2014 used to estimate and prioritize the work.\n- **Classification** fields (e.g. value area: Business) linking the technical task back to business value.\n- Direct links from the work item to its **development** (commits/pull requests/branches) and **deployment** (release tracking), so planning, code, and delivery stay traceable to each other.\n\n### 3. Step 2 \u2014 Code\n\nDevelopers implement the planned work in an IDE, typically organizing the solution into clearly-separated services/layers (e.g. an `AccountService`, `PaymentService`, `TransactionService`, each split into Domain, Application, Infrastructure, and Api projects \u2014 a layered/domain-driven structure). Code here directly implements the acceptance criteria defined in the Plan step (e.g. a `SendPaymentCommandHandler` that validates a recipient account before creating a payment).\n\n### 4. Step 3 \u2014 Build\n\nThe build step compiles the solution and restores dependencies \u2014 but a build is also where **dependency vulnerability scanning** naturally surfaces, because package managers (e.g. NuGet) can flag known-vulnerable dependencies automatically during restore:\n\n```\nwarning NU1903: Package 'System.Security.Cryptography.Xml' 9.0 has a known high severity vulnerability\nwarning NU1902: Package 'OpenTelemetry.Api' 1.11.2 has a known moderate severity vulnerability\n```\n\nThis is a concrete example of **security shifting left**: a real CVE (Common Vulnerabilities and Exposures) in a third-party dependency is surfaced automatically during a routine build, long before the vulnerable code would ever reach production \u2014 the developer sees the warning the moment they build locally or in CI, not after a security audit months later.\n\n### 5. Step 4 \u2014 Test\n\nAutomated tests run via a test runner (e.g. Visual Studio's Test Explorer), reporting pass/fail counts per test group (e.g. \"118 passed, 0 failed\"). Testing also covers **input validation** at the UI layer \u2014 e.g. a \"Send Payment\" form rejecting an invalid recipient account number (\"Enter a valid 7-digit account number\") before the request is even submitted, mirroring the constraints-based validation principle from UI/UX design.\n\n### 6. Step 5 \u2014 Release\n\nReleasing is the step where a new version is prepared to go live, without yet being exposed to users. A common pattern (shown via container \"pods\" in a cluster):\n\n- **Active running pods (live to end users):** the current version (e.g. `v1.2.3`) continues serving all live traffic.\n- **Pods being created (not live to end users yet):** new pods running the next version (e.g. `v1.2.4`) are started up **in parallel**, but are **not yet receiving user traffic**.\n\nNew pods are created and started in the cluster; **they are not live to end users until traffic is switched.** This separation of \"started\" from \"live\" is what allows a release to be validated (health checks, smoke tests) before it's actually exposed \u2014 and allows an instant rollback (just don't switch traffic, or switch it back) if something is wrong, without needing to redeploy.\n\n### 7. Step 6 \u2014 Deploy\n\nDeploy is the step where traffic is actually switched to the new version \u2014 the point at which the newly-released pods stop being \"not live\" and start actually serving real users.\n\n### 8. Step 7 \u2014 Operate\n\nOnce deployed, the system runs live in production, serving real users performing real actions \u2014 e.g. a live banking app where users view account dashboards, transfer funds between their own accounts, and send payments to other accounts. This is the system actually doing its job in the real world, not just passing tests in a controlled environment.\n\n### 9. Step 8 \u2014 Monitor\n\nMonitoring closes the loop by observing the running system from two complementary angles:\n\n- **Technical/distributed tracing** (e.g. via Jaeger): individual requests are broken into **traces** made up of **spans** \u2014 e.g. a trace for `PaymentService: POST /api/v1/payments` shows exactly how long the request took and which downstream services (`AccountService`, `PaymentService`) it touched, letting engineers pinpoint exactly where latency or errors occur across service boundaries.\n- **User behaviour analytics** (e.g. heatmaps, session replay, funnels): tools can show where users actually click, scroll, and spend attention on a live page (a heatmap), replay entire user sessions, and track engagement metrics \u2014 connecting the technical health of the system to how real users are actually experiencing it.\n\nThe insights from monitoring \u2014 a slow trace, a confusing UI heatmap, a recurring error \u2014 feed directly back into the next **Plan** phase, closing the infinite loop.\n\n---\n\n## Part B: Introduction to DevSecOps\n\nDevSecOps means **security is integrated throughout the entire DevOps loop**, not bolted on as a separate final gate \u2014 security becomes part of Plan, Code, Build, Test, Release, Deploy, Operate, and Monitor, not a step that only happens right before (or after) release.\n\n### 1. CVE \u2014 Common Vulnerabilities and Exposures\n\n**CVE** is a publicly maintained, community-driven catalogue of publicly disclosed cybersecurity vulnerabilities \u2014 each one assigned a standard CVE identifier so that different tools, vendors, and researchers can all refer to the *same* vulnerability unambiguously. This is the exact mechanism behind the build-time warnings seen in Step 3 (`NU1903`, `NU1902`) \u2014 package ecosystems cross-reference dependency versions against CVE-style vulnerability databases to warn developers automatically.\n\n### 2. OWASP \u2014 Open Web Application Security Project\n\n**OWASP** is a well-known open community focused on web application security, best known for resources like the **OWASP Top 10** \u2014 a regularly updated list of the most critical web application security risks (e.g. injection, broken access control, security misconfiguration) used industry-wide as a baseline for what to defend against.\n\n### 3. Tooling: DAST vs. SAST\n\nTwo complementary categories of automated security testing tooling:\n\n- **SAST (Static Application Security Testing)** \u2014 analyzes source code (or compiled bytecode) **without running it**, looking for known-insecure patterns directly in the code (e.g. string-concatenated SQL queries, hardcoded credentials, use of unsafe functions). Runs early \u2014 can be part of the Build/Code step, catching issues before the application ever executes.\n- **DAST (Dynamic Application Security Testing)** \u2014 tests a **running** application from the outside, the way an attacker would: sending malicious/unexpected inputs to a live running instance and observing the actual responses/behaviour, to catch vulnerabilities that only manifest at runtime (e.g. in how the app actually handles a crafted request), which static analysis of the source code alone can miss.\n\n### 4. Secret Scanning\n\nAutomated scanning (of source code, commit history, and configuration files) for accidentally committed secrets \u2014 API keys, passwords, tokens, private keys \u2014 before or immediately after they land in a repository. This directly mirrors the \"secrets do not belong in your repo\" principle from L17's CI/CD material: secret scanning is the *automated tooling* that catches this class of mistake as part of the DevSecOps pipeline, rather than relying on developers to never make it.\n",
+  "mcqs": [
+    {
+      "id": "m1",
+      "q": "What are the two halves of the DevOps infinite loop, per the lecture?",
+      "options": [
+        "Frontend / Backend",
+        "CI (Plan, Code, Build, Test) and CD (Release, Deploy, Operate, Monitor)",
+        "Design / Development",
+        "Waterfall / Agile"
+      ],
+      "correct": 1,
+      "explanation": "The infinite loop splits into a CI half (Plan, Code, Build, Test) and a CD half (Release, Deploy, Operate, Monitor)."
+    },
+    {
+      "id": "m2",
+      "q": "In the Plan step example, where is a user story's acceptance criteria typically captured?",
+      "options": [
+        "In a separate document never linked to the work item",
+        "Embedded directly within the work item's description (e.g. \"API call failure shows user-friendly error; page loads within 2 seconds\")",
+        "Only in code comments",
+        "Only in the deployment pipeline configuration"
+      ],
+      "correct": 1,
+      "explanation": "The example work item's description embeds the functional and non-functional acceptance criteria directly alongside the user story."
+    },
+    {
+      "id": "m3",
+      "q": "What did the warnings during the Build step indicate?",
+      "options": [
+        "Syntax errors in the codebase",
+        "Known vulnerabilities in third-party NuGet packages (System.Security.Cryptography.Xml, OpenTelemetry.Api), surfaced automatically during dependency restore",
+        "Failing unit tests",
+        "A missing database connection string"
+      ],
+      "correct": 1,
+      "explanation": "The build log shows NU1903/NU1902 warnings \u2014 known high/moderate severity vulnerabilities in restored packages, not compile errors or test failures."
+    },
+    {
+      "id": "m4",
+      "q": "What security principle do the build-time dependency vulnerability warnings directly demonstrate?",
+      "options": [
+        "Secrets should never be committed to source control",
+        "Security \"shifting left\" \u2014 a real vulnerability (CVE) in a dependency is surfaced automatically during a routine build, long before it would reach production",
+        "All containers must run as a non-root user",
+        "Passwords should always be hashed before storage"
+      ],
+      "correct": 1,
+      "explanation": "Catching a CVE the moment a developer builds locally, rather than during a later security audit, is a textbook example of shifting security left."
+    },
+    {
+      "id": "m5",
+      "q": "What did the \"Send Payment\" form's recipient account number validation demonstrate in the Test step?",
+      "options": [
+        "A load testing scenario",
+        "Input validation / a UI constraint preventing an invalid submission before it happens",
+        "A database migration test",
+        "A canary release configuration"
+      ],
+      "correct": 1,
+      "explanation": "Rejecting an invalid account number format before submission is a constraint-based validation, mirroring the UI/UX \"prevent mistakes before they happen\" principle."
+    },
+    {
+      "id": "m6",
+      "q": "In the Release step's pod diagram, what is true of the \"pods being created\" (v1.2.4) while still in that state?",
+      "options": [
+        "They are immediately live to end users",
+        "They are started in the cluster but not yet live to end users until traffic is switched",
+        "They replace the active pods the instant they are created",
+        "They cannot be rolled back once created"
+      ],
+      "correct": 1,
+      "explanation": "The diagram explicitly notes: \"new pods are created and started in the cluster... they are not live to end users until traffic is switched.\""
+    },
+    {
+      "id": "m7",
+      "q": "Why does separating \"pods started\" from \"pods live\" matter operationally?",
+      "options": [
+        "It allows the new version to be validated before being exposed to real traffic, and enables a fast rollback by simply not switching traffic",
+        "It reduces the total number of pods needed in the cluster",
+        "It is a mandatory legal requirement for all container platforms",
+        "It eliminates the need for a separate Build step"
+      ],
+      "correct": 0,
+      "explanation": "This separation is precisely what allows safe validation and near-instant rollback without a redeploy \u2014 the core benefit of the Release/Deploy split."
+    },
+    {
+      "id": "m8",
+      "q": "What actually happens during the Deploy step, given the lecture's Release \u2192 Deploy sequence?",
+      "options": [
+        "Code is written for the new feature for the first time",
+        "Traffic is switched to the already-running new pods, making them live to end users",
+        "Automated tests are executed for the first time",
+        "A new work item is created on the planning board"
+      ],
+      "correct": 1,
+      "explanation": "Release starts the new pods without live traffic; Deploy is the step where traffic is actually switched over to them."
+    },
+    {
+      "id": "m9",
+      "q": "What does the Operate step represent in the DevOps loop?",
+      "options": [
+        "Writing the initial application code",
+        "The deployed system running live in production, serving real users performing real actions",
+        "Reviewing pull requests before merge",
+        "Estimating story points during planning"
+      ],
+      "correct": 1,
+      "explanation": "Operate is illustrated by the live banking app actually being used \u2014 viewing dashboards, transferring funds, sending payments."
+    },
+    {
+      "id": "m10",
+      "q": "In the Monitor step, what does a distributed tracing tool like Jaeger show?",
+      "options": [
+        "User click heatmaps only",
+        "Individual requests broken into traces made up of spans, showing how long a request took and which downstream services it touched",
+        "Only the CPU usage of a single server",
+        "Source code coverage percentages"
+      ],
+      "correct": 1,
+      "explanation": "Jaeger traces a request (e.g. POST /api/v1/payments) across service boundaries via spans, showing per-service timing."
+    },
+    {
+      "id": "m11",
+      "q": "Besides distributed tracing, what other category of monitoring appears in the Monitor step?",
+      "options": [
+        "Static code analysis",
+        "User behaviour analytics \u2014 heatmaps, session replay, and engagement/funnel tracking",
+        "Dependency vulnerability scanning",
+        "Story point estimation accuracy"
+      ],
+      "correct": 1,
+      "explanation": "Alongside Jaeger's technical tracing, the Monitor step also shows a UX analytics tool with heatmaps, session replay, and funnels."
+    },
+    {
+      "id": "m12",
+      "q": "How does the Monitor step connect back to the start of the DevOps loop?",
+      "options": [
+        "It doesn't \u2014 Monitor is the final step and the loop ends there",
+        "Insights from monitoring (e.g. a slow trace, a confusing UI heatmap) feed back into the next Plan phase, closing the infinite loop",
+        "Monitoring data is only ever used for annual reporting",
+        "Monitor replaces the need for a Test step in future iterations"
+      ],
+      "correct": 1,
+      "explanation": "The loop is explicitly infinite \u2014 monitoring insights become the input to the next Plan phase, not a dead end."
+    },
+    {
+      "id": "m13",
+      "q": "What is the core idea behind DevSecOps, as distinct from just running security testing before release?",
+      "options": [
+        "Security is a separate team's responsibility, entirely disconnected from Dev and Ops",
+        "Security is integrated throughout the entire DevOps loop \u2014 part of Plan, Code, Build, Test, Release, Deploy, Operate, and Monitor \u2014 not a single final gate",
+        "Security only needs to be considered after a breach has occurred",
+        "DevSecOps replaces the need for automated testing"
+      ],
+      "correct": 1,
+      "explanation": "DevSecOps is defined as security woven through every phase of the loop, not a bolt-on gate at the end."
+    },
+    {
+      "id": "m14",
+      "q": "What is CVE (Common Vulnerabilities and Exposures)?",
+      "options": [
+        "A single company's proprietary vulnerability scanner",
+        "A publicly maintained, community-driven catalogue of publicly disclosed vulnerabilities, each with a standard identifier so tools and researchers can reference the same vulnerability unambiguously",
+        "A programming language security extension",
+        "A type of firewall configuration"
+      ],
+      "correct": 1,
+      "explanation": "CVE is a shared, standardized public vulnerability catalogue \u2014 the mechanism behind the NU1903/NU1902 build warnings."
+    },
+    {
+      "id": "m15",
+      "q": "What is OWASP best known for?",
+      "options": [
+        "Hosting cloud infrastructure for enterprises",
+        "The OWASP Top 10 \u2014 a regularly updated list of the most critical web application security risks",
+        "Managing DNS records for major websites",
+        "Providing IDE autocomplete plugins"
+      ],
+      "correct": 1,
+      "explanation": "OWASP is best known for the OWASP Top 10, an industry-standard baseline of critical web app security risks."
+    },
+    {
+      "id": "m16",
+      "q": "What is the key difference between SAST and DAST?",
+      "options": [
+        "SAST tests a running application from the outside; DAST analyzes source code without executing it",
+        "SAST analyzes source/compiled code without running it; DAST tests a running application from the outside, the way an attacker would",
+        "They are two names for the exact same technique",
+        "SAST only applies to mobile apps; DAST only applies to web apps"
+      ],
+      "correct": 1,
+      "explanation": "SAST is static (code, not running); DAST is dynamic (a live running instance, tested externally)."
+    },
+    {
+      "id": "m17",
+      "q": "Why can DAST catch vulnerabilities that SAST might miss?",
+      "options": [
+        "DAST is always faster to run than SAST",
+        "DAST observes actual runtime behaviour by testing a live running application, catching issues that only manifest when the code is actually executing",
+        "DAST doesn't require any application to be running",
+        "DAST only checks for hardcoded secrets"
+      ],
+      "correct": 1,
+      "explanation": "Because DAST exercises the real running system, it can surface runtime-only issues that static source analysis alone would miss."
+    },
+    {
+      "id": "m18",
+      "q": "What does secret scanning specifically look for?",
+      "options": [
+        "Slow-running database queries",
+        "Accidentally committed secrets \u2014 API keys, passwords, tokens, private keys \u2014 in source code, commit history, or config files",
+        "Unused dependencies in a package manifest",
+        "Missing unit test coverage"
+      ],
+      "correct": 1,
+      "explanation": "Secret scanning is specifically about catching credentials/secrets that landed in a repo by mistake."
+    },
+    {
+      "id": "m19",
+      "q": "How does secret scanning relate to the \"secrets do not belong in your repo\" principle from the CI/CD material?",
+      "options": [
+        "They are unrelated concepts from different lectures",
+        "Secret scanning is the automated tooling that enforces that principle, catching accidentally committed secrets rather than relying on developer discipline alone",
+        "Secret scanning replaces the need for environment variables entirely",
+        "Secret scanning only works after a secret has already been exploited"
+      ],
+      "correct": 1,
+      "explanation": "Secret scanning is the DevSecOps tooling that turns a stated principle (\"secrets don't belong in the repo\") into an enforced, automated check."
+    },
+    {
+      "id": "m20",
+      "q": "Why is DevSecOps tooling (SAST, DAST, secret scanning, dependency CVE checks) typically distributed across multiple pipeline stages rather than run once at the end?",
+      "options": [
+        "Running security checks at only one stage is considered industry best practice",
+        "Different tooling catches different classes of issues at the point where they're cheapest and earliest to catch \u2014 e.g. SAST/dependency checks during Code/Build, DAST against a running system during Test/Operate \u2014 matching DevSecOps' \"security throughout the loop\" principle",
+        "Security tooling cannot technically run during the Build step",
+        "DAST and SAST always produce identical results, so only one needs to run"
+      ],
+      "correct": 1,
+      "explanation": "This distribution directly reflects DevSecOps' core idea: security integrated at every phase, each tool suited to where it can act earliest and most effectively."
+    }
+  ],
+  "techQuestions": [
+    {
+      "id": "t1",
+      "q": "Using the build output shown in the lecture (the NU1903 and NU1902 warnings), explain step by step how a CVE in a third-party dependency ends up surfaced to a developer as a build warning, and why this is a practical example of \"shifting security left.\"",
+      "answer": "**Step by step:**\n1. A researcher or the community discovers a vulnerability in a published package (e.g. `System.Security.Cryptography.Xml`) and it is catalogued with a standard CVE identifier, along with a severity rating (high/moderate/etc.) and an advisory describing the issue.\n2. Package registries (e.g. NuGet, npm) maintain or consume a database that cross-references published package versions against known CVE advisories.\n3. When a developer runs a build, the package manager step (`dotnet restore` / `yarn install` under the hood) resolves the project's dependency tree to specific package versions, and checks each resolved version against that advisory database.\n4. If a resolved version matches a known vulnerability, the build tooling emits a warning directly in the build output \u2014 exactly the `NU1903`/`NU1902` lines shown, including a link to the advisory \u2014 without the developer having to do anything beyond a normal build.\n\n**Why this is \"shifting left\":** \"Shifting left\" means moving a check earlier in the pipeline (visually, toward the left/start of the pipeline diagram) instead of leaving it for the end. Here, a vulnerability that might otherwise only be discovered during a dedicated security audit \u2014 potentially months after the vulnerable dependency was introduced, and possibly after it has already shipped to production \u2014 is instead surfaced the moment *any* developer runs *any* normal build, whether locally on their laptop or in CI. The cost of fixing it (bumping a package version) is trivial at this point; the cost of fixing the same vulnerability after it's been running in production for months (incident response, patching under pressure, potentially a breach) is dramatically higher. Shifting the check left doesn't change *what* is found \u2014 it changes *when*, catching the same problem while it's still cheap."
+    },
+    {
+      "id": "t2",
+      "q": "Explain the operational difference between the Release step and the Deploy step in this lecture's model, using the pod diagram. Why might a team choose to treat these as two distinct steps rather than one?",
+      "answer": "**The difference:** in the Release step, new pods running the next version (e.g. `v1.2.4`) are **created and started** inside the cluster, running alongside the currently-active pods (`v1.2.3`) \u2014 but they receive **zero live user traffic** at this point; they exist and are running, but are not yet \"live.\" In the Deploy step, traffic is actually **switched** to those already-running new pods \u2014 this is the moment they transition from \"exists but idle\" to \"actually serving real users.\"\n\n**Why treat them as two distinct steps:**\n1. **Validation window.** Once the new pods are started (Release) but before any real user traffic reaches them (before Deploy), the team has an opportunity to run health checks, smoke tests, or synthetic traffic against the new version in a real, running environment \u2014 without any risk to real users, since nothing user-facing depends on those pods yet.\n2. **Fast, low-risk rollback.** If Deploy (the traffic switch) reveals a problem, rolling back is as simple as switching traffic back to the still-running old pods \u2014 no redeploy, no rebuild, near-instant recovery. If Release and Deploy were the same atomic step (new pods immediately take over serving traffic the instant they start), any problem discovered after the fact requires either an emergency rollback deployment or user-facing downtime while it's fixed forward.\n3. **Decoupling \"is it ready\" from \"is it live.\"** Splitting these lets a team treat \"the new version exists and is running correctly\" and \"users are now using the new version\" as two separate, independently-controllable facts \u2014 which is exactly what enables techniques like canary releases (route only a fraction of traffic to the new pods) or blue-green deployments (switch all traffic at once, but only when ready)."
+    },
+    {
+      "id": "t3",
+      "q": "A team's monitoring dashboard shows a Jaeger trace revealing that a `POST /api/v1/payments` request spends 90% of its total duration inside a call to `AccountService`. Explain how this observation flows back into the Plan step of the next loop iteration, and what kind of work item might result.",
+      "answer": "**How it flows back:** the DevOps loop is explicitly closed \u2014 Monitor's output is not a dead end, it's the input to the next Plan phase. A trace showing that 90% of a payment request's latency is concentrated in one specific downstream call (`AccountService`) is a precise, evidence-based signal about *where* the system's actual bottleneck is, as opposed to a vague complaint like \"payments feel slow.\" This is exactly the kind of concrete finding that turns into a planned, prioritized piece of work rather than being lost or forgotten, because it's backed by measured data rather than guesswork.\n\n**What kind of work item might result:** a new backlog item would likely be created in the Plan step \u2014 structured the same way as the lecture's example work item \u2014 something like:\n\n> **User Story:** As a user, I want the payment submission flow to respond quickly, so that I don't experience a slow, unresponsive UI when sending a payment.\n> **Description / Acceptance Criteria:** `POST /api/v1/payments` should complete in under [target] ms at the 95th percentile; specifically investigate and reduce the AccountService call latency identified in trace [link], which currently accounts for ~90% of total request duration.\n> **Planning fields:** Priority \u2014 high (if this affects a critical user-facing path); Story points \u2014 estimated once the root cause inside AccountService (e.g. a slow query, a missing cache, a synchronous call that could be made async) is investigated.\n\nThe key point: the trace doesn't just report *that* something's slow \u2014 it tells the team specifically *where* to look, which turns an abstract performance concern into an actionable, scoped, prioritizable planning item, exactly the kind of concrete input the Plan step is meant to consume."
+    },
+    {
+      "id": "t4",
+      "q": "Compare SAST and DAST directly: for a SQL injection vulnerability that exists in application code but is protected behind an authentication check that a scanner can't pass, which tool is more likely to catch it, and why?",
+      "answer": "**SAST** analyzes source code (or compiled bytecode) directly, without executing the application \u2014 it looks for known-dangerous *patterns* in the code itself, such as a database query built via string concatenation with unsanitized user input. Because SAST reads the code as text/structure rather than running it, it does **not** need to authenticate, log in, or navigate through the application at all \u2014 it can see the vulnerable query construction directly in the source, regardless of what access control sits in front of the endpoint at runtime.\n\n**DAST** tests a **live, running** application from the outside, behaving like an external attacker sending real HTTP requests and observing real responses. Critically, DAST can only test what it can actually *reach* \u2014 if the vulnerable endpoint sits behind an authentication check that the DAST scanner's automated crawler can't pass (e.g. it doesn't have valid test credentials configured, or the login flow uses something the scanner can't automate, like a CAPTCHA or MFA), the scanner will simply never reach the vulnerable code path at all, and will report no finding \u2014 not because the vulnerability doesn't exist, but because the tool never got past the front door.\n\n**Which tool is more likely to catch this specific case:** **SAST**. Since SAST reads the vulnerable query-construction code directly from the source, the authentication barrier is irrelevant to it \u2014 SAST doesn't need to \"get past\" anything to see the code. DAST, by contrast, is entirely dependent on being able to actually exercise the vulnerable code path at runtime; if it can't authenticate, it can't test the protected endpoint at all, and the vulnerability would go undetected by DAST alone in this scenario. This is exactly why DevSecOps typically uses SAST and DAST **together**, as complementary tools with different blind spots, rather than relying on either one alone."
+    },
+    {
+      "id": "t5",
+      "q": "Design a DevSecOps-integrated version of the standard 8-step DevOps loop by mapping at least one specific security practice (from CVE checking, OWASP Top 10 awareness, SAST, DAST, or secret scanning) onto each of the 8 steps.",
+      "answer": "1. **Plan** \u2014 Threat-model the feature against the **OWASP Top 10** as part of writing acceptance criteria (e.g. for a login feature, explicitly plan for \"broken access control\" and \"injection\" risks up front, not as an afterthought).\n2. **Code** \u2014 Use an IDE-integrated **SAST** linter/plugin that flags insecure patterns (e.g. string-concatenated SQL, hardcoded secrets) as the developer types, before the code is even committed.\n3. **Build** \u2014 Run automated **dependency/CVE scanning** during package restore (exactly the NU1903/NU1902 pattern shown in the lecture) and **secret scanning** on the diff being built, failing the build on critical findings.\n4. **Test** \u2014 Run a full **SAST** pass across the entire codebase (not just changed files) as a CI stage, and include security-specific test cases (e.g. attempting SQL injection payloads against test endpoints) alongside functional tests.\n5. **Release** \u2014 Run **DAST** against the newly-started (but not-yet-live) pods from the Release step's staging environment \u2014 exactly the validation window the pod diagram creates \u2014 catching runtime-only vulnerabilities before any real traffic is switched to them.\n6. **Deploy** \u2014 Verify the deployed artefact's **signature and SBOM** (tying back to L17's supply-chain security material) before allowing the traffic switch to proceed, ensuring the exact artefact that was scanned is the one going live.\n7. **Operate** \u2014 Run continuous, scheduled **DAST** scans and dependency **CVE** re-checks against the live production system, since new CVEs can be disclosed for dependencies that were \"clean\" at deploy time.\n8. **Monitor** \u2014 Feed security-relevant signals (e.g. anomalous traffic patterns, repeated failed auth attempts visible in traces/logs) into monitoring dashboards alongside performance data, so security incidents are detected with the same observability tooling (e.g. Jaeger-style tracing) used for performance issues, and loop back into the next Plan phase as prioritized security work."
+    },
+    {
+      "id": "t6",
+      "q": "Explain why \"not live until traffic is switched\" (the Release step's pod separation) is a form of risk mitigation. What could go wrong if a team's deployment process didn't have this separation, and pods went live to users the instant they started?",
+      "answer": "**Why it's risk mitigation:** the separation converts deployment from a single, all-or-nothing, irreversible event into two independently-controllable steps: \"does the new version start up and run correctly\" (Release) and \"should real users actually be using it\" (Deploy). Because the second question can be answered \u2014 via health checks, smoke tests, or simply watching the new pods for errors \u2014 *before* any real user is affected, the team gets a genuine opportunity to catch a broken deployment with zero user-facing impact, and to reverse course (simply not switching traffic, or switching it back) without any redeploy at all.\n\n**What could go wrong without this separation:** if a pod becomes \"live\" the instant it starts, then any problem in the new version \u2014 a missing environment variable, a failed database migration, a crash-on-startup bug, a subtly broken business logic change \u2014 is discovered *by real users hitting it in production*, not by the team in a controlled check. Consider a scenario where `v1.2.4` has a bug causing every payment request to silently fail: without the Release/Deploy separation, the moment the new pods start, they'd begin receiving live payment traffic and failing real user transactions immediately, with no window in which the team could have caught this via a smoke test first. Recovery would then require either scrambling to redeploy the previous version under pressure (itself a re-run of the full pipeline, taking real time during which the bug is actively affecting users) or, worse, if pods are being replaced one-by-one without careful traffic control, a confusing partial-failure state where *some* requests hit the broken new version and others hit the still-running old version \u2014 exactly the kind of production incident this two-step separation is specifically designed to prevent."
+    },
+    {
+      "id": "t7",
+      "q": "A recipient account number validation error (\"Enter a valid 7-digit account number\") appears in the Test step's example. Explain how this specific UI behaviour demonstrates both a software testing concept (from L19) and a UI/UX design concept (from L20) simultaneously.",
+      "answer": "**As a software testing concept (L19):** this behaviour is most directly a **functional test** concern \u2014 \"does this feature behave as intended?\" Specifically, it's testing input validation logic: given an account number that doesn't match the required 7-digit format, does the system correctly reject it and communicate why, rather than silently accepting bad data or crashing? A test suite would cover this with explicit test cases: valid 7-digit input \u2192 accepted; too-short input \u2192 rejected with the specific error message; non-numeric input \u2192 rejected; etc. This is exactly the kind of behaviour a well-named, well-designed test (per L19's \"implementing tests\" guidance) would verify and document.\n\n**As a UI/UX design concept (L20):** the same behaviour is simultaneously a **constraint**, in L20's terms \u2014 the interface prevents (or at minimum immediately flags) an invalid action rather than silently accepting bad input and failing later, deeper in the system (e.g. only discovering the invalid account number after attempting to process the payment against a non-existent account). The specific, actionable error message (\"Enter a valid 7-digit account number,\" rather than a generic \"Error\") also reflects L20's discoverability and feedback principles: the user immediately knows *what* was wrong and *what* a valid input looks like, rather than being left to guess.\n\n**Why this matters as a single example demonstrating both:** it shows that testing and UX design aren't separate concerns bolted onto different parts of the system \u2014 the *same* piece of validation logic simultaneously satisfies \"does the feature behave correctly\" (a testing concern, verified by automated tests) and \"does the user understand what went wrong and how to fix it\" (a UX concern, evaluated by how the error is communicated). A good implementation has to get both right: the validation must be logically correct (testable, verifiable) *and* the resulting user-facing message must be clear and actionable (well-designed) \u2014 one without the other is an incomplete solution."
+    },
+    {
+      "id": "t8",
+      "q": "Explain why CVE identifiers being \"standardized\" matters in practice \u2014 what would go wrong in dependency vulnerability scanning (like the NuGet warnings shown) if there were no shared, standard vulnerability identifiers across the industry?",
+      "answer": "A CVE identifier acts as a **universal, unambiguous reference** for a specific vulnerability \u2014 every tool, vendor, researcher, and package registry that references \"CVE-2024-XXXXX\" is guaranteed to be talking about the exact same underlying issue, regardless of which company or team discovered it, which language ecosystem it affects, or which scanning tool is checking for it.\n\n**What would go wrong without this standardization:** imagine instead that every security research group, every package registry (NuGet, npm, PyPI), and every scanning vendor maintained its own independent, differently-formatted vulnerability catalogue with its own internal naming scheme. The specific automated check shown in the lecture \u2014 NuGet's package restore step automatically cross-referencing a resolved package version against a vulnerability database and emitting a `NU1903` warning \u2014 depends entirely on that database being able to say, unambiguously, \"package X at version Y has vulnerability Z, described here.\" Without a shared identifier:\n- The same real-world vulnerability might be independently rediscovered and separately catalogued multiple times under different names by different organizations, making it impossible to know if two advisories from different sources describe the same issue or two different ones.\n- Tooling built by one vendor (e.g. GitHub's dependency scanning) couldn't reliably cross-reference findings with tooling built by another vendor (e.g. NuGet's built-in restore-time check, or a separate SAST/dependency-scanning product), since they'd have no common key to match records against.\n- A developer seeing a warning would have no reliable way to search for more information, check if a fix already exists, or confirm whether the specific version they're using is actually patched \u2014 every source might describe \"the same\" issue slightly differently, with no canonical reference to reconcile them.\n\nIn short, CVE's standardization is precisely what makes automated, cross-tool, cross-vendor vulnerability detection like the lecture's NuGet build warnings *possible* at scale \u2014 it's the shared vocabulary the entire ecosystem of security tooling depends on to interoperate."
+    },
+    {
+      "id": "t9",
+      "q": "A company currently only runs DAST scans once a year during a scheduled external penetration test. Using DevSecOps principles from the lecture, explain what's wrong with this approach and how it should be integrated into the pipeline instead.",
+      "answer": "**What's wrong:** this is the exact opposite of the DevSecOps principle the lecture defines \u2014 security integrated *throughout* the loop, not as a single, infrequent, end-of-cycle gate. An annual DAST scan means that any vulnerability introduced by a code change has, on average, up to a year of exposure in production before it's ever detected by this process \u2014 during which the vulnerable code may have shipped multiple releases, been exercised by real (and potentially malicious) traffic, and had its blast radius grow as more features are built on top of the vulnerable component. It also means that when a vulnerability *is* found during the annual test, it could take significant investigative effort just to identify *which* of potentially dozens of releases over the past year introduced it, since there's no fine-grained, per-change signal \u2014 only one snapshot per year.\n\n**How it should be integrated instead:** per the lecture's Release step, DAST should run against the system in an environment that mirrors production but isn't yet receiving live traffic \u2014 i.e., DAST against the newly-started (but not-yet-deployed) pods, before the Deploy step switches real traffic to them. This means every release candidate gets scanned, not just once a year \u2014 catching a newly-introduced vulnerability within a single release cycle (days/weeks) rather than up to twelve months later, and narrowing the \"which change caused this\" investigation down to a single release's diff instead of a year's worth of changes. The annual external penetration test doesn't need to be eliminated \u2014 it still adds value as an independent, deeper, human-led check \u2014 but it should be a *supplement* to continuous, automated, per-release DAST, not a substitute for it, exactly matching DevSecOps' principle of security running throughout the loop rather than concentrated at one infrequent gate."
+    },
+    {
+      "id": "t10",
+      "q": "Explain the relationship between distributed tracing (Jaeger, shown in Monitor) and the microservices architecture concepts from L18. Why does distributed tracing become necessary specifically in a microservices architecture in a way it wouldn't be for a monolith?",
+      "answer": "**In a monolith:** a single incoming request (e.g. processing a payment) executes as one continuous call stack within a single process. If something is slow or fails, a developer can typically get a complete picture just by reading a single stack trace or a single process's logs \u2014 every step of handling that request happened inside one process, in one place, with one execution context.\n\n**In a microservices architecture (per L18):** the same logical operation \u2014 \"process this payment\" \u2014 is decomposed into a call that spans multiple, independently-deployed services communicating over the network (e.g. a request to `PaymentService`, which in turn calls `AccountService` to verify balance and update account state). Each service has its own process, its own logs, and \u2014 critically \u2014 its own independent execution context. A single logical request now has no single call stack to read; it's scattered across N separate services' logs, each of which only sees its own piece of the interaction, with no inherent way to tell which log lines across different services correspond to the *same* originating request.\n\n**Why distributed tracing becomes necessary:** distributed tracing solves exactly this problem by propagating a shared trace ID across every service boundary a single logical request crosses, and recording each service's contribution as a \"span\" within that shared trace. This is what lets the lecture's Jaeger example show that a single `POST /api/v1/payments` request touched both `PaymentService` and `AccountService`, and exactly how long each one took \u2014 reconstructing, after the fact, the same complete picture that a monolith's single call stack would have given you \"for free,\" but which the microservices architecture's decentralized, independently-deployed services structurally cannot provide without this extra tracing infrastructure. This is a direct, practical consequence of the \"decentralized control\" and \"independent deployment\" characteristics L18 attributes to microservices \u2014 the same properties that give microservices their benefits (independent scaling, independent deployment) are exactly what make simple, monolith-style debugging (read one process's log) insufficient, and dedicated cross-service observability tooling like Jaeger a practical necessity rather than a nice-to-have."
+    },
+    {
+      "id": "t11",
+      "q": "Using the lecture's user behaviour analytics tools (heatmaps, session replay, funnels) shown in Monitor, explain how these tools could reveal a UI/UX problem (per L20's concepts) that a purely technical monitoring tool like Jaeger would never surface, and vice versa.",
+      "answer": "**What Jaeger (technical tracing) can and cannot see:** Jaeger measures *system* behaviour \u2014 request latency, which services were called, whether calls succeeded or failed. It has no concept of what a user was actually trying to accomplish or how they felt about the interaction. A request can be technically perfect by every metric Jaeger tracks \u2014 fast, error-free, all downstream calls succeeding \u2014 while the user experience built on top of that request is still confusing or frustrating. For example: a checkout API call that returns a `200 OK` in 80ms (excellent by Jaeger's metrics) could still power a confirmation screen that, per L20's feedback principles, gives the user no visible confirmation that anything happened \u2014 Jaeger would show a perfectly healthy trace for an interaction the user experienced as \"did that even work?\"\n\n**What heatmaps/session replay/funnels can and cannot see:** these tools directly capture what L20's material is actually about \u2014 where users click, how far they scroll, where they hesitate, and at what step in a multi-step flow they abandon it (a funnel drop-off). A heatmap could reveal that users are repeatedly clicking on a visual element that *isn't* actually interactive (a discoverability failure per L20 \u2014 the design \"looks clickable\" but isn't), or a funnel could show 40% of users abandoning at a specific step of checkout \u2014 signals about the *experience* that have nothing to do with whether the underlying API calls succeeded quickly. But these UX tools have no visibility into *why* a technical failure occurred \u2014 they can show that users abandoned at a step, but not that the abandonment was actually caused by a slow downstream `AccountService` call that Jaeger would have flagged immediately.\n\n**Why both are needed together:** a purely technical view (Jaeger) can miss real UX problems that occur even when the system is functioning \"correctly\" by every technical measure; a purely UX-analytics view (heatmaps/funnels) can observe *that* users are struggling without being able to diagnose *why* at a systems level if the root cause is technical (e.g. hidden latency, an intermittent backend error not surfaced clearly in the UI). The lecture placing both tool categories together under Monitor reflects exactly this: closing the DevOps loop requires understanding both whether the system is technically healthy *and* whether real users are actually succeeding at their goals \u2014 neither lens alone gives the complete picture."
+    },
+    {
+      "id": "t12",
+      "q": "A junior developer says: \"DevSecOps just means the security team reviews the code before each release.\" Critique this statement using the lecture's actual definition of DevSecOps and the CVE/SAST/DAST/secret-scanning tooling described.",
+      "answer": "This statement describes something closer to a traditional, siloed security review gate \u2014 which is closer to the *opposite* of what the lecture defines DevSecOps as being.\n\n**What's wrong with the statement:**\n1. **\"Just before each release\" contradicts \"throughout the loop.\"** The lecture is explicit that DevSecOps means security is integrated across Plan, Code, Build, Test, Release, Deploy, Operate, *and* Monitor \u2014 not concentrated into a single review that happens right before release. A pre-release-only review means a vulnerability introduced early in development sits undetected through Plan, Code, Build, and Test, only potentially being caught at the very last gate \u2014 the opposite of the \"shift left\" principle the build-time CVE warnings demonstrate.\n2. **\"The security team reviews\" implies a manual, human-gated, separate-team process** \u2014 but the lecture's actual examples (NuGet's automatic build-time CVE warnings, SAST scanning code, DAST scanning a running system, secret scanning on commits) are all **automated tooling embedded directly into the same pipeline developers already use**, not a separate manual review performed by a different team at a separate point in the process. The whole premise of DevSecOps, per its name (**Dev** + **Sec** + **Ops** combined), is that security stops being a separate silo/gate and becomes something Dev and Ops teams are equipped to catch themselves, continuously, using tooling \u2014 not something exclusively owned and manually checked by a distinct security team at the end.\n3. **A single review, however thorough, cannot substitute for continuous automated checks.** A human reviewer looking at a diff before release is unlikely to manually re-verify every transitive dependency against the CVE database (the exact thing the automated NuGet warning does automatically on every single build) or manually attempt every OWASP Top 10 attack pattern against a live running instance (what automated DAST does systematically). These are precisely the kinds of exhaustive, repetitive checks that don't scale as a manual, periodic human task, but do scale as automated tooling running on every build/release.\n\n**A more accurate framing:** DevSecOps means security tooling (dependency/CVE scanning, SAST, DAST, secret scanning) is embedded as automated, continuous checks running throughout the pipeline that Dev and Ops teams themselves interact with directly (e.g. a developer seeing a build warning), supplemented \u2014 not replaced \u2014 by human security expertise, rather than security being solely a separate team's manual, end-of-cycle gate."
+    }
+  ]
+}

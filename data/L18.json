@@ -1,0 +1,310 @@
+{
+  "id": "L18",
+  "title": "Domain Modelling Recap + Architecture Recap",
+  "subtitle": "Entities vs value objects, UML relationships, and choosing between monoliths, microservices, event-driven, SOA, CQRS, and MVC-family patterns.",
+  "contentMarkdown": "## Part A: Domain Modelling Recap\n\n### 1. Core Vocabulary\n\n- **Class** \u2014 a type; an abstraction that groups objects.\n- **Attribute** \u2014 defines a class's properties.\n- **Operation** \u2014 defines the behaviour of objects.\n- **Object** \u2014 an instance of a class.\n- **Encapsulation** \u2014 defining and storing the properties and behaviour of a class/object together.\n- **Polymorphism** \u2014 the ability to assume more than one form.\n\n### 2. UML Class Diagrams\n\n- A **UML class diagram** is a *structural* diagram. It shows classes, their attributes and operations, and the relationships between classes.\n- A **domain model** is represented by a class diagram **without showing operations** \u2014 it models the concepts and their relationships, not the behaviour/implementation.\n\n### 3. Relationships Summary\n\n| Relationship | Notion | Notation direction | Example |\n|---|---|---|---|\n| Inheritance (IS-A) | Between classes; a subclass *is a* kind of its superclass | Arrow points from subclass to superclass | `Manager` \u2192 `Employee` |\n| Aggregation (part-of, shared) | A \"has-a\" relationship where the part can exist independently of the whole | Diamond at the aggregate (whole) side, arrow toward the part | `Car` \u25c7\u2192 `Engine` |\n| Composition (part-of, exclusive ownership) | A stronger \"has-a\" \u2014 the whole exclusively owns the part; the part's lifecycle is bound to the whole | Filled diamond at the aggregate side, arrow toward the part | `Building` \u25c6\u2192 `Room` |\n\n### 4. Domain Modelling Process (4 steps)\n\n1. **Collect application domain information** \u2014 focus on the functional requirements, but also consider other requirements and documents, and business descriptions.\n2. **Brainstorm** \u2014 list the important application domain concepts, list their properties/attributes, and list their relationships.\n3. **Classify the domain concepts** into: classes; attributes/attribute values; relationships (association, inheritance, aggregation).\n4. **Visualize the result** using a UML class diagram.\n\n### 5. Pitfalls \u2014 Get the Model Wrong, Every Layer Above Inherits the Confusion\n\nGet the domain model right and the architecture writes itself; get it wrong and every layer built on top inherits the confusion.\n\n| What you see (symptoms) | What's actually wrong |\n|---|---|\n| Every feature requires touching ten files | Boundaries drawn around database tables, not around domain concepts |\n| Two developers use the same word to mean different things | Vocabulary is technical, not what users actually say (no shared ubiquitous language) |\n| Business says \"ship quickly\"; the codebase says no | Business rules scattered across services and helper functions instead of living in the model |\n| Bugs cluster around the same area for months | Data flow was modelled, but behaviour was ignored |\n| Rewrites get pitched, often | Architecture was chosen before the domain was actually understood |\n\n### 6. Entity vs. Value Object \u2014 Identity Is the Test\n\n**The test:** *\"If I changed every field, would it still be the same thing?\"* Yes \u2192 it's an **Entity**. No \u2192 it's a **Value Object**.\n\n| | Entity | Value Object |\n|---|---|---|\n| Example | `Customer` | `Money` |\n| Identity | Has an ID. Two customers with the same name are still different people. Can change email and remain the same customer. | No ID. R100 ZAR is R100 ZAR \u2014 interchangeable. You don't \"change\" a value object; you replace it. |\n| Equality | Compared by identity (the ID) | Compared by comparing all fields |\n\n```ts\nclass Customer {\n  readonly id: CustomerId;\n  email: Email;\n  status: CustomerStatus;\n\n  changeEmail(e: Email) {\n    this.email = e;\n    this.emit(EmailChanged);\n  }\n}\n\nclass Money {\n  constructor(\n    readonly amount: Decimal,\n    readonly currency: Currency,\n  ) {}\n\n  add(other: Money): Money {\n    return new Money(this.amount.plus(other.amount), this.currency);\n  }\n}\n```\n\nNote how `Customer.changeEmail` **mutates** the entity in place and emits an event (identity persists through change), while `Money.add` **returns a new instance** rather than mutating (a value object is replaced, never changed in place).\n\n---\n\n## Part B: Architecture Recap\n\n### 1. What Is Software Architecture?\n\nSoftware architecture is the fundamental organization of a software system. It serves as a high-level \"blueprint\" that defines the structures, components, and relationships between different parts of the system to ensure it meets both technical and business requirements.\n\n**An architecture is technology neutral** \u2014 choosing an architectural style is not the same as choosing specific technologies/frameworks.\n\nArchitecture decisions cover:\n\n- **Structural Elements** \u2014 defining the major modules, subsystems, and databases.\n- **Communication** \u2014 determining how components interact: via APIs, messaging, or data buses.\n- **Quality Attributes** \u2014 prioritizing the \"ilities\": scalability, maintainability, security, reliability.\n- **Trade-offs** \u2014 balancing conflicting needs, such as speed of development vs. high performance.\n\n### 2. How to Choose an Architecture \u2014 Four Questions\n\n1. **How well do you actually understand the domain?** Don't know yet \u2192 monolith. Stable model \u2192 start splitting.\n2. **How many teams will work on it concurrently?** 1\u20132 teams \u2192 one deployable. 5+ teams \u2192 microservices may pay off.\n3. **Where's the read/write asymmetry?** Roughly equal reads/writes \u2192 same model for both. Reads far exceed writes \u2192 consider CQRS.\n4. **Does history matter as much as current state?** Audit, finance, healthcare domains \u2192 event sourcing earns its place.\n\n### 3. N-Layer Architecture (Horizontal Decomposition)\n\nOrganizes concerns into logical **layers** (e.g. Presentation, Business, Data). Each layer has a specific responsibility. Layers only communicate with **adjacent** layers (separation of concerns) \u2014 this enhances modifiability and lets layers be developed independently. A common example is the **4-layer architecture** (e.g. Presentation \u2192 Application/Business \u2192 Domain \u2192 Data/Infrastructure).\n\n### 4. N-Tier Architecture (Vertical Decomposition)\n\nOrganizes concerns into physical **tiers** \u2014 each tier has a specific responsibility and is **physically separated** (can run on different machines/processes), unlike layers which are a logical organization within one deployable. The classic example is the **3-tier architecture** (presentation tier, application/logic tier, data tier), each of which can be deployed and scaled independently.\n\n### 5. Microservices Architecture\n\n- **Decentralized control** \u2014 the application is split into small, autonomous services that communicate over lightweight protocols (REST/gRPC).\n- **Independent deployment** \u2014 each service has its own lifecycle, allowing teams to deploy updates without affecting the entire system.\n\n### 6. Event-Driven Architecture\n\n- **Asynchronous nature** \u2014 systems respond to \"events\" (state changes) rather than direct commands.\n- **Publish/Subscribe** \u2014 producers send events to a broker; consumers listen for specific events they care about.\n- **Extreme scalability** \u2014 ideal for systems requiring high throughput and low coupling between modules.\n\n| Pros | Cons | Use when |\n|---|---|---|\n| Producers don't know who's listening \u2014 true decoupling | Eventual consistency by default \u2014 no \"after this, that\" guarantee | High-throughput pipelines (orders, telemetry, IoT) |\n| Add a new consumer without touching the producer | Debugging crosses async boundaries \u2014 needs distributed tracing | Multiple consumers care about the same fact |\n| Buffers absorb spikes; system stays responsive | Schema evolution is hard once N consumers depend on event v1 | You want to add capabilities later without redeploying |\n\n### 7. Service-Oriented Architecture (SOA)\n\n- **Interoperability** \u2014 diverse systems communicate via an Enterprise Service Bus (ESB).\n- **Granularity** \u2014 coarse-grained services compared to microservices (fewer, larger services vs. many small ones).\n- **SOAP/WSDL** \u2014 often relies on formal contracts and heavier protocols than modern REST/gRPC microservices.\n\n### 8. Command Query Responsibility Segregation (CQRS)\n\nSeparates **read operations (Queries)** from **write operations (Commands)**. Allows independent scaling of read and write workloads, and enables using different data models for reading vs. writing.\n\n| When it fits | When it doesn't |\n|---|---|\n| Read patterns are wildly different from write patterns | A simple CRUD app where \"show me the record I just edited\" is the norm |\n| Reports/dashboards that would crush the OLTP database | The team is uncomfortable reasoning about eventual consistency between the read and write models |\n| Audit + history matter (pairs naturally with event sourcing) | You haven't actually proven a single read-model bottleneck yet |\n\n### 9. Model-View-Controller (MVC)\n\n| Model | Controller | View |\n|---|---|---|\n| Represents the data structure and business logic. Notifies the view of state changes. | The \"brain.\" Receives input, updates the model, and selects the appropriate view. | The presentation. Renders data from the model into a user-friendly interface. |\n\n### 10. Pattern Evolution: MVVM vs. MVT\n\n| Feature | MVVM (Model-View-ViewModel) | MVT (Model-View-Template) |\n|---|---|---|\n| Intermediary | **ViewModel** (data-binding focus) | **View** (controller-like logic \u2014 Django's \"View\" plays the Controller's role) |\n| UI Rendering | Client-side (Angular, Vue, React) | Server-side (Django) |\n| Core strength | Complex UI interaction / state management | Rapid, content-heavy development |\n| Dependency flow | Loosely coupled via events/data-binding | Django's View handles the \"Control\" flow directly, rendering a server-side Template |\n",
+  "mcqs": [
+    {
+      "id": "m1",
+      "q": "What does \"encapsulation\" mean in domain modelling, per the lecture's definitions?",
+      "options": [
+        "Combining unrelated classes into one module",
+        "Defining and storing the properties and behaviour of a class/object together",
+        "Hiding a class's operations from a UML diagram",
+        "Converting a class into an interface"
+      ],
+      "correct": 1,
+      "explanation": "Encapsulation is defined as defining/storing the properties and behaviour of a class or object together."
+    },
+    {
+      "id": "m2",
+      "q": "Why does a domain model's class diagram typically omit operations?",
+      "options": [
+        "Operations cannot be represented in UML at all",
+        "A domain model focuses on concepts and relationships, not implementation behaviour",
+        "Operations are always marked private and therefore hidden",
+        "Domain models only describe database schemas"
+      ],
+      "correct": 1,
+      "explanation": "The lecture defines the domain model specifically as \"a class diagram without showing the operations\" \u2014 it captures structure/vocabulary, not behaviour."
+    },
+    {
+      "id": "m3",
+      "q": "Which UML relationship uses a filled diamond and represents exclusive ownership, where the part's lifecycle is bound to the whole?",
+      "options": [
+        "Inheritance",
+        "Aggregation",
+        "Composition",
+        "Association"
+      ],
+      "correct": 2,
+      "explanation": "Composition (e.g. Building\u2013Room) uses a filled diamond and means the aggregate exclusively owns the part \u2014 unlike aggregation, where the part can exist independently."
+    },
+    {
+      "id": "m4",
+      "q": "A `Manager` class inherits from an `Employee` class. Which relationship is this, and which way does the UML arrow point?",
+      "options": [
+        "Aggregation; arrow points from Employee to Manager",
+        "Inheritance (IS-A); arrow points from Manager (subclass) to Employee (superclass)",
+        "Composition; arrow points from Manager to Employee",
+        "Association; no arrow direction applies"
+      ],
+      "correct": 1,
+      "explanation": "Inheritance/IS-A arrows point from the subclass toward the superclass \u2014 Manager \u2192 Employee."
+    },
+    {
+      "id": "m5",
+      "q": "Which symptom-to-cause pairing correctly matches the lecture's \"pitfalls\" table?",
+      "options": [
+        "Symptom: bugs cluster in the same area for months \u2014 Cause: too many microservices",
+        "Symptom: every feature requires touching ten files \u2014 Cause: boundaries were drawn around database tables, not domain concepts",
+        "Symptom: rewrites get pitched often \u2014 Cause: too many junior developers were hired",
+        "Symptom: two devs use the same word differently \u2014 Cause: insufficient unit test coverage"
+      ],
+      "correct": 1,
+      "explanation": "The lecture explicitly pairs \"every feature requires touching ten files\" with boundaries drawn around tables instead of domain concepts."
+    },
+    {
+      "id": "m6",
+      "q": "Using the identity test (\"if I changed every field, would it still be the same thing?\"), which of these is a Value Object rather than an Entity?",
+      "options": [
+        "A `Customer` tracked by a unique ID",
+        "A `BankAccount` tracked by account number",
+        "A `Money` amount of \"R100 ZAR\"",
+        "An `Order` tracked by order ID"
+      ],
+      "correct": 2,
+      "explanation": "R100 ZAR is interchangeable with any other R100 ZAR \u2014 no identity, compared by value, so it's a Value Object like the lecture's Money example."
+    },
+    {
+      "id": "m7",
+      "q": "In the lecture's code example, why does `Money.add()` return a new `Money` instance instead of mutating `this.amount`?",
+      "options": [
+        "Because Money is stored in a database and therefore cannot be mutated",
+        "Because Money is a value object \u2014 value objects are replaced rather than changed in place, and are compared by their fields",
+        "Because TypeScript does not allow mutable class properties",
+        "Because only Customer objects are required to be immutable"
+      ],
+      "correct": 1,
+      "explanation": "Value objects like Money can't be \"changed\"; you replace them \u2014 which is exactly why `add()` constructs and returns a new Money rather than mutating."
+    },
+    {
+      "id": "m8",
+      "q": "According to the lecture, what does it mean for an architecture to be \"technology neutral\"?",
+      "options": [
+        "It must avoid using any programming language",
+        "Architectural decisions \u2014 structural elements, communication style, quality attribute priorities \u2014 are made independently of specific technology/framework choices",
+        "It only applies to open-source technologies",
+        "It means the architecture cannot be deployed to the cloud"
+      ],
+      "correct": 1,
+      "explanation": "The lecture states an architecture is technology neutral and explicitly calls out \"NO Technologies!!!\" as part of describing/choosing it."
+    },
+    {
+      "id": "m9",
+      "q": "A team doesn't yet understand their domain well and isn't sure how it will evolve. Per the \"how to choose\" guidance, what should they start with?",
+      "options": [
+        "Microservices, to stay flexible",
+        "A monolith",
+        "Event sourcing",
+        "SOA with an ESB"
+      ],
+      "correct": 1,
+      "explanation": "\"Don't know yet \u2192 monolith. Stable model \u2192 start splitting\" is the lecture's explicit guidance."
+    },
+    {
+      "id": "m10",
+      "q": "Which of the four \"how to choose\" architecture questions specifically motivates considering CQRS?",
+      "options": [
+        "How many teams will work on the codebase concurrently?",
+        "Does history matter as much as current state?",
+        "Where's the read/write asymmetry \u2014 are reads much greater than writes?",
+        "How well is the domain understood?"
+      ],
+      "correct": 2,
+      "explanation": "\"Reads >> writes \u2192 consider CQRS\" is the lecture's explicit answer to the read/write asymmetry question."
+    },
+    {
+      "id": "m11",
+      "q": "What is the key structural difference between N-layer and N-tier architecture?",
+      "options": [
+        "N-layer is a physical separation across machines; N-tier is purely logical",
+        "N-layer is a logical decomposition (layers communicate only with adjacent layers within one deployable); N-tier is a physical decomposition where tiers are physically separated",
+        "They are exactly the same concept with different names",
+        "N-tier only applies to microservices, N-layer only applies to monoliths"
+      ],
+      "correct": 1,
+      "explanation": "N-layer = horizontal, logical decomposition within a deployable. N-tier = vertical, physical decomposition across separate physical/deployment boundaries."
+    },
+    {
+      "id": "m12",
+      "q": "Which principle does N-layer architecture rely on to enhance modifiability?",
+      "options": [
+        "Layers may only communicate with adjacent layers (separation of concerns)",
+        "All layers must share the same database schema",
+        "Every layer must be deployed on a separate physical server",
+        "Layers should be merged whenever possible to reduce latency"
+      ],
+      "correct": 0,
+      "explanation": "Restricting communication to adjacent layers is the separation-of-concerns principle that lets layers be developed and modified independently."
+    },
+    {
+      "id": "m13",
+      "q": "What is a defining characteristic of microservices architecture, per the lecture?",
+      "options": [
+        "Centralized control with a single shared deployable",
+        "Decentralized control \u2014 small, autonomous services communicating over lightweight protocols like REST/gRPC, each independently deployable",
+        "All services must share one common database",
+        "Services communicate exclusively via a heavyweight ESB"
+      ],
+      "correct": 1,
+      "explanation": "Decentralized control and independent deployability over lightweight protocols are the two defining traits the lecture gives for microservices."
+    },
+    {
+      "id": "m14",
+      "q": "In event-driven architecture, what is the main trade-off exchanged for extreme scalability and decoupling?",
+      "options": [
+        "Increased coupling between producers and consumers",
+        "Eventual consistency by default, and debugging that crosses async boundaries",
+        "A mandatory shared database between all services",
+        "Producers must know exactly who is listening"
+      ],
+      "correct": 1,
+      "explanation": "The lecture's pros/cons table lists eventual consistency and cross-boundary debugging as the direct cons of the async, pub/sub nature."
+    },
+    {
+      "id": "m15",
+      "q": "Why is schema evolution described as \"hard\" in an event-driven system?",
+      "options": [
+        "Event brokers do not support any schema validation",
+        "Once multiple consumers depend on an event's v1 schema, changing that schema risks breaking every downstream consumer",
+        "Events cannot contain structured data",
+        "Only one consumer is ever allowed to subscribe to a given event type"
+      ],
+      "correct": 1,
+      "explanation": "\"Schema evolution is hard once N consumers depend on event v1\" \u2014 every additional consumer increases the blast radius of a breaking schema change."
+    },
+    {
+      "id": "m16",
+      "q": "How does SOA typically differ from microservices in terms of granularity, per the lecture?",
+      "options": [
+        "SOA services are more fine-grained than microservices",
+        "SOA favours coarse-grained services communicating via an ESB, often with formal SOAP/WSDL contracts, compared to microservices' lighter-weight, finer-grained services",
+        "SOA and microservices always use identical granularity",
+        "SOA does not support interoperability between diverse systems"
+      ],
+      "correct": 1,
+      "explanation": "The lecture explicitly notes SOA's coarse-grained services (vs. microservices), interoperability via ESB, and formal SOAP/WSDL contracts."
+    },
+    {
+      "id": "m17",
+      "q": "A reporting dashboard is crushing the OLTP production database with heavy read queries, while writes remain simple and low-volume. Which pattern directly addresses this?",
+      "options": [
+        "Composition",
+        "CQRS",
+        "N-tier architecture",
+        "SOA"
+      ],
+      "correct": 1,
+      "explanation": "\"Reports/dashboards that crush the OLTP DB\" is listed explicitly as a case where CQRS fits."
+    },
+    {
+      "id": "m18",
+      "q": "When does the lecture say CQRS does NOT fit well?",
+      "options": [
+        "When reports/dashboards are overwhelming the OLTP database",
+        "When audit and history matter alongside event sourcing",
+        "In a simple CRUD app where \"show me the record I just edited\" is the norm",
+        "When read patterns differ wildly from write patterns"
+      ],
+      "correct": 2,
+      "explanation": "A simple CRUD app with immediate read-your-write expectations is explicitly listed as a case where CQRS doesn't fit."
+    },
+    {
+      "id": "m19",
+      "q": "In the MVC pattern, which component is responsible for receiving input, updating the model, and selecting the appropriate view?",
+      "options": [
+        "Model",
+        "View",
+        "Controller",
+        "ViewModel"
+      ],
+      "correct": 2,
+      "explanation": "The lecture describes the Controller as \"the brain\" \u2014 it receives input, updates the model, and selects the view."
+    },
+    {
+      "id": "m20",
+      "q": "Comparing MVVM and MVT: which statement correctly matches each pattern to its rendering location and intermediary role?",
+      "options": [
+        "MVVM renders server-side via a ViewModel; MVT renders client-side via a Template",
+        "MVVM renders client-side (e.g. Angular/Vue/React) using a data-binding-focused ViewModel; MVT (e.g. Django) renders server-side, with the View playing a controller-like role",
+        "Both MVVM and MVT render exclusively server-side",
+        "MVT is used only for single-page applications, MVVM only for multi-page applications"
+      ],
+      "correct": 1,
+      "explanation": "The lecture's comparison table pairs MVVM with client-side rendering and a data-binding ViewModel, and MVT with server-side rendering (Django) where the View handles control flow."
+    }
+  ],
+  "techQuestions": [
+    {
+      "id": "t1",
+      "q": "Using the identity test, explain why an `Order`'s `discountPercentage` field is likely a value rather than an entity, while the `Order` itself is an entity. What practical consequence does this have for how each is compared for equality in code?",
+      "answer": "Apply the test to each: *\"if I changed every field, would it still be the same thing?\"*\n\n- **`Order` (Entity):** if you changed every field of an order \u2014 its line items, its total, its shipping address, even its status \u2014 it's still meaningfully \"the same order\" as long as its identity (order ID) is preserved. A customer asking \"where's my order?\" means a specific order, trackable through changes over its lifecycle. So `Order` is an entity.\n- **`discountPercentage` (Value):** a 10% discount has no identity of its own. Two `Order`s that both happen to have `discountPercentage = 10` share an interchangeable value \u2014 there's no sense in which \"this particular 10%\" is different from \"that 10%\". If the field changes from 10% to 15%, you haven't mutated some persistent \"discount object\" \u2014 you've simply replaced one value with another.\n\n**Practical consequence for equality:** `Order` should be compared **by identity** \u2014 `order1.equals(order2)` should check `order1.id === order2.id`, even if every other field currently differs (e.g. the order's status changed since you last loaded it, it's still the same order). `discountPercentage` (and value objects generally, like the lecture's `Money`) should be compared **by value** \u2014 two values with identical fields are simply equal, with no notion of \"same instance\" required. Getting this backwards is a common bug source: comparing entities by field-equality treats a legitimately-updated order as \"a different order,\" while comparing value objects by reference/identity causes spurious inequality between two `Money` amounts that are obviously the same value."
+    },
+    {
+      "id": "t2",
+      "q": "A team complains that \"every feature requires touching ten files\" and that two developers routinely use the same word to mean different things. Diagnose the underlying domain modelling problem using the lecture's pitfalls table, and describe two concrete steps to fix it.",
+      "answer": "**Diagnosis:** both symptoms map directly to the lecture's pitfalls table:\n- \"Every feature requires touching ten files\" \u2190 the root cause is that **boundaries were drawn around database tables, not around domain concepts.** When the code's structure mirrors the schema instead of the actual business concepts, a single business change (e.g. \"customers can now have multiple shipping addresses\") ripples across every table-shaped class/file that happens to touch that concept.\n- \"Two devs use the same word to mean different things\" \u2190 the root cause is that the **vocabulary in the code is technical, not what users actually say** \u2014 there is no shared, agreed-upon domain language (no \"ubiquitous language\"), so each developer's mental model of a term like \"Account\" or \"Order\" silently diverges.\n\nBoth symptoms point to the same underlying failure: **the domain wasn't modelled before the architecture/schema was built** \u2014 exactly the lecture's warning that \"architecture chosen before the domain was understood\" is itself listed as a root cause.\n\n**Two concrete fixes:**\n1. **Re-run the brainstorming step (step 2 of the domain modelling process)** with both developers and, ideally, a business stakeholder in the room: explicitly list the important domain concepts and agree, in writing, what each term means and what its properties/relationships are. This directly produces the missing shared/ubiquitous language.\n2. **Redraw module/class boundaries around the agreed domain concepts, not around tables.** Concretely: identify which \"concept\" each of those ten touched files actually belongs to, and consolidate the behaviour and rules for that concept into one place (e.g. one `Order` aggregate/class) instead of scattering it across a `orders` table access layer, an `order_items` table access layer, and three unrelated helper files."
+    },
+    {
+      "id": "t3",
+      "q": "Walk through the four-step domain modelling process for a simple library system (books, members, loans), giving one concrete example output for each step.",
+      "answer": "**Step 1 \u2014 Collect application domain information:** gather the functional requirements (\"members can borrow up to 5 books,\" \"a book can only be loaned to one member at a time,\" \"loans have a due date\"), plus any relevant policy documents (the library's lending rules) and business descriptions (how fines are calculated for overdue books).\n\n**Step 2 \u2014 Brainstorm:** list important concepts and their properties/relationships as they emerge from those requirements, e.g.:\n- `Book` (title, ISBN, author, availability status)\n- `Member` (name, membership ID, current loan count)\n- `Loan` (which book, which member, loan date, due date, return date)\n- Relationship: a `Member` *borrows* a `Book` via a `Loan`; a `Book` can have many historical `Loan`s but at most one *active* one.\n\n**Step 3 \u2014 Classify the domain concepts:**\n- **Classes:** `Book`, `Member`, `Loan`.\n- **Attributes:** `Book.isbn`, `Book.title`, `Member.membershipId`, `Loan.dueDate`, etc.\n- **Relationships:** association between `Member` and `Loan` (a member has many loans), association between `Book` and `Loan` (a book has many loans over time), and a derived rule (\"a book has at most one active loan\") that becomes a business invariant rather than a structural relationship.\n\n**Step 4 \u2014 Visualize the result:** draw a UML class diagram (without operations, per the domain model definition) showing `Book`, `Member`, and `Loan` as classes with their attributes, connected by association lines annotated with multiplicities (e.g. `Member \"1\" -- \"0..*\" Loan`, `Book \"1\" -- \"0..*\" Loan`)."
+    },
+    {
+      "id": "t4",
+      "q": "Explain why \"architecture is technology neutral,\" and give one example of a good technology-neutral architecture decision versus a technology-specific decision that would be premature at the architecture stage.",
+      "answer": "Being technology neutral means architectural decisions describe **structural elements, communication patterns, and quality attribute priorities** in the abstract \u2014 independent of which specific frameworks, languages, or vendor products will eventually implement them. The architecture is a blueprint of *shape and responsibility*, not a shopping list of tools.\n\n**Good technology-neutral decision:** \"We will use an event-driven style, where the order-processing subsystem publishes domain events consumed asynchronously by inventory and billing, because we need high throughput and loose coupling between those subsystems.\" This decision is entirely about structure and communication style \u2014 it says nothing yet about whether the broker will be Kafka, RabbitMQ, or AWS SNS/SQS.\n\n**Premature technology-specific decision:** \"We will use Kafka for messaging\" decided at the very start of architecture design, before the team has even settled on whether an event-driven style is appropriate at all. This risks anchoring the whole system's structure around one vendor's specific capabilities and constraints (e.g. Kafka's partition-ordering semantics) before the actual communication requirements (ordering guarantees, throughput, consumer count) have been analysed \u2014 the technology choice should be a *consequence* of the architectural style decision, not a substitute for making it."
+    },
+    {
+      "id": "t5",
+      "q": "A startup has 2 developers, an evolving and poorly-understood domain, roughly equal read/write volume, and no regulatory requirement to track historical state. Using the four \"how to choose\" questions, recommend an architecture and justify each answer.",
+      "answer": "Walking through each question:\n\n1. **How well is the domain understood?** Poorly, and it's still evolving \u2192 per the lecture, \"don't know yet \u2192 monolith.\" Splitting into services now would mean drawing service boundaries around a domain model that will likely be wrong and need to be redrawn repeatedly \u2014 expensive to do across service/network boundaries, cheap to do within one codebase.\n2. **How many teams will work on it concurrently?** Only 2 developers \u2192 \"1\u20132 \u2192 one deployable.\" There's no organizational pressure (multiple independent teams needing to deploy independently) that would justify the operational overhead of microservices.\n3. **Where's the read/write asymmetry?** Roughly equal \u2192 \"equal \u2192 same model.\" There's no case here for CQRS; a single read/write model is simpler and sufficient.\n4. **Does history matter as much as current state?** No regulatory/audit requirement \u2192 event sourcing's complexity (rebuilding state from an event log, handling schema evolution of events) isn't justified; a straightforward current-state data model is enough.\n\n**Recommendation:** a single, well-modularized **monolith**, using standard CRUD persistence with a single read/write model (no CQRS, no event sourcing, no service split). The domain modelling effort should focus on getting clean N-layer separation of concerns *within* that monolith, so that if the domain stabilizes and the team grows later, module boundaries are already reasonably close to correct and easier to extract into services if needed."
+    },
+    {
+      "id": "t6",
+      "q": "Compare N-layer and N-tier architecture with a concrete example of each, and describe one scenario where you'd want them physically separate (as tiers) versus one where collapsing to a single process (layers only) is preferable.",
+      "answer": "**N-layer (logical, horizontal decomposition):** a single deployable internally organized into layers \u2014 e.g. a `PresentationLayer`, `BusinessLogicLayer`, and `DataAccessLayer`, all running inside one process, where each layer only calls the layer directly below it. This is purely an internal code-organization concern; nothing here says anything about how many machines the application runs on.\n\n**N-tier (physical, vertical decomposition):** the same kind of responsibilities, but each one is a **physically separate deployable** \u2014 e.g. a browser-based presentation tier, a separate application-server tier hosting business logic, and a separate database server tier, communicating over the network.\n\n**Scenario favouring layers collapsed into one process (no tier separation):** a small internal admin tool used by a handful of employees, with light traffic and no independent scaling needs. Running Presentation/Business/Data as layers inside one deployable (e.g. a single monolithic web app process talking directly to its database) avoids the operational overhead (network calls, separate deployments, separate monitoring) that physical tier separation would add, for no real benefit at this scale.\n\n**Scenario favouring physically separate tiers:** a public-facing e-commerce site where the presentation tier (a CDN-served SPA) needs to scale and be geographically distributed independently of the application tier (which needs heavier compute for checkout/payment logic), which in turn needs to scale independently of the database tier (which has entirely different scaling characteristics \u2014 read replicas, connection pooling). Here, physical separation lets each tier be scaled, deployed, and hardened according to its own load profile and failure characteristics."
+    },
+    {
+      "id": "t7",
+      "q": "Explain the core trade-off of event-driven architecture using an e-commerce example: an `OrderPlaced` event consumed by inventory, billing, and shipping services. What happens if the event's schema later needs a new mandatory field, and how would you evolve it safely?",
+      "answer": "**The core trade-off:** publishing `OrderPlaced` to a broker decouples the order service from every consumer \u2014 inventory, billing, and shipping don't need to be known to (or even online at the same time as) the producer, and new consumers can subscribe later without touching the order service at all. The cost is **eventual consistency and cross-boundary debugging**: there's no guarantee that inventory has finished reserving stock by the time billing processes payment; if something goes wrong, tracing a single logical \"order placed\" flow now means following a trail across three independently-deployed, asynchronously-triggered services rather than reading one linear call stack.\n\n**What breaks if you add a new mandatory field:** the moment `OrderPlaced` gains a required field (say, `taxJurisdiction`), every consumer that has code depending on the old shape either breaks outright (if it strictly validates the schema) or silently receives `undefined`/`null` for a field it now assumes exists \u2014 and because inventory, billing, and shipping are deployed independently, you can't guarantee they all upgrade at the same instant. This is exactly the lecture's warning that \"schema evolution is hard once N consumers depend on event v1.\"\n\n**How to evolve it safely:**\n- Add the new field as **optional** first (backward-compatible / additive change), with a sensible default for consumers that don't yet read it, rather than mandatory from day one.\n- **Version the event** explicitly (e.g. `OrderPlacedV2`) if the change is truly breaking, and run both versions in parallel until every consumer has migrated, then retire v1.\n- Establish **consumer-driven contracts** or a shared schema registry so producer changes are checked against what active consumers actually expect before being published, catching incompatible changes before they reach production."
+    },
+    {
+      "id": "t8",
+      "q": "Explain why SOA is often considered \"heavier\" than microservices, referencing the specific characteristics the lecture gives (ESB, granularity, SOAP/WSDL).",
+      "answer": "The lecture identifies three specific SOA characteristics that, together, make it heavier than a typical microservices approach:\n\n1. **Interoperability via an Enterprise Service Bus (ESB):** SOA routes and mediates communication through a centralized ESB, which adds a layer of infrastructure, transformation logic, and often a single coordination point \u2014 compared to microservices, which typically communicate directly, peer-to-peer, over lightweight protocols like REST or gRPC without a centralized broker/mediator in the critical path.\n2. **Granularity:** SOA favours **coarse-grained** services \u2014 larger units of functionality bundled together \u2014 versus microservices' preference for many small, narrowly-scoped, independently deployable services. Coarser services mean each deployable carries more responsibility and more code to coordinate internally.\n3. **SOAP/WSDL formal contracts:** SOA often relies on SOAP messaging with WSDL-described formal service contracts \u2014 a heavier, more rigidly-typed and verbose protocol/tooling stack than the lightweight JSON-over-HTTP (or binary-over-gRPC) styles typical of microservices, adding both payload overhead and tooling/infrastructure complexity.\n\nTogether, a centralized mediation layer, larger service units, and heavier formal contracts explain why SOA is generally perceived as more operationally and architecturally \"heavy\" than the decentralized, small-service, lightweight-protocol style of microservices."
+    },
+    {
+      "id": "t9",
+      "q": "A product team wants to add CQRS to their app because \"CQRS is modern and scalable.\" Using the lecture's when-it-fits/when-it-doesn't table, explain why this justification is insufficient, and describe what evidence would actually justify adopting CQRS.",
+      "answer": "\"It's modern and scalable\" isn't one of the lecture's actual fit criteria \u2014 it's a technology-attraction argument, not a domain-driven one, and CQRS has real costs (maintaining two models, reasoning about eventual consistency between them) that this justification never weighs against. The lecture's own criteria are specific and evidence-based:\n\n**Fits when:** read patterns are wildly different from write patterns; reports/dashboards are crushing the OLTP database; audit and history matter (pairing naturally with event sourcing).\n\n**Doesn't fit when:** it's a simple CRUD app where \"show me the record I just edited\" is the norm (i.e. users expect immediate read-your-own-write consistency); the team is uncomfortable with eventual consistency between the read and write models; or \u2014 critically \u2014 **\"you haven't proven a single read-model bottleneck yet.\"**\n\nThat last point is the key test for this scenario: has the team actually measured that their read workload is a bottleneck, or that their read/write patterns genuinely diverge? If not, adopting CQRS \"because it's modern\" adds real complexity (two models, synchronization logic, eventual consistency edge cases for users) with no measured problem it's solving.\n\n**What would actually justify it:** concrete evidence such as production metrics showing the OLTP database struggling under report/dashboard read load, a measured read:write ratio that's heavily skewed, or a genuine product requirement for historical/audit views that naturally pairs with an event-sourced write model \u2014 i.e. the same specific conditions the lecture's \"fits\" column lists, backed by data rather than trend-following."
+    },
+    {
+      "id": "t10",
+      "q": "Is MVC's Controller the same responsibility as MVVM's ViewModel, just renamed, or are they fundamentally different? Justify your answer using the specific characteristics given in the lecture.",
+      "answer": "They are related but **not** simply a rename \u2014 they solve overlapping problems with a different emphasis.\n\n**MVC's Controller** is described as \"the brain\": it receives input, updates the model, and **selects the appropriate view**. Its core job is directing traffic \u2014 deciding, per request/action, what should happen and which view should be shown next. This model fits naturally with a request/response cycle (e.g. a server handling a new HTTP request each time).\n\n**MVVM's ViewModel** is explicitly characterized by the lecture as having a **data-binding focus**. Rather than manually selecting and rendering a view per input event, the ViewModel exposes observable state, and the View is automatically kept in sync with that state through data-binding \u2014 the \"loosely coupled via events\" mechanism. Its job isn't to *select* a view per action; it's to hold and expose state in a form the view can continuously and automatically reflect, which fits naturally with long-lived, stateful client-side UIs (Angular/Vue/React) where the same view instance needs to keep updating live as state changes, rather than being re-selected per discrete request.\n\n**The key distinction:** Controller is fundamentally about *directing a discrete flow of control* (input \u2192 model update \u2192 view selection), while ViewModel is fundamentally about *maintaining continuously-bound state* that the view observes. MVVM emerged specifically to handle complex, stateful, client-side UI interaction \u2014 a scenario where MVC's discrete \"pick the next view\" model is a poor fit \u2014 which is why the lecture lists \"Complex UI interaction/state\" as MVVM's core strength versus MVC's more general request-handling role."
+    },
+    {
+      "id": "t11",
+      "q": "Explain why Django's MVT pattern describes the View as playing \"controller-like\" logic, and what practical difference this makes for how a request flows through a Django app compared to a classic MVC framework.",
+      "answer": "In Django's naming, the **View** is not the presentation layer (as it is in classic MVC) \u2014 it's the piece of code that receives an incoming HTTP request, talks to the Model to fetch/update data, decides what should happen, and then selects and renders a **Template** (which is the actual presentation layer, Django's equivalent of MVC's \"View\"). So Django's \"View\" is doing the job that classic MVC assigns to the **Controller** \u2014 receiving input, coordinating with the model, and choosing what to render \u2014 while the actual visual rendering role is renamed to \"Template.\"\n\n**Practical difference in request flow:** in a classic MVC framework, a request is routed to a Controller action, which updates/queries the Model and then explicitly selects a View to render the response. In Django (MVT), a request is routed to a Django \"view function/class\" (playing the Controller's role), which queries/updates the Model and then renders a Template (playing the classic View's role) with the resulting context data. Functionally the flow is nearly identical \u2014 the difference is almost entirely terminological \u2014 but it matters practically when learning or documenting Django: a developer coming from classic MVC who looks for \"the Controller\" in Django will find that role inside what Django calls the **View**, not inside the Template."
+    },
+    {
+      "id": "t12",
+      "q": "A financial services company needs an audit trail of every historical change to a customer's account for regulatory compliance, and reads significantly outnumber writes on their reporting dashboards. Using the four \"how to choose\" questions, argue for or against combining event sourcing with CQRS here.",
+      "answer": "Walking through the relevant two questions:\n\n**Does history matter as much as current state?** Yes \u2014 this is a financial/audit domain, and the lecture explicitly states \"audit, finance, healthcare \u2192 event sourcing earns its place.\" Event sourcing stores every change as an immutable event (rather than only the current row state), which is precisely what a regulator asking \"show me every change to this account and when\" requires \u2014 the audit trail isn't bolted on after the fact, it's the system's native storage model.\n\n**Where's the read/write asymmetry?** Reads (reporting dashboards) significantly outnumber writes \u2192 the lecture's guidance is \"reads >> writes \u2192 consider CQRS.\" Building dashboard queries directly against an event-sourced write model (replaying events to compute current state on every query) would be slow and awkward; a CQRS read model, materialized and optimized specifically for the dashboard's query patterns, solves this cleanly.\n\n**Argument for combining them:** the lecture explicitly notes CQRS's fit criteria include \"audit + history matter (pairs naturally with event sourcing)\" \u2014 this system hits that exact combination. Event sourcing supplies the compliant, complete history the regulator needs as the write-side source of truth; CQRS supplies a fast, purpose-built read model (projected from the event stream) for the read-heavy dashboards, without forcing every report query to replay the full event log. Given both the history requirement and the read/write asymmetry point toward the same architectural choice independently, combining event sourcing with CQRS is well justified here \u2014 this is a textbook case for the pairing, not a case of reaching for complexity without evidence."
+    }
+  ]
+}

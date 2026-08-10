@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API Service Contracts — CT3 Study Guide</title>
+<style>
+/* ============================================================
+   CT3 Study Guides — shared dark academic theme
+   Identical across every lecture file. Edit here, regenerate all.
+   ============================================================ */
+
+:root {
+  --bg: #0b0e11;
+  --surface: #12161b;
+  --card: #1a1f26;
+  --card-border: #262d37;
+  --text: #e8ecf1;
+  --text-dim: #9aa4b2;
+  --text-faint: #626d7a;
+  --accent: #4a90f8;
+  --accent-dim: #2c5aa8;
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --warning: #f59e0b;
+  --error: #f56363;
+  --error-bg: rgba(245, 99, 99, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Nav ---------- */
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 14, 17, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.topnav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.topnav-brand {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topnav-brand span { color: var(--accent); }
+
+.topnav-links {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+}
+
+.topnav-links::-webkit-scrollbar { height: 4px; }
+.topnav-links::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 2px; }
+
+.topnav-links a {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--easing), color var(--duration-fast) var(--easing);
+}
+
+.topnav-links a:hover { background: var(--card); color: var(--text); }
+.topnav-links a.active { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Layout ---------- */
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) 120px;
+}
+
+.hero {
+  margin-bottom: var(--space-8);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.hero h1 {
+  font-size: 30px;
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.hero p {
+  color: var(--text-dim);
+  font-size: 16px;
+  margin: 0;
+}
+
+.section-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 53px;
+  background: var(--bg);
+  z-index: 50;
+  padding-top: var(--space-2);
+}
+
+.section-tab {
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--duration-fast) var(--easing);
+}
+
+.section-tab:hover { color: var(--text); }
+.section-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.section-panel { display: none; }
+.section-panel.active { display: block; animation: fadein var(--duration-normal) var(--easing); }
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Content (rendered markdown) ---------- */
+
+.content h2 {
+  font-size: 22px;
+  margin: var(--space-8) 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--card-border);
+  letter-spacing: -0.005em;
+}
+.content h2:first-child { margin-top: 0; }
+
+.content h3 {
+  font-size: 17px;
+  color: var(--accent);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.content p { color: var(--text); margin: 0 0 var(--space-4); }
+.content strong { color: #fff; font-weight: 600; }
+.content ul, .content ol { margin: 0 0 var(--space-4); padding-left: 22px; color: var(--text); }
+.content li { margin-bottom: var(--space-1); }
+.content li strong { color: var(--text); }
+
+.content code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.content pre {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin: 0 0 var(--space-4);
+}
+
+.content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #d8dee9;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-4);
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+}
+
+.content th, .content td {
+  border: 1px solid var(--card-border);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.content th {
+  background: var(--card);
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.content tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+.content hr {
+  border: none;
+  border-top: 1px solid var(--card-border);
+  margin: var(--space-8) 0;
+}
+
+/* ---------- Quiz (MCQ) ---------- */
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.quiz-score {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.quiz-score b { color: var(--text); }
+
+.progress-bar {
+  height: 6px;
+  background: var(--card);
+  border-radius: 999px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 120px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width var(--duration-normal) var(--easing);
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing);
+}
+.btn:hover { background: #232a33; border-color: #38414d; }
+.btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-accent:hover { background: #3a7de0; }
+
+.mcq-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.mcq-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.mcq-q .mcq-index {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  flex: none;
+}
+
+.mcq-options { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.mcq-option {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing);
+}
+
+.mcq-option:hover:not(:disabled) { border-color: var(--accent); }
+.mcq-option:disabled { cursor: default; }
+
+.mcq-option.correct { background: var(--success-bg); border-color: var(--success); color: #baf7cf; }
+.mcq-option.incorrect { background: var(--error-bg); border-color: var(--error); color: #ffc9c9; }
+.mcq-option.reveal-correct { border-color: var(--success); color: #baf7cf; }
+
+.mcq-explanation {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  display: none;
+}
+.mcq-explanation.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.mcq-explanation b { color: var(--text); }
+
+/* ---------- Tech questions ---------- */
+
+.tech-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.tech-q-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.tech-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  gap: var(--space-2);
+}
+.tech-q .mcq-index { color: var(--accent); font-family: var(--font-mono); flex: none; }
+
+.tech-reviewed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+  flex: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.tech-reviewed-label input { accent-color: var(--accent); }
+
+.tech-answer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--card-border);
+  display: none;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.tech-answer.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.tech-answer p { margin: 0 0 var(--space-3); color: var(--text-dim); }
+.tech-answer ul { margin: 0 0 var(--space-3); padding-left: 20px; }
+.tech-answer strong { color: var(--text); }
+.tech-answer code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.reveal-btn {
+  margin-top: var(--space-4);
+}
+
+/* ---------- Footer ---------- */
+
+.page-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.page-footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.page-footer a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .page { padding: var(--space-6) var(--space-4) 100px; }
+  .hero h1 { font-size: 24px; }
+  .section-tabs { top: 49px; }
+}
+
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a>
+    <div class="topnav-links">
+      <a href="index.html" class="">Home</a>
+<a href="L17.html" class="">L17 · Design Systems & CI</a>
+<a href="L18.html" class="">L18 · Domain Modelling & Architectures</a>
+<a href="L19.html" class="">L19 · Software Testing in Practice</a>
+<a href="L20.html" class="">L20 · Designed for Humans</a>
+<a href="L21.html" class="">L21 · DevOps & DevSecOps</a>
+<a href="L22.html" class="">L22 · Practical Architectural Design</a>
+<a href="L23.html" class="">L23 · Architecture in Practice</a>
+<a href="L24.html" class="">L24 · Security Testing</a>
+<a href="L25.html" class="active">L25 · Service Contracts</a>
+<a href="MS.html" class="">Bonus · Microservices Deep Dive</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <header class="hero">
+    <div class="hero-eyebrow">L25 &middot; Software Engineering</div>
+    <h1>API Service Contracts</h1>
+    <p>OpenAPI vs. Swagger, contract-first vs. code-first development, mock servers, versioning, and capstone-project best practices for frontend/backend integration.</p>
+  </header>
+
+  <div class="section-tabs">
+    <button class="section-tab active" data-target="panel-content">Study Content</button>
+    <button class="section-tab" data-target="panel-mcq">MCQs (20)</button>
+    <button class="section-tab" data-target="panel-tech">Technical Questions (12)</button>
+  </div>
+
+  <section id="panel-content" class="section-panel active">
+    <div id="content-body" class="content"></div>
+  </section>
+
+  <section id="panel-mcq" class="section-panel">
+    <div id="mcq-panel-top" class="quiz-header">
+      <div class="progress-bar"><div id="quiz-progress-fill" class="progress-bar-fill" style="width:0%"></div></div>
+      <div id="quiz-score" class="quiz-score">0 / 0 correct</div>
+      <button id="quiz-reset" class="btn">Shuffle &amp; reset quiz</button>
+    </div>
+    <div id="mcq-list"></div>
+  </section>
+
+  <section id="panel-tech" class="section-panel">
+    <div class="quiz-header">
+      <div id="tech-counter" class="quiz-score">0 / 12 marked reviewed</div>
+    </div>
+    <div id="tech-list"></div>
+  </section>
+
+  <footer class="page-footer">
+    <a href="L24.html">&larr; L24</a>
+    <a href="MS.html">MS &rarr;</a>
+  </footer>
+</main>
+
+<script id="lecture-data" type="application/json">{"id": "L25", "title": "API Service Contracts", "subtitle": "OpenAPI vs. Swagger, contract-first vs. code-first development, mock servers, versioning, and capstone-project best practices for frontend/backend integration.", "contentMarkdown": "## API Service Contracts\n\n### 1. The Integration Nightmare\n\nA familiar scenario: the frontend team builds one component, the backend team builds the other. The night before a demo, you attempt to connect them, and absolutely nothing works.\n\n- A lack of upfront agreement leads to integration chaos and massive code blockers.\n- Without a standard, you rely on assumptions and \"he said, she said\" arguments about how the application should communicate.\n\n### 2. What Is an API Service Contract?\n\n**Definition:** an API service contract in software engineering is a **formal agreement** that defines the rules, inputs, outputs, and behaviors in a **machine-readable format** for communication between different software systems or components.\n\nTwo complementary framings:\n\n- **The Blueprint:** it formally defines endpoint URLs, allowed HTTP methods (GET, POST, ...), required request payloads, and the exact shape of the response data. It completely eliminates guesswork from the development process by documenting expectations clearly.\n- **The Agreement:** it acts as a strict agreement between the backend provider and the frontend consumer. If both teams commit to and strictly adhere to the contract, system integration is virtually guaranteed to work flawlessly on the first try.\n\n### 3. Why Use Contracts (Especially in a Capstone / Team Project)\n\n| Benefit | Description |\n|---|---|\n| Parallel Development | Backend and frontend can work simultaneously. The frontend uses mock data generated from the contract while the backend builds the actual database logic. |\n| Single Source of Truth | Eliminates confusion and arguments about how an endpoint should behave. The written contract is the absolute authority on data structures. |\n| Reliable Testing | Enables automated contract testing to ensure neither the frontend nor the backend inadvertently breaks the agreement during subsequent code updates. |\n\n### 4. OpenAPI vs. Swagger \u2014 Clearing Up a Common Terminology Confusion\n\n**The Blueprint vs. The Tools:**\n- **OpenAPI** \u2014 the official, vendor-neutral *specification*. It dictates the rules for writing your API document (in JSON or YAML). It is the blueprint itself.\n- **Swagger** \u2014 a *suite of tools* (Swagger UI, Swagger Editor, Swagger Codegen) that process an OpenAPI specification to generate documentation and interactive interfaces.\n\n**Analogy:** think of OpenAPI as the universal standard for a USB-C port. Swagger represents a specific brand of tools that utilise and build upon that standard.\n\n**In short:** you *write* an OpenAPI file, and you *view* it using Swagger tools.\n\n### 5. Anatomy of an OpenAPI Document\n\n| Section | Purpose |\n|---|---|\n| Paths & Operations | Defines the specific endpoints of your application (e.g. `/users` or `/orders`). Specifies the appropriate HTTP method (GET, POST, PUT, DELETE) and details the required query parameters, path variables, and necessary security headers. |\n| Components & Schemas | Defines reusable data models. For example, a `User` object must contain an integer `id` and a string `email`. Defining these schemas guarantees data integrity and prevents malformed data exchanges between your components. |\n\n**Example OpenAPI document:**\n\n```yaml\nopenapi: 3.0.4\ninfo:\n  title: Sample API\n  description: Optional multiline or single-line description in CommonMark or HTML.\n  version: 0.1.9\nservers:\n  - url: http://api.example.com/v1\n    description: Optional server description, e.g. Main (production) server\n  - url: http://staging-api.example.com\n    description: Optional server description, e.g. Internal staging server for testing\npaths:\n  /users:\n    get:\n      summary: Returns a list of users.\n      description: Optional extended description in CommonMark or HTML.\n      responses:\n        \"200\": # status code\n          description: A JSON array of user names\n          content:\n            application/json:\n              schema:\n                type: array\n                items:\n                  type: string\n```\n\n### 6. Mock Servers\n\nA **mock server** is a simulated backend service that is automatically generated from an API service contract, such as an OpenAPI specification. Rather than communicating with a real backend, the frontend sends requests to the mock server, which returns predefined example responses that conform to the agreed contract \u2014 letting frontend development proceed before any real backend logic exists.\n\n### 7. Contract-First vs. Code-First\n\n| | Contract-First | Code-First |\n|---|---|---|\n| Approach | Design the API first | Write the backend first |\n| Frontend impact | Frontend can start immediately (against the contract/mocks) | Frontend waits (for the real backend to exist) |\n| Collaboration | Better collaboration | \u2014 |\n| Fit | Preferred for teams | Common for prototypes / easier for small projects |\n\n### 8. Integration Workflow (Four Steps)\n\n1. **Design:** the team agrees on the API contract before writing any code. Write the OpenAPI YAML file together.\n2. **Mocking:** the frontend uses tools like Swagger to mock backend responses and begins building the UI immediately.\n3. **Development:** simultaneously, the backend builds the actual server logic to fulfill the agreed-upon API contract.\n4. **Integration:** because both teams strictly followed the blueprint, connecting frontend to backend is seamless.\n\n### 9. Breaking the Contract\n\nChanging the contract means everyone depending on it must update their code accordingly. **To prevent this from silently breaking consumers, use versioning when updating services** \u2014 rather than silently changing an existing endpoint's shape.\n\n```\n// GET /v1/users              // GET /v2/users\n{                              {\n  \"name\": \"Alice\"                \"fullName\": \"Alice\"\n}                              }\n```\n\nHere, renaming the `name` field to `fullName` is a breaking change \u2014 instead of altering `/v1/users` in place (which would silently break every existing consumer expecting `name`), a new `/v2/users` version is introduced, so existing consumers on `/v1` continue to work unaffected while new consumers can adopt `/v2`.\n\n### 10. Capstone Best Practices\n\n- **Design-First Approach:** never write the backend code and then generate the contract as an afterthought. Design the API first, agree on it, and *then* implement.\n- **Version Control:** store your `openapi.yaml` file in your main Git repository. Treat it as critical production code that the whole team relies on.\n- **Descriptive Errors:** define standard error formats (e.g. `400 Bad Request`, `404 Not Found`) in your contract so the frontend can catch them and display helpful UI messages.\n- **Communicate Changes:** if backend developers must alter the contract, the frontend team must be consulted and agree to the update beforehand.\n", "mcqs": [{"id": "m1", "q": "What causes the \"Integration Nightmare\" scenario described in the lecture?", "options": ["Too much upfront planning", "A lack of upfront agreement between frontend and backend teams, leading to integration chaos based on assumptions", "Using OpenAPI specifications", "Writing too many automated tests"], "correct": 1, "explanation": "The scenario is explicitly framed as the result of no upfront agreement, leading to \"he said, she said\" arguments about how the application should communicate."}, {"id": "m2", "q": "What is the formal definition of an API service contract given in the lecture?", "options": ["A verbal agreement between developers", "A formal agreement that defines the rules, inputs, outputs, and behaviors in a machine-readable format for communication between software systems", "A legal document signed by both teams", "A UI mockup shared in a design tool"], "correct": 1, "explanation": "This is the lecture's stated definition, emphasizing \"machine-readable format\"."}, {"id": "m3", "q": "Per the \"Blueprint\" framing, what does a service contract formally define?", "options": ["Only the visual design of the frontend", "Endpoint URLs, allowed HTTP methods, required request payloads, and the exact shape of response data", "The database schema exclusively", "Team meeting schedules"], "correct": 1, "explanation": "The Blueprint framing explicitly lists endpoints, HTTP methods, payloads, and response shape."}, {"id": "m4", "q": "Which of the three benefits (Parallel Dev, Single Truth, Reliable Testing) specifically enables backend and frontend teams to work simultaneously?", "options": ["Single Truth", "Parallel Dev \u2014 the frontend uses mock data generated from the contract while the backend builds actual database logic", "Reliable Testing", "None of them enable simultaneous work"], "correct": 1, "explanation": "Parallel Dev is explicitly defined as enabling simultaneous frontend/backend work via mock data."}, {"id": "m5", "q": "What does \"Single Source of Truth\" mean in the context of a service contract?", "options": ["Only the backend team's opinion matters", "The written contract is the absolute authority on data structures, eliminating confusion and arguments about endpoint behavior", "There must be only one developer on the project", "The contract must be rewritten daily"], "correct": 1, "explanation": "The contract itself \u2014 not either team's opinion \u2014 becomes the authoritative reference."}, {"id": "m6", "q": "What is OpenAPI, per the lecture's distinction?", "options": ["A suite of UI tools for viewing documentation", "The official, vendor-neutral specification that dictates the rules for writing an API document (in JSON or YAML)", "A programming language for writing backend code", "A specific company's proprietary format"], "correct": 1, "explanation": "OpenAPI is the specification itself \u2014 \"the blueprint\" \u2014 not a tool."}, {"id": "m7", "q": "What is Swagger, per the lecture's distinction?", "options": ["The official specification itself", "A suite of tools (UI, Editor, Codegen) that process an OpenAPI specification to generate documentation and interactive interfaces", "A database management system", "A version control system"], "correct": 1, "explanation": "Swagger is the tooling suite that consumes OpenAPI documents, not the specification itself."}, {"id": "m8", "q": "Using the lecture's USB-C analogy, what does Swagger represent?", "options": ["The universal standard itself", "A specific brand of tools that utilise and build upon the OpenAPI standard", "An unrelated, competing standard", "The physical connector hardware"], "correct": 1, "explanation": "OpenAPI = the universal USB-C standard; Swagger = a specific brand of tools built on that standard."}, {"id": "m9", "q": "In an OpenAPI document, what does the \"Paths & Operations\" section define?", "options": ["Reusable data models like a User object", "The specific endpoints of the application, their HTTP methods, and required parameters/headers", "The database connection string", "The frontend's CSS styling"], "correct": 1, "explanation": "Paths & Operations defines endpoints, HTTP methods, parameters, and security headers."}, {"id": "m10", "q": "In an OpenAPI document, what does the \"Components & Schemas\" section define?", "options": ["The specific endpoint URLs only", "Reusable data models (e.g. a User object must contain an integer id and a string email), guaranteeing data integrity", "The server's physical location", "HTTP status codes exclusively"], "correct": 1, "explanation": "Components & Schemas defines reusable data model shapes, per the lecture's User-object example."}, {"id": "m11", "q": "What is a mock server?", "options": ["A real backend service deployed to production", "A simulated backend service, automatically generated from an API contract, that returns predefined example responses conforming to the agreed contract", "A tool for writing OpenAPI YAML files", "A backup database server"], "correct": 1, "explanation": "A mock server simulates the backend based on the contract, without any real backend logic."}, {"id": "m12", "q": "Why does a mock server let frontend development proceed before the real backend exists?", "options": ["It requires the backend to be fully built first", "It returns predefined responses that conform to the contract, so the frontend can build against a realistic simulated API immediately", "It automatically writes the frontend code", "It replaces the need for an OpenAPI specification"], "correct": 1, "explanation": "The mock server's contract-conformant responses let frontend work start without waiting on real backend logic."}, {"id": "m13", "q": "What distinguishes Contract-First from Code-First development?", "options": ["Contract-First writes the backend before designing anything; Code-First designs the API first", "Contract-First designs the API first (frontend can start immediately); Code-First writes the backend first (frontend waits)", "They are identical approaches with different names", "Code-First is always preferred for team projects"], "correct": 1, "explanation": "This is the exact distinction given in the lecture's comparison table."}, {"id": "m14", "q": "Per the lecture, which approach is \"preferred for teams\" versus \"common for prototypes\"?", "options": ["Code-First is preferred for teams; Contract-First is for prototypes", "Contract-First is preferred for teams; Code-First is common for prototypes/small projects", "Both are equally preferred in all situations", "Neither approach applies to team projects"], "correct": 1, "explanation": "The comparison table states Contract-First is preferred for teams, Code-First is common for prototypes."}, {"id": "m15", "q": "What happens in Step 1 (Design) of the Integration Workflow?", "options": ["The backend builds server logic independently", "The team agrees on the API contract before writing any code, writing the OpenAPI YAML file together", "The frontend and backend are connected for the first time", "Automated tests are run against production"], "correct": 1, "explanation": "Step 1 is explicitly the joint design/agreement step, before any code is written."}, {"id": "m16", "q": "What happens in Step 2 (Mocking) of the Integration Workflow?", "options": ["The contract is deleted and rewritten", "The frontend uses tools like Swagger to mock backend responses and begins building the UI immediately", "The backend team writes the frontend's CSS", "Version control is set up for the first time"], "correct": 1, "explanation": "Step 2 is the frontend mocking backend responses to begin building immediately."}, {"id": "m17", "q": "Why does the lecture recommend versioning (e.g. /v1/users vs /v2/users) when changing a contract, rather than editing the existing endpoint in place?", "options": ["Versioning is required by HTTP standards", "Editing an endpoint in place would silently break every existing consumer expecting the old shape; versioning lets old and new consumers coexist", "Versioning makes the API faster", "It eliminates the need for an OpenAPI document"], "correct": 1, "explanation": "Versioning prevents a breaking change from silently affecting every existing consumer of the old contract."}, {"id": "m18", "q": "In the versioning example, what specific change was made between /v1/users and /v2/users?", "options": ["The HTTP method changed from GET to POST", "The response field was renamed from \"name\" to \"fullName\"", "The endpoint was removed entirely", "Authentication was added for the first time"], "correct": 1, "explanation": "The example shows the \"name\" field renamed to \"fullName\" between v1 and v2."}, {"id": "m19", "q": "Per the Capstone Best Practices, what is wrong with writing the backend code first and generating the contract afterward as documentation?", "options": ["Nothing \u2014 this is the recommended approach", "It violates the Design-First Approach; the API should be designed and agreed upon first, then implemented", "It is required for all Code-First projects", "It only applies to frontend development"], "correct": 1, "explanation": "\"Never write the backend code and then generate the contract as an afterthought\" is stated directly as a best practice."}, {"id": "m20", "q": "Per the Capstone Best Practices, what should happen if backend developers need to alter the contract?", "options": ["They should make the change immediately without informing anyone", "The frontend team must be consulted and agree to the update beforehand", "The contract should be deleted and a new one created independently", "Only the version control system needs to be updated"], "correct": 1, "explanation": "\"Communicate Changes\" explicitly requires frontend consultation and agreement before altering the contract."}], "techQuestions": [{"id": "t1", "q": "Using the \"Integration Nightmare\" scenario, explain exactly how having an agreed-upon OpenAPI contract from the start would have prevented the night-before-demo failure. Be specific about the actual mechanism.", "answer": "**The root cause of the nightmare:** the frontend and backend teams each built their component based on their own, separately-held assumptions about how the other side would behave \u2014 what fields a response would contain, what an endpoint's URL and method were, what a valid request body looked like. Because none of this was written down anywhere both teams could reference, each team's assumptions could silently diverge without either side realizing it until the literal moment of connecting the two systems \u2014 by which point fixing a mismatch means one or both teams reworking code under demo-eve time pressure.\n\n**The specific mechanism an OpenAPI contract fixes this with:** by requiring both teams to agree on and write down, in a single machine-readable YAML/JSON document, the exact endpoint URLs, HTTP methods, request payload shapes, and response schemas *before* either team writes implementation code, the contract removes the possibility of silent divergence. Concretely:\n- The frontend doesn't need to *guess* what field name the backend will return for a user's name \u2014 the contract's Components & Schemas section states it explicitly (e.g. `fullName: string`), so the frontend codes against that exact field name from day one.\n- The backend doesn't need to *guess* what shape of request the frontend will send \u2014 the contract's Paths & Operations section specifies the exact request body/parameters expected, so the backend implements exactly that shape.\n- Because the contract is a single shared document (not two teams' separate mental models), any question about \"how should this endpoint behave\" has one authoritative answer both teams already agreed to, rather than being discovered \u2014 and disputed \u2014 only once the systems are actually wired together.\n\n**Why this specifically prevents the night-before-demo failure:** the class of bug the nightmare scenario describes \u2014 \"the frontend expects one shape, the backend returns another\" \u2014 becomes structurally impossible to introduce silently, because both sides were building against the *same* explicit specification the whole time, rather than each building against their own private assumption that only gets tested at final integration."}, {"id": "t2", "q": "A teammate says: \"OpenAPI and Swagger are basically the same thing, we can use either name.\" Correct this misconception precisely, explaining the actual relationship between the two.", "answer": "This is incorrect, and the lecture explicitly calls out this exact confusion as common. The precise relationship:\n\n**OpenAPI** is a **specification** \u2014 a formal, vendor-neutral standard that defines the *rules* for how an API description document should be structured (in JSON or YAML): what fields are valid under `paths`, how `components/schemas` should be shaped, what `info` must contain, and so on. It is not software you install or run \u2014 it's a written standard, analogous to how HTML is a specification for how web page markup should be structured.\n\n**Swagger** is a **suite of tools** \u2014 Swagger UI (renders an OpenAPI document as interactive, browsable documentation), Swagger Editor (a tool for writing/validating OpenAPI documents), and Swagger Codegen (generates client/server code stubs from an OpenAPI document). These tools *consume* OpenAPI documents; they don't define what a valid OpenAPI document looks like \u2014 that's OpenAPI's job.\n\n**Precise correction to offer the teammate:** \"We write our API contract *in* OpenAPI \u2014 that's the actual specification/format our `openapi.yaml` file follows. Swagger is just one set of tools (among others that also support OpenAPI) that we might use to *view or generate things from* that file, like Swagger UI showing us interactive docs. If we deleted every Swagger tool tomorrow, our OpenAPI file would still be a perfectly valid, meaningful document \u2014 because the contract is the OpenAPI spec, not the Swagger tooling built on top of it.\" Using the lecture's own analogy: you wouldn't say \"USB-C and [a specific USB-C cable brand] are the same thing\" \u2014 one is the universal standard, the other is a specific vendor's product that implements/uses that standard."}, {"id": "t3", "q": "Design a minimal OpenAPI schema definition (Components & Schemas section) for a \"Product\" object that must contain: an integer id, a string name, a decimal price, and an optional string description. Explain why defining this schema formally, rather than just describing it in a team chat message, \"guarantees data integrity.\"", "answer": "**The schema definition:**\n\n```yaml\ncomponents:\n  schemas:\n    Product:\n      type: object\n      required:\n        - id\n        - name\n        - price\n      properties:\n        id:\n          type: integer\n        name:\n          type: string\n        price:\n          type: number\n          format: double\n        description:\n          type: string\n```\n\nNote: `description` is deliberately **not** listed under `required` \u2014 since it's optional, it can be omitted from a valid `Product` object entirely, while `id`, `name`, and `price` must always be present.\n\n**Why a formal schema \"guarantees data integrity\" in a way a chat message cannot:**\n\n1. **It's machine-checkable, not just human-readable.** A message in a team chat saying \"Product objects have an id, name, price, and optional description\" relies entirely on every developer reading it, correctly remembering it, and never misremembering a detail weeks later. A formal schema, by contrast, can be **automatically validated against** \u2014 tooling can check at runtime (or even in CI) whether a given JSON payload actually matches this schema, rejecting or flagging one that doesn't (e.g. a response missing `price`, or sending `price` as a string instead of a number). This converts \"hopefully everyone remembers correctly\" into \"the system itself refuses to let a mismatch through unnoticed.\"\n2. **It's unambiguous about types, not just field names.** A chat message might say \"price\" without specifying whether it's a number, a string like `\"19.99\"`, or an integer number of cents \u2014 different reasonable interpretations that two developers could each independently and confidently choose differently. The formal schema removes this ambiguity entirely by explicitly stating `type: number`.\n3. **It's a single, referenceable source, not a scattered conversation.** A chat message about the Product shape is easy to lose in scrollback, easy to have been superseded by a later, unremembered message, and has no clear \"current, authoritative version\" the way a single, version-controlled `openapi.yaml` file does \u2014 directly connecting to the \"Single Source of Truth\" benefit, which specifically depends on there being one document everyone actually refers back to, not a conversational history nobody re-reads."}, {"id": "t4", "q": "Explain the mechanism by which a mock server lets the frontend team \"start immediately.\" What breaks in this parallel-development approach if the mock server's responses don't actually conform to the agreed contract?", "answer": "**The mechanism:** a mock server is generated directly from the agreed OpenAPI contract (rather than from any actual backend implementation) and, when the frontend sends it a request matching a defined path/method, it returns a predefined example response whose shape matches the contract's schema for that endpoint \u2014 e.g. a `GET /users` request returns a JSON array of example user objects shaped exactly as `Components & Schemas` specifies. Because the frontend only needs *something* that responds with the right shape to build its UI, forms, and data-handling logic against \u2014 not a fully functioning, database-backed system \u2014 the mock server is sufficient to let frontend developers write real, working UI code (rendering lists, handling form submissions, wiring up state) *before* the backend team has written a single line of actual server logic. This is exactly what enables the \"Parallel Dev\" benefit: frontend work isn't blocked waiting on backend completion, because it never actually needed the *real* backend \u2014 only something that honors the same contract the real backend will eventually also honor.\n\n**What breaks if the mock server's responses don't actually conform to the agreed contract:** the entire value of this approach depends on one specific guarantee \u2014 that the mock server's responses are shaped *exactly* like what the real backend, once built to the same contract, will actually return. If the mock server drifts from the contract (say, it was hand-written quickly and returns a `name` field when the contract's actual schema specifies `fullName`), the frontend team will unknowingly build their UI against the *wrong* shape \u2014 code that reads `response.name` will work perfectly against the mock, giving false confidence, but will silently fail (or need rework) the moment it's later pointed at the real backend, which correctly implements the contract's actual `fullName` field. This reintroduces exactly the kind of \"worked against my assumption, breaks on real integration\" problem the contract was supposed to eliminate \u2014 which is precisely why mock servers should be *generated from* the contract (so they're guaranteed to match it), rather than hand-built separately and only loosely based on it."}, {"id": "t5", "q": "Compare Contract-First and Code-First development using a concrete example: a team of 4 (2 frontend, 2 backend) building a capstone project with an 8-week deadline. Argue which approach they should use and what specific risk the other approach introduces given this team size and timeline.", "answer": "**Recommendation: Contract-First.**\n\n**Argument, grounded in the lecture's own comparison:** the lecture explicitly states Contract-First is \"preferred for teams\" while Code-First is \"common for prototypes\" / \"easier for small projects\" (typically implying solo or throwaway work, not a multi-person team project with a hard deadline). This team \u2014 4 people split across frontend and backend \u2014 is exactly the \"team\" case the lecture is describing, not a prototype being built by one person exploring an idea.\n\n**Concrete reasoning for this specific scenario:**\n1. **Parallelism directly matters against an 8-week deadline.** With Contract-First, once the API contract is agreed (ideally within the first few days), both frontend developers and both backend developers can work **simultaneously** for essentially the entire remaining timeline \u2014 frontend building real UI against mocked responses, backend building real server logic against the same agreed contract. With Code-First, the frontend developers are structurally blocked waiting for backend endpoints to actually exist and be reachable before they can build anything real against them \u2014 for a 2-person frontend team, that's potentially weeks of reduced productivity (mockups/static work only) compressed into a hard deadline that doesn't get any longer to accommodate it.\n2. **Coordination overhead scales with team size, and Contract-First reduces it.** With 4 people (not 1), the \"he said, she said\" argument scenario from the Integration Nightmare is a real, live risk \u2014 without an agreed contract, it's entirely plausible that one backend developer and one frontend developer independently assume different shapes for the same endpoint, discovering the mismatch only at integration time. Contract-First removes this risk category by construction (Single Source of Truth), which matters more as team size grows past a single person who'd otherwise just be arguing with themselves.\n\n**What specific risk Code-First introduces here:** with Code-First, the two backend developers might build their endpoints according to their own, unwritten mental model of what the frontend needs \u2014 and the two frontend developers, unable to start against anything real yet, might independently guess at what shape to expect once available. By the time backend work is far enough along for frontend integration to actually begin (likely well into the 8 weeks, leaving little runway to fix problems), any mismatches surface all at once, under time pressure, with limited weeks left to resolve them \u2014 the exact \"night before a demo, nothing works\" failure mode the lecture opens with, except now compounded by a full team's worth of independently-diverging assumptions rather than just two people's."}, {"id": "t6", "q": "Walk through the four-step Integration Workflow (Design, Mocking, Development, Integration) and explain why Step 4 (Integration) is described as \"seamless.\" What has to be true at Steps 1\u20133 for that claim to hold, and what would make Step 4 NOT seamless despite following this process?", "answer": "**Step 1 \u2014 Design:** the team agrees on the API contract *before* writing any code, jointly writing the OpenAPI YAML file. This establishes the single shared specification both subsequent steps will build against.\n\n**Step 2 \u2014 Mocking:** the frontend uses tools like Swagger to mock backend responses (generated from the Step 1 contract) and begins building the UI immediately, without waiting on the backend.\n\n**Step 3 \u2014 Development:** simultaneously (in parallel with Step 2), the backend builds the actual server logic \u2014 real database queries, real business logic \u2014 specifically to fulfill the exact API contract agreed in Step 1.\n\n**Step 4 \u2014 Integration:** the frontend, previously pointed at the mock server, is now pointed at the real backend instead. Because both teams strictly followed the same blueprint from Step 1, connecting them is described as seamless.\n\n**Why \"seamless\" specifically holds, given Steps 1\u20133:** the underlying claim is that the frontend was always coding against *the contract's shape* (via the mock, which itself was generated from that same contract) and the backend was always implementing *that same contract's shape* \u2014 so at integration time, there is, in principle, no shape mismatch to discover, because both sides were never actually building against each other directly; they were both building independently against the *same third thing* (the contract). Swapping the mock server for the real backend should be invisible to the frontend's code, since both return responses matching the identical schema.\n\n**What would make Step 4 NOT seamless despite following this process:**\n1. **Drift between the mock and the real backend.** If the mock server used in Step 2 wasn't actually generated faithfully from the Step 1 contract (or was hand-built and diverged from it over time), the frontend may have built working code against the *mock's* actual shape rather than the *contract's* true shape \u2014 a subtle but real difference that only surfaces at Step 4.\n2. **The backend silently deviating from the contract during Step 3.** If a backend developer, under time pressure, implements an endpoint slightly differently than the contract specifies (e.g. returns an extra undocumented field, omits a required one, or uses a slightly different date format) without updating the contract and notifying the frontend team, Step 4 will surface exactly the kind of mismatch the whole process was meant to prevent \u2014 because the \"strictly adhered to the contract\" precondition, not just \"followed the four steps,\" is what the seamlessness claim actually depends on.\n3. **The contract itself being incomplete or ambiguous at Step 1.** If the Step 1 contract failed to specify some detail (e.g. what happens on an empty result set, or an ambiguous date format with no explicit type/format annotation), both teams may have made different, individually reasonable assumptions to fill that gap \u2014 the process was followed correctly, but the *artifact* (the contract) it depended on wasn't sufficiently precise.\n\nIn all three cases, the four-step process was nominally followed, but the specific guarantee that makes Step 4 seamless \u2014 that both sides genuinely, faithfully built against the identical, complete specification \u2014 was violated somewhere along the way."}, {"id": "t7", "q": "A backend developer wants to rename a field in an existing, already-deployed API endpoint from \"name\" to \"fullName\" without creating a new API version. Explain concretely what breaks for existing consumers, and why versioning (rather than just announcing the change in a team meeting) is the recommended technical solution.", "answer": "**What breaks concretely:** any existing frontend code (or any other consumer of this API \u2014 a mobile app, a third-party integration, another internal service) that currently reads the response as `response.name` will, the instant this change is deployed, receive a response where that field no longer exists \u2014 `response.name` now evaluates to `undefined`/`null`. Depending on how that value is used downstream, this could silently render a blank/missing name on screen (a quiet UX bug that might not even trigger an obvious error), or it could throw a runtime error if the code assumes `name` is always a non-null string (e.g. calling `.toUpperCase()` on `undefined`), potentially crashing that part of the application entirely. Critically, **this happens without the consumer having done anything wrong** \u2014 their code was correct against the contract as it existed when they wrote it; the contract changed underneath them without their consent or preparation.\n\n**Why \"announce it in a meeting\" is not a sufficient technical solution:** a verbal or chat-based announcement relies entirely on every single consumer's developer (1) being present or reading the announcement, (2) correctly understanding its full implication for their specific code, and (3) actually completing their own update *before* the backend change is deployed \u2014 a fragile, purely social/procedural safeguard with no technical enforcement. If even one consumer misses the announcement, forgets about it, or simply hasn't gotten around to updating their code yet by deployment day, their application breaks in production the moment the field rename ships \u2014 and for a public or multi-team API, \"everyone will definitely see and act on the announcement in time\" doesn't scale reliably at all.\n\n**Why versioning is the correct technical solution:** by introducing this breaking change as `/v2/users` (returning `fullName`) while **leaving `/v1/users` unchanged** (still returning `name`), existing consumers pointed at `/v1/users` continue working exactly as before, completely unaffected by the change \u2014 there is no deadline by which they *must* update to avoid breakage, because the old contract they built against still exists and is still honored. New consumers, or existing consumers once they're ready, can adopt `/v2/users` and its `fullName` field on their own schedule. This converts a coordination problem (everyone must update in perfect lockstep, on a deadline, based on a verbal announcement) into a much safer property: **old and new consumers can coexist indefinitely**, decoupling the backend team's ability to evolve the contract from every single consumer's readiness to adopt that specific change immediately."}, {"id": "t8", "q": "Explain why \"descriptive errors\" (defining standard error formats like 400 Bad Request, 404 Not Found in the contract) is a best practice, connecting it to the \"Single Source of Truth\" benefit. What happens to frontend error handling if error response formats are NOT part of the contract?", "answer": "**Why descriptive errors are a best practice:** a contract that only specifies the *success* case (what a `200 OK` response looks like) leaves an entire, commonly-hit category of behaviour \u2014 what happens when something goes wrong \u2014 completely undefined and left to guesswork, exactly the same problem the whole contract concept exists to eliminate for successful responses. Explicitly defining standard error formats in the contract (e.g. \"a `400 Bad Request` response always has the shape `{ \"error\": string, \"field\": string }`\") extends the Single Source of Truth guarantee to cover error paths, not just happy paths.\n\n**Connection to Single Source of Truth:** the whole value of Single Source of Truth is that there's one authoritative answer to \"how does this endpoint behave,\" removing arguments and guesswork. If error formats are left out of the contract, the \"single source of truth\" silently only covers *part* of the endpoint's actual behaviour \u2014 the success case \u2014 while the error case reverts back to exactly the kind of undocumented, assumption-based territory the contract was introduced to eliminate in the first place. This is an incomplete application of the same underlying principle, not a genuinely separate concern.\n\n**What happens to frontend error handling if error formats are NOT part of the contract:**\n1. **The frontend team has to guess, and might guess wrong.** Without a documented error shape, a frontend developer might assume a failed request returns `{ \"message\": \"...\" }`, while the backend actually returns `{ \"error\": \"...\" }` \u2014 a mismatch that, unlike a success-path mismatch (which is usually immediately visible during normal testing), might not be discovered until a specific error condition is actually triggered in testing or, worse, in production \u2014 error paths are frequently under-tested precisely because they're less visible during typical development.\n2. **Error handling becomes inconsistent across the application.** Without a single documented format, different frontend developers, each independently guessing at different times, might build error-handling code that expects different shapes for different endpoints \u2014 some checking `response.error`, others `response.message` \u2014 making it harder to build a single, reusable error-display component, and directly undermining the ability to \"catch them and display helpful UI messages,\" which is exactly the stated purpose of this best practice.\n3. **Silent failures become more likely.** If the frontend's error-handling code doesn't match the backend's actual error shape, a genuine error might not be recognized as an error at all by the frontend logic \u2014 potentially rendering a blank or broken UI state instead of the helpful message the best practice is specifically trying to guarantee."}, {"id": "t9", "q": "A team stores their openapi.yaml file only on one backend developer's local machine, not in the shared Git repository. Using the \"Version Control\" best practice, explain the specific risks this creates, referencing the \"Single Source of Truth\" and \"Reliable Testing\" benefits.", "answer": "**What the best practice actually requires, and what's being violated:** \"Version Control\" specifically states the `openapi.yaml` file should be stored in the main Git repository and treated \"as critical production code that the whole team relies on\" \u2014 i.e. it should be versioned, shared, and visible to everyone exactly like the application's actual source code, not kept as one person's private working file.\n\n**Specific risks created by keeping it local to one developer:**\n\n1. **It stops being a genuine Single Source of Truth.** The entire value of \"the written contract is the absolute authority\" depends on *everyone* being able to access the current, authoritative version at any time. If it only exists on one developer's machine, everyone else on the team is working from whatever version they last saw (a shared doc, a screenshot, memory) \u2014 which can silently go stale the moment the file's owner makes a local edit that nobody else knows about. The \"single\" in Single Source of Truth breaks down into \"whatever that one person's local file currently says, which nobody else can verify.\"\n2. **No history, no accountability, no rollback.** A file in Git gets commit history \u2014 who changed what, when, and (via commit messages/PR discussion) why. A local-only file has none of this: if a change to the contract turns out to be wrong or causes confusion, there's no way to see exactly what changed, when it changed, or to revert to a previous known-good version, unlike every other piece of \"critical production code\" the team already manages this way.\n3. **A single point of failure.** If that one developer's laptop is lost, has a hard drive failure, or the developer is simply unavailable (sick, on leave, leaves the project) right when someone urgently needs to check the current contract, the team has no access to it at all \u2014 versus a Git repository, which every team member already has cloned and can access independently.\n4. **Reliable (automated) contract testing becomes impossible to actually run for everyone.** \"Reliable Testing\" specifically depends on automated contract tests being runnable \u2014 e.g. in CI, on every pull request \u2014 to ensure neither frontend nor backend inadvertently breaks the agreement. CI pipelines and automated tooling need the contract file to be present in the repository they're checking out and running against; a file that only exists on one person's local machine simply isn't visible to CI at all, meaning this entire benefit \u2014 catching contract-breaking changes automatically \u2014 cannot function, silently reintroducing the exact \"nobody notices until integration\" risk the contract was meant to eliminate."}, {"id": "t10", "q": "Explain the concept of \"automated contract testing\" (mentioned under Reliable Testing). What would such a test actually check, and give a concrete example of a backend code change that such a test should catch and fail on.", "answer": "**What automated contract testing actually checks:** rather than manually re-reading the OpenAPI contract every time code changes, an automated contract test programmatically compares the *actual behaviour* of a running service (or its code) against the *documented* contract \u2014 checking things like: does this endpoint exist at the documented path and method; does a request matching the documented shape actually get accepted; does the response returned actually match the documented schema (correct field names, correct types, all required fields present). It runs as part of the normal automated test suite (ideally in CI, on every change), so a violation is caught automatically, the same way a failing unit test is caught, rather than relying on someone manually re-reading and comparing the contract to the code by eye.\n\n**Concrete example of a backend change such a test should catch:** suppose the contract's `Product` schema (as designed in an earlier example) specifies:\n```yaml\nProduct:\n  required: [id, name, price]\n  properties:\n    id: { type: integer }\n    name: { type: string }\n    price: { type: number }\n```\nA backend developer, refactoring the product-serialization code, accidentally renames the internal field mapping so the API now returns `productName` instead of `name` \u2014 a perfectly reasonable-looking code change from the backend's own perspective (maybe it matches an internal database column name better), but one that silently diverges from the documented contract.\n\n**What the automated contract test does:** on the next CI run, a contract test \u2014 sending a request to the actual (or a test instance of the) `/products` endpoint and validating the real JSON response against the `Product` schema defined in the OpenAPI document \u2014 would find that the response is *missing* the required `name` field (since `productName` isn't recognized as satisfying the `name` requirement) and fail the build, exactly the way a broken unit test would. This surfaces the problem immediately, to the developer who made the change, as part of their normal development workflow \u2014 long before it could ever reach a frontend developer relying on `response.name`, and long before it could reach production. This is precisely what \"ensures neither the frontend nor the backend inadvertently breaks the agreement during subsequent code updates\" means in practice \u2014 the contract isn't just a document consulted once at the start of the project, it's continuously, automatically re-verified against reality as the codebase evolves."}, {"id": "t11", "q": "A junior developer argues: \"Contract-first is a waste of time up front \u2014 we should just start coding the backend and frontend together and figure out the API as we go, since we'll move faster.\" Construct a counter-argument using the lecture's stated benefits and the Integration Nightmare scenario.", "answer": "**Acknowledging the surface appeal of the argument:** it's true that Contract-First requires spending real time up front \u2014 agreeing on and writing the OpenAPI document \u2014 before any \"real\" feature code gets written, which can feel like it delays visible progress, especially early in a project when the temptation is to start producing tangible code as fast as possible.\n\n**Why this \"faster\" framing is misleading \u2014 it trades a small, controlled upfront cost for a larger, uncontrolled later cost:**\n\n1. **\"Figure out the API as we go\" is precisely the Integration Nightmare scenario, not an alternative to it.** The lecture's opening scenario \u2014 frontend and backend built separately, connected the night before a demo, \"absolutely nothing works\" \u2014 is *exactly* what \"figuring it out as we go\" without an agreed contract produces. The junior developer isn't proposing a new, faster approach; they're proposing to skip the one step the lecture identifies as the direct cause of that failure mode.\n\n2. **Without Parallel Dev, \"coding together\" doesn't actually mean simultaneous, productive work.** If there's no contract and no mock server, the frontend genuinely has nothing real to build against until backend endpoints actually exist and are reachable \u2014 \"coding together\" in practice often means the frontend either sits partially idle, builds throwaway static mockups that get discarded, or builds against guessed API shapes that may not match what the backend eventually produces. Contract-First's mock-server step specifically avoids this: both sides are productively building real, keepable code from day one, in parallel \u2014 which is *faster* in aggregate than sequential or guess-and-discard work, even though it has an upfront design cost.\n\n3. **Without Single Source of Truth, disagreements get resolved late, expensively, and repeatedly.** \"Figuring it out as we go\" means disagreements about endpoint shape surface organically, mid-development, exactly when they're most disruptive to already-written code on both sides \u2014 and without a written contract, the same kind of disagreement can recur multiple times over a project's life (a later feature touching the same endpoint reopens the same undocumented ambiguity), rather than being settled once, explicitly, at the start.\n\n4. **Without Reliable Testing, contract violations go undetected until they cause visible breakage.** Even if the team gets lucky early on and things mostly work, without a formal contract there's nothing for automated contract tests to check against \u2014 meaning a later code change (by either team) that silently breaks what the other team depends on has no safety net, and will only be discovered whenever someone happens to manually test that specific path \u2014 which, on a real project, could easily be after it's already shipped.\n\n**The counter-argument, stated directly:** the time \"saved\" by skipping Contract-First isn't actually saved \u2014 it's deferred, and it typically comes back with interest, concentrated at the worst possible moment (late in the project, under deadline pressure, exactly like the lecture's opening scenario), rather than being paid down predictably and cheaply upfront while there's still time to course-correct calmly."}, {"id": "t12", "q": "Explain the relationship between OpenAPI's \"servers\" section (listing both a production URL and a staging URL) and real-world deployment practice. Why would a frontend team need to know about multiple server URLs for the same API contract?", "answer": "**What the `servers` section does:** in an OpenAPI document, the `servers` section lists the actual base URL(s) where the described API can be reached \u2014 in the lecture's example, `http://api.example.com/v1` (labelled as the main/production server) and `http://staging-api.example.com` (labelled as an internal staging server for testing). Critically, this section is separate from the `paths` section \u2014 the *shape* of the API (its endpoints, methods, schemas) is described once, but it can be reachable at more than one actual network location.\n\n**Why this matters in real-world deployment practice:** almost every real software team maintains at least two distinct environments running (nominally) the same application: a **production** environment serving real users, and one or more **staging/testing** environments used to verify changes before they reach production, without risking real user data or real user-facing downtime. These environments typically run at different URLs (different domains/subdomains, or different ports), even though they're meant to expose the *same* API contract \u2014 the whole point of a staging environment is that it behaves identically to production so that testing against it is meaningful.\n\n**Why the frontend team specifically needs to know about both:** the frontend application itself typically needs to be pointed at different backend URLs depending on what it's doing:\n- **During development/testing**, the frontend should talk to the staging server \u2014 so frontend developers (and QA/testers) can safely test new features against a backend that itself may still be receiving new, not-yet-fully-verified changes, without any risk to real production data or real users.\n- **Once deployed for real users**, the frontend (the actual production build) needs to talk to the production server \u2014 the stable, live backend serving real traffic.\n\nHaving both URLs documented directly in the shared OpenAPI contract (rather than, say, only the backend team knowing the staging URL and having to separately communicate it) means the frontend team has a single, authoritative reference for *both* which shape the API has (via `paths`/`components`) *and* where to actually reach each version of it (via `servers`) \u2014 extending the Single Source of Truth principle to cover not just \"what does the API look like\" but \"where do I actually send these requests,\" which is just as necessary for the frontend to actually integrate correctly, and just as prone to miscommunication/guesswork if left undocumented."}]}</script>
+<script>
+/* ============================================================
+   CT3 Study Guides — shared app engine
+   Identical across every lecture file. Reads window.LECTURE_DATA.
+   ============================================================ */
+
+(function () {
+  "use strict";
+
+  /* ---------------- tiny markdown renderer ---------------- */
+  /* Supports: ## / ### headers, **bold**, `code`, ```fenced code```,
+     GFM pipe tables, "- " unordered lists, "---" hr, paragraphs. */
+
+  function escapeHtml(s) {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function inline(s) {
+    let out = escapeHtml(s);
+    out = out.replace(/`([^`]+)`/g, "<code>$1</code>");
+    out = out.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    return out;
+  }
+
+  function renderTable(rows) {
+    const header = rows[0];
+    const body = rows.slice(2);
+    const cell = (r) =>
+      r
+        .trim()
+        .replace(/^\|/, "")
+        .replace(/\|$/, "")
+        .split("|")
+        .map((c) => c.trim());
+    let html = "<table><thead><tr>";
+    cell(header).forEach((c) => (html += `<th>${inline(c)}</th>`));
+    html += "</tr></thead><tbody>";
+    body.forEach((r) => {
+      html += "<tr>";
+      cell(r).forEach((c) => (html += `<td>${inline(c)}</td>`));
+      html += "</tr>";
+    });
+    html += "</tbody></table>";
+    return html;
+  }
+
+  function renderMarkdown(md) {
+    const lines = md.replace(/\r\n/g, "\n").split("\n");
+    let html = "";
+    let i = 0;
+    let para = [];
+
+    function flushPara() {
+      if (para.length) {
+        html += `<p>${inline(para.join(" "))}</p>`;
+        para = [];
+      }
+    }
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      if (/^```/.test(line)) {
+        flushPara();
+        const lang = line.replace(/^```/, "").trim();
+        const code = [];
+        i++;
+        while (i < lines.length && !/^```/.test(lines[i])) {
+          code.push(lines[i]);
+          i++;
+        }
+        html += `<pre><code class="lang-${escapeHtml(lang || "text")}">${escapeHtml(
+          code.join("\n")
+        )}</code></pre>`;
+        i++;
+        continue;
+      }
+
+      if (/^\s*\|/.test(line) && i + 1 < lines.length && /^\s*\|?\s*-+\s*(\|\s*-+\s*)*\|?\s*$/.test(lines[i + 1])) {
+        flushPara();
+        const rows = [];
+        while (i < lines.length && /^\s*\|/.test(lines[i])) {
+          rows.push(lines[i]);
+          i++;
+        }
+        html += renderTable(rows);
+        continue;
+      }
+
+      if (/^###\s+/.test(line)) {
+        flushPara();
+        html += `<h3>${inline(line.replace(/^###\s+/, ""))}</h3>`;
+        i++;
+        continue;
+      }
+
+      if (/^##\s+/.test(line)) {
+        flushPara();
+        html += `<h2>${inline(line.replace(/^##\s+/, ""))}</h2>`;
+        i++;
+        continue;
+      }
+
+      if (/^-\s+/.test(line)) {
+        flushPara();
+        const items = [];
+        while (i < lines.length && /^-\s+/.test(lines[i])) {
+          items.push(lines[i].replace(/^-\s+/, ""));
+          i++;
+        }
+        html += "<ul>" + items.map((it) => `<li>${inline(it)}</li>`).join("") + "</ul>";
+        continue;
+      }
+
+      if (/^---+\s*$/.test(line)) {
+        flushPara();
+        html += "<hr>";
+        i++;
+        continue;
+      }
+
+      if (line.trim() === "") {
+        flushPara();
+        i++;
+        continue;
+      }
+
+      para.push(line.trim());
+      i++;
+    }
+    flushPara();
+    return html;
+  }
+
+  /* ---------------- utils ---------------- */
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function storageGet(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function storageSet(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {
+      /* ignore quota / private-mode errors */
+    }
+  }
+
+  /* ---------------- tabs ---------------- */
+
+  function initTabs() {
+    const tabs = document.querySelectorAll(".section-tab");
+    const panels = document.querySelectorAll(".section-panel");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active"));
+        panels.forEach((p) => p.classList.remove("active"));
+        tab.classList.add("active");
+        document.getElementById(tab.dataset.target).classList.add("active");
+        window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+      });
+    });
+  }
+
+  /* ---------------- content ---------------- */
+
+  function renderContent(data) {
+    const el = document.getElementById("content-body");
+    if (el) el.innerHTML = renderMarkdown(data.contentMarkdown);
+  }
+
+  /* ---------------- MCQ engine ---------------- */
+
+  function mcqStorageKey(id) {
+    return `ct3-quiz-${id}`;
+  }
+
+  function newMcqState(data) {
+    const ids = data.mcqs.map((q) => q.id);
+    const order = shuffle(ids);
+    const optionOrder = {};
+    data.mcqs.forEach((q) => {
+      optionOrder[q.id] = shuffle(q.options.map((_, idx) => idx));
+    });
+    return { order, optionOrder, answers: {} };
+  }
+
+  function initQuiz(data) {
+    const key = mcqStorageKey(data.id);
+    let state = storageGet(key);
+    if (!state || !state.order || state.order.length !== data.mcqs.length) {
+      state = newMcqState(data);
+      storageSet(key, state);
+    }
+
+    const byId = {};
+    data.mcqs.forEach((q) => (byId[q.id] = q));
+
+    const list = document.getElementById("mcq-list");
+    const scoreEl = document.getElementById("quiz-score");
+    const barEl = document.getElementById("quiz-progress-fill");
+    const total = data.mcqs.length;
+
+    function updateScore() {
+      const answeredIds = Object.keys(state.answers);
+      const correctCount = answeredIds.filter((id) => state.answers[id].correct).length;
+      scoreEl.innerHTML = `<b>${correctCount}</b> / ${answeredIds.length} correct &nbsp;·&nbsp; ${answeredIds.length} / ${total} answered`;
+      barEl.style.width = `${(answeredIds.length / total) * 100}%`;
+    }
+
+    function renderQuestion(qid, displayIndex) {
+      const q = byId[qid];
+      const wrap = document.createElement("div");
+      wrap.className = "mcq-card";
+      const already = state.answers[qid];
+
+      const qEl = document.createElement("p");
+      qEl.className = "mcq-q";
+      qEl.innerHTML = `<span class="mcq-index">${displayIndex + 1}.</span><span>${inline(q.q)}</span>`;
+      wrap.appendChild(qEl);
+
+      const optsWrap = document.createElement("div");
+      optsWrap.className = "mcq-options";
+
+      const order = state.optionOrder[qid];
+      order.forEach((origIdx) => {
+        const btn = document.createElement("button");
+        btn.className = "mcq-option";
+        btn.innerHTML = inline(q.options[origIdx]);
+        btn.disabled = !!already;
+
+        if (already) {
+          if (origIdx === q.correct) btn.classList.add("correct");
+          else if (origIdx === already.chosen) btn.classList.add("incorrect");
+        }
+
+        btn.addEventListener("click", () => {
+          if (state.answers[qid]) return;
+          const correct = origIdx === q.correct;
+          state.answers[qid] = { chosen: origIdx, correct };
+          storageSet(mcqStorageKey(data.id), state);
+
+          Array.from(optsWrap.children).forEach((b) => (b.disabled = true));
+          if (correct) {
+            btn.classList.add("correct");
+          } else {
+            btn.classList.add("incorrect");
+            Array.from(optsWrap.children)[order.indexOf(q.correct)].classList.add("reveal-correct");
+          }
+          expl.classList.add("show");
+          updateScore();
+        });
+
+        optsWrap.appendChild(btn);
+      });
+
+      wrap.appendChild(optsWrap);
+
+      const expl = document.createElement("div");
+      expl.className = "mcq-explanation" + (already ? " show" : "");
+      expl.innerHTML = `<b>Why:</b> ${inline(q.explanation)}`;
+      wrap.appendChild(expl);
+
+      return wrap;
+    }
+
+    function render() {
+      list.innerHTML = "";
+      state.order.forEach((qid, idx) => list.appendChild(renderQuestion(qid, idx)));
+      updateScore();
+    }
+
+    document.getElementById("quiz-reset").addEventListener("click", () => {
+      state = newMcqState(data);
+      storageSet(key, state);
+      render();
+      document.getElementById("mcq-panel-top").scrollIntoView({ behavior: "smooth" });
+    });
+
+    render();
+  }
+
+  /* ---------------- technical questions engine ---------------- */
+
+  function techStorageKey(id) {
+    return `ct3-tech-${id}`;
+  }
+
+  function initTech(data) {
+    const key = techStorageKey(data.id);
+    let state = storageGet(key) || { reviewed: {} };
+
+    const list = document.getElementById("tech-list");
+    const counterEl = document.getElementById("tech-counter");
+    const total = data.techQuestions.length;
+
+    function updateCounter() {
+      const n = Object.keys(state.reviewed).filter((k) => state.reviewed[k]).length;
+      counterEl.innerHTML = `<b>${n}</b> / ${total} marked reviewed`;
+    }
+
+    data.techQuestions.forEach((tq, idx) => {
+      const wrap = document.createElement("div");
+      wrap.className = "tech-card";
+
+      const row = document.createElement("div");
+      row.className = "tech-q-row";
+
+      const qEl = document.createElement("p");
+      qEl.className = "tech-q";
+      qEl.innerHTML = `<span class="mcq-index">${idx + 1}.</span><span>${inline(tq.q)}</span>`;
+      row.appendChild(qEl);
+
+      const label = document.createElement("label");
+      label.className = "tech-reviewed-label";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = !!state.reviewed[tq.id];
+      cb.addEventListener("change", () => {
+        state.reviewed[tq.id] = cb.checked;
+        storageSet(key, state);
+        updateCounter();
+      });
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode("reviewed"));
+      row.appendChild(label);
+
+      wrap.appendChild(row);
+
+      const revealBtn = document.createElement("button");
+      revealBtn.className = "btn reveal-btn";
+      revealBtn.textContent = "Reveal model answer";
+
+      const answerEl = document.createElement("div");
+      answerEl.className = "tech-answer";
+      answerEl.innerHTML = renderMarkdown(tq.answer);
+
+      revealBtn.addEventListener("click", () => {
+        const showing = answerEl.classList.toggle("show");
+        revealBtn.textContent = showing ? "Hide model answer" : "Reveal model answer";
+      });
+
+      wrap.appendChild(revealBtn);
+      wrap.appendChild(answerEl);
+      list.appendChild(wrap);
+    });
+
+    updateCounter();
+  }
+
+  /* ---------------- boot ---------------- */
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const dataEl = document.getElementById("lecture-data");
+    if (!dataEl) return;
+    const data = JSON.parse(dataEl.textContent);
+    initTabs();
+    renderContent(data);
+    initQuiz(data);
+    initTech(data);
+  });
+})();
+
+</script>
+</body>
+</html>

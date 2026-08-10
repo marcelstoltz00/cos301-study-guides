@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Software Testing in Practice — CT3 Study Guide</title>
+<style>
+/* ============================================================
+   CT3 Study Guides — shared dark academic theme
+   Identical across every lecture file. Edit here, regenerate all.
+   ============================================================ */
+
+:root {
+  --bg: #0b0e11;
+  --surface: #12161b;
+  --card: #1a1f26;
+  --card-border: #262d37;
+  --text: #e8ecf1;
+  --text-dim: #9aa4b2;
+  --text-faint: #626d7a;
+  --accent: #4a90f8;
+  --accent-dim: #2c5aa8;
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --warning: #f59e0b;
+  --error: #f56363;
+  --error-bg: rgba(245, 99, 99, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Nav ---------- */
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 14, 17, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.topnav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.topnav-brand {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topnav-brand span { color: var(--accent); }
+
+.topnav-links {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+}
+
+.topnav-links::-webkit-scrollbar { height: 4px; }
+.topnav-links::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 2px; }
+
+.topnav-links a {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--easing), color var(--duration-fast) var(--easing);
+}
+
+.topnav-links a:hover { background: var(--card); color: var(--text); }
+.topnav-links a.active { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Layout ---------- */
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) 120px;
+}
+
+.hero {
+  margin-bottom: var(--space-8);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.hero h1 {
+  font-size: 30px;
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.hero p {
+  color: var(--text-dim);
+  font-size: 16px;
+  margin: 0;
+}
+
+.section-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 53px;
+  background: var(--bg);
+  z-index: 50;
+  padding-top: var(--space-2);
+}
+
+.section-tab {
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--duration-fast) var(--easing);
+}
+
+.section-tab:hover { color: var(--text); }
+.section-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.section-panel { display: none; }
+.section-panel.active { display: block; animation: fadein var(--duration-normal) var(--easing); }
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Content (rendered markdown) ---------- */
+
+.content h2 {
+  font-size: 22px;
+  margin: var(--space-8) 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--card-border);
+  letter-spacing: -0.005em;
+}
+.content h2:first-child { margin-top: 0; }
+
+.content h3 {
+  font-size: 17px;
+  color: var(--accent);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.content p { color: var(--text); margin: 0 0 var(--space-4); }
+.content strong { color: #fff; font-weight: 600; }
+.content ul, .content ol { margin: 0 0 var(--space-4); padding-left: 22px; color: var(--text); }
+.content li { margin-bottom: var(--space-1); }
+.content li strong { color: var(--text); }
+
+.content code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.content pre {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin: 0 0 var(--space-4);
+}
+
+.content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #d8dee9;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-4);
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+}
+
+.content th, .content td {
+  border: 1px solid var(--card-border);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.content th {
+  background: var(--card);
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.content tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+.content hr {
+  border: none;
+  border-top: 1px solid var(--card-border);
+  margin: var(--space-8) 0;
+}
+
+/* ---------- Quiz (MCQ) ---------- */
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.quiz-score {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.quiz-score b { color: var(--text); }
+
+.progress-bar {
+  height: 6px;
+  background: var(--card);
+  border-radius: 999px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 120px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width var(--duration-normal) var(--easing);
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing);
+}
+.btn:hover { background: #232a33; border-color: #38414d; }
+.btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-accent:hover { background: #3a7de0; }
+
+.mcq-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.mcq-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.mcq-q .mcq-index {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  flex: none;
+}
+
+.mcq-options { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.mcq-option {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing);
+}
+
+.mcq-option:hover:not(:disabled) { border-color: var(--accent); }
+.mcq-option:disabled { cursor: default; }
+
+.mcq-option.correct { background: var(--success-bg); border-color: var(--success); color: #baf7cf; }
+.mcq-option.incorrect { background: var(--error-bg); border-color: var(--error); color: #ffc9c9; }
+.mcq-option.reveal-correct { border-color: var(--success); color: #baf7cf; }
+
+.mcq-explanation {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  display: none;
+}
+.mcq-explanation.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.mcq-explanation b { color: var(--text); }
+
+/* ---------- Tech questions ---------- */
+
+.tech-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.tech-q-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.tech-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  gap: var(--space-2);
+}
+.tech-q .mcq-index { color: var(--accent); font-family: var(--font-mono); flex: none; }
+
+.tech-reviewed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+  flex: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.tech-reviewed-label input { accent-color: var(--accent); }
+
+.tech-answer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--card-border);
+  display: none;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.tech-answer.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.tech-answer p { margin: 0 0 var(--space-3); color: var(--text-dim); }
+.tech-answer ul { margin: 0 0 var(--space-3); padding-left: 20px; }
+.tech-answer strong { color: var(--text); }
+.tech-answer code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.reveal-btn {
+  margin-top: var(--space-4);
+}
+
+/* ---------- Footer ---------- */
+
+.page-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.page-footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.page-footer a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .page { padding: var(--space-6) var(--space-4) 100px; }
+  .hero h1 { font-size: 24px; }
+  .section-tabs { top: 49px; }
+}
+
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a>
+    <div class="topnav-links">
+      <a href="index.html" class="">Home</a>
+<a href="L17.html" class="">L17 · Design Systems & CI</a>
+<a href="L18.html" class="">L18 · Domain Modelling & Architectures</a>
+<a href="L19.html" class="active">L19 · Software Testing in Practice</a>
+<a href="L20.html" class="">L20 · Designed for Humans</a>
+<a href="L21.html" class="">L21 · DevOps & DevSecOps</a>
+<a href="L22.html" class="">L22 · Practical Architectural Design</a>
+<a href="L23.html" class="">L23 · Architecture in Practice</a>
+<a href="L24.html" class="">L24 · Security Testing</a>
+<a href="L25.html" class="">L25 · Service Contracts</a>
+<a href="MS.html" class="">Bonus · Microservices Deep Dive</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <header class="hero">
+    <div class="hero-eyebrow">L19 &middot; Software Engineering</div>
+    <h1>Software Testing in Practice</h1>
+    <p>From a production horror story to a working testing strategy: test types, TDD, coverage, CI gating, and progressive delivery techniques.</p>
+  </header>
+
+  <div class="section-tabs">
+    <button class="section-tab active" data-target="panel-content">Study Content</button>
+    <button class="section-tab" data-target="panel-mcq">MCQs (20)</button>
+    <button class="section-tab" data-target="panel-tech">Technical Questions (12)</button>
+  </div>
+
+  <section id="panel-content" class="section-panel active">
+    <div id="content-body" class="content"></div>
+  </section>
+
+  <section id="panel-mcq" class="section-panel">
+    <div id="mcq-panel-top" class="quiz-header">
+      <div class="progress-bar"><div id="quiz-progress-fill" class="progress-bar-fill" style="width:0%"></div></div>
+      <div id="quiz-score" class="quiz-score">0 / 0 correct</div>
+      <button id="quiz-reset" class="btn">Shuffle &amp; reset quiz</button>
+    </div>
+    <div id="mcq-list"></div>
+  </section>
+
+  <section id="panel-tech" class="section-panel">
+    <div class="quiz-header">
+      <div id="tech-counter" class="quiz-score">0 / 12 marked reviewed</div>
+    </div>
+    <div id="tech-list"></div>
+  </section>
+
+  <footer class="page-footer">
+    <a href="L18.html">&larr; L18</a>
+    <a href="L20.html">L20 &rarr;</a>
+  </footer>
+</main>
+
+<script id="lecture-data" type="application/json">{"id": "L19", "title": "Software Testing in Practice", "subtitle": "From a production horror story to a working testing strategy: test types, TDD, coverage, CI gating, and progressive delivery techniques.", "contentMarkdown": "## Software Testing in Practice\n\n### 1. Why Bother? A Case Study\n\n**The scenario:** an HR Portal was developed on a low-code/customisable platform (SharePoint), with a customisable data structure and workflows. It had no local development environment, extremely slow deployment, painful release cycles, and unhappy users.\n\n**Why it got so bad:**\n- Issues were only caught in production \u2014 never earlier.\n- Business logic was heavily coupled to the platform, making it hard to isolate and change safely.\n- The development environment was extremely inefficient (no fast local loop).\n- It was hard to work as a team \u2014 changes collided.\n- There was a **negative compounding effect**: each new problem made the next change riskier and slower.\n\n**Lessons:**\n- Your reputation is affected by the quality of the software you release.\n- The hard part of software engineering isn't writing the first version \u2014 it's **ensuring software keeps working correctly as it changes over time.**\n- More automated tests would have caught this earlier.\n\n**How automated tests would have helped:**\n- Issues get caught early in the development process, not in production.\n- Writing tests **forces you to abstract out external dependencies and isolate logic** (untestable code is usually a sign of tangled coupling).\n- Testing changes in a local development environment is much faster than testing in production.\n- Tests catch when one team member's changes interfere with and break another's code.\n- Testing has a **positive compounding effect** \u2014 the inverse of the horror story's negative one: good tests make each subsequent change safer and faster, not riskier and slower.\n\n### 2. Testing Attitude\n\n- Your attitude towards testing determines its value.\n- Good tests lead to **acceleration**, not overhead \u2014 a test suite is a fast feedback mechanism.\n- It helps you refactor and abstract dependencies in your code correctly.\n- It makes sure a growing codebase remains maintainable.\n- **Tests should not be an afterthought \u2014 they are development,** not something bolted on after \"the real work\" is done.\n\n### 3. Testing Concepts (the test types)\n\n- **Unit** \u2014 does this one piece of logic do what it claims?\n- **Integration** \u2014 do these pieces work together?\n- **Functional** \u2014 does this feature behave as intended?\n- **E2E (End-to-End)** \u2014 does the whole journey work, from the user's perspective?\n- **Load** \u2014 does it hold up when the users show up (i.e. under realistic/peak traffic)?\n\n### 4. Implementing Tests\n\n- Design code to be **testable** \u2014 testability is a design property, not something you retrofit for free.\n- **Name tests appropriately** \u2014 the name should immediately tell you what failed, without needing to read the test body.\n- Tests can serve as **self-documentation** of a system's intended behaviour \u2014 a well-named, well-written test tells a future reader what the code is supposed to do.\n\n### 5. Code Coverage\n\n- Code coverage is a metric showing **how much of your code is being exercised by tests.**\n- Tooling can show which lines of code are executed, and which branches are traversed, by the test suite.\n- An open question for any team: **what percentage of code must be covered** before a change is considered adequately tested? (There's no universal number \u2014 coverage is a signal, not a guarantee of correctness; 100% coverage does not mean zero bugs, and low coverage on critical logic is a red flag regardless of the overall percentage.)\n\n### 6. Test-Driven Development (TDD) \u2014 Red, Green, Refactor\n\n1. **Red** \u2014 write the test(s) first. They will fail, since the implementation doesn't exist yet.\n2. **Green** \u2014 implement just enough code to make the failing tests pass.\n3. **Refactor** \u2014 clean up the code (and/or the tests) now that you have passing tests as a safety net.\n\nA key benefit: **TDD eliminates premature optimisation** \u2014 you write the simplest code that satisfies the test, then improve it, rather than trying to design the \"perfect\" implementation upfront before you even know it behaves correctly.\n\n### 7. Testing Strategy\n\n**Continuous Integration:**\n- Tests should run on **every** code change.\n- Pull requests cannot succeed (cannot be merged) unless tests have passed.\n- This ensures teams can collaborate and deliver quality together \u2014 a shared, enforced quality gate rather than an individual discipline.\n\n**User Acceptance Testing (UAT):**\n- Not all testing can be automated \u2014 some features genuinely require human verification.\n- Humans can break things in unexpected ways. A really good manual tester is an extremely valuable team member, precisely because they find the paths automated tests didn't anticipate.\n- It's far better to catch an unexpected end-user action during testing than in production.\n\n### 8. Testing Strategy \u2014 Advanced\n\n- **Smoke tests** \u2014 a limited set of tests covering critical paths, used to quickly verify a deployment succeeded (i.e. \"did the basic things not catastrophically break\").\n- **Feature switches / dark features (feature flags)** \u2014 ship code to production without exposing it to users yet. This **decouples deployment from release** \u2014 the code can be deployed and verified safely, then \"released\" (turned on) independently, and rolled back instantly by flipping the flag rather than re-deploying.\n- **Canary releases** \u2014 roll a change out to a small subset of users/traffic first, to reduce risk and/or measure user reaction, before a full rollout.\n\n### 9. Key Takeaways\n\n- **Plan for testing** \u2014 have an explicit testing strategy, don't leave it implicit.\n- **Design for testability** \u2014 testable code is a design outcome, not an accident.\n- **Automated tests have a compounding effect** \u2014 good tests make future change safer and faster; poor/absent tests make future change riskier and slower (the horror story's negative compounding effect, inverted).\n- **Implement against tests** \u2014 write the test first (or alongside), and execute tests consistently (e.g. via CI on every change), not sporadically.\n", "mcqs": [{"id": "m1", "q": "In the HR Portal case study, what was identified as a primary reason issues went undetected until it was too late?", "options": ["The team used too many automated tests", "Issues were only caught in production", "The platform had too much unit test coverage", "The team over-invested in TDD"], "correct": 1, "explanation": "\"Only caught issues in production\" is listed first among the reasons the HR Portal situation got so bad."}, {"id": "m2", "q": "Why does writing tests force you to \"abstract out external dependencies and isolate logic\"?", "options": ["Testing frameworks require all code to be written in a functional style", "Code tightly coupled to external dependencies (e.g. a specific platform) is hard to test in isolation, so testability pressures you toward decoupling", "Unit tests automatically mock the database for you", "Integration tests replace the need for abstraction entirely"], "correct": 1, "explanation": "The HR Portal's business logic was \"heavily coupled to the platform\" \u2014 writing tests for coupled code is painful, which pushes developers toward isolating logic from its dependencies."}, {"id": "m3", "q": "What is the \"negative compounding effect\" described in the case study?", "options": ["Automated tests becoming slower with every release", "Each new problem in an untested, coupled codebase makes the next change riskier and slower, compounding over time", "Code coverage percentage decreasing with every release", "The number of engineers needed doubling every year"], "correct": 1, "explanation": "The lecture lists a \"negative compounding effect\" as a reason the HR Portal situation deteriorated, contrasted later with testing's positive compounding effect."}, {"id": "m4", "q": "According to the \"Testing Attitude\" section, what should a good test suite function as?", "options": ["A compliance checkbox required before release", "A fast feedback mechanism that leads to acceleration instead of overhead", "A replacement for code review", "An optional step performed only before major releases"], "correct": 1, "explanation": "\"A test suite is a fast feedback mechanism\" and \"good tests lead to acceleration instead of overhead\" are stated directly."}, {"id": "m5", "q": "Which test type answers the question \"does this one piece of logic do what it claims?\"", "options": ["Integration", "Unit", "E2E", "Load"], "correct": 1, "explanation": "Unit tests target one isolated piece of logic."}, {"id": "m6", "q": "Which test type answers \"does the whole journey work, from the user's perspective?\"", "options": ["Unit", "Functional", "E2E", "Integration"], "correct": 2, "explanation": "End-to-end (E2E) tests verify the full user journey, not an isolated piece or pairing of components."}, {"id": "m7", "q": "Which test type specifically answers \"do these pieces work together?\"", "options": ["Unit", "Integration", "Load", "E2E"], "correct": 1, "explanation": "Integration tests verify that multiple pieces/components function correctly together."}, {"id": "m8", "q": "What does Load testing primarily verify?", "options": ["Whether individual functions return correct values", "Whether the system holds up when users actually show up (realistic/peak traffic)", "Whether a feature behaves as intended for a single user", "Whether two components work together correctly"], "correct": 1, "explanation": "Load testing answers \"does it hold up when the users show up?\" \u2014 a question about capacity/performance under real traffic, not correctness of a single function or feature."}, {"id": "m9", "q": "Why does the lecture emphasize naming tests so \"the name should immediately tell you what failed\"?", "options": ["So test names can double as documentation and let a reader diagnose a failure without reading the test body", "Because test frameworks require alphabetically sorted test names", "Because CI pipelines fail if test names exceed a character limit", "Because coverage tools cannot process ambiguous test names"], "correct": 0, "explanation": "The lecture states tests \"can serve as self-documentation of the behaviour of a system\" \u2014 a clear name is central to that."}, {"id": "m10", "q": "What is code coverage a metric of?", "options": ["How many bugs exist in the codebase", "How much of the code is executed by the test suite (lines/branches)", "How many developers contributed to a file", "How fast the test suite runs"], "correct": 1, "explanation": "Coverage tooling shows which lines and branches were executed by the tests \u2014 not correctness or bug count directly."}, {"id": "m11", "q": "Which statement about code coverage best reflects the lecture's framing?", "options": ["100% code coverage guarantees zero bugs", "The required coverage percentage is left as an open question for teams, and coverage is a signal rather than a guarantee of correctness", "Coverage should never be measured, as it discourages testing", "Only integration tests count toward code coverage"], "correct": 1, "explanation": "The lecture poses \"what percentage of code must be covered?\" as an open question rather than asserting a fixed number or claiming coverage proves correctness."}, {"id": "m12", "q": "In TDD's Red-Green-Refactor cycle, what happens during \"Red\"?", "options": ["Code is refactored for performance", "Tests are written first and are expected to fail, since the implementation doesn't exist yet", "All existing tests are deleted", "The application is deployed to production"], "correct": 1, "explanation": "\"Write the tests first, which will fail\" is the Red phase \u2014 no implementation exists yet to make them pass."}, {"id": "m13", "q": "What is one stated benefit of TDD regarding code design decisions?", "options": ["It guarantees the fastest possible runtime performance", "It eliminates premature optimisation, since you write the simplest code to pass the test before improving it", "It removes the need for code review", "It requires exactly 100% code coverage by definition"], "correct": 1, "explanation": "The lecture states TDD \"eliminates premature optimisation\" \u2014 you implement just enough to pass, then refactor."}, {"id": "m14", "q": "Under a CI-based testing strategy, what must be true before a pull request can be merged?", "options": ["A manual UAT tester must approve it, regardless of automated results", "Tests must run and pass \u2014 the PR cannot succeed unless tests have passed", "Code coverage must reach exactly 100%", "The PR must include a canary release plan"], "correct": 1, "explanation": "\"Pull Requests cannot succeed unless tests have passed\" is stated directly under the Continuous Integration strategy."}, {"id": "m15", "q": "Why does the lecture argue a good manual/UAT tester is extremely valuable, even with strong automated coverage?", "options": ["Manual testers replace the need for CI entirely", "Not all testing can be automated, and humans can break things in unexpected ways automated tests didn't anticipate", "Manual testers are required to write all future automated tests", "UAT is only useful for load testing"], "correct": 1, "explanation": "\"Not all testing can be automated... humans can break things in unexpected ways\" is given as the reason a good tester is valuable."}, {"id": "m16", "q": "What is the primary purpose of a smoke test?", "options": ["To achieve 100% code coverage on critical paths", "To quickly verify limited critical paths still work, confirming a deployment didn't catastrophically break something", "To replace unit tests for core business logic", "To simulate thousands of concurrent users"], "correct": 1, "explanation": "Smoke tests \"verify limited critical paths to verify a deployment\" \u2014 a fast, shallow sanity check, not exhaustive coverage."}, {"id": "m17", "q": "What do feature switches (dark features) allow a team to do?", "options": ["Permanently disable a feature after release", "Ship code to production without exposing it to users yet, decoupling deployment from release", "Automatically generate unit tests for new features", "Bypass CI checks for urgent hotfixes"], "correct": 1, "explanation": "Feature flags let you deploy code dark and \"decouple deployment from release\" \u2014 deploying and releasing become two separate, independently-controlled actions."}, {"id": "m18", "q": "What is a canary release used for?", "options": ["Rolling a change out to a small subset of users/traffic first, to reduce risk or measure reaction before a full rollout", "Running tests exclusively in an isolated branch that never merges", "Replacing smoke tests entirely", "Testing database migrations only"], "correct": 0, "explanation": "Canary releases are explicitly described as being \"used to reduce risk or test user reaction\" via a limited initial rollout."}, {"id": "m19", "q": "How do feature flags and canary releases differ in what they primarily control?", "options": ["Feature flags control code visibility to users; canary releases control what portion of traffic/users receives a change", "They are functionally identical techniques with different names", "Feature flags require production deployment; canary releases do not", "Canary releases only apply to database schema changes"], "correct": 0, "explanation": "A feature flag toggles whether a shipped feature is visible at all; a canary release controls how much traffic/how many users see a given version \u2014 related but distinct levers."}, {"id": "m20", "q": "Which statement best captures the lecture's core argument about testing and reputation/velocity?", "options": ["Testing is purely a quality-assurance formality with no effect on delivery speed", "Good automated testing has a compounding effect that accelerates future development and protects reputation, while untested, coupled code compounds negatively and slows teams down", "Manual testing is strictly superior to automated testing for velocity", "Testing should only begin once a product is close to release"], "correct": 1, "explanation": "This is the throughline of the whole lecture: the HR Portal's negative compounding effect versus testing's positive compounding effect, and \"your reputation is affected by the quality of the software you release.\""}], "techQuestions": [{"id": "t1", "q": "Using the HR Portal case study, trace the causal chain from \"no local development environment\" to \"users were very unhappy,\" and identify which single automated testing practice would have broken that chain earliest.", "answer": "**The causal chain:** no local development environment \u2192 developers can't quickly verify a change works before committing it \u2192 issues are only discovered once code reaches production \u2192 each production issue has to be diagnosed and fixed under pressure, on a platform where business logic is heavily coupled to the platform itself \u2192 fixes are slow and risky because there's no fast, isolated way to test a fix before shipping it \u2192 release cycles become painful and slow \u2192 users experience frequent breakage and slow turnaround on fixes \u2192 users are unhappy. This is the \"negative compounding effect\" the lecture names directly: each step makes the next step worse.\n\n**Where the chain could have been broken earliest:** a fast local **unit/integration test suite** that developers run *before* committing would have caught logic errors before they ever reached the shared, slow-to-deploy production-like environment. This is earlier in the chain than CI (which still requires a push), earlier than smoke tests (which run post-deployment), and earlier than UAT (which happens even later). The lecture's own answer to \"how would automated tests have helped\" leads with exactly this: \"we would've caught issues early on in the development process\" and \"testing changes in the development environment would've been much faster\" \u2014 i.e. a fast local test loop is the earliest possible intervention point in this specific chain."}, {"id": "t2", "q": "Explain the difference between \"code coverage\" as a metric and \"test quality.\" Why can a codebase have high coverage but still ship serious bugs?", "answer": "**Code coverage** measures *execution*, not *verification* \u2014 it tells you which lines and branches were run while the test suite executed, using instrumentation that tracks which parts of the code path were touched. **Test quality** is a separate question: did the test that touched that line actually assert something meaningful about the correct behaviour of that code?\n\n**Why high coverage can coexist with serious bugs:** a test can execute a line of code \u2014 satisfying the coverage tool \u2014 without checking that the result was correct. For example:\n\n```js\nfunction calculateDiscount(price, percent) {\n  return price - (price * percent / 100);\n}\n\ntest(\"calculateDiscount runs without crashing\", () => {\n  calculateDiscount(100, 10); // executes the function...\n  // ...but asserts nothing about the returned value!\n});\n```\n\nThis test gives 100% line coverage of `calculateDiscount`, and would pass even if the function had a sign error and returned `110` instead of `90`. Coverage tools only see that the branch/line executed \u2014 they have no concept of whether the *result* was checked against the *expected* result. This is exactly why the lecture frames coverage as an open question (\"what percentage must be covered?\") rather than a target to maximize blindly \u2014 a team chasing a coverage number without care for assertion quality can hit 90%+ coverage while shipping logic errors that no test actually verifies against."}, {"id": "t3", "q": "Design a test-pyramid-style plan (unit / integration / functional / E2E / load) for a feature: \"users can upload a profile photo, which is resized and stored in cloud storage.\" Give one concrete example test case for each level.", "answer": "- **Unit** \u2014 isolate the pure logic with no I/O. Example: `resizeImage(buffer, targetWidth)` given a known input image buffer, returns a buffer whose decoded dimensions match `targetWidth` (mocking/stubbing out any actual filesystem or network calls).\n- **Integration** \u2014 verify the pieces work together, using real-but-local dependencies where practical. Example: the `PhotoUploadService.upload()` method, given a raw image buffer, correctly calls the resize function *and* writes the resulting bytes to a real (test/ephemeral) storage bucket, then reads it back and confirms the stored bytes match \u2014 proving the resize step and the storage client integrate correctly.\n- **Functional** \u2014 verify the feature behaves as intended from an API/feature-level perspective. Example: `POST /users/:id/profile-photo` with a valid JPEG returns `200` and a URL; fetching that URL returns an image with the expected resized dimensions and content-type.\n- **E2E** \u2014 verify the whole journey from the user's perspective, through the real UI. Example: a browser-driven test that logs in as a user, navigates to profile settings, selects a photo file via the file picker, clicks \"upload,\" and asserts the new photo visibly appears as the profile picture on the page.\n- **Load** \u2014 verify the system holds up under realistic traffic. Example: simulate 200 concurrent users uploading photos within a 60-second window and assert the 95th-percentile response time stays under an agreed threshold (e.g. 2 seconds) with no failed uploads."}, {"id": "t4", "q": "Explain the Red-Green-Refactor cycle using a concrete example: implementing `calculateShippingCost(weight, distance)`. Walk through what happens at each phase.", "answer": "**Red \u2014 write a failing test first:**\n```js\ntest(\"calculateShippingCost returns base fee plus weight and distance charges\", () => {\n  expect(calculateShippingCost(2, 100)).toBe(25); // e.g. 5 base + 2*2 weight + 100*0.16 distance\n});\n```\nThis fails immediately because `calculateShippingCost` doesn't exist yet \u2014 that's expected; Red simply confirms the test can actually fail (proving it isn't vacuous).\n\n**Green \u2014 write the simplest code that passes:**\n```js\nfunction calculateShippingCost(weight, distance) {\n  return 25; // hardcoded, just to satisfy this one test\n}\n```\nThis looks silly, but it's a deliberately minimal implementation \u2014 the point of Green is to get to a passing state fast, not to build the \"real\" general solution yet. As more test cases are added (different weight/distance combinations), the hardcoded value becomes impossible to satisfy, forcing a genuinely general implementation:\n```js\nfunction calculateShippingCost(weight, distance) {\n  const base = 5;\n  return base + weight * 2 + distance * 0.16;\n}\n```\n\n**Refactor \u2014 clean up with the tests as a safety net:**\n```js\nconst BASE_FEE = 5;\nconst WEIGHT_RATE = 2;\nconst DISTANCE_RATE = 0.16;\n\nfunction calculateShippingCost(weight, distance) {\n  return BASE_FEE + weight * WEIGHT_RATE + distance * DISTANCE_RATE;\n}\n```\nThe magic numbers are extracted into named constants for clarity \u2014 a pure readability/maintainability improvement, made safely because the existing passing tests will immediately flag it if the refactor accidentally changed behaviour.\n\nThis progression is exactly why the lecture says TDD \"eliminates premature optimisation\" \u2014 at no point did the developer stop to design an elaborate shipping-cost engine upfront; the implementation grew only as far as the tests demanded, then was cleaned up once correctness was already locked in."}, {"id": "t5", "q": "A team says: \"We don't need CI-enforced tests \u2014 our developers are disciplined enough to run tests locally before pushing.\" Critique this position using the lecture's CI testing strategy points.", "answer": "This position has several concrete weaknesses the lecture's CI strategy directly addresses:\n\n1. **It relies on discipline, not enforcement.** The lecture's CI point is explicit: \"Pull Requests cannot succeed unless tests have passed\" \u2014 a hard gate, not a request. Human discipline is inconsistent under deadline pressure (\"I'll just push this one small fix, I already tested it locally, mostly\") \u2014 exactly the scenario CI exists to remove reliance on.\n2. **It doesn't scale with team size.** \"This ensures that teams can collaborate and deliver quality together\" \u2014 with one disciplined developer, self-enforcement might mostly work; with a growing team, the probability that *someone*, *sometime*, skips the local run approaches certainty, and there's no shared, auditable record that tests actually ran and passed for every change.\n3. **\"Ran locally\" and \"ran against what's actually being merged\" can diverge.** A developer's local branch may not include the latest changes from `main` that just landed from someone else \u2014 a locally-green test run doesn't prove the *merged result* is green. CI running tests against the actual merge target closes this gap.\n4. **No visible, shared signal for reviewers.** A reviewer approving a PR has no reliable way to know \"yes, tests were run and passed\" without CI providing that status directly on the PR \u2014 trusting a verbal/implicit claim isn't the same as an enforced, visible check.\n\nThe underlying principle from the lecture is that testing should be a **team-level guarantee**, not an individual one \u2014 CI enforcement is what converts \"our developers are disciplined\" (a hope) into \"our pull requests cannot merge without passing tests\" (a guarantee)."}, {"id": "t6", "q": "The lecture states \"tests should not be an afterthought \u2014 they are development.\" What does this imply about *when* in the development process tests should be written, and how does it relate to designing code to be testable?", "answer": "Treating tests as an afterthought means writing the implementation first, then trying to bolt tests onto it once it's \"done.\" The lecture's framing rejects that ordering: tests are not a separate QA phase performed *after* development, they *are* part of the act of developing the feature \u2014 writing the test and writing the implementation are the same activity, not sequential ones (the extreme version of this is literally TDD's Red-Green-Refactor, where the test is written *before* any implementation exists at all).\n\n**Why this matters for testability:** if tests are written only after the implementation is finished, the implementation was designed with zero pressure to be testable \u2014 it's easy to end up with code tightly coupled to specific external dependencies (a database client, the system clock, a third-party API) because nothing forced the developer to think about how those dependencies would be isolated during testing. This is precisely the HR Portal's failure mode: \"business logic was heavily coupled to the platform,\" making it hard to test in isolation after the fact.\n\nWriting tests *as part of* development \u2014 ideally before or alongside the implementation \u2014 forces early decisions like \"this function needs its dependencies injected rather than hardcoded\" or \"this piece of logic should be a pure function separate from its I/O,\" *while the code is still being shaped*, rather than trying to retrofit those boundaries onto already-tangled code later. Testability becomes a natural consequence of treating testing as development, not an afterthought bolted on once the design is already locked in."}, {"id": "t7", "q": "Compare feature flags (dark features) and canary releases: describe one scenario where you'd use only a feature flag, one where you'd use only a canary release, and one where you'd combine both.", "answer": "**Feature flag only:** a new \"export to PDF\" button is fully built and deployed to production, but it's not ready for any users to see yet \u2014 perhaps the design team wants to demo it internally first, or the launch needs to be coordinated with a marketing announcement date. The code ships to production behind a flag that's off for everyone; when the announcement date arrives, the team flips the flag on for all users simultaneously, with zero additional deployment needed. Here you don't need a *gradual* rollout \u2014 you need a *deployment/release timing* decoupling, which a flag alone provides.\n\n**Canary release only:** a team rewrites the checkout service's internal payment-processing logic \u2014 the change isn't a new visible feature (there's nothing to \"hide\" behind a flag; the button and flow look identical to users), but it's high-risk because it touches money movement. Routing 5% of production checkout traffic through the new version first, while the rest continues on the old version, lets the team compare error rates and payment-success rates before trusting it with 100% of traffic. Here there's no user-facing toggle needed \u2014 you need a *risk-limiting, gradually-increasing exposure* mechanism, which canarying provides.\n\n**Combined:** a major redesign of the onboarding flow is both risky (new code path, could have bugs) and something the team wants to validate gradually with real user reaction, not just error rates. The new flow ships behind a feature flag (decoupling deploy from release \u2014 the code can sit in production, verified via smoke tests, without any user seeing it), and when it's time to test it live, the flag is enabled only for a canary segment of users (e.g. 10%) so the team can measure both technical health (errors, latency) *and* product signals (completion rate, drop-off) before progressively increasing the percentage to 100%. The flag controls *whether* the new logic can be reached at all; the canary percentage controls *how much* traffic reaches it at any given point \u2014 using both together gives the team fine-grained control over both dimensions."}, {"id": "t8", "q": "A developer argues automated tests are \"overhead that slows down delivery.\" Using the lecture's compounding effect argument, construct a counter-argument grounded in a specific 6-month example.", "answer": "**The developer's framing treats testing as a fixed, one-time cost** \u2014 time spent writing tests instead of writing features. The lecture's compounding effect argument says this misses the *time-dependent* nature of the trade-off: the cost/benefit of testing isn't constant, it compounds in opposite directions over time depending on whether you invest in it or not.\n\n**Concrete 6-month example \u2014 Team A (no tests) vs. Team B (invests in tests), same feature set:**\n\n- **Month 1:** Team A ships features slightly faster \u2014 no time spent writing tests. Team B ships slightly slower, having written unit and integration tests alongside each feature.\n- **Month 2\u20133:** Team A starts touching earlier code to add new features. Because nothing verifies existing behaviour, each change risks silently breaking something built in month 1 \u2014 bugs surface days or weeks later, often in production, and take time to trace back to their real cause (exactly the \"only caught issues in production\" failure mode from the HR Portal case study). Team B's tests catch regressions in *seconds*, locally, before the change is even pushed \u2014 refactoring and extending old code is low-risk because the safety net is already there.\n- **Month 4\u20136:** Team A's velocity is now visibly *decreasing* \u2014 every new feature requires manual regression-testing of unrelated areas \"just in case,\" release cycles slow down, and trust in the software erodes (matching \"your reputation is affected by the quality of the software you release\"). Team B's velocity holds steady or increases \u2014 new features build confidently on a codebase whose existing behaviour is continuously verified, and the test suite itself increasingly documents how the system is supposed to work, reducing onboarding/context-switching cost.\n\n**The counter-argument, stated directly:** testing isn't overhead subtracted once from month 1's velocity \u2014 it's an investment that inverts the sign of a compounding effect. Skipping it doesn't remove a cost, it defers and *compounds* it as accumulating regression risk, debugging time, and slowed releases across every subsequent month \u2014 which is a strictly worse trade over any timeline longer than a few weeks."}, {"id": "t9", "q": "Explain what \"testability\" means as a code design property, and give a concrete before/after example of code refactored to be more testable by isolating a hard dependency (e.g. the current time).", "answer": "**Testability** is a property of how code is *structured*, not a property you can add after the fact without changing the code. Testable code isolates the logic you actually want to verify from things that are hard to control deterministically in a test \u2014 the system clock, a live database, a network call to a third-party API, random number generation. Untestable code entangles the logic and the hard dependency together, so you can't exercise the logic without also somehow controlling the dependency.\n\n**Before (untestable \u2014 hard-codes the dependency):**\n```js\nfunction isSubscriptionExpired(subscription) {\n  const now = new Date(); // reaches directly into global, uncontrollable state\n  return subscription.expiresAt < now;\n}\n```\nTesting this requires either waiting for real time to pass, or manipulating the system clock globally (which is fragile, environment-dependent, and can break other tests running concurrently) \u2014 there's no clean way to say \"given that today is 2027-01-01, is this subscription expired?\"\n\n**After (testable \u2014 the dependency is injected):**\n```js\nfunction isSubscriptionExpired(subscription, clock = () => new Date()) {\n  const now = clock();\n  return subscription.expiresAt < now;\n}\n```\nNow a test can pass in a fake clock and get a fully deterministic result:\n```js\ntest(\"subscription expired when expiresAt is before now\", () => {\n  const fixedClock = () => new Date(\"2027-01-01\");\n  const subscription = { expiresAt: new Date(\"2026-12-31\") };\n  expect(isSubscriptionExpired(subscription, fixedClock)).toBe(true);\n});\n```\nThe production code path still defaults to the real clock (`() => new Date()`), so no behaviour changes for real callers \u2014 but the *logic* (the comparison) is now fully separable from the *dependency* (the current time), which is exactly the \"abstract out external dependencies and isolate logic\" the lecture describes as a direct, forced benefit of writing tests."}, {"id": "t10", "q": "Why does the lecture insist that \"not all testing can be automated\"? Give two categories of issues a good manual/UAT tester would catch that automated tests structurally cannot.", "answer": "Automated tests can only check what they were explicitly written to check \u2014 they execute a predetermined script and compare the result against a predetermined expectation. They have no capacity for judgment, curiosity, or improvisation; a human tester does, and the lecture points to this directly: \"humans can break things in unexpected ways\" \u2014 precisely the class of problem a fixed, pre-written test script cannot cover by definition, because if a team anticipated the exact failure mode, they would already have written an automated test for it. It is *unanticipated* usage that requires a human.\n\n**Two categories a human catches that automated tests structurally cannot:**\n\n1. **Subjective UX/usability judgment.** An automated test can assert that a button exists, is clickable, and triggers the correct API call \u2014 it cannot assess whether the resulting flow is *confusing*, whether error messages are *helpful* in context, or whether a layout *feels* cluttered on an actual device. This requires human perception and judgment about the experience, not verification of a discrete, specifiable outcome.\n\n2. **Unanticipated real-world usage patterns.** A human tester might, without being told to, try pasting an emoji into a numeric field, double-clicking \"submit\" rapidly, using the browser's back button mid-checkout, or resizing the window mid-upload \u2014 none of which anyone thought to write an automated test for, precisely because no one anticipated a user would do it. Automated tests only cover paths someone already imagined; a curious human tester actively searches for paths *nobody* imagined, which is exactly the \"unexpected end-user action\" the lecture says is better caught in testing than in production."}, {"id": "t11", "q": "Explain the relationship between smoke tests and the rest of the automated test suite in a deployment pipeline. Why not just rely on the full test suite that already passed in CI before deployment?", "answer": "The full CI test suite (unit, integration, functional, E2E) verifies that the **code itself** is correct, typically run against a build artifact in a CI runner or staging-like environment *before* deployment. A smoke test runs **after** a specific deployment, against the **actual freshly-deployed environment**, and checks a small set of critical paths to confirm the deployment itself succeeded \u2014 a fundamentally different concern from code correctness.\n\n**Why the pre-deploy test suite passing isn't sufficient on its own:** CI proves the code is correct in the environment CI ran it in \u2014 it says nothing about whether *this specific deployment*, to *this specific environment*, actually came up correctly. Things that can go wrong purely at deployment time, which a pre-deploy test suite structurally cannot catch, include:\n- A missing or misconfigured environment variable/secret in the target environment\n- A database migration that didn't actually run, or ran against the wrong database\n- A networking/DNS/load-balancer misconfiguration preventing the new instances from receiving traffic\n- The wrong container image or build artifact actually being deployed\n- A dependency (e.g. an external API, a cache, a message broker) being unreachable from the new environment specifically\n\nA smoke test is a fast, narrow, post-deployment sanity check that answers \"did the thing that just got deployed actually come up and serve the critical paths correctly in this real environment?\" \u2014 a question the earlier, code-focused test suite is not positioned to answer, since it never actually touches the real deployment target. This is why the lecture lists smoke tests as a distinct, additional layer of the testing strategy rather than treating a passing CI run as sufficient on its own."}, {"id": "t12", "q": "Using test naming as self-documentation, rewrite the poorly-named test `test1()` \u2014 which checks that creating an order with a negative quantity throws a validation error \u2014 as a well-named test, and explain why the improved name better serves debugging.", "answer": "**Poorly named:**\n```js\ntest(\"test1\", () => {\n  expect(() => createOrder({ quantity: -1 })).toThrow();\n});\n```\n\n**Well named** (using a common `subject_condition_expectedResult` or plain-English style):\n```js\ntest(\"createOrder throws a validation error when quantity is negative\", () => {\n  expect(() => createOrder({ quantity: -1 })).toThrow(ValidationError);\n});\n```\n\n**Why this matters for debugging:** when this test fails in a CI run (perhaps months after it was written, and someone other than its original author is looking at the failure), the test runner's output typically shows only the **test name**, not necessarily the full test body, in a summary view \u2014 e.g. a CI dashboard listing \"\u274c createOrder throws a validation error when quantity is negative\" versus \"\u274c test1.\" The first tells the reader immediately, without opening the file, *exactly* what behaviour broke: order creation is no longer correctly rejecting negative quantities. The second tells them nothing \u2014 they have to go find the file, open it, read the implementation, and reconstruct what \"test1\" was even supposed to verify, which is pure wasted diagnostic time multiplied across every person who ever encounters this failure.\n\nThis is exactly the lecture's point that tests \"can serve as self-documentation of the behaviour of a system\" \u2014 a well-named test is simultaneously a piece of executable verification *and* a plain-English specification of one fact about how the system is supposed to behave, readable by anyone without needing to read the implementation."}]}</script>
+<script>
+/* ============================================================
+   CT3 Study Guides — shared app engine
+   Identical across every lecture file. Reads window.LECTURE_DATA.
+   ============================================================ */
+
+(function () {
+  "use strict";
+
+  /* ---------------- tiny markdown renderer ---------------- */
+  /* Supports: ## / ### headers, **bold**, `code`, ```fenced code```,
+     GFM pipe tables, "- " unordered lists, "---" hr, paragraphs. */
+
+  function escapeHtml(s) {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  function inline(s) {
+    let out = escapeHtml(s);
+    out = out.replace(/`([^`]+)`/g, "<code>$1</code>");
+    out = out.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    return out;
+  }
+
+  function renderTable(rows) {
+    const header = rows[0];
+    const body = rows.slice(2);
+    const cell = (r) =>
+      r
+        .trim()
+        .replace(/^\|/, "")
+        .replace(/\|$/, "")
+        .split("|")
+        .map((c) => c.trim());
+    let html = "<table><thead><tr>";
+    cell(header).forEach((c) => (html += `<th>${inline(c)}</th>`));
+    html += "</tr></thead><tbody>";
+    body.forEach((r) => {
+      html += "<tr>";
+      cell(r).forEach((c) => (html += `<td>${inline(c)}</td>`));
+      html += "</tr>";
+    });
+    html += "</tbody></table>";
+    return html;
+  }
+
+  function renderMarkdown(md) {
+    const lines = md.replace(/\r\n/g, "\n").split("\n");
+    let html = "";
+    let i = 0;
+    let para = [];
+
+    function flushPara() {
+      if (para.length) {
+        html += `<p>${inline(para.join(" "))}</p>`;
+        para = [];
+      }
+    }
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      if (/^```/.test(line)) {
+        flushPara();
+        const lang = line.replace(/^```/, "").trim();
+        const code = [];
+        i++;
+        while (i < lines.length && !/^```/.test(lines[i])) {
+          code.push(lines[i]);
+          i++;
+        }
+        html += `<pre><code class="lang-${escapeHtml(lang || "text")}">${escapeHtml(
+          code.join("\n")
+        )}</code></pre>`;
+        i++;
+        continue;
+      }
+
+      if (/^\s*\|/.test(line) && i + 1 < lines.length && /^\s*\|?\s*-+\s*(\|\s*-+\s*)*\|?\s*$/.test(lines[i + 1])) {
+        flushPara();
+        const rows = [];
+        while (i < lines.length && /^\s*\|/.test(lines[i])) {
+          rows.push(lines[i]);
+          i++;
+        }
+        html += renderTable(rows);
+        continue;
+      }
+
+      if (/^###\s+/.test(line)) {
+        flushPara();
+        html += `<h3>${inline(line.replace(/^###\s+/, ""))}</h3>`;
+        i++;
+        continue;
+      }
+
+      if (/^##\s+/.test(line)) {
+        flushPara();
+        html += `<h2>${inline(line.replace(/^##\s+/, ""))}</h2>`;
+        i++;
+        continue;
+      }
+
+      if (/^-\s+/.test(line)) {
+        flushPara();
+        const items = [];
+        while (i < lines.length && /^-\s+/.test(lines[i])) {
+          items.push(lines[i].replace(/^-\s+/, ""));
+          i++;
+        }
+        html += "<ul>" + items.map((it) => `<li>${inline(it)}</li>`).join("") + "</ul>";
+        continue;
+      }
+
+      if (/^---+\s*$/.test(line)) {
+        flushPara();
+        html += "<hr>";
+        i++;
+        continue;
+      }
+
+      if (line.trim() === "") {
+        flushPara();
+        i++;
+        continue;
+      }
+
+      para.push(line.trim());
+      i++;
+    }
+    flushPara();
+    return html;
+  }
+
+  /* ---------------- utils ---------------- */
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function storageGet(key) {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function storageSet(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {
+      /* ignore quota / private-mode errors */
+    }
+  }
+
+  /* ---------------- tabs ---------------- */
+
+  function initTabs() {
+    const tabs = document.querySelectorAll(".section-tab");
+    const panels = document.querySelectorAll(".section-panel");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => t.classList.remove("active"));
+        panels.forEach((p) => p.classList.remove("active"));
+        tab.classList.add("active");
+        document.getElementById(tab.dataset.target).classList.add("active");
+        window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+      });
+    });
+  }
+
+  /* ---------------- content ---------------- */
+
+  function renderContent(data) {
+    const el = document.getElementById("content-body");
+    if (el) el.innerHTML = renderMarkdown(data.contentMarkdown);
+  }
+
+  /* ---------------- MCQ engine ---------------- */
+
+  function mcqStorageKey(id) {
+    return `ct3-quiz-${id}`;
+  }
+
+  function newMcqState(data) {
+    const ids = data.mcqs.map((q) => q.id);
+    const order = shuffle(ids);
+    const optionOrder = {};
+    data.mcqs.forEach((q) => {
+      optionOrder[q.id] = shuffle(q.options.map((_, idx) => idx));
+    });
+    return { order, optionOrder, answers: {} };
+  }
+
+  function initQuiz(data) {
+    const key = mcqStorageKey(data.id);
+    let state = storageGet(key);
+    if (!state || !state.order || state.order.length !== data.mcqs.length) {
+      state = newMcqState(data);
+      storageSet(key, state);
+    }
+
+    const byId = {};
+    data.mcqs.forEach((q) => (byId[q.id] = q));
+
+    const list = document.getElementById("mcq-list");
+    const scoreEl = document.getElementById("quiz-score");
+    const barEl = document.getElementById("quiz-progress-fill");
+    const total = data.mcqs.length;
+
+    function updateScore() {
+      const answeredIds = Object.keys(state.answers);
+      const correctCount = answeredIds.filter((id) => state.answers[id].correct).length;
+      scoreEl.innerHTML = `<b>${correctCount}</b> / ${answeredIds.length} correct &nbsp;·&nbsp; ${answeredIds.length} / ${total} answered`;
+      barEl.style.width = `${(answeredIds.length / total) * 100}%`;
+    }
+
+    function renderQuestion(qid, displayIndex) {
+      const q = byId[qid];
+      const wrap = document.createElement("div");
+      wrap.className = "mcq-card";
+      const already = state.answers[qid];
+
+      const qEl = document.createElement("p");
+      qEl.className = "mcq-q";
+      qEl.innerHTML = `<span class="mcq-index">${displayIndex + 1}.</span><span>${inline(q.q)}</span>`;
+      wrap.appendChild(qEl);
+
+      const optsWrap = document.createElement("div");
+      optsWrap.className = "mcq-options";
+
+      const order = state.optionOrder[qid];
+      order.forEach((origIdx) => {
+        const btn = document.createElement("button");
+        btn.className = "mcq-option";
+        btn.innerHTML = inline(q.options[origIdx]);
+        btn.disabled = !!already;
+
+        if (already) {
+          if (origIdx === q.correct) btn.classList.add("correct");
+          else if (origIdx === already.chosen) btn.classList.add("incorrect");
+        }
+
+        btn.addEventListener("click", () => {
+          if (state.answers[qid]) return;
+          const correct = origIdx === q.correct;
+          state.answers[qid] = { chosen: origIdx, correct };
+          storageSet(mcqStorageKey(data.id), state);
+
+          Array.from(optsWrap.children).forEach((b) => (b.disabled = true));
+          if (correct) {
+            btn.classList.add("correct");
+          } else {
+            btn.classList.add("incorrect");
+            Array.from(optsWrap.children)[order.indexOf(q.correct)].classList.add("reveal-correct");
+          }
+          expl.classList.add("show");
+          updateScore();
+        });
+
+        optsWrap.appendChild(btn);
+      });
+
+      wrap.appendChild(optsWrap);
+
+      const expl = document.createElement("div");
+      expl.className = "mcq-explanation" + (already ? " show" : "");
+      expl.innerHTML = `<b>Why:</b> ${inline(q.explanation)}`;
+      wrap.appendChild(expl);
+
+      return wrap;
+    }
+
+    function render() {
+      list.innerHTML = "";
+      state.order.forEach((qid, idx) => list.appendChild(renderQuestion(qid, idx)));
+      updateScore();
+    }
+
+    document.getElementById("quiz-reset").addEventListener("click", () => {
+      state = newMcqState(data);
+      storageSet(key, state);
+      render();
+      document.getElementById("mcq-panel-top").scrollIntoView({ behavior: "smooth" });
+    });
+
+    render();
+  }
+
+  /* ---------------- technical questions engine ---------------- */
+
+  function techStorageKey(id) {
+    return `ct3-tech-${id}`;
+  }
+
+  function initTech(data) {
+    const key = techStorageKey(data.id);
+    let state = storageGet(key) || { reviewed: {} };
+
+    const list = document.getElementById("tech-list");
+    const counterEl = document.getElementById("tech-counter");
+    const total = data.techQuestions.length;
+
+    function updateCounter() {
+      const n = Object.keys(state.reviewed).filter((k) => state.reviewed[k]).length;
+      counterEl.innerHTML = `<b>${n}</b> / ${total} marked reviewed`;
+    }
+
+    data.techQuestions.forEach((tq, idx) => {
+      const wrap = document.createElement("div");
+      wrap.className = "tech-card";
+
+      const row = document.createElement("div");
+      row.className = "tech-q-row";
+
+      const qEl = document.createElement("p");
+      qEl.className = "tech-q";
+      qEl.innerHTML = `<span class="mcq-index">${idx + 1}.</span><span>${inline(tq.q)}</span>`;
+      row.appendChild(qEl);
+
+      const label = document.createElement("label");
+      label.className = "tech-reviewed-label";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = !!state.reviewed[tq.id];
+      cb.addEventListener("change", () => {
+        state.reviewed[tq.id] = cb.checked;
+        storageSet(key, state);
+        updateCounter();
+      });
+      label.appendChild(cb);
+      label.appendChild(document.createTextNode("reviewed"));
+      row.appendChild(label);
+
+      wrap.appendChild(row);
+
+      const revealBtn = document.createElement("button");
+      revealBtn.className = "btn reveal-btn";
+      revealBtn.textContent = "Reveal model answer";
+
+      const answerEl = document.createElement("div");
+      answerEl.className = "tech-answer";
+      answerEl.innerHTML = renderMarkdown(tq.answer);
+
+      revealBtn.addEventListener("click", () => {
+        const showing = answerEl.classList.toggle("show");
+        revealBtn.textContent = showing ? "Hide model answer" : "Reveal model answer";
+      });
+
+      wrap.appendChild(revealBtn);
+      wrap.appendChild(answerEl);
+      list.appendChild(wrap);
+    });
+
+    updateCounter();
+  }
+
+  /* ---------------- boot ---------------- */
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const dataEl = document.getElementById("lecture-data");
+    if (!dataEl) return;
+    const data = JSON.parse(dataEl.textContent);
+    initTabs();
+    renderContent(data);
+    initQuiz(data);
+    initTech(data);
+  });
+})();
+
+</script>
+</body>
+</html>
