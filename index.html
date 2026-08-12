@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>COS301 Software Engineering — Study Guides (L17-L25)</title>
+<title>COS301 Software Engineering — Study Guides (L17-L25 + SOA + Practice Test)</title>
 <style>
 /* ============================================================
    CT3 Study Guides — shared dark academic theme
@@ -625,6 +625,16 @@ body {
 .lecture-card .card-progress-bar { height: 5px; background: var(--card); border-radius: 999px; overflow: hidden; }
 .lecture-card .card-progress-fill { height: 100%; background: var(--accent); border-radius: 999px; width: 0%; transition: width 300ms; }
 .lecture-card .card-progress-label { margin-top: 6px; font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); }
+.special-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-4); margin-top: var(--space-4); }
+.special-card {
+  background: linear-gradient(180deg, rgba(26, 31, 38, 0.96), rgba(18, 22, 27, 0.96)); border: 1px solid var(--card-border); border-radius: var(--radius-lg);
+  padding: var(--space-6); text-decoration: none; display: block; transition: border-color 150ms, transform 150ms;
+}
+.special-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.special-card .id { font-family: var(--font-mono); color: var(--accent); font-size: 13px; margin-bottom: var(--space-2); }
+.special-card h3 { margin: 0 0 var(--space-2); color: var(--text); font-size: 17px; }
+.special-card p { margin: 0 0 var(--space-3); color: var(--text-dim); font-size: 13.5px; }
+.special-card .tag { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 999px; background: rgba(74, 144, 248, 0.12); color: #a9c8fb; border: 1px solid rgba(74, 144, 248, 0.25); font-family: var(--font-mono); font-size: 11px; margin-bottom: var(--space-3); }
 .overall-progress {
   background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius-lg);
   padding: var(--space-4) var(--space-6); margin-bottom: var(--space-6); display: flex; align-items: center; gap: var(--space-4);
@@ -649,6 +659,7 @@ body {
 <a href="L23.html" class="">L23 · Architecture in Practice</a>
 <a href="L24.html" class="">L24 · Security Testing</a>
 <a href="L25.html" class="">L25 · Service Contracts</a>
+<a href="SOA.html" class="">SOA · Service-Oriented Architecture</a>
 <a href="MS.html" class="">Bonus · Microservices Deep Dive</a>
     </div>
   </div>
@@ -657,7 +668,7 @@ body {
 <main class="page">
   <header class="hero">
     <div class="hero-eyebrow">COS301 &middot; Software Engineering</div>
-    <h1>Class Test Study Guides — L17 to L25</h1>
+    <h1>Class Test Study Guides — L17 to L25 + SOA</h1>
     <p>Content summaries, flashcards, 20 shuffled MCQs, and 12 in-depth technical questions per lecture. Progress is saved locally in your browser.</p>
   </header>
 
@@ -676,8 +687,13 @@ body {
 <a class="lecture-card" href="L23.html" data-id="L23" data-tech-total="12" data-flash-total="15"><div class="id">L23</div><h3>Architecture in Practice</h3><p>Design considerations and best practices applied to two real systems: a high-performance event-driven road-security platform, and a resilient, modular financial-services platform.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
 <a class="lecture-card" href="L24.html" data-id="L24" data-tech-total="12" data-flash-total="20"><div class="id">L24</div><h3>Security Testing — Red Team vs. Blue Team</h3><p>General security testing fundamentals: red/blue/purple teaming, the attack lifecycle, OWASP Top 10, and blue team defense concepts (SIEM, SOC, incident response).</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
 <a class="lecture-card" href="L25.html" data-id="L25" data-tech-total="12" data-flash-total="17"><div class="id">L25</div><h3>API Service Contracts</h3><p>OpenAPI vs. Swagger, contract-first vs. code-first development, mock servers, versioning, and capstone-project best practices for frontend/backend integration.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="SOA.html" data-id="SOA" data-tech-total="12" data-flash-total="12"><div class="id">SOA</div><h3>Service-Oriented Architecture (SOA)</h3><p>Loose coupling, reusable services, contracts, orchestration, and the trade-offs between SOA, ESBs, and modern microservice design.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
 <a class="lecture-card" href="MS.html" data-id="MS" data-tech-total="12" data-flash-total="20"><div class="id">MS</div><h3>Microservices Deep Dive (Bonus Synthesis Guide)</h3><p>Pulling together the microservices threads scattered across L18, L21, L22, and L23, plus standard industry patterns: sagas, service mesh, resilience, and observability.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
   </div>
+
+  <section class="special-grid" aria-label="Additional practice material">
+    <a class="special-card" href="comprehensive-test.html"><div class="id">Practice</div><div class="tag">Standalone</div><h3>Comprehensive Practice Test</h3><p>Interactive review covering L17 to L25, MS, and SOA with working multi-select questions.</p></a>
+  </section>
 </main>
 
 <script>

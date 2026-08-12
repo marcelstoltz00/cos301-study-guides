@@ -1,0 +1,907 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COS301 Comprehensive Practice Test - L17 to L25 + MS + SOA</title>
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+:root {
+  --panel: rgba(18, 22, 27, 0.94);
+  --panel-border: rgba(38, 45, 55, 0.96);
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(74, 144, 248, 0.16), transparent 28%),
+    radial-gradient(circle at top right, rgba(34, 197, 94, 0.1), transparent 22%),
+    var(--bg);
+}
+
+.test-hero {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  background: linear-gradient(180deg, rgba(26, 31, 38, 0.96), rgba(18, 22, 27, 0.96));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
+}
+
+.test-kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.test-hero h1 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.08;
+}
+
+.test-hero p {
+  margin: 0;
+  color: var(--text-dim);
+  max-width: 72ch;
+}
+
+.test-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing);
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  background: #202731;
+  transform: translateY(-1px);
+}
+
+.stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  margin-top: var(--space-4);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  background: rgba(10, 13, 16, 0.36);
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.stat-pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.quick-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  color: var(--text-dim);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.quick-links a:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.lecture-section {
+  margin-top: var(--space-6);
+}
+
+.lecture-section > header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.lecture-section h2 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.lecture-section p {
+  margin: 0;
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.test-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.question-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.14);
+}
+
+.question-card header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.lecture-badge,
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lecture-badge {
+  background: rgba(74, 144, 248, 0.14);
+  color: #a9c8fb;
+  border: 1px solid rgba(74, 144, 248, 0.3);
+}
+
+.type-badge {
+  background: rgba(34, 197, 94, 0.12);
+  color: #9debb9;
+  border: 1px solid rgba(34, 197, 94, 0.26);
+}
+
+.question-card h3 {
+  margin: 0 0 var(--space-3);
+  font-size: 20px;
+}
+
+.prompt {
+  margin: 0 0 var(--space-4);
+  color: var(--text);
+}
+
+.options {
+  margin: 0 0 var(--space-4);
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.option-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background: rgba(26, 31, 38, 0.72);
+  color: var(--text);
+  padding: 11px 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing), transform var(--duration-fast) var(--easing);
+}
+
+.option-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.option-btn .letter {
+  flex: none;
+  min-width: 28px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.option-btn.selected {
+  border-color: rgba(74, 144, 248, 0.65);
+  background: rgba(74, 144, 248, 0.12);
+}
+
+.option-btn.correct {
+  border-color: rgba(34, 197, 94, 0.8);
+  background: rgba(34, 197, 94, 0.14);
+}
+
+.option-btn.incorrect {
+  border-color: rgba(245, 99, 99, 0.8);
+  background: rgba(245, 99, 99, 0.12);
+}
+
+.option-btn.reveal-correct {
+  border-color: rgba(34, 197, 94, 0.55);
+}
+
+.question-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.feedback {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  background: rgba(11, 14, 17, 0.4);
+  color: var(--text-dim);
+  display: none;
+}
+
+.feedback.visible {
+  display: block;
+}
+
+.feedback strong {
+  color: var(--text);
+}
+
+.solution-toggle {
+  margin-left: auto;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .question-card {
+    padding: var(--space-4);
+  }
+
+  .lecture-section > header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <a href="L17.html">L17</a>
+      <a href="L18.html">L18</a>
+      <a href="L19.html">L19</a>
+      <a href="L20.html">L20</a>
+      <a href="L21.html">L21</a>
+      <a href="L22.html">L22</a>
+      <a href="L23.html">L23</a>
+      <a href="L24.html">L24</a>
+      <a href="L25.html">L25</a>
+      <a href="MS.html">MS</a>
+      <a href="SOA.html">SOA</a>
+      <a href="comprehensive-test.html" class="active">Test</a>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+  <header class="test-hero">
+    <div class="test-kicker">COS301 Y1 2026</div>
+    <h1>Comprehensive Practice Test: L17 to L25 + MS + SOA</h1>
+    <p>Each lecture now has two questions, and the multi-select questions use real toggles so you can select several options before checking your answer.</p>
+    <div class="test-toolbar">
+      <button class="btn" type="button" id="show-all">Show all answers</button>
+      <button class="btn" type="button" id="hide-all">Hide all answers</button>
+      <button class="btn" type="button" id="reset-all">Reset all attempts</button>
+    </div>
+    <div class="stats-bar">
+      <div class="stats-row">
+        <div class="stat-pill" id="stat-answered">0 / 22 answered</div>
+        <div class="stat-pill" id="stat-correct">0 correct</div>
+        <div class="stat-pill" id="stat-multi">11 multi-select questions</div>
+      </div>
+      <div class="quick-links">
+        <a href="#l17">L17</a>
+        <a href="#l18">L18</a>
+        <a href="#l19">L19</a>
+        <a href="#l20">L20</a>
+        <a href="#l21">L21</a>
+        <a href="#l22">L22</a>
+        <a href="#l23">L23</a>
+        <a href="#l24">L24</a>
+        <a href="#l25">L25</a>
+        <a href="#ms">MS</a>
+        <a href="#soa">SOA</a>
+      </div>
+    </div>
+  </header>
+
+  <div id="quiz-root"></div>
+
+  <p class="note">Tip: answer each question from memory first, then reveal the solution. The multi-select cards require every correct option and no extras for a perfect score.</p>
+</main>
+
+<script>
+(function () {
+  const lectureOrder = ["L17", "L18", "L19", "L20", "L21", "L22", "L23", "L24", "L25", "MS", "SOA"];
+  const lectureTitles = {
+    "L17": "Lecture 17",
+    "L18": "Lecture 18",
+    "L19": "Lecture 19",
+    "L20": "Lecture 20",
+    "L21": "Lecture 21",
+    "L22": "Lecture 22",
+    "L23": "Lecture 23",
+    "L24": "Lecture 24",
+    "L25": "Lecture 25",
+    "MS": "Microservices Deep Dive",
+    "SOA": "SOA"
+  };
+
+  const questions = [
+    {
+      id: "l17-1",
+      lecture: "L17",
+      type: "single",
+      prompt: "Which token naming choice best follows the lecture's role-over-name rule?",
+      options: ["color.action", "color.blue", "color.primary-blue", "color.brand-1"],
+      correct: [0],
+      explanation: "Naming by role keeps the token stable when the underlying hue changes."
+    },
+    {
+      id: "l17-2",
+      lecture: "L17",
+      type: "multi",
+      prompt: "Select all statements that are true about design tokens.",
+      options: [
+        "They name decisions like spacing, colour, and duration",
+        "They are only used for colours",
+        "They can be referenced across Figma, CSS, iOS, and Android",
+        "Changing one token can update every consumer that references it"
+      ],
+      correct: [0, 2, 3],
+      explanation: "A token names a decision once and lets every consumer share that same name, so a single value change updates all downstream uses."
+    },
+    {
+      id: "l18-1",
+      lecture: "L18",
+      type: "single",
+      prompt: "A domain model is a class diagram without showing ______.",
+      options: ["attributes", "operations", "relationships", "objects"],
+      correct: [1],
+      explanation: "A domain model focuses on the static structure of the domain, not behaviour or implementation details."
+    },
+    {
+      id: "l18-2",
+      lecture: "L18",
+      type: "multi",
+      prompt: "Select all statements about UML relationship notation that are true.",
+      options: [
+        "Inheritance uses an open triangle pointing to the superclass",
+        "Composition means the part can exist independently of the whole",
+        "Aggregation uses an open diamond",
+        "Association is the same thing as composition"
+      ],
+      correct: [0, 2],
+      explanation: "Inheritance points to the superclass, aggregation uses an open diamond, and composition is the stronger lifecycle-bound relationship."
+    },
+    {
+      id: "l19-1",
+      lecture: "L19",
+      type: "single",
+      prompt: "Which statement best describes software coverage?",
+      options: [
+        "It measures what was executed, not what was verified",
+        "It measures how many bugs were fixed",
+        "It only applies to integration tests",
+        "It guarantees the software is correct"
+      ],
+      correct: [0],
+      explanation: "Coverage tells you what code ran; weak assertions can still leave bugs untested."
+    },
+    {
+      id: "l19-2",
+      lecture: "L19",
+      type: "multi",
+      prompt: "Select all test types from the lecture's testing pyramid.",
+      options: ["Unit", "Integration", "Functional", "E2E", "Load", "Static analysis"],
+      correct: [0, 1, 2, 3, 4],
+      explanation: "The lecture distinguishes unit, integration, functional, end-to-end, and load testing."
+    },
+    {
+      id: "l20-1",
+      lecture: "L20",
+      type: "single",
+      prompt: "Which statement best describes great UX in the lecture?",
+      options: ["Useful only", "Usable only", "Useful, usable, and desirable", "Animated and colorful"],
+      correct: [2],
+      explanation: "Great UX sits at the intersection of useful, usable, and desirable."
+    },
+    {
+      id: "l20-2",
+      lecture: "L20",
+      type: "multi",
+      prompt: "Select all lecture principles that improve usability or discoverability.",
+      options: [
+        "Constraints prevent invalid actions before they happen",
+        "Feedback should be immediate and visible",
+        "More options always make decisions faster",
+        "Hierarchy can be created with size, weight, and spacing",
+        "The implementation model should guide the UI"
+      ],
+      correct: [0, 1, 3],
+      explanation: "Constraints, feedback, and hierarchy all help users understand and operate the interface."
+    },
+    {
+      id: "l21-1",
+      lecture: "L21",
+      type: "single",
+      prompt: "In the lecture, which step is where dependency vulnerability scanning naturally happens?",
+      options: ["Plan", "Build", "Deploy", "Monitor"],
+      correct: [1],
+      explanation: "The lecture places dependency vulnerability scanning in Build, before anything reaches production."
+    },
+    {
+      id: "l21-2",
+      lecture: "L21",
+      type: "multi",
+      prompt: "Select all DevSecOps practices integrated throughout the loop.",
+      options: ["CVE tracking", "OWASP Top 10 awareness", "SAST", "DAST", "Secret scanning", "Manual only security review"],
+      correct: [0, 1, 2, 3, 4],
+      explanation: "DevSecOps folds security into the workflow through scanning, testing, and secret detection instead of treating it as an afterthought."
+    },
+    {
+      id: "l22-1",
+      lecture: "L22",
+      type: "single",
+      prompt: "What does the First Law of software architecture state?",
+      options: ["The why is more important than the how", "Everything in software architecture is a trade-off", "Every system should be microservices", "Documentation prevents drift"],
+      correct: [1],
+      explanation: "First Law: everything in software architecture is a trade-off."
+    },
+    {
+      id: "l22-2",
+      lecture: "L22",
+      type: "multi",
+      prompt: "Select all true statements about quality attribute scenarios and utility trees.",
+      options: [
+        "A scalable requirement must be expressed as a number",
+        "Utility trees tag each leaf with importance and difficulty",
+        "High importance and high difficulty is where effort should go",
+        "Low importance and high difficulty should be pushed back on",
+        "A good NFR cannot become a test"
+      ],
+      correct: [0, 1, 2, 3],
+      explanation: "The lecture insists that NFRs must be measurable and that utility trees help decide where architectural effort should be spent."
+    },
+    {
+      id: "l23-1",
+      lecture: "L23",
+      type: "single",
+      prompt: "What were the success factors for the road-security case study?",
+      options: ["Security and maintainability", "Performance and scalability", "Availability and resilience", "Extensibility and collaboration"],
+      correct: [1],
+      explanation: "Case Study 1 is explicitly framed around performance and scalability."
+    },
+    {
+      id: "l23-2",
+      lecture: "L23",
+      type: "multi",
+      prompt: "Select all decisions that supported the financial-services case study.",
+      options: [
+        "API Gateway",
+        "Centralized Identity / SSO",
+        "Modularisation / micro-frontends",
+        "Caching with timeout, retry, and backoff",
+        "A single shared database for every service"
+      ],
+      correct: [0, 1, 2, 3],
+      explanation: "The lecture uses these tactics to improve maintainability, availability, and resilience."
+    },
+    {
+      id: "l24-1",
+      lecture: "L24",
+      type: "single",
+      prompt: "What is the key difference between a vulnerability scan and a penetration test?",
+      options: [
+        "They are identical processes with different names",
+        "A scan is automated and shallow; a pentest is human-driven and proves impact",
+        "A scan is manual, while a pentest is automated",
+        "Pentesting only checks OWASP Top 10 items"
+      ],
+      correct: [1],
+      explanation: "Scanning is fast and broad; pentesting is an active attempt to exploit weaknesses and demonstrate impact."
+    },
+    {
+      id: "l24-2",
+      lecture: "L24",
+      type: "multi",
+      prompt: "Select all true statements about the red-team / blue-team lecture concepts.",
+      options: [
+        "The Red Team attacks",
+        "The Blue Team defends",
+        "Purple Team means red and blue collaborating during the exercise",
+        "Defense in depth means layered, independent controls",
+        "MITRE ATT&CK is a linear sequence with one fixed path"
+      ],
+      correct: [0, 1, 2, 3],
+      explanation: "The lecture distinguishes attack, defence, collaboration, and layered control concepts."
+    },
+    {
+      id: "l25-1",
+      lecture: "L25",
+      type: "single",
+      prompt: "What is OpenAPI in the lecture's framing?",
+      options: ["The specification / blueprint", "The tooling suite", "A mock backend", "A versioning strategy"],
+      correct: [0],
+      explanation: "OpenAPI is the specification; Swagger is the tooling that reads it."
+    },
+    {
+      id: "l25-2",
+      lecture: "L25",
+      type: "multi",
+      prompt: "Select all benefits of using an API service contract.",
+      options: [
+        "Parallel development",
+        "Single source of truth",
+        "Reliable testing",
+        "A mock server so the frontend can build first",
+        "No need to version breaking changes"
+      ],
+      correct: [0, 1, 2, 3],
+      explanation: "The contract lets teams work in parallel, test reliably, and share one authoritative API definition."
+    },
+    {
+      id: "ms-1",
+      lecture: "MS",
+      type: "single",
+      prompt: "What two properties define a microservice as truly independent in the bonus guide?",
+      options: ["Reusable and discoverable", "Independently deployable and independently scalable", "Small and fast", "Event-driven and stateless"],
+      correct: [1],
+      explanation: "A service is only really independent if it can be deployed and scaled on its own."
+    },
+    {
+      id: "ms-2",
+      lecture: "MS",
+      type: "multi",
+      prompt: "Select all resilience patterns named in the microservices guide.",
+      options: ["Timeout", "Retry", "Circuit breaker", "Bulkhead", "Fallback", "Monolithic locking"],
+      correct: [0, 1, 2, 3, 4],
+      explanation: "These are the classic patterns the guide uses because the eight fallacies are still false in real systems."
+    },
+    {
+      id: "soa-1",
+      lecture: "SOA",
+      type: "single",
+      prompt: "What is the main idea of SOA?",
+      options: ["Small autonomous services with independent deployability", "Reusable business services exposed through contracts", "One database with many UIs", "Event-only asynchronous communication"],
+      correct: [1],
+      explanation: "SOA organizes software around reusable business services and their contracts."
+    },
+    {
+      id: "soa-2",
+      lecture: "SOA",
+      type: "multi",
+      prompt: "Select all SOA principles named in the lecture.",
+      options: ["Reusability", "Loose coupling", "Interoperability", "Discoverability", "Composability", "Shared database ownership"],
+      correct: [0, 1, 2, 3, 4],
+      explanation: "SOA depends on services that can be reused, discovered, composed, and consumed through contracts with loose coupling."
+    }
+  ];
+
+  const storageKey = "ct3-comprehensive-test-v2";
+  const root = document.getElementById("quiz-root");
+  const statAnswered = document.getElementById("stat-answered");
+  const statCorrect = document.getElementById("stat-correct");
+  const statMulti = document.getElementById("stat-multi");
+  const showAllBtn = document.getElementById("show-all");
+  const hideAllBtn = document.getElementById("hide-all");
+  const resetAllBtn = document.getElementById("reset-all");
+
+  let state = loadState();
+  let forceReveal = false;
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(storageKey);
+      return raw ? JSON.parse(raw) : {};
+    } catch (error) {
+      return {};
+    }
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(state));
+    } catch (error) {
+      // Ignore private-mode or quota errors.
+    }
+  }
+
+  function getQuestionState(id) {
+    return state[id] || { selected: [], submitted: false, correct: false, revealed: false };
+  }
+
+  function setQuestionState(id, next) {
+    state[id] = next;
+    saveState();
+  }
+
+  function isExactMatch(question, selected) {
+    const correct = question.correct.slice().sort((a, b) => a - b).join(",");
+    const chosen = selected.slice().sort((a, b) => a - b).join(",");
+    return correct === chosen;
+  }
+
+  function updateStats() {
+    const answered = questions.filter((q) => getQuestionState(q.id).submitted).length;
+    const correct = questions.filter((q) => getQuestionState(q.id).submitted && getQuestionState(q.id).correct).length;
+    const multi = questions.filter((q) => q.type === "multi").length;
+    statAnswered.textContent = `${answered} / ${questions.length} answered`;
+    statCorrect.textContent = `${correct} correct`;
+    statMulti.textContent = `${multi} multi-select questions`;
+  }
+
+  function renderQuestion(question) {
+    const current = getQuestionState(question.id);
+    const card = document.createElement("article");
+    card.className = "question-card";
+    card.id = question.id;
+
+    const header = document.createElement("header");
+    header.innerHTML = `
+      <span class="lecture-badge">${question.lecture}</span>
+      <span class="type-badge">${question.type === "multi" ? "Multiple Select" : "Multiple Choice"}</span>
+    `;
+    card.appendChild(header);
+
+    const title = document.createElement("h3");
+    title.textContent = `Question ${questions.indexOf(question) + 1}`;
+    card.appendChild(title);
+
+    const prompt = document.createElement("p");
+    prompt.className = "prompt";
+    prompt.textContent = question.prompt;
+    card.appendChild(prompt);
+
+    const options = document.createElement("div");
+    options.className = "options";
+
+    const buttons = question.options.map((text, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "option-btn";
+      button.setAttribute("aria-pressed", "false");
+      button.innerHTML = `<span class="letter">${String.fromCharCode(65 + index)}</span><span>${text}</span>`;
+
+      button.addEventListener("click", () => {
+        const latest = getQuestionState(question.id);
+        if (latest.submitted) {
+          return;
+        }
+
+        let selected = latest.selected.slice();
+        if (question.type === "single") {
+          selected = [index];
+        } else if (selected.includes(index)) {
+          selected = selected.filter((item) => item !== index);
+        } else {
+          selected.push(index);
+        }
+
+        setQuestionState(question.id, { ...latest, selected });
+        updateQuestion(question.id);
+      });
+
+      options.appendChild(button);
+      return button;
+    });
+
+    card.appendChild(options);
+
+    const actions = document.createElement("div");
+    actions.className = "question-actions";
+
+    const submit = document.createElement("button");
+    submit.type = "button";
+    submit.className = "btn";
+    submit.textContent = "Check answer";
+
+    const reset = document.createElement("button");
+    reset.type = "button";
+    reset.className = "btn";
+    reset.textContent = "Reset question";
+
+    const reveal = document.createElement("button");
+    reveal.type = "button";
+    reveal.className = "btn solution-toggle";
+    reveal.textContent = "Show solution";
+
+    actions.appendChild(submit);
+    actions.appendChild(reset);
+    actions.appendChild(reveal);
+    card.appendChild(actions);
+
+    const feedback = document.createElement("div");
+    feedback.className = "feedback";
+    card.appendChild(feedback);
+
+    function updateButtonStyles() {
+      const latest = getQuestionState(question.id);
+      buttons.forEach((button, index) => {
+        button.classList.remove("selected", "correct", "incorrect", "reveal-correct");
+        const selected = latest.selected.includes(index);
+        const correct = question.correct.includes(index);
+
+        if (selected) {
+          button.classList.add("selected");
+        }
+
+        if (latest.submitted) {
+          button.disabled = true;
+          if (selected && correct) {
+            button.classList.add("correct");
+          } else if (selected && !correct) {
+            button.classList.add("incorrect");
+          } else if (correct) {
+            button.classList.add("reveal-correct");
+          }
+        } else {
+          button.disabled = false;
+        }
+
+        button.setAttribute("aria-pressed", selected ? "true" : "false");
+      });
+
+      const solutionVisible = forceReveal || latest.submitted || latest.revealed;
+      feedback.classList.toggle("visible", solutionVisible);
+      reveal.textContent = solutionVisible ? "Hide solution" : "Show solution";
+
+      if (solutionVisible) {
+        const correctLabels = question.correct.map((index) => String.fromCharCode(65 + index)).join(", ");
+        const modeLabel = question.type === "multi" ? "Correct options" : "Correct answer";
+        feedback.innerHTML = `<strong>${modeLabel}:</strong> ${correctLabels}. ${question.explanation}`;
+      } else if (latest.submitted) {
+        feedback.innerHTML = `<strong>Answered.</strong> Your selection has been recorded.`;
+      } else {
+        feedback.innerHTML = `<strong>Not answered yet.</strong> Select your choice${question.type === "multi" ? "s" : ""} and check your answer.`;
+      }
+    }
+
+    function updateQuestion() {
+      updateButtonStyles();
+    }
+
+    submit.addEventListener("click", () => {
+      const latest = getQuestionState(question.id);
+      const correct = isExactMatch(question, latest.selected);
+      setQuestionState(question.id, { ...latest, submitted: true, correct });
+      updateQuestion();
+      updateStats();
+    });
+
+    reset.addEventListener("click", () => {
+      setQuestionState(question.id, { selected: [], submitted: false, correct: false });
+      updateQuestion();
+      updateStats();
+    });
+
+    reveal.addEventListener("click", () => {
+      const latest = getQuestionState(question.id);
+      const shouldReveal = !latest.revealed;
+      setQuestionState(question.id, { ...latest, revealed: shouldReveal });
+      updateQuestion();
+    });
+
+    card._update = updateQuestion;
+    updateQuestion();
+    return card;
+  }
+
+  function renderSections() {
+    root.innerHTML = "";
+
+    lectureOrder.forEach((lecture) => {
+      const section = document.createElement("section");
+      section.className = "lecture-section";
+      section.id = lecture.toLowerCase();
+
+      const header = document.createElement("header");
+      const title = document.createElement("h2");
+      title.textContent = `${lecture} · ${lectureTitles[lecture]}`;
+      const subtitle = document.createElement("p");
+      subtitle.textContent = "Two practice questions, including one multi-select question.";
+      header.appendChild(title);
+      header.appendChild(subtitle);
+
+      const grid = document.createElement("div");
+      grid.className = "test-grid";
+
+      questions.filter((question) => question.lecture === lecture).forEach((question) => {
+        grid.appendChild(renderQuestion(question));
+      });
+
+      section.appendChild(header);
+      section.appendChild(grid);
+      root.appendChild(section);
+    });
+  }
+
+  function refreshAll() {
+    document.querySelectorAll(".question-card").forEach((card) => {
+      if (typeof card._update === "function") {
+        card._update();
+      }
+    });
+    updateStats();
+  }
+
+  showAllBtn.addEventListener("click", () => {
+    forceReveal = true;
+    refreshAll();
+  });
+
+  hideAllBtn.addEventListener("click", () => {
+    forceReveal = false;
+    refreshAll();
+  });
+
+  resetAllBtn.addEventListener("click", () => {
+    state = {};
+    forceReveal = false;
+    saveState();
+    renderSections();
+    updateStats();
+  });
+
+  renderSections();
+  updateStats();
+})();
+</script>
+</body>
+</html>

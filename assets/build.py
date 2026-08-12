@@ -23,6 +23,7 @@ LECTURES = [
     {"id": "L23", "nav": "L23 · Architecture in Practice"},
     {"id": "L24", "nav": "L24 · Security Testing"},
     {"id": "L25", "nav": "L25 · Service Contracts"},
+    {"id": "SOA", "nav": "SOA · Service-Oriented Architecture"},
     {"id": "MS", "nav": "Bonus · Microservices Deep Dive"},
 ]
 
@@ -129,7 +130,7 @@ INDEX_TEMPLATE = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>COS301 Software Engineering — Study Guides (L17-L25)</title>
+<title>COS301 Software Engineering — Study Guides (L17-L25 + SOA + Practice Test)</title>
 <style>
 {css}
 .lecture-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-6); }}
@@ -144,6 +145,16 @@ INDEX_TEMPLATE = """<!doctype html>
 .lecture-card .card-progress-bar {{ height: 5px; background: var(--card); border-radius: 999px; overflow: hidden; }}
 .lecture-card .card-progress-fill {{ height: 100%; background: var(--accent); border-radius: 999px; width: 0%; transition: width 300ms; }}
 .lecture-card .card-progress-label {{ margin-top: 6px; font-family: var(--font-mono); font-size: 11px; color: var(--text-faint); }}
+.special-grid {{ display: grid; grid-template-columns: 1fr; gap: var(--space-4); margin-top: var(--space-4); }}
+.special-card {{
+  background: linear-gradient(180deg, rgba(26, 31, 38, 0.96), rgba(18, 22, 27, 0.96)); border: 1px solid var(--card-border); border-radius: var(--radius-lg);
+  padding: var(--space-6); text-decoration: none; display: block; transition: border-color 150ms, transform 150ms;
+}}
+.special-card:hover {{ border-color: var(--accent); transform: translateY(-1px); }}
+.special-card .id {{ font-family: var(--font-mono); color: var(--accent); font-size: 13px; margin-bottom: var(--space-2); }}
+.special-card h3 {{ margin: 0 0 var(--space-2); color: var(--text); font-size: 17px; }}
+.special-card p {{ margin: 0 0 var(--space-3); color: var(--text-dim); font-size: 13.5px; }}
+.special-card .tag {{ display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 999px; background: rgba(74, 144, 248, 0.12); color: #a9c8fb; border: 1px solid rgba(74, 144, 248, 0.25); font-family: var(--font-mono); font-size: 11px; margin-bottom: var(--space-3); }}
 .overall-progress {{
   background: var(--surface); border: 1px solid var(--card-border); border-radius: var(--radius-lg);
   padding: var(--space-4) var(--space-6); margin-bottom: var(--space-6); display: flex; align-items: center; gap: var(--space-4);
@@ -166,7 +177,7 @@ INDEX_TEMPLATE = """<!doctype html>
 <main class="page">
   <header class="hero">
     <div class="hero-eyebrow">COS301 &middot; Software Engineering</div>
-    <h1>Class Test Study Guides — L17 to L25</h1>
+    <h1>Class Test Study Guides — L17 to L25 + SOA</h1>
     <p>Content summaries, flashcards, 20 shuffled MCQs, and 12 in-depth technical questions per lecture. Progress is saved locally in your browser.</p>
   </header>
 
@@ -178,6 +189,10 @@ INDEX_TEMPLATE = """<!doctype html>
   <div class="lecture-grid">
     {cards}
   </div>
+
+  <section class="special-grid" aria-label="Additional practice material">
+    {special_cards}
+  </section>
 </main>
 
 <script>
@@ -267,9 +282,17 @@ def build_index():
             f'<div class="card-progress-label">Not started</div>'
             f"</a>"
         )
-    out = INDEX_TEMPLATE.format(css=CSS, nav=nav_html(None), cards="\n".join(cards))
+    special_cards = [
+      '<a class="special-card" href="comprehensive-test.html">'
+      '<div class="id">Practice</div>'
+      '<div class="tag">Standalone</div>'
+      '<h3>Comprehensive Practice Test</h3>'
+      '<p>Interactive review covering L17 to L25, MS, and SOA with working multi-select questions.</p>'
+      '</a>'
+    ]
+    out = INDEX_TEMPLATE.format(css=CSS, nav=nav_html(None), cards="\n".join(cards), special_cards="\n".join(special_cards))
     (OUT_DIR / "index.html").write_text(out)
-    print(f"built index.html ({len(cards)} lecture cards)")
+    print(f"built index.html ({len(cards)} lecture cards, {len(special_cards)} special cards)")
 
 
 if __name__ == "__main__":
