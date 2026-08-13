@@ -1,0 +1,26 @@
+L18.html
+  s_d8b54083bb6680::t_5b10ae84054e0e 776-777
+  s_d8b54083bb6680::t_a13a7ed7264dd9 905,907-925,931-942,945-948,952-956,958-974,1262
+  s_d8b54083bb6680::t_2f4a86d503b19e 294-303,906,926-930,943-944,949-951,957,1270,1272-1275,1291-1292,1305
+  s_d8b54083bb6680::t_76d777a4e58803 1271,1276-1290,1293-1304
+  s_d8b54083bb6680::t_921854bb533ae6 1306
+L22.html
+  s_d8b54083bb6680::t_2f4a86d503b19e 1177
+  s_d8b54083bb6680::t_66a6493633d5e9 689
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "644916aa9ac9a2511528dda66b57e82ace2d4eaf",
+  "prompts": {},
+  "sessions": {
+    "s_d8b54083bb6680": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "ac3f47fa-e60d-4f77-8100-7d076a996e22",
+        "model": "mai-code-1.1-flash"
+      },
+      "human_author": "marcelstoltz00 <marcelstoltz00@gmail.com>"
+    }
+  }
+}
