@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Architecture Patterns Comparison — CT3 Study Guide</title>
+  <style>
+    :root {
+      --bg: #0b0e11;
+      --surface: #12161b;
+      --card: #1a1f26;
+      --card-border: #262d37;
+      --text: #e8ecf1;
+      --text-dim: #9aa4b2;
+      --text-faint: #626d7a;
+      --accent: #4a90f8;
+      --accent-dim: #2c5aa8;
+      --success: #22c55e;
+      --success-bg: rgba(34, 197, 94, 0.12);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.12);
+      --error: #f56363;
+      --error-bg: rgba(245, 99, 99, 0.12);
+      --purple: #a78bfa;
+      --teal: #2dd4bf;
+      --pink: #f472b6;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; }
+    ::selection { background: var(--accent-dim); color: white; }
+
+    .topnav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11, 14, 17, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .topnav-inner {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .topnav-brand {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .topnav-brand span { color: var(--accent); }
+
+    .topnav-links {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      flex: 1;
+    }
+
+    .topnav-links a {
+      flex: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .topnav-links a:hover { background: var(--card); color: var(--text); }
+    .topnav-links a.active { background: var(--accent-dim); color: white; }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 24px 120px;
+    }
+
+    .hero {
+      margin-bottom: 24px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .hero h1 {
+      font-size: 30px;
+      line-height: 1.25;
+      margin: 0 0 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero p {
+      color: var(--text-dim);
+      margin: 0;
+      max-width: 760px;
+    }
+
+    .section {
+      margin-top: 32px;
+    }
+
+    .section-header {
+      margin: 0 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 22px;
+      letter-spacing: -0.005em;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .pattern-card {
+      background: linear-gradient(180deg, rgba(26, 31, 38, 0.96), rgba(18, 22, 27, 0.96));
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px;
+      min-height: 245px;
+    }
+
+    .pattern-card h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .pattern-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #dfeaff;
+      background: rgba(74, 144, 248, 0.1);
+      border: 1px solid rgba(74, 144, 248, 0.25);
+      border-radius: 999px;
+      padding: 4px 8px;
+      margin-bottom: 12px;
+    }
+
+    .arch-visual {
+      margin: 14px 0 12px;
+      padding: 10px;
+      background: rgba(11, 14, 17, 0.42);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      min-height: 220px;
+    }
+
+    .diagram-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0 18px;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      color: var(--text-dim);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .legend-swatch.direct { background: rgba(74, 144, 248, 0.9); }
+    .legend-swatch.event { background: rgba(245, 158, 11, 0.9); }
+    .legend-swatch.shared { background: rgba(245, 99, 99, 0.9); }
+    .legend-swatch.boundary { background: rgba(45, 212, 191, 0.9); }
+
+    .arch-diagram {
+      width: 100%;
+      height: 220px;
+      display: block;
+      border-radius: 12px;
+      background: rgba(12, 15, 18, 0.7);
+      border: 1px solid rgba(255,255,255,0.04);
+      overflow: visible;
+    }
+
+    .arch-box {
+      stroke: rgba(255,255,255,0.12);
+      stroke-width: 1.2;
+      rx: 10;
+    }
+
+    .arch-box.ui { fill: rgba(74, 144, 248, 0.78); }
+    .arch-box.app { fill: rgba(45, 212, 191, 0.78); }
+    .arch-box.db { fill: rgba(167, 139, 250, 0.78); }
+    .arch-box.bus { fill: rgba(244, 114, 182, 0.78); }
+    .arch-box.svc { fill: rgba(59, 130, 246, 0.76); }
+    .arch-box.event { fill: rgba(245, 158, 11, 0.82); }
+    .arch-box.warn { fill: rgba(245, 99, 99, 0.72); }
+
+    .arch-text {
+      fill: #ffffff;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      letter-spacing: 0.04em;
+    }
+
+    .arch-line {
+      stroke: rgba(255,255,255,0.8);
+      stroke-width: 2.2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .arch-line.dashed {
+      stroke-dasharray: 7 7;
+      stroke: rgba(245, 99, 99, 0.9);
+    }
+
+    .communication-tag {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(74, 144, 248, 0.10);
+      border: 1px solid rgba(74, 144, 248, 0.22);
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .pattern-card p {
+      margin: 0;
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+
+    .pattern-card ul {
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: var(--text);
+      font-size: 13.5px;
+    }
+
+    .pattern-card li { margin-bottom: 4px; }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--card-border);
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--card);
+      color: var(--accent);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    td { color: var(--text-dim); }
+    td strong { color: var(--text); }
+    tbody tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .mini-panel {
+      background: var(--surface);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .mini-panel h3 {
+      font-size: 17px;
+      margin: 0 0 10px;
+    }
+
+    .mini-panel ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+    .mini-panel li { margin-bottom: 6px; }
+
+    .rule-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--text);
+      font-size: 15px;
+    }
+    .rule-list li { margin-bottom: 10px; }
+
+    .callout {
+      background: linear-gradient(135deg, rgba(74,144,248,0.10), rgba(74,144,248,0.03));
+      border: 1px solid var(--accent-dim);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 18px;
+    }
+
+    .callout h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    .callout p {
+      margin: 0;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 20px 14px 100px; }
+      .hero h1 { font-size: 24px; }
+      .topnav-inner { padding: 10px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="topnav">
+    <div class="topnav-inner">
+      <a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a>
+      <div class="topnav-links">
+        <a href="index.html">Home</a>
+        <a href="L17.html">L17</a>
+        <a href="L18.html">L18</a>
+        <a href="L19.html">L19</a>
+        <a href="L20.html">L20</a>
+        <a href="L21.html">L21</a>
+        <a href="L22.html">L22</a>
+        <a href="L23.html">L23</a>
+        <a href="L24.html">L24</a>
+        <a href="L25.html">L25</a>
+        <a href="SOA.html">SOA</a>
+        <a href="MS.html">MS</a>
+        <a href="architecture-comparison.html" class="active">Architecture</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page">
+    <header class="hero">
+      <div class="hero-eyebrow">Architecture patterns</div>
+      <h1>Monolith vs N-Tier vs N-Layer vs Event-Driven vs SOA vs Microservices vs Distributed Monolith</h1>
+      <p>
+        This guide is designed to make the differences obvious: not just the definitions, but how each approach is deployed,
+        how components communicate, where the coupling lives, and when it is a good idea versus a trap.
+      </p>
+    </header>
+
+    <section class="section">
+      <h2 class="section-header">Quick visual comparison</h2>
+      <div class="diagram-legend" aria-label="Architecture communication legend">
+        <div class="legend-item"><span class="legend-swatch direct"></span> Direct call</div>
+        <div class="legend-item"><span class="legend-swatch event"></span> Async event</div>
+        <div class="legend-item"><span class="legend-swatch shared"></span> Shared state</div>
+        <div class="legend-item"><span class="legend-swatch boundary"></span> Boundary / ownership</div>
+      </div>
+      <div class="summary-grid">
+        <article class="pattern-card">
+          <div class="pattern-badge">MONOLITH</div>
+          <h3>One app, one deployable unit</h3>
+          <div class="arch-visual">
+            <svg class="arch-diagram" viewBox="0 0 260 220" aria-label="Monolith architecture diagram">
+              <defs>
+                <marker id="monolith-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L6,3 z" fill="rgba(255,255,255,0.8)"></path>
+                </marker>
+              </defs>
+              <rect class="arch-box ui" x="82" y="18" width="96" height="34" rx="10"></rect>
+              <text class="arch-text" x="130" y="35">UI</text>
+              <rect class="arch-box app" x="64" y="82" width="132" height="46" rx="12"></rect>
+              <text class="arch-text" x="130" y="105">APP</text>
+              <rect class="arch-box db" x="82" y="160" width="96" height="34" rx="10"></rect>
+              <text class="arch-text" x="130" y="177">DB</text>
+              <path class="arch-line" d="M130 52 L130 82" marker-end="url(#monolith-arrow)"></path>
+              <path class="arch-line" d="M130 128 L130 160" marker-end="url(#monolith-arrow)"></path>
+            </svg>
+          </div>
+          <div class="communication-tag">Internal calls only</div>
+          <p><strong>Definition:</strong> everything lives in one application process and is deployed together.</p>
+          <ul>
+            <li>Simple to build and test</li>
+            <li>Fastest to start</li>
+            <li>Harder to scale by feature</li>
+          </ul>
+        </article>
+
+        <article class="pattern-card">
+          <div class="pattern-badge">N-TIER</div>
+          <h3>Deployment tiers</h3>
+          <div class="arch-visual">
+            <svg class="arch-diagram" viewBox="0 0 260 220" aria-label="N-tier architecture diagram">
+              <defs>
+                <marker id="tier-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L6,3 z" fill="rgba(255,255,255,0.8)"></path>
+                </marker>
+              </defs>
+              <rect class="arch-box ui" x="80" y="18" width="100" height="36" rx="10"></rect>
+              <text class="arch-text" x="130" y="36">PRESENTATION</text>
+              <rect class="arch-box app" x="68" y="90" width="124" height="42" rx="12"></rect>
+              <text class="arch-text" x="130" y="111">APPLICATION</text>
+              <rect class="arch-box db" x="80" y="164" width="100" height="34" rx="10"></rect>
+              <text class="arch-text" x="130" y="181">DATABASE</text>
+              <path class="arch-line" d="M130 54 L130 90" marker-end="url(#tier-arrow)"></path>
+              <path class="arch-line" d="M130 132 L130 164" marker-end="url(#tier-arrow)"></path>
+            </svg>
+          </div>
+          <div class="communication-tag">Request / response</div>
+          <p><strong>Definition:</strong> physically separated tiers, usually by runtime boundary or deployment unit.</p>
+          <ul>
+            <li>Clear deployment boundaries</li>
+            <li>Good for classic enterprise apps</li>
+            <li>Can still be tightly coupled internally</li>
+          </ul>
+        </article>
+
+        <article class="pattern-card">
+          <div class="pattern-badge">N-LAYER</div>
+          <h3>Logical code layers</h3>
+          <div class="arch-visual">
+            <svg class="arch-diagram" viewBox="0 0 260 220" aria-label="N-layer architecture diagram">
+              <defs>
+                <marker id="layer-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L6,3 z" fill="rgba(255,255,255,0.8)"></path>
+                </marker>
+              </defs>
+              <rect class="arch-box ui" x="18" y="36" width="64" height="32" rx="9"></rect>
+              <text class="arch-text" x="50" y="52">CTRL</text>
+              <rect class="arch-box app" x="98" y="36" width="68" height="32" rx="9"></rect>
+              <text class="arch-text" x="132" y="52">SERVICE</text>
+              <rect class="arch-box app" x="176" y="36" width="64" height="32" rx="9"></rect>
+              <text class="arch-text" x="208" y="52">DOMAIN</text>
+              <rect class="arch-box db" x="98" y="112" width="108" height="34" rx="9"></rect>
+              <text class="arch-text" x="152" y="129">REPOSITORY</text>
+              <path class="arch-line" d="M82 52 L98 52" marker-end="url(#layer-arrow)"></path>
+              <path class="arch-line" d="M166 52 L176 52" marker-end="url(#layer-arrow)"></path>
+              <path class="arch-line" d="M152 68 L152 112" marker-end="url(#layer-arrow)"></path>
+            </svg>
+          </div>
+          <div class="communication-tag">Call graph rules</div>
+          <p><strong>Definition:</strong> code organization into layers such as presentation, business, persistence.</p>
+          <ul>
+            <li>Improves separation of concerns</li>
+            <li>Not necessarily distributed</li>
+            <li>Layers can become leaky</li>
+          </ul>
+        </article>
+
+        <article class="pattern-card">
+          <div class="pattern-badge">EVENT-DRIVEN</div>
+          <h3>Async reactions to events</h3>
+          <div class="arch-visual">
+            <svg class="arch-diagram" viewBox="0 0 260 220" aria-label="Event-driven architecture diagram">
+              <defs>
+                <marker id="event-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L6,3 z" fill="rgba(255,255,255,0.8)"></path>
+                </marker>
+              </defs>
+              <rect class="arch-box ui" x="18" y="34" width="60" height="34" rx="10"></rect>
+              <text class="arch-text" x="48" y="51">PRODUCER</text>
+              <rect class="arch-box event" x="98" y="88" width="64" height="34" rx="10"></rect>
+              <text class="arch-text" x="130" y="105">TOPIC</text>
+              <rect class="arch-box app" x="182" y="34" width="60" height="34" rx="10"></rect>
+              <text class="arch-text" x="212" y="51">CONSUMER</text>
+              <rect class="arch-box db" x="98" y="152" width="64" height="34" rx="10"></rect>
+              <text class="arch-text" x="130" y="169">STATE</text>
+              <path class="arch-line" d="M78 51 L98 88" marker-end="url(#event-arrow)"></path>
+              <path class="arch-line" d="M162 105 L182 51" marker-end="url(#event-arrow)"></path>
+              <path class="arch-line" d="M130 122 L130 152" marker-end="url(#event-arrow)"></path>
+            </svg>
+          </div>
+          <div class="communication-tag">Publish / subscribe</div>
+          <p><strong>Definition:</strong> components publish and subscribe to events instead of direct synchronous calls.</p>
+          <ul>
+            <li>Responsive and decoupled</li>
+            <li>Good for async workflows</li>
+            <li>Harder to debug and reason about</li>
+          </ul>
+        </article>
+
+        <article class="pattern-card">
+          <div class="pattern-badge">SOA</div>
+          <h3>Shared business services</h3>
+          <div class="arch-visual">
+            <svg class="arch-diagram" viewBox="0 0 260 220" aria-label="SOA architecture diagram">
+              <defs>
+                <marker id="soa-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L6,3 z" fill="rgba(255,255,255,0.8)"></path>
+                </marker>
+              </defs>
+              <rect class="arch-box ui" x="16" y="96" width="62" height="34" rx="10"></rect>
+              <text class="arch-text" x="47" y="113">CLIENT</text>
+              <rect class="arch-box bus" x="96" y="42" width="68" height="34" rx="10"></rect>
+              <text class="arch-text" x="130" y="59">ESB</text>
+              <rect class="arch-box svc" x="96" y="120" width="36" height="34" rx="10"></rect>
+              <text class="arch-text" x="114" y="137">A</text>
+              <rect class="arch-box svc" x="144" y="120" width="36" height="34" rx="10"></rect>
+              <text class="arch-text" x="162" y="137">B</text>
+              <rect class="arch-box svc" x="192" y="120" width="36" height="34" rx="10"></rect>
+              <text class="arch-text" x="210" y="137">C</text>
+              <rect class="arch-box app" x="195" y="96" width="46" height="34" rx="10"></rect>
+              <text class="arch-text" x="218" y="113">SERVICE</text>
+              <path class="arch-line" d="M78 113 L96 113" marker-end="url(#soa-arrow)"></path>
+              <path class="arch-line" d="M130 76 L130 120" marker-end="url(#soa-arrow)"></path>
+              <path class="arch-line" d="M164 137 L192 137" marker-end="url(#soa-arrow)"></path>
+              <path class="arch-line" d="M218 130 L218 96" marker-end="url(#soa-arrow)"></path>
+            </svg>
+          </div>
+          <div class="communication-tag">Governed contracts</div>
+          <p><strong>Definition:</strong> reusable enterprise services with formal contracts and coordination.</p>
+          <ul>
+            <li>Strong governance and reuse</li>
+            <li>Good for large enterprise ecosystems</li>
+            <li>Can introduce heavy infrastructure and orchestration</li>
+          </ul>
+        </article>
+
+        <article class="pattern-card">
+          <div class="pattern-badge">MS / MICRO</div>
+          <h3>Independent small services</h3>
+          <div class="arch-visual">
+            <svg class="arch-diagram" viewBox="0 0 260 220" aria-label="Microservices architecture diagram">
+              <defs>
+                <marker id="micro-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L6,3 z" fill="rgba(255,255,255,0.8)"></path>
+                </marker>
+              </defs>
+              <rect class="arch-box svc" x="20" y="30" width="68" height="34" rx="10"></rect>
+              <text class="arch-text" x="54" y="47">ORDER</text>
+              <rect class="arch-box svc" x="96" y="30" width="68" height="34" rx="10"></rect>
+              <text class="arch-text" x="130" y="47">USER</text>
+              <rect class="arch-box svc" x="172" y="30" width="68" height="34" rx="10"></rect>
+              <text class="arch-text" x="206" y="47">BILLING</text>
+              <rect class="arch-box db" x="20" y="116" width="56" height="28" rx="9"></rect>
+              <text class="arch-text" x="48" y="130">DB</text>
+              <rect class="arch-box db" x="102" y="116" width="56" height="28" rx="9"></rect>
+              <text class="arch-text" x="130" y="130">DB</text>
+              <rect class="arch-box db" x="184" y="116" width="56" height="28" rx="9"></rect>
+              <text class="arch-text" x="212" y="130">DB</text>
+              <path class="arch-line" d="M88 47 L96 47" marker-end="url(#micro-arrow)"></path>
+              <path class="arch-line" d="M164 47 L172 47" marker-end="url(#micro-arrow)"></path>
+              <path class="arch-line" d="M54 64 L54 116" marker-end="url(#micro-arrow)"></path>
+              <path class="arch-line" d="M130 64 L130 116" marker-end="url(#micro-arrow)"></path>
+              <path class="arch-line" d="M206 64 L206 116" marker-end="url(#micro-arrow)"></path>
+            </svg>
+          </div>
+          <div class="communication-tag">Bounded contexts</div>
+          <p><strong>Definition:</strong> services are small, autonomous, bounded-context based, and often independently deployed.</p>
+          <ul>
+            <li>Team autonomy and scale</li>
+            <li>Independent releases</li>
+            <li>Operational complexity and distributed debugging</li>
+          </ul>
+        </article>
+
+        <article class="pattern-card">
+          <div class="pattern-badge">DISTRIBUTED MONOLITH</div>
+          <h3>Looks split, behaves coupled</h3>
+          <div class="arch-visual">
+            <svg class="arch-diagram" viewBox="0 0 260 220" aria-label="Distributed monolith architecture diagram">
+              <defs>
+                <marker id="dist-arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L6,3 z" fill="rgba(255,255,255,0.8)"></path>
+                </marker>
+              </defs>
+              <rect class="arch-box svc" x="20" y="36" width="84" height="34" rx="10"></rect>
+              <text class="arch-text" x="62" y="53">SVC 1</text>
+              <rect class="arch-box svc" x="156" y="36" width="84" height="34" rx="10"></rect>
+              <text class="arch-text" x="198" y="53">SVC 2</text>
+              <rect class="arch-box warn" x="85" y="96" width="90" height="36" rx="10"></rect>
+              <text class="arch-text" x="130" y="114">SHARED DB</text>
+              <rect class="arch-box warn" x="92" y="150" width="76" height="28" rx="8"></rect>
+              <text class="arch-text" x="130" y="164">TX</text>
+              <path class="arch-line dashed" d="M104 70 L93 96" marker-end="url(#dist-arrow)"></path>
+              <path class="arch-line dashed" d="M156 70 L167 96" marker-end="url(#dist-arrow)"></path>
+              <path class="arch-line dashed" d="M130 132 L130 150" marker-end="url(#dist-arrow)"></path>
+            </svg>
+          </div>
+          <div class="communication-tag">Coupled via shared state</div>
+          <p><strong>Definition:</strong> multiple services exist, but they share a database, tight coupling, and deployment behavior like a monolith.</p>
+          <ul>
+            <li>Feels “modern” but still fragile</li>
+            <li>Failure domains are not isolated</li>
+            <li>It is often worse than a simple monolith</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-header">Key distinctions</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Approach</th>
+              <th>What it really means</th>
+              <th>Primary boundary</th>
+              <th>Communication style</th>
+              <th>Best fit</th>
+              <th>Typical risk</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Monolith</strong></td>
+              <td>Single application with many modules in one runtime</td>
+              <td>One deployable unit</td>
+              <td>In-process calls</td>
+              <td>Small/medium systems, rapid delivery</td>
+              <td>Scaling and team coordination bottleneck</td>
+            </tr>
+            <tr>
+              <td><strong>N-tier</strong></td>
+              <td>Physical tiers such as UI, app, data</td>
+              <td>Deployment/runtime boundary</td>
+              <td>Mostly request/response over network</td>
+              <td>Traditional enterprise apps</td>
+              <td>Tier design can still hide poor modularity</td>
+            </tr>
+            <tr>
+              <td><strong>N-layer</strong></td>
+              <td>Logical layers inside the codebase</td>
+              <td>Code organization</td>
+              <td>Method calls / abstractions</td>
+              <td>Cleanly structured application code</td>
+              <td>Layering becomes “architecture by naming”</td>
+            </tr>
+            <tr>
+              <td><strong>Event-driven</strong></td>
+              <td>Action triggered by business events</td>
+              <td>Event topics / streams</td>
+              <td>Async publish/subscribe</td>
+              <td>Real-time workflows, integration, decoupling</td>
+              <td>Eventual consistency and debugging complexity</td>
+            </tr>
+            <tr>
+              <td><strong>SOA</strong></td>
+              <td>Reusable enterprise services with contracts and shared governance</td>
+              <td>Business capability</td>
+              <td>Service calls and orchestration</td>
+              <td>Large organizations with many systems</td>
+              <td>Heavy governance + Enterprise Service Bus complexity</td>
+            </tr>
+            <tr>
+              <td><strong>Microservices</strong></td>
+              <td>Small autonomous services with independent lifecycles</td>
+              <td>Bounded context / ownership</td>
+              <td>API calls + async events</td>
+              <td>Large, fast-moving product teams</td>
+              <td>Operational complexity and distributed failure modes</td>
+            </tr>
+            <tr>
+              <td><strong>Distributed monolith</strong></td>
+              <td>Split into many services but still tightly coupled</td>
+              <td>Data and workflow coupling</td>
+              <td>Service calls + shared state</td>
+              <td>Usually no good case; often accidental</td>
+              <td>Same problems as monolith, plus network complexity</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-header">Rules of thumb</h2>
+      <ul class="rule-list">
+        <li><strong>Use a monolith</strong> when the system is small, the team is small, and speed to first value matters more than deep scaling.</li>
+        <li><strong>Use N-tier</strong> when you want deployment separation but not necessarily autonomous service ownership.</li>
+        <li><strong>Use N-layer</strong> when the goal is code quality and maintainability, not distribution.</li>
+        <li><strong>Use event-driven</strong> when the system benefits from asynchronous reactions, decoupling, or eventual consistency.</li>
+        <li><strong>Use SOA</strong> when you need enterprise-wide service reuse and formal governance across many legacy systems.</li>
+        <li><strong>Use microservices</strong> when independent deployment, ownership, scaling, and team autonomy matter more than simplicity.</li>
+        <li><strong>Beware distributed monoliths:</strong> if services still share too much state and require coordinated releases, the architecture is not actually helping you.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2 class="section-header">Pros and cons at a glance</h2>
+      <div class="compare-grid">
+        <div class="mini-panel">
+          <h3>Monolith</h3>
+          <ul>
+            <li><strong>Pros:</strong> simple, fast, easy debugging, easy to deploy.</li>
+            <li><strong>Cons:</strong> hard to scale selectively, difficult for large teams.</li>
+          </ul>
+        </div>
+        <div class="mini-panel">
+          <h3>N-tier</h3>
+          <ul>
+            <li><strong>Pros:</strong> clearer deployment structure, separation of concerns.</li>
+            <li><strong>Cons:</strong> easy to build a tiered app with bad internal coupling.</li>
+          </ul>
+        </div>
+        <div class="mini-panel">
+          <h3>N-layer</h3>
+          <ul>
+            <li><strong>Pros:</strong> improves code organization and maintainability.</li>
+            <li><strong>Cons:</strong> layering rules can be violated and become a paper exercise.</li>
+          </ul>
+        </div>
+        <div class="mini-panel">
+          <h3>Event-driven</h3>
+          <ul>
+            <li><strong>Pros:</strong> decoupled workflows and scalability for asynchronous work.</li>
+            <li><strong>Cons:</strong> replay, ordering, retries, and failure handling are harder.</li>
+          </ul>
+        </div>
+        <div class="mini-panel">
+          <h3>SOA</h3>
+          <ul>
+            <li><strong>Pros:</strong> mature enterprise patterns, strong governance and reuse.</li>
+            <li><strong>Cons:</strong> expensive to operate; often operationally heavy.</li>
+          </ul>
+        </div>
+        <div class="mini-panel">
+          <h3>Microservices</h3>
+          <ul>
+            <li><strong>Pros:</strong> independent deployment, team autonomy, scalability by domain.</li>
+            <li><strong>Cons:</strong> many moving parts, distributed debugging, higher ops cost.</li>
+          </ul>
+        </div>
+        <div class="mini-panel">
+          <h3>Distributed monolith</h3>
+          <ul>
+            <li><strong>Pros:</strong> can feel modular at first glance.</li>
+            <li><strong>Cons:</strong> extra network complexity without real independence; often worse than a monolith.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <div class="callout">
+      <h3>One-sentence summary</h3>
+      <p>
+        A <strong>monolith</strong> is one app; <strong>N-tier</strong> is about where it runs; <strong>N-layer</strong> is about how code is structured;
+        <strong>event-driven</strong> is about how components communicate; <strong>SOA</strong> is enterprise service reuse; <strong>microservices</strong>
+        are small autonomous services; and a <strong>distributed monolith</strong> is what you get when separation looks real but the system is still deeply coupled.
+      </p>
+    </div>
+  </main>
+</body>
+</html>
