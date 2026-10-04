@@ -1,0 +1,32 @@
+index.html
+  s_d8b54083bb6680::t_28251467eaa620 664,695
+architecture-comparison.html
+  s_d8b54083bb6680::t_4eaaa0db4877c0 186,225,249,257,265-266,436-450,465-479,494-511,526-543,558-580,595-618,633-650
+  s_d8b54083bb6680::t_715c0d02fccb3e 189-222,227,229-230,425-430
+  s_d8b54083bb6680::t_faa3c36b905903 1-180,184,187-188,231-232,250,253,281-424,431-435,451,453-464,480,482-493,512,514-525,544,546-557,581,583-594,619,621-632,651,653-817
+  s_d8b54083bb6680::t_8cc29d537ac762 181-183,185,223-224,228,233-236,239-248,251-252,256,258-261,264,271
+  h_2d4b3dca70a3d8 226,237-238,254-255,262-263,267-270,272-280,452,481,513,545,582,620,652
+L22.html
+  s_d8b54083bb6680::t_94cf1d9a8b3c3e 689
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "e7b8a913630e195d3018a7f229448b7c870af65d",
+  "prompts": {},
+  "humans": {
+    "h_2d4b3dca70a3d8": {
+      "author": "marcelstoltz00 <marcelstoltz00@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_d8b54083bb6680": {
+      "agent_id": {
+        "tool": "github-copilot",
+        "id": "ac3f47fa-e60d-4f77-8100-7d076a996e22",
+        "model": "mai-code-1.1-flash"
+      },
+      "human_author": "marcelstoltz00 <marcelstoltz00@gmail.com>"
+    }
+  }
+}
