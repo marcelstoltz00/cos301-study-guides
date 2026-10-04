@@ -1,0 +1,16 @@
+CT3.html
+  h_2d4b3dca70a3d8 1
+ST1.html
+  h_2d4b3dca70a3d8 1-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "28a4c8c16b9c9fc36e192f041d34c298c31b6785",
+  "prompts": {},
+  "humans": {
+    "h_2d4b3dca70a3d8": {
+      "author": "marcelstoltz00 <marcelstoltz00@gmail.com>"
+    }
+  }
+}
