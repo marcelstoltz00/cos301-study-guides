@@ -1,0 +1,97 @@
+markdown/ct4-example-1.md
+  s_eb4f94cc02a336::t_596f6e5b440fad 1-280
+assets/build.py
+  s_eb4f94cc02a336::t_7bea7866cfd9ae 10,402,404-438
+  s_eb4f94cc02a336::t_baaf697435488c 16,47,213,336-347,376-401,403,446
+  s_eb4f94cc02a336::t_5b5f4e6cacc854 439-440
+README.md
+  s_eb4f94cc02a336::t_7bea7866cfd9ae 9-17,38-40
+st2-example-2.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 1-834
+L28.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 685
+L24.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+assessment-style-review.md
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 1-64
+MS.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+st2-example-1.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 1-834
+ct4-example-1.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 1-834
+L34.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 685
+L29.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 685
+markdown/st2-example-1.md
+  s_eb4f94cc02a336::t_596f6e5b440fad 1-275
+markdown/st2-example-2.md
+  s_eb4f94cc02a336::t_596f6e5b440fad 1-277
+data/st2-example-2.json
+  s_eb4f94cc02a336::t_a5d8956f04cf34 1-42,45-264,266-273,275-277,280-428
+  s_eb4f94cc02a336::t_860ea395caeaa6 43-44,265,274,278-279
+L19.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+data/ct4-example-2.json
+  s_eb4f94cc02a336::t_f93b59535e5a6f 1-422
+assets/mock-exam.css
+  s_eb4f94cc02a336::t_79d7dbb5ef4a57 1-72
+L30.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 685
+L32.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 685
+ct4-example-2.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 1-834
+markdown/ct4-example-2.md
+  s_eb4f94cc02a336::t_596f6e5b440fad 1-280
+L17.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+L35.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 685
+L23.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+SOA.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+index.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 660,719-724
+assets/mock-exam.html
+  s_eb4f94cc02a336::t_79d7dbb5ef4a57 1-42
+L20.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+L25.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+L31.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 685
+data/ct4-example-1.json
+  s_eb4f94cc02a336::t_f93b59535e5a6f 1-424
+assets/mock-exam.js
+  s_eb4f94cc02a336::t_79d7dbb5ef4a57 1-109
+L18.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+L21.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+L22.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 626
+data/st2-example-1.json
+  s_eb4f94cc02a336::t_a5d8956f04cf34 1-258,260,262-270,272-277,281-427
+  s_eb4f94cc02a336::t_860ea395caeaa6 259,261,271,278-280
+L33.html
+  s_eb4f94cc02a336::t_a10b2b23bfd5a7 685
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ed52e6cd112f8daeea3aed734aa7fc4a49c5198d",
+  "prompts": {},
+  "sessions": {
+    "s_eb4f94cc02a336": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1062c-d2b2-7031-b66a-487a8f9c9b98",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "marcelstoltz00 <marcelstoltz00@gmail.com>"
+    }
+  }
+}
