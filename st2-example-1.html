@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ST2 Example 1 · COS301 Mock Paper</title>
+<style>
+/* ============================================================
+   CT3 Study Guides — shared dark academic theme
+   Identical across every lecture file. Edit here, regenerate all.
+   ============================================================ */
+
+:root {
+  --bg: #0b0e11;
+  --surface: #12161b;
+  --card: #1a1f26;
+  --card-border: #262d37;
+  --text: #e8ecf1;
+  --text-dim: #9aa4b2;
+  --text-faint: #626d7a;
+  --accent: #4a90f8;
+  --accent-dim: #2c5aa8;
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --warning: #f59e0b;
+  --error: #f56363;
+  --error-bg: rgba(245, 99, 99, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Nav ---------- */
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 14, 17, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.topnav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.topnav-brand {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topnav-brand span { color: var(--accent); }
+
+.topnav-links {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+}
+
+.topnav-links::-webkit-scrollbar { height: 4px; }
+.topnav-links::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 2px; }
+
+.topnav-links a {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--easing), color var(--duration-fast) var(--easing);
+}
+
+.topnav-links a:hover { background: var(--card); color: var(--text); }
+.topnav-links a.active { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Layout ---------- */
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) 120px;
+}
+
+.hero {
+  margin-bottom: var(--space-8);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.hero h1 {
+  font-size: 30px;
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.hero p {
+  color: var(--text-dim);
+  font-size: 16px;
+  margin: 0;
+}
+
+.section-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 53px;
+  background: var(--bg);
+  z-index: 50;
+  padding-top: var(--space-2);
+}
+
+.section-tab {
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--duration-fast) var(--easing);
+}
+
+.section-tab:hover { color: var(--text); }
+.section-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.section-panel { display: none; }
+.section-panel.active { display: block; animation: fadein var(--duration-normal) var(--easing); }
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Content (rendered markdown) ---------- */
+
+.content h2 {
+  font-size: 22px;
+  margin: var(--space-8) 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--card-border);
+  letter-spacing: -0.005em;
+}
+.content h2:first-child { margin-top: 0; }
+
+.content h3 {
+  font-size: 17px;
+  color: var(--accent);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.content p { color: var(--text); margin: 0 0 var(--space-4); }
+.content strong { color: #fff; font-weight: 600; }
+.content ul, .content ol { margin: 0 0 var(--space-4); padding-left: 22px; color: var(--text); }
+.content li { margin-bottom: var(--space-1); }
+.content li strong { color: var(--text); }
+
+.content code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.content pre {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin: 0 0 var(--space-4);
+}
+
+.content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #d8dee9;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-4);
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+}
+
+.content th, .content td {
+  border: 1px solid var(--card-border);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.content th {
+  background: var(--card);
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.content tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+.content hr {
+  border: none;
+  border-top: 1px solid var(--card-border);
+  margin: var(--space-8) 0;
+}
+
+.content blockquote {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--warning);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+.content blockquote p:last-child { margin-bottom: 0; }
+.content blockquote strong { color: var(--text); }
+
+/* ---------- Diagrams ---------- */
+
+.diagram {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  text-align: center;
+}
+.diagram svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.diagram-caption {
+  margin-top: var(--space-3);
+  font-size: 12.5px;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* ---------- TL;DR box ---------- */
+
+.tldr-box {
+  background: linear-gradient(135deg, rgba(74,144,248,0.10), rgba(74,144,248,0.03));
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+.tldr-box-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.tldr-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: var(--accent);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.tldr-box-header span.label { font-size: 13px; color: var(--text-dim); font-weight: 600; }
+.tldr-box ul { margin: 0; padding-left: 20px; }
+.tldr-box li { margin-bottom: 6px; color: var(--text); font-size: 14.5px; }
+.tldr-box li:last-child { margin-bottom: 0; }
+.tldr-box li strong { color: #fff; }
+.tldr-box code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+/* ---------- Flashcards ---------- */
+
+.flash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.flash-card {
+  perspective: 1200px;
+  height: 160px;
+  cursor: pointer;
+}
+
+.flash-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 400ms;
+  transform-style: preserve-3d;
+}
+.flash-card.flipped .flash-card-inner { transform: rotateY(180deg); }
+
+.flash-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.flash-front {
+  background: var(--surface);
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+.flash-front .flash-term { font-size: 16px; font-weight: 700; color: var(--text); }
+.flash-front .flash-hint { margin-top: auto; font-size: 11px; color: var(--text-faint); }
+.flash-back {
+  background: var(--card);
+  border-color: var(--accent-dim);
+  transform: rotateY(180deg);
+  justify-content: center;
+}
+.flash-back .flash-def { font-size: 13.5px; color: var(--text-dim); line-height: 1.5; }
+.flash-back .flash-def code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.flash-card.known .flash-front { border-color: var(--success); }
+.flash-card.known .flash-front::after {
+  content: "✓ known";
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 11px;
+  color: var(--success);
+  font-family: var(--font-mono);
+}
+
+.flash-know-btn {
+  margin-top: var(--space-2);
+  align-self: flex-start;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+/* ---------- Quiz (MCQ) ---------- */
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.quiz-score {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.quiz-score b { color: var(--text); }
+
+.progress-bar {
+  height: 6px;
+  background: var(--card);
+  border-radius: 999px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 120px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width var(--duration-normal) var(--easing);
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing);
+}
+.btn:hover { background: #232a33; border-color: #38414d; }
+.btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-accent:hover { background: #3a7de0; }
+
+.mcq-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.mcq-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.mcq-q .mcq-index {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  flex: none;
+}
+
+.mcq-options { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.mcq-option {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing);
+}
+
+.mcq-option:hover:not(:disabled) { border-color: var(--accent); }
+.mcq-option:disabled { cursor: default; }
+
+.mcq-option.correct { background: var(--success-bg); border-color: var(--success); color: #baf7cf; }
+.mcq-option.incorrect { background: var(--error-bg); border-color: var(--error); color: #ffc9c9; }
+.mcq-option.reveal-correct { border-color: var(--success); color: #baf7cf; }
+
+.mcq-explanation {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  display: none;
+}
+.mcq-explanation.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.mcq-explanation b { color: var(--text); }
+
+/* ---------- Tech questions ---------- */
+
+.tech-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.tech-q-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.tech-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  gap: var(--space-2);
+}
+.tech-q .mcq-index { color: var(--accent); font-family: var(--font-mono); flex: none; }
+
+.tech-reviewed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+  flex: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.tech-reviewed-label input { accent-color: var(--accent); }
+
+.tech-answer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--card-border);
+  display: none;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.tech-answer.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.tech-answer p { margin: 0 0 var(--space-3); color: var(--text-dim); }
+.tech-answer ul { margin: 0 0 var(--space-3); padding-left: 20px; }
+.tech-answer strong { color: var(--text); }
+.tech-answer code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.reveal-btn {
+  margin-top: var(--space-4);
+}
+
+/* ---------- Footer ---------- */
+
+.page-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.page-footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.page-footer a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .page { padding: var(--space-6) var(--space-4) 100px; }
+  .hero h1 { font-size: 24px; }
+  .section-tabs { top: 49px; flex-wrap: wrap; }
+  .section-tab { flex: 1 1 calc(50% - var(--space-2)); }
+}
+
+.mock-page { max-width: 1000px; }
+.mock-hero { border: 1px solid #35547c; border-radius: 14px; padding: 24px; background: linear-gradient(145deg, #142132, #12161b); }
+.mock-kicker { color: #a4caff; font: 12px var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
+.mock-hero h1 { margin: 12px 0; font-size: clamp(28px, 5vw, 42px); }
+.mock-hero p { color: #c1cedf; }
+.mock-toolbar, .mock-jumps { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.mock-jumps a { padding: 6px 10px; border-radius: 7px; background: #182b42; color: #cce0ff; text-decoration: none; font-size: 13px; }
+.mock-score { padding: 16px; background: #0e1826; border-radius: 10px; display: grid; gap: 8px; }
+.mock-instructions summary, .mock-memo summary { cursor: pointer; padding: 10px 0; color: #b8d5ff; font-weight: 600; }
+.mock-instructions a { color: #b8d5ff; }
+.mock-note { font-size: 13px; color: #b4c1d3; }
+.mock-question { margin: 24px 0; padding: 24px; background: #121a25; border: 1px solid #33465f; border-radius: 12px; scroll-margin-top: 80px; overflow-wrap: anywhere; }
+.mock-qhead { display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap; align-items: baseline; }
+.mock-qhead h2 { margin: 0; font-size: 22px; }
+.mock-marks { color: #acd0ff; font: 13px var(--font-mono); }
+.mock-type { color: #b4c1d3; font-size: 13px; }
+.mock-prompt { white-space: pre-line; }
+.mock-diagram { margin: 20px 0; overflow-x: auto; border: 1px solid #52657e; border-radius: 10px; }
+.mock-diagram svg { display: block; width: 100%; min-width: 680px; height: auto; }
+.mock-question fieldset { border: 0; padding: 0; margin: 18px 0; min-width: 0; }
+.mock-question legend { font-weight: 600; margin-bottom: 12px; }
+.mock-option { display: flex; gap: 12px; align-items: flex-start; padding: 12px; margin-bottom: 8px; background: #192535; border: 1px solid #415b7c; border-radius: 8px; cursor: pointer; }
+.mock-option input { margin-top: 5px; flex: none; accent-color: #75afff; }
+.mock-row, .mock-part { margin: 20px 0; }
+.mock-row label, .mock-part label { display: block; margin-bottom: 10px; font-weight: 500; }
+.mock-row select, .mock-row input, .mock-part textarea, .mock-self input { font: inherit; color: #e8ecf1; background: #0b1421; border: 1px solid #526c8f; border-radius: 7px; padding: 10px; max-width: 100%; }
+.mock-row select, .mock-row input { width: 100%; }
+.mock-part textarea { display: block; width: 100%; min-height: 140px; resize: vertical; line-height: 1.6; }
+.mock-result { margin: 16px 0; padding: 14px; background: #142942; border-left: 3px solid #83b5ff; border-radius: 7px; }
+.mock-memo { border-top: 1px solid #33465f; margin-top: 18px; padding-top: 8px; }
+.mock-memo h3 { font-size: 17px; }
+.mock-memo li { margin-bottom: 6px; }
+.mock-self { margin: 12px 0; padding: 14px; border: 1px dashed #5e7ca2; border-radius: 7px; }
+.mock-self label { display: block; margin-bottom: 8px; }
+.mock-self input { width: 110px; }
+.mock-invalid { color: #ffbec3; }
+.mock-word-count { color: #b4c1d3; font: 12px var(--font-mono); }
+.mock-print-space { display: none; }
+.mock-question :focus-visible, .mock-hero :focus-visible { outline: 3px solid #edc878; outline-offset: 3px; }
+@media (max-width: 640px) {
+ .mock-hero, .mock-question { padding: 16px; }
+ .mock-diagram svg { min-width: 680px; }
+ .mock-toolbar .btn { flex: 1 1 140px; }
+}
+@media print {
+ @page { margin: 16mm; }
+ html, body { background: white !important; color: black !important; font-size: 11pt; }
+ .page { max-width: none; margin: 0; padding: 0; }
+ .topnav, .mock-toolbar, .mock-jumps, .mock-score, #storage-status, .page-footer, .mock-self, .mock-word-count, .mock-result, .mock-question > .btn, .mock-instructions { display: none !important; }
+ .mock-hero, .mock-question { background: white !important; border: 0; box-shadow: none; padding: 0; border-radius: 0; }
+ .mock-hero { border-bottom: 2px solid black; padding-bottom: 12px; }
+ .mock-hero p, .mock-question *, .mock-marks { color: black; }
+ .mock-question { break-inside: auto; }
+ .mock-qhead, .mock-question h3, .mock-row label, .mock-part label { break-after: avoid; }
+ .mock-row, .mock-option, .mock-diagram { break-inside: avoid; }
+ .mock-option { background: white; border: 1px solid #aaa; padding: 6px; }
+ .mock-option input { display: none; }
+ .mock-option::before { content: '□'; }
+ .mock-row input, .mock-row select, .mock-part textarea { display: none; }
+ .mock-print-space { display: block; min-height: 25px; border-bottom: 1px solid #888; margin: 8px 0 18px; }
+ .mock-part .mock-print-space { min-height: 90px; }
+ .mock-diagram { overflow: visible; }
+ .mock-diagram svg { min-width: 0; width: 100%; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+ .mock-diagram svg text { fill: #f2f6ff; }
+ body:not(.print-memo) .mock-memo { display: none !important; }
+ .print-memo .mock-memo { display: block; border-top: 1px solid #888; }
+ .print-memo .mock-memo summary { color: black; }
+ .print-memo .mock-print-space { display: none; }
+ .print-memo .mock-memo li { break-inside: avoid; }
+ .mock-print-bank { display: block !important; font-size: 10pt; }
+}
+.mock-print-bank { display: none; }
+
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="topnav-inner"><a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a><div class="topnav-links"><a href="index.html">Home</a><a href="ct4-example-1.html">CT4 EXAMPLE 1</a>
+<a href="ct4-example-2.html">CT4 EXAMPLE 2</a>
+<a href="st2-example-1.html" class="active" aria-current="page">ST2 EXAMPLE 1</a>
+<a href="st2-example-2.html">ST2 EXAMPLE 2</a></div></div></nav>
+<main class="page mock-page">
+<header class="mock-hero">
+<p class="mock-kicker">Original practice assessment · COS301</p>
+<h1>ST2 Example 1</h1>
+<p id="paper-scope"></p>
+<p id="paper-meta"></p>
+<details class="mock-instructions"><summary>Instructions, marking and reference style</summary><div id="instructions"></div></details>
+<div class="mock-toolbar">
+<button type="button" class="btn" id="mark-all">Mark objective answers</button>
+<button type="button" class="btn" id="show-memos">Show marking guides</button>
+<button type="button" class="btn" id="hide-memos">Hide marking guides</button>
+<button type="button" class="btn" id="print-paper">Print blank paper</button>
+<button type="button" class="btn" id="print-memo">Print marking guide</button>
+<button type="button" class="btn" id="reset-paper">Reset this paper</button>
+</div>
+<p id="storage-status" role="status" class="mock-note"></p>
+<div class="mock-score" id="paper-score" role="status" aria-live="polite"></div>
+<nav class="mock-jumps" id="question-links" aria-label="Jump to question"></nav>
+</header>
+<div id="paper-questions"></div>
+<noscript><p>Enable JavaScript for this interactive paper. A readable paper and memorandum are also available in the <a href="markdown/st2-example-1.md">Markdown version</a>.</p></noscript>
+<footer class="page-footer"><a href="index.html">All study guides and papers</a><a href="assessment-style-review.md">How these examples follow CT3 and ST1</a></footer>
+</main>
+<script type="application/json" id="mock-data">{"id": "st2-example-1", "title": "ST2 Example 1", "scope": "L17\u2013L35, including SOA and Microservices", "reference": "ST1.html", "totalMarks": 60, "questions": [{"type": "essay", "marks": 10, "prompt": "Scenario: You are the architect for CampusCart, a university marketplace. Students buy equipment, staff resolve disputes, and an external provider processes payments. Orders may remain pending during a short worker outage. A student must not read another student\u2019s order. During a defined 30-minute peak test at 150 checkout requests/s, the team wants at most 500 ms p95 latency and less than 1% failed requests. Provide a clear, numbered answer addressing every subpart. Suggested maximum: 250 words.", "parts": [{"prompt": "1. Identify the quality concern addressed by the latency/error requirement, and name two measurement conditions that must be recorded. (3 marks)", "marks": 3, "answer": "Performance efficiency/capacity under a stated workload. Record the environment/configuration and representative request mix or dataset; duration and arrival model are also relevant. The existing 150 requests/s and 30-minute window are part of the acceptance context.", "rubric": ["1: relevant performance quality concern.", "1 each: two distinct measurement conditions relevant to interpreting the result."]}, {"prompt": "2. State one authentication rule and one object-authorisation rule for order access; explain why one does not replace the other. (4 marks)", "marks": 4, "answer": "Verify a caller\u2019s session or credentials before protected access. Then check whether that caller owns the requested order or has the applicable staff permission. Authentication establishes identity; the object rule limits that identity\u2019s actions and resource scope.", "rubric": ["1: verified identity rule.", "1: resource/role-scoped authorisation rule.", "2: explains the separate purpose of each with the scenario."]}, {"prompt": "3. Propose three verification activities, each linked to a different requirement in the scenario. (3 marks)", "marks": 3, "answer": "Run the defined peak workload and compare latency/errors; send direct order requests as owner and non-owner; interrupt a payment worker and verify pending orders later complete without duplicate payment effects.", "rubric": ["1 each: three relevant activities linked to performance, access scope and outage/retry behaviour."]}], "topics": ["L22", "L28", "L29", "L32"], "wordLimit": 250, "id": "q1", "number": 1}, {"type": "essay", "marks": 10, "prompt": "A library lends equipment kits. Each kit has a persistent asset number and can be loaned to only one borrower at a time. A borrower may have multiple historical loans. Each loan identifies exactly one kit and one borrower, and records checkout and due dates. A kit can contain several replaceable accessories; an accessory can exist in stock without belonging to a kit. Staff members inspect returned kits. Separate your answers with blank lines.", "parts": [{"prompt": "1. Identify six plausible domain classes. (3 marks)", "marks": 3, "answer": "Borrower, Kit, Loan, Accessory, StaffMember and Inspection are suitable. Other coherent business classes can receive credit when grounded in the scenario.", "rubric": ["0.5 each: six plausible domain concepts, not UI widgets or database infrastructure."]}, {"prompt": "2. For any four classes, give two suitable attributes each. (2 marks)", "marks": 2, "answer": "Kit: assetNumber, condition. Loan: checkoutDate, dueDate. Borrower: borrowerId, name. Inspection: inspectedAt, findings.", "rubric": ["0.5 per class with two suitable attributes, for four classes."]}, {"prompt": "3. Describe three associations and their business meaning. (3 marks)", "marks": 3, "answer": "A Borrower participates in Loans; a Loan records use of one Kit; an Inspection is performed by a StaffMember. A Kit\u2013Accessory association can also be described as a grouping of replaceable items, without claiming mandatory shared lifetime.", "rubric": ["1 each: three meaningful associations explained in the domain."]}, {"prompt": "4. State multiplicities for two associations and distinguish historical loans from the active-loan constraint. (2 marks)", "marks": 2, "answer": "Borrower 1 to Loan 0..*, with each loan belonging to exactly one borrower. Kit 1 to Loan 0..* over history, with an additional invariant of at most one active loan per kit.", "rubric": ["1: a correct first multiplicity in both directions.", "1: correct Kit\u2013Loan history multiplicity plus the separate active-loan constraint."]}], "topics": ["L18"], "id": "q2", "number": 2}, {"type": "matching", "marks": 4, "prompt": "Match each UI architecture role to its principal responsibility in the stated pattern.", "options": ["Exposes presentation state and commands for the View to bind to", "Coordinates presentation logic and explicitly updates the View", "Renders the response presentation from supplied data", "Receives input and coordinates the next action"], "items": [{"prompt": "MVC Controller", "answer": "Receives input and coordinates the next action", "explanation": "MVC Controller: Receives input and coordinates the next action."}, {"prompt": "MVVM ViewModel", "answer": "Exposes presentation state and commands for the View to bind to", "explanation": "MVVM ViewModel: Exposes presentation state and commands for the View to bind to."}, {"prompt": "MVP Presenter", "answer": "Coordinates presentation logic and explicitly updates the View", "explanation": "MVP Presenter: Coordinates presentation logic and explicitly updates the View."}, {"prompt": "Django-style MVT Template", "answer": "Renders the response presentation from supplied data", "explanation": "Django-style MVT Template: Renders the response presentation from supplied data."}], "topics": ["L18"], "id": "q3", "number": 3}, {"type": "essay", "marks": 6, "prompt": "For each scenario, choose the most suitable test type from load, stress, soak, or none of the above. In one sentence, justify the choice by naming the distinguishing property. Marks: one for the selection and one for the scenario-specific justification.", "parts": [{"prompt": "1. A portal is exercised for 30 minutes at its documented expected peak of 200 requests/s to check its latency and error targets. (2 marks)", "marks": 2, "answer": "Load testing: the demand represents a defined expected operating workload rather than an intentional push beyond capacity.", "rubric": ["1: load.", "1: expected/peak workload tied to acceptance targets."]}, {"prompt": "2. A service is run continuously at a stable, ordinary workload for 12 hours because memory use appears to accumulate slowly. (2 marks)", "marks": 2, "answer": "Soak testing: sustained operation is intended to expose time-dependent leakage or degradation.", "rubric": ["1: soak/endurance.", "1: duration and accumulation mechanism."]}, {"prompt": "3. The team sends another student\u2019s record ID using a valid student session to determine whether the server blocks unauthorised access. (2 marks)", "marks": 2, "answer": "None of the above: this is a targeted security/object-authorisation test, not a workload-shape test.", "rubric": ["1: none of the above.", "1: explains permission enforcement as the property under test."]}], "topics": ["L29", "L32"], "id": "q4", "number": 4}, {"type": "essay", "marks": 5, "prompt": "You are reviewing the CampusCart incident evidence below. Infer behaviour from the stated rates and delivery rules; do not assume the word \u201cqueue\u201d provides unlimited capacity or exactly-once business effects.", "parts": [{"prompt": "1. Identify two observations showing that API acceptance is decoupled from immediate payment completion. Cite the evidence for each. (2 marks)", "marks": 2, "answer": "The API continues accepting 50 orders/s while the worker has no completions. Responses identify payment as pending rather than confirmed. Together they show accepted work can wait for later processing.", "rubric": ["1: continued acceptance despite stopped completions, citing rates.", "1: pending response or durable queued work tied to later completion."]}, {"prompt": "2. Calculate the additional backlog after 120 seconds, then explain two controls needed to process the backlog without duplicate charges after restart. (3 marks)", "marks": 3, "answer": "Backlog increases by (50 \u2212 0) \u00d7 120 = 6,000 orders. Reuse a stable business-operation identity with provider/application idempotency or deduplication; record and reconcile uncertain outcomes so redelivery after lost acknowledgement does not repeat a charge.", "rubric": ["1: 6,000 orders with calculation.", "1: stable identity plus idempotency/deduplication.", "1: durable outcome/acknowledgement or reconciliation reasoning."]}], "topics": ["L28", "L34", "MS"], "diagram": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 390\" role=\"img\" aria-label=\"CampusCart production \u2014 evidence from a worker outage\"><title>CampusCart production \u2014 evidence from a worker outage<\/title><rect width=\"760\" height=\"390\" rx=\"12\" fill=\"#101923\"/><g font-family=\"system-ui,sans-serif\"><text x=\"24\" y=\"30\" fill=\"#e8ecf1\" font-size=\"17\">CampusCart production \u2014 evidence from a worker outage<\/text><rect x=\"24\" y=\"60\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"38\" y=\"86\" fill=\"#c4ddff\" font-size=\"15\">API / Zone A<\/text><text x=\"38\" y=\"111\" fill=\"#e8ecf1\" font-size=\"13\">Accepts orders into durable Queue Q<\/text><text x=\"38\" y=\"132\" fill=\"#e8ecf1\" font-size=\"13\">Responds: payment pending<\/text><text x=\"38\" y=\"153\" fill=\"#e8ecf1\" font-size=\"13\">Calls use a stable order operation ID<\/text><rect x=\"410\" y=\"60\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"424\" y=\"86\" fill=\"#c4ddff\" font-size=\"15\">Payment worker / Zone B<\/text><text x=\"424\" y=\"111\" fill=\"#e8ecf1\" font-size=\"13\">At-least-once delivery from Q<\/text><text x=\"424\" y=\"132\" fill=\"#e8ecf1\" font-size=\"13\">Calls external provider with that ID<\/text><text x=\"424\" y=\"153\" fill=\"#e8ecf1\" font-size=\"13\">Acknowledges after recording outcome<\/text><rect x=\"24\" y=\"205\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"38\" y=\"231\" fill=\"#c4ddff\" font-size=\"15\">Observation before outage<\/text><text x=\"38\" y=\"256\" fill=\"#e8ecf1\" font-size=\"13\">Queue depth: 0<\/text><text x=\"38\" y=\"277\" fill=\"#e8ecf1\" font-size=\"13\">API acceptance rate: 50 orders/s<\/text><text x=\"38\" y=\"298\" fill=\"#e8ecf1\" font-size=\"13\">Worker completion rate: 50 orders/s<\/text><rect x=\"410\" y=\"205\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"424\" y=\"231\" fill=\"#c4ddff\" font-size=\"15\">Observation during outage<\/text><text x=\"424\" y=\"256\" fill=\"#e8ecf1\" font-size=\"13\">Worker unavailable for 120 seconds<\/text><text x=\"424\" y=\"277\" fill=\"#e8ecf1\" font-size=\"13\">API still accepts 50 orders/s<\/text><text x=\"424\" y=\"298\" fill=\"#e8ecf1\" font-size=\"13\">No worker completions during outage<\/text><path d=\"M350 110 L410 110\" stroke=\"#a6cbff\" stroke-width=\"2\"/><circle cx=\"410\" cy=\"110\" r=\"3\" fill=\"#a6cbff\"/><text x=\"380.0\" y=\"102.0\" fill=\"#b9d4f8\" text-anchor=\"middle\" font-size=\"12\">via Q<\/text><text x=\"24\" y=\"344\" fill=\"#c9d3e1\" font-size=\"12\">Assume constant rates, no expiry, no other consumers and enough queue capacity for 120 seconds.<\/text><text x=\"24\" y=\"364\" fill=\"#c9d3e1\" font-size=\"12\">After restart, a lost acknowledgement may cause redelivery of an already processed order.<\/text><\/g><\/svg>", "id": "q5", "number": 5}, {"type": "matching", "marks": 4, "prompt": "Match each quality/delivery artifact to its purpose.", "options": ["Records decision context, alternatives and consequences", "Defines agreed operations, data and behaviour at an interface", "Checks agreed conditions on submitted changes before progression", "A named reusable design decision consumed by interface implementations"], "items": [{"prompt": "Design token", "answer": "A named reusable design decision consumed by interface implementations", "explanation": "Design token: A named reusable design decision consumed by interface implementations."}, {"prompt": "Architectural decision record", "answer": "Records decision context, alternatives and consequences", "explanation": "Architectural decision record: Records decision context, alternatives and consequences."}, {"prompt": "API service contract", "answer": "Defines agreed operations, data and behaviour at an interface", "explanation": "API service contract: Defines agreed operations, data and behaviour at an interface."}, {"prompt": "CI quality gate", "answer": "Checks agreed conditions on submitted changes before progression", "explanation": "CI quality gate: Checks agreed conditions on submitted changes before progression."}], "topics": ["L17", "L21", "L22", "L25"], "id": "q6", "number": 6}, {"type": "multi", "marks": 5, "prompt": "Which statements are defensible engineering claims? Select all that apply. Negative marking applies using the explicit practice rule on this paper.", "options": ["A shared contract can enable frontend development with mocks while the provider is implemented.", "Matching a response schema proves that the returned data belongs to the authorised user.", "A design system can carry reusable design decisions into code.", "A context-free code-coverage percentage proves tests contain meaningful assertions.", "A deployment diagram should identify the environment and relevant failure domains.", "A technical presentation should distinguish tested conditions from planned functionality.", "A no-code workflow still needs ownership, permission checks and failure testing.", "An automated vulnerability scan is equivalent to an authorised red-team exercise that also evaluates detection and response.", "Source formatting alone establishes runtime availability."], "correct": [0, 2, 4, 5, 6], "explanation": "Contracts, implemented design decisions, explicit topology, honest presentation scope and maintained workflows supply bounded evidence. Schemas do not prove permissions, coverage does not prove meaningful assertions, and automated scanning does not reproduce the scope of an authorised adversary exercise.", "topics": ["L17", "L19", "L25", "L28", "L30", "L33", "L24", "L31"], "id": "q7", "number": 7}, {"type": "short", "marks": 2, "prompt": "For each scenario below, write only the most specific testing term. Base the answer on the purpose explicitly stated.", "items": [{"prompt": "1. After modifying the cache, the team reruns existing response-time tests to detect a loss of previously achieved performance.", "answers": ["non-functional regression testing", "performance regression testing", "regression testing", "regression"], "explanation": "The purpose is checking for an unintended quality regression after change."}, {"prompt": "2. The database is populated with ten times as many records, while arrival rate stays fixed, to assess the effect of data size.", "answers": ["volume testing", "volume"], "explanation": "The changed dimension is dataset size rather than arrival-rate overload."}], "topics": ["L30", "L32"], "id": "q8", "number": 8}, {"type": "matching", "marks": 5, "prompt": "Match each term in Column A with the most precise description in Column B.", "options": ["Observed incorrect or unexpected runtime behaviour", "Target maximum acceptable data-loss interval", "Target maximum acceptable service-restoration time", "Only the permissions needed for the relevant task", "A static defect that can cause incorrect runtime behaviour"], "items": [{"prompt": "Fault", "answer": "A static defect that can cause incorrect runtime behaviour", "explanation": "Fault: A static defect that can cause incorrect runtime behaviour."}, {"prompt": "Failure", "answer": "Observed incorrect or unexpected runtime behaviour", "explanation": "Failure: Observed incorrect or unexpected runtime behaviour."}, {"prompt": "RPO", "answer": "Target maximum acceptable data-loss interval", "explanation": "RPO: Target maximum acceptable data-loss interval."}, {"prompt": "RTO", "answer": "Target maximum acceptable service-restoration time", "explanation": "RTO: Target maximum acceptable service-restoration time."}, {"prompt": "Least privilege", "answer": "Only the permissions needed for the relevant task", "explanation": "Least privilege: Only the permissions needed for the relevant task."}], "topics": ["L28", "L29", "L30"], "id": "q9", "number": 9}, {"type": "multi", "marks": 4, "prompt": "A field gateway records events while disconnected. Its durable buffer is bounded, retry uses stable event IDs, and the server deduplicates received events. The gateway may use an approved cached policy for a limited period. Select all statements that are TRUE about what can happen, and why. Negative marking applies.", "options": ["A lost acknowledgement can cause an already accepted event to be resent.", "A stable event ID supports recognising duplicate delivery.", "The existence of a buffer guarantees survival through every outage duration.", "A newly revoked central permission is necessarily known to the disconnected gateway immediately.", "The design needs an explicit rule for full-buffer behaviour.", "Keeping computation local automatically proves every privacy property.", "Cached authority needs an explicit staleness rule and reconciliation where appropriate.", "A timestamp alone eliminates every ordering and conflict problem."], "correct": [0, 1, 4, 6], "explanation": "Uncertain acknowledgement, finite storage and stale local knowledge are normal distributed-system concerns. IDs, overflow policies and defined offline authority address different aspects. Locality and timestamps do not establish universal privacy or consistency.", "topics": ["L28", "L34"], "id": "q10", "number": 10}, {"type": "essay", "marks": 5, "prompt": "A four-person team is building a departmental booking application with moderate, predictable traffic. It has several related capabilities, one release cadence, and no requirement to deploy or scale those capabilities independently. The team needs clear boundaries and maintainable code but has little capacity for distributed operations.", "parts": [{"prompt": "1. Recommend the most suitable architectural starting point and state its defining property. (2 marks)", "marks": 2, "answer": "A modular monolith: one deployable application with intentionally separated internal modules and interfaces.", "rubric": ["1: modular monolith or equivalently justified single-deployment modular design.", "1: clear internal boundaries within one deployment."]}, {"prompt": "2. Give three reasons tied to this scenario. (3 marks)", "marks": 3, "answer": "It fits the shared release cadence; avoids unnecessary network/partial-failure and operational overhead for a small team; preserves internal separation and testability without requiring independent deployments.", "rubric": ["1 each: three distinct scenario-linked reasons. Accept defensible alternatives only when their additional costs are addressed."]}], "topics": ["L18", "L22", "L23", "SOA", "MS"], "id": "q11", "number": 11}], "storageKey": "cos301-st2-example-1-v1", "notes": "Original practice paper based on the reference assessment style. Not an official paper or prediction. No official duration was available in the supplied export.", "multiRule": "Each correct selection earns the question marks divided by the number of correct options. Each incorrect selection deducts the same amount. Omitted options earn zero. Each question is floored at zero. This explicit practice rule is not asserted to be the original marking formula."}</script>
+<script>
+(function () {
+ 'use strict';
+ const paper = JSON.parse(document.getElementById('mock-data').textContent);
+ const node = (tag, cls, text) => {const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
+ const normal = s => String(s ?? '').trim().toLowerCase().replace(/\s+/g,' ').replace(/\.$/,'');
+ const fmt = n => Number(n.toFixed(2)).toString();
+ let state = {};
+ try {const saved=JSON.parse(localStorage.getItem(paper.storageKey));if(saved && typeof saved==='object'&&!Array.isArray(saved))state=saved;}catch{}
+ const status=document.getElementById('storage-status');
+ const markViews=new Map();const memoElements=[];const wordViews=[];
+ function save(){try{localStorage.setItem(paper.storageKey,JSON.stringify(state));status.textContent='Drafts, selections and self-assessment save locally for this paper.';}catch{status.textContent='Browser storage is unavailable. You can still practise, but this session’s work may not survive a reload.';}}
+ function current(q){
+  if(!state[q.id]||typeof state[q.id]!=='object'||Array.isArray(state[q.id]))state[q.id]={};
+  const s=state[q.id];
+  for(const key of ['answers','drafts','selfMarks'])if(!Array.isArray(s[key]))s[key]=[];
+  if(q.options&&['single','multi'].includes(q.type)){
+   s.answers=[...new Set(s.answers.filter(x=>Number.isInteger(x)&&x>=0&&x<q.options.length))];
+   if(q.type==='single')s.answers=s.answers.slice(0,1);
+  }
+  return s;
+ }
+ function score(q){
+  const s=current(q);
+  if(q.type==='single')return s.answers.length===1&&s.answers[0]===q.correct[0]?q.marks:0;
+  if(q.type==='multi'){
+   const hits=s.answers.filter(i=>q.correct.includes(i)).length;
+   return Math.max(0,(hits-(s.answers.length-hits))*q.marks/q.correct.length);
+  }
+  return q.items.reduce((sum,item,i)=>sum+(q.type==='matching'?s.answers[i]===item.answer:item.answers.some(a=>normal(a)===normal(s.answers[i]))) * q.marks/q.items.length,0);
+ }
+ function updateScore(){
+  const objective=paper.questions.filter(q=>q.type!=='essay'),written=paper.questions.filter(q=>q.type==='essay');
+  const objectiveMax=objective.reduce((s,q)=>s+q.marks,0);const writtenMax=written.reduce((s,q)=>s+q.marks,0);
+  const graded=objective.filter(q=>current(q).marked===true);const obj=graded.reduce((s,q)=>s+score(q),0);
+  let self=0, assessed=0,partCount=0;
+  written.forEach(q=>q.parts.forEach((p,i)=>{partCount++;const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=p.marks&&Number.isInteger(value*2)){self+=value;assessed++;}}));
+  const target=document.getElementById('paper-score');target.replaceChildren(node('div','',`Objective: ${fmt(obj)} / ${fmt(objectiveMax)} marks · ${graded.length} / ${objective.length} questions marked`));
+  if(written.length){target.append(node('div','',`Written answers (self-assessed): ${fmt(self)} / ${fmt(writtenMax)} marks · ${assessed} / ${partCount} parts assessed`),node('strong','',`Combined practice total: ${fmt(obj+self)} / ${paper.totalMarks}`),node('div','mock-note','Unmarked work contributes zero to this running total. Written-answer marks are your assessment, not an automated judgement.'));}
+ }
+ function mark(q){current(q).marked=true;save();markViews.get(q.id)?.();updateScore();}
+ function change(q){current(q).marked=false;save();markViews.get(q.id)?.();updateScore();}
+ function addText(parent,text){parent.append(node('p','',text));}
+ function addMemo(card,q){
+  const memo=node('details','mock-memo');memo.append(node('summary','','Model answer and marking guide'));
+  if(q.type==='essay')q.parts.forEach((part,i)=>{
+   memo.append(node('h3','',`Part ${i+1} · ${part.marks} marks`));addText(memo,part.answer);
+   const list=node('ul');part.rubric.forEach(text=>list.append(node('li','',text)));memo.append(list);
+   const self=node('div','mock-self');const label=node('label','',`Your self-assessed mark for part ${i+1} (0–${part.marks})`);const input=node('input');Object.assign(input,{type:'number',min:'0',max:String(part.marks),step:'0.5',id:`${q.id}-mark-${i}`});label.htmlFor=input.id;
+   const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=part.marks&&Number.isInteger(value*2))input.value=String(value);
+   const msg=node('p','mock-note');msg.setAttribute('role','status');
+   input.addEventListener('input',()=>{const valid=input.value!==''&&input.validity.valid&&Number.isFinite(input.valueAsNumber);current(q).selfMarks[i]=valid?input.valueAsNumber:null;input.setAttribute('aria-invalid',String(input.value!==''&&!valid));msg.textContent=input.value!==''&&!valid?`Enter 0 to ${part.marks} in half-mark steps. Invalid marks are not counted.`:'';save();updateScore();});
+   self.append(label,input,msg);memo.append(self);
+  });
+  else if(q.type==='single'||q.type==='multi'){
+   addText(memo,`Correct option${q.correct.length>1?'s':''}: ${q.correct.map(i=>String.fromCharCode(65+i)).join(', ')}.`);q.correct.forEach(i=>addText(memo,`${String.fromCharCode(65+i)}. ${q.options[i]}`));addText(memo,q.explanation);
+   if(q.type==='multi')addText(memo,`Scoring: +${fmt(q.marks/q.correct.length)} per correct selection, −${fmt(q.marks/q.correct.length)} per incorrect selection; minimum 0, maximum ${q.marks}.`);
+  }else q.items.forEach((item,i)=>{memo.append(node('h3','',`${i+1}. ${q.type==='matching'?item.answer:item.answers.join(' / ')} · ${fmt(q.marks/q.items.length)} marks`));addText(memo,item.explanation);});
+  card.append(memo);memoElements.push(memo);
+ }
+ function renderQuestion(q){
+  const s=current(q),card=node('section','mock-question');card.id=q.id;
+  const head=node('div','mock-qhead');head.append(node('h2','',`Question ${q.number}`),node('span','mock-marks',`${fmt(q.marks)} mark${q.marks===1?'':'s'}`));card.append(head);
+  const names={single:q.options?.length===2?'True / False':'Single answer',multi:'Select all that apply · negative marking',matching:'Matching',cloze:'Sentence completion',short:'Short answer / letter',essay:'Structured written response'};
+  card.append(node('p','mock-type',names[q.type]),node('p','mock-prompt',q.prompt));
+  if(q.diagram){const figure=node('div','mock-diagram');figure.innerHTML=q.diagram;card.append(figure);addText(card,'Diagram is part of the question. On a narrow screen, scroll it horizontally to read all labels.');}
+  if(['single','multi'].includes(q.type)){
+   const fieldset=node('fieldset');fieldset.append(node('legend','',q.type==='multi'?'Select all correct options':'Select one option'));
+   q.options.forEach((text,i)=>{const label=node('label','mock-option');const input=node('input');input.type=q.type==='single'?'radio':'checkbox';input.name=q.id;input.checked=s.answers.includes(i);input.addEventListener('change',()=>{s.answers=q.type==='single'?[i]:input.checked?[...new Set([...s.answers,i])]:s.answers.filter(x=>x!==i);change(q);});label.append(input,node('span','',`${String.fromCharCode(65+i)}. ${text}`));fieldset.append(label);});card.append(fieldset);
+  }else if(q.type==='essay'){
+   q.parts.forEach((part,i)=>{const block=node('div','mock-part'),label=node('label','',part.prompt),textarea=node('textarea');textarea.id=`${q.id}-draft-${i}`;label.htmlFor=textarea.id;textarea.value=typeof s.drafts[i]==='string'?s.drafts[i]:'';textarea.addEventListener('input',()=>{s.drafts[i]=textarea.value;save();wordViews.forEach(fn=>fn());});block.append(label,textarea,node('div','mock-print-space'));card.append(block);});
+   const word=node('p','mock-word-count');const update=()=>{const count=s.drafts.join(' ').trim().split(/\s+/).filter(Boolean).length;word.textContent=`${count} words${q.wordLimit?` · suggested maximum ${q.wordLimit}; no automatic penalty`:''}`;word.classList.toggle('mock-invalid',Boolean(q.wordLimit&&count>q.wordLimit));};wordViews.push(update);update();card.append(word);
+  }else{
+   if(q.type==='matching'){
+    addText(card,'Choose the most precise match for each prompt. Each answer is intended to be used once; each row is marked independently.');
+    card.append(node('p','mock-print-bank',`Answer bank: ${q.options.map((x,i)=>`${String.fromCharCode(65+i)}. ${x}`).join(' · ')}`));
+   }
+   q.items.forEach((item,i)=>{const row=node('div','mock-row'),label=node('label','',item.prompt);let input;
+    if(q.type==='matching'){input=node('select');const blank=node('option','','Choose an answer');blank.value='';input.append(blank);q.options.forEach(text=>{const option=node('option','',text);option.value=text;input.append(option);});}
+    else {input=node('input');input.type='text';input.autocomplete='off';}
+    input.id=`${q.id}-answer-${i}`;label.htmlFor=input.id;input.value=typeof s.answers[i]==='string'?s.answers[i]:'';input.addEventListener(q.type==='matching'?'change':'input',()=>{s.answers[i]=input.value;change(q);});row.append(label,input,node('div','mock-print-space'));card.append(row);
+   });
+  }
+  if(q.type!=='essay'){
+   const check=node('button','btn','Mark this question');check.type='button';check.addEventListener('click',()=>mark(q));const feedback=node('div','mock-result');feedback.setAttribute('role','status');
+   const update=()=>{feedback.hidden=s.marked!==true;feedback.textContent=s.marked===true?`${fmt(score(q))} / ${fmt(q.marks)} marks. Open the marking guide for the answer and reasoning. Changing a response clears this marking result.`:'';};markViews.set(q.id,update);update();card.append(check,feedback);
+  }
+  addMemo(card,q);document.getElementById('paper-questions').append(card);
+  const jump=node('a','',`Q${q.number} · ${fmt(q.marks)}`);jump.href='#'+q.id;document.getElementById('question-links').append(jump);
+ }
+ document.getElementById('paper-scope').textContent=`Scope: ${paper.scope}`;
+ document.getElementById('paper-meta').textContent=`${paper.questions.length} questions · ${paper.totalMarks} marks · attempt all questions. ${paper.notes}`;
+ const instructions=document.getElementById('instructions');
+ addText(instructions,`Style reference: ${paper.reference}. The questions and diagrams in this paper are newly authored. Saved responses in the reference export were not treated as an authoritative memorandum.`);
+ addText(instructions,paper.multiRule);
+ addText(instructions,'Matching rows and short-answer subparts share their question’s marks equally. Short answers ignore case, extra spaces and a final full stop; accepted alternatives are shown in the marking guide. Equivalent written reasoning may earn credit under the rubric. Use the rubric to review a defensible alternative the exact-match marker does not recognise.');
+ addText(instructions,'Written responses are not automatically graded. Enter optional self-assessed marks after consulting the model answer. Any word maximum is practice guidance, not an automatically applied penalty. Blank printing omits your saved answers and all marking guides. Marking-guide printing includes the paper and model answers, without your private drafts.');
+ addText(instructions,'Some topic guides are general coverage because lecture notes were unavailable. CT4 is limited to L28–L35; its revision items use L28–L34. ST2 samples L17–L35, including existing SOA and Microservices material.');
+ paper.questions.forEach(renderQuestion);updateScore();status.textContent='Drafts, selections and self-assessment save locally for this paper.';
+ document.getElementById('mark-all').addEventListener('click',()=>{paper.questions.filter(q=>q.type!=='essay').forEach(q=>{current(q).marked=true;markViews.get(q.id)();});save();updateScore();});
+ document.getElementById('show-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=true));
+ document.getElementById('hide-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=false));
+ document.getElementById('reset-paper').addEventListener('click',()=>{if(window.confirm('Clear only this paper’s answers, drafts and self-assessed marks?')){state={};save();location.reload();}});
+ let printState=null;
+ function restorePrint(){if(!printState)return;memoElements.forEach((m,i)=>m.open=printState[i]);document.body.classList.remove('print-memo');printState=null;}
+ function printPaper(withMemo){printState=memoElements.map(m=>m.open);document.body.classList.toggle('print-memo',withMemo);memoElements.forEach(m=>m.open=withMemo);window.print();}
+ addEventListener('afterprint',restorePrint);
+ document.getElementById('print-paper').addEventListener('click',()=>printPaper(false));
+ document.getElementById('print-memo').addEventListener('click',()=>printPaper(true));
+})();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CT4 Example 2 · COS301 Mock Paper</title>
+<style>
+/* ============================================================
+   CT3 Study Guides — shared dark academic theme
+   Identical across every lecture file. Edit here, regenerate all.
+   ============================================================ */
+
+:root {
+  --bg: #0b0e11;
+  --surface: #12161b;
+  --card: #1a1f26;
+  --card-border: #262d37;
+  --text: #e8ecf1;
+  --text-dim: #9aa4b2;
+  --text-faint: #626d7a;
+  --accent: #4a90f8;
+  --accent-dim: #2c5aa8;
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --warning: #f59e0b;
+  --error: #f56363;
+  --error-bg: rgba(245, 99, 99, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Nav ---------- */
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 14, 17, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.topnav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.topnav-brand {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topnav-brand span { color: var(--accent); }
+
+.topnav-links {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+}
+
+.topnav-links::-webkit-scrollbar { height: 4px; }
+.topnav-links::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 2px; }
+
+.topnav-links a {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--easing), color var(--duration-fast) var(--easing);
+}
+
+.topnav-links a:hover { background: var(--card); color: var(--text); }
+.topnav-links a.active { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Layout ---------- */
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) 120px;
+}
+
+.hero {
+  margin-bottom: var(--space-8);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.hero h1 {
+  font-size: 30px;
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.hero p {
+  color: var(--text-dim);
+  font-size: 16px;
+  margin: 0;
+}
+
+.section-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 53px;
+  background: var(--bg);
+  z-index: 50;
+  padding-top: var(--space-2);
+}
+
+.section-tab {
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--duration-fast) var(--easing);
+}
+
+.section-tab:hover { color: var(--text); }
+.section-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.section-panel { display: none; }
+.section-panel.active { display: block; animation: fadein var(--duration-normal) var(--easing); }
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Content (rendered markdown) ---------- */
+
+.content h2 {
+  font-size: 22px;
+  margin: var(--space-8) 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--card-border);
+  letter-spacing: -0.005em;
+}
+.content h2:first-child { margin-top: 0; }
+
+.content h3 {
+  font-size: 17px;
+  color: var(--accent);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.content p { color: var(--text); margin: 0 0 var(--space-4); }
+.content strong { color: #fff; font-weight: 600; }
+.content ul, .content ol { margin: 0 0 var(--space-4); padding-left: 22px; color: var(--text); }
+.content li { margin-bottom: var(--space-1); }
+.content li strong { color: var(--text); }
+
+.content code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.content pre {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin: 0 0 var(--space-4);
+}
+
+.content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #d8dee9;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-4);
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+}
+
+.content th, .content td {
+  border: 1px solid var(--card-border);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.content th {
+  background: var(--card);
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.content tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+.content hr {
+  border: none;
+  border-top: 1px solid var(--card-border);
+  margin: var(--space-8) 0;
+}
+
+.content blockquote {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--warning);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+.content blockquote p:last-child { margin-bottom: 0; }
+.content blockquote strong { color: var(--text); }
+
+/* ---------- Diagrams ---------- */
+
+.diagram {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  text-align: center;
+}
+.diagram svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.diagram-caption {
+  margin-top: var(--space-3);
+  font-size: 12.5px;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* ---------- TL;DR box ---------- */
+
+.tldr-box {
+  background: linear-gradient(135deg, rgba(74,144,248,0.10), rgba(74,144,248,0.03));
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+.tldr-box-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.tldr-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: var(--accent);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.tldr-box-header span.label { font-size: 13px; color: var(--text-dim); font-weight: 600; }
+.tldr-box ul { margin: 0; padding-left: 20px; }
+.tldr-box li { margin-bottom: 6px; color: var(--text); font-size: 14.5px; }
+.tldr-box li:last-child { margin-bottom: 0; }
+.tldr-box li strong { color: #fff; }
+.tldr-box code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+/* ---------- Flashcards ---------- */
+
+.flash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.flash-card {
+  perspective: 1200px;
+  height: 160px;
+  cursor: pointer;
+}
+
+.flash-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 400ms;
+  transform-style: preserve-3d;
+}
+.flash-card.flipped .flash-card-inner { transform: rotateY(180deg); }
+
+.flash-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.flash-front {
+  background: var(--surface);
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+.flash-front .flash-term { font-size: 16px; font-weight: 700; color: var(--text); }
+.flash-front .flash-hint { margin-top: auto; font-size: 11px; color: var(--text-faint); }
+.flash-back {
+  background: var(--card);
+  border-color: var(--accent-dim);
+  transform: rotateY(180deg);
+  justify-content: center;
+}
+.flash-back .flash-def { font-size: 13.5px; color: var(--text-dim); line-height: 1.5; }
+.flash-back .flash-def code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.flash-card.known .flash-front { border-color: var(--success); }
+.flash-card.known .flash-front::after {
+  content: "✓ known";
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 11px;
+  color: var(--success);
+  font-family: var(--font-mono);
+}
+
+.flash-know-btn {
+  margin-top: var(--space-2);
+  align-self: flex-start;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+/* ---------- Quiz (MCQ) ---------- */
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.quiz-score {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.quiz-score b { color: var(--text); }
+
+.progress-bar {
+  height: 6px;
+  background: var(--card);
+  border-radius: 999px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 120px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width var(--duration-normal) var(--easing);
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing);
+}
+.btn:hover { background: #232a33; border-color: #38414d; }
+.btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-accent:hover { background: #3a7de0; }
+
+.mcq-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.mcq-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.mcq-q .mcq-index {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  flex: none;
+}
+
+.mcq-options { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.mcq-option {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing);
+}
+
+.mcq-option:hover:not(:disabled) { border-color: var(--accent); }
+.mcq-option:disabled { cursor: default; }
+
+.mcq-option.correct { background: var(--success-bg); border-color: var(--success); color: #baf7cf; }
+.mcq-option.incorrect { background: var(--error-bg); border-color: var(--error); color: #ffc9c9; }
+.mcq-option.reveal-correct { border-color: var(--success); color: #baf7cf; }
+
+.mcq-explanation {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  display: none;
+}
+.mcq-explanation.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.mcq-explanation b { color: var(--text); }
+
+/* ---------- Tech questions ---------- */
+
+.tech-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.tech-q-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.tech-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  gap: var(--space-2);
+}
+.tech-q .mcq-index { color: var(--accent); font-family: var(--font-mono); flex: none; }
+
+.tech-reviewed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+  flex: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.tech-reviewed-label input { accent-color: var(--accent); }
+
+.tech-answer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--card-border);
+  display: none;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.tech-answer.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.tech-answer p { margin: 0 0 var(--space-3); color: var(--text-dim); }
+.tech-answer ul { margin: 0 0 var(--space-3); padding-left: 20px; }
+.tech-answer strong { color: var(--text); }
+.tech-answer code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.reveal-btn {
+  margin-top: var(--space-4);
+}
+
+/* ---------- Footer ---------- */
+
+.page-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.page-footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.page-footer a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .page { padding: var(--space-6) var(--space-4) 100px; }
+  .hero h1 { font-size: 24px; }
+  .section-tabs { top: 49px; flex-wrap: wrap; }
+  .section-tab { flex: 1 1 calc(50% - var(--space-2)); }
+}
+
+.mock-page { max-width: 1000px; }
+.mock-hero { border: 1px solid #35547c; border-radius: 14px; padding: 24px; background: linear-gradient(145deg, #142132, #12161b); }
+.mock-kicker { color: #a4caff; font: 12px var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
+.mock-hero h1 { margin: 12px 0; font-size: clamp(28px, 5vw, 42px); }
+.mock-hero p { color: #c1cedf; }
+.mock-toolbar, .mock-jumps { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.mock-jumps a { padding: 6px 10px; border-radius: 7px; background: #182b42; color: #cce0ff; text-decoration: none; font-size: 13px; }
+.mock-score { padding: 16px; background: #0e1826; border-radius: 10px; display: grid; gap: 8px; }
+.mock-instructions summary, .mock-memo summary { cursor: pointer; padding: 10px 0; color: #b8d5ff; font-weight: 600; }
+.mock-instructions a { color: #b8d5ff; }
+.mock-note { font-size: 13px; color: #b4c1d3; }
+.mock-question { margin: 24px 0; padding: 24px; background: #121a25; border: 1px solid #33465f; border-radius: 12px; scroll-margin-top: 80px; overflow-wrap: anywhere; }
+.mock-qhead { display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap; align-items: baseline; }
+.mock-qhead h2 { margin: 0; font-size: 22px; }
+.mock-marks { color: #acd0ff; font: 13px var(--font-mono); }
+.mock-type { color: #b4c1d3; font-size: 13px; }
+.mock-prompt { white-space: pre-line; }
+.mock-diagram { margin: 20px 0; overflow-x: auto; border: 1px solid #52657e; border-radius: 10px; }
+.mock-diagram svg { display: block; width: 100%; min-width: 680px; height: auto; }
+.mock-question fieldset { border: 0; padding: 0; margin: 18px 0; min-width: 0; }
+.mock-question legend { font-weight: 600; margin-bottom: 12px; }
+.mock-option { display: flex; gap: 12px; align-items: flex-start; padding: 12px; margin-bottom: 8px; background: #192535; border: 1px solid #415b7c; border-radius: 8px; cursor: pointer; }
+.mock-option input { margin-top: 5px; flex: none; accent-color: #75afff; }
+.mock-row, .mock-part { margin: 20px 0; }
+.mock-row label, .mock-part label { display: block; margin-bottom: 10px; font-weight: 500; }
+.mock-row select, .mock-row input, .mock-part textarea, .mock-self input { font: inherit; color: #e8ecf1; background: #0b1421; border: 1px solid #526c8f; border-radius: 7px; padding: 10px; max-width: 100%; }
+.mock-row select, .mock-row input { width: 100%; }
+.mock-part textarea { display: block; width: 100%; min-height: 140px; resize: vertical; line-height: 1.6; }
+.mock-result { margin: 16px 0; padding: 14px; background: #142942; border-left: 3px solid #83b5ff; border-radius: 7px; }
+.mock-memo { border-top: 1px solid #33465f; margin-top: 18px; padding-top: 8px; }
+.mock-memo h3 { font-size: 17px; }
+.mock-memo li { margin-bottom: 6px; }
+.mock-self { margin: 12px 0; padding: 14px; border: 1px dashed #5e7ca2; border-radius: 7px; }
+.mock-self label { display: block; margin-bottom: 8px; }
+.mock-self input { width: 110px; }
+.mock-invalid { color: #ffbec3; }
+.mock-word-count { color: #b4c1d3; font: 12px var(--font-mono); }
+.mock-print-space { display: none; }
+.mock-question :focus-visible, .mock-hero :focus-visible { outline: 3px solid #edc878; outline-offset: 3px; }
+@media (max-width: 640px) {
+ .mock-hero, .mock-question { padding: 16px; }
+ .mock-diagram svg { min-width: 680px; }
+ .mock-toolbar .btn { flex: 1 1 140px; }
+}
+@media print {
+ @page { margin: 16mm; }
+ html, body { background: white !important; color: black !important; font-size: 11pt; }
+ .page { max-width: none; margin: 0; padding: 0; }
+ .topnav, .mock-toolbar, .mock-jumps, .mock-score, #storage-status, .page-footer, .mock-self, .mock-word-count, .mock-result, .mock-question > .btn, .mock-instructions { display: none !important; }
+ .mock-hero, .mock-question { background: white !important; border: 0; box-shadow: none; padding: 0; border-radius: 0; }
+ .mock-hero { border-bottom: 2px solid black; padding-bottom: 12px; }
+ .mock-hero p, .mock-question *, .mock-marks { color: black; }
+ .mock-question { break-inside: auto; }
+ .mock-qhead, .mock-question h3, .mock-row label, .mock-part label { break-after: avoid; }
+ .mock-row, .mock-option, .mock-diagram { break-inside: avoid; }
+ .mock-option { background: white; border: 1px solid #aaa; padding: 6px; }
+ .mock-option input { display: none; }
+ .mock-option::before { content: '□'; }
+ .mock-row input, .mock-row select, .mock-part textarea { display: none; }
+ .mock-print-space { display: block; min-height: 25px; border-bottom: 1px solid #888; margin: 8px 0 18px; }
+ .mock-part .mock-print-space { min-height: 90px; }
+ .mock-diagram { overflow: visible; }
+ .mock-diagram svg { min-width: 0; width: 100%; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+ .mock-diagram svg text { fill: #f2f6ff; }
+ body:not(.print-memo) .mock-memo { display: none !important; }
+ .print-memo .mock-memo { display: block; border-top: 1px solid #888; }
+ .print-memo .mock-memo summary { color: black; }
+ .print-memo .mock-print-space { display: none; }
+ .print-memo .mock-memo li { break-inside: avoid; }
+ .mock-print-bank { display: block !important; font-size: 10pt; }
+}
+.mock-print-bank { display: none; }
+
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="topnav-inner"><a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a><div class="topnav-links"><a href="index.html">Home</a><a href="ct4-example-1.html">CT4 EXAMPLE 1</a>
+<a href="ct4-example-2.html" class="active" aria-current="page">CT4 EXAMPLE 2</a>
+<a href="st2-example-1.html">ST2 EXAMPLE 1</a>
+<a href="st2-example-2.html">ST2 EXAMPLE 2</a></div></div></nav>
+<main class="page mock-page">
+<header class="mock-hero">
+<p class="mock-kicker">Original practice assessment · COS301</p>
+<h1>CT4 Example 2</h1>
+<p id="paper-scope"></p>
+<p id="paper-meta"></p>
+<details class="mock-instructions"><summary>Instructions, marking and reference style</summary><div id="instructions"></div></details>
+<div class="mock-toolbar">
+<button type="button" class="btn" id="mark-all">Mark objective answers</button>
+<button type="button" class="btn" id="show-memos">Show marking guides</button>
+<button type="button" class="btn" id="hide-memos">Hide marking guides</button>
+<button type="button" class="btn" id="print-paper">Print blank paper</button>
+<button type="button" class="btn" id="print-memo">Print marking guide</button>
+<button type="button" class="btn" id="reset-paper">Reset this paper</button>
+</div>
+<p id="storage-status" role="status" class="mock-note"></p>
+<div class="mock-score" id="paper-score" role="status" aria-live="polite"></div>
+<nav class="mock-jumps" id="question-links" aria-label="Jump to question"></nav>
+</header>
+<div id="paper-questions"></div>
+<noscript><p>Enable JavaScript for this interactive paper. A readable paper and memorandum are also available in the <a href="markdown/ct4-example-2.md">Markdown version</a>.</p></noscript>
+<footer class="page-footer"><a href="index.html">All study guides and papers</a><a href="assessment-style-review.md">How these examples follow CT3 and ST1</a></footer>
+</main>
+<script type="application/json" id="mock-data">{"id": "ct4-example-2", "title": "CT4 Example 2", "scope": "L28\u2013L35 (L35 revises L28\u2013L34 only)", "reference": "CT3.html", "totalMarks": 30, "questions": [{"type": "single", "marks": 0.5, "prompt": "A Kubernetes namespace alone guarantees network isolation and a separate host kernel.", "options": ["True", "False"], "correct": [1], "explanation": "A namespace is not, by itself, either of those isolation boundaries.", "topics": ["L28"], "id": "q1", "number": 1}, {"type": "single", "marks": 0.5, "prompt": "Client-side validation can replace server-side validation because all users must use the supplied interface.", "options": ["True", "False"], "correct": [1], "explanation": "Requests can bypass the client; the server must enforce its own constraints.", "topics": ["L29"], "id": "q2", "number": 2}, {"type": "short", "marks": 6, "prompt": "Analyse the FieldSense diagram. For each question, write only the letter of the best answer. Use decimal MB and the assumptions shown.", "items": [{"prompt": "1. What storage estimate follows for a 60-minute outage, including 25% overhead? A: 36 MB. B: 45 MB. C: 64 MB. D: 450 MB.", "answers": ["B"], "explanation": "Raw payload is 50 \u00d7 200 \u00d7 3,600 = 36,000,000 bytes; multiplying by 1.25 gives 45 MB."}, {"prompt": "2. The cloud accepts an event but its acknowledgement is lost. What should a retry do? A: Generate a new event ID. B: Treat the previous attempt as definitely unsuccessful. C: Reuse the event ID so the receiver can deduplicate. D: Bypass authentication.", "answers": ["C"], "explanation": "An uncertain acknowledgement does not prove that the side effect failed. Stable identity supports deduplication."}, {"prompt": "3. The outage lasts longer than predicted and storage becomes full. Which assessment is correct? A: Store-and-forward guarantees infinite storage. B: Cloud elasticity automatically expands an offline device. C: Clock synchronisation removes the need for buffering. D: The design needs explicit backpressure or a justified overflow policy.", "answers": ["D"], "explanation": "The local buffer is finite. Its full condition needs defined behaviour, even if the original capacity calculation was correct."}], "topics": ["L34"], "diagram": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 390\" role=\"img\" aria-label=\"FieldSense / field site and cloud \u2014 event delivery\"><title>FieldSense / field site and cloud \u2014 event delivery<\/title><rect width=\"760\" height=\"390\" rx=\"12\" fill=\"#101923\"/><g font-family=\"system-ui,sans-serif\"><text x=\"24\" y=\"30\" fill=\"#e8ecf1\" font-size=\"17\">FieldSense / field site and cloud \u2014 event delivery<\/text><rect x=\"24\" y=\"60\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"38\" y=\"86\" fill=\"#c4ddff\" font-size=\"15\">Device \u2192 local gateway<\/text><text x=\"38\" y=\"111\" fill=\"#e8ecf1\" font-size=\"13\">Gateway G applies approved local policy<\/text><text x=\"38\" y=\"132\" fill=\"#e8ecf1\" font-size=\"13\">Durable buffer: 64 MB decimal<\/text><text x=\"38\" y=\"153\" fill=\"#e8ecf1\" font-size=\"13\">50 events/s; 200 bytes/event<\/text><rect x=\"410\" y=\"60\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"424\" y=\"86\" fill=\"#c4ddff\" font-size=\"15\">Cloud ingestion<\/text><text x=\"424\" y=\"111\" fill=\"#e8ecf1\" font-size=\"13\">Receives stable event IDs<\/text><text x=\"424\" y=\"132\" fill=\"#e8ecf1\" font-size=\"13\">Deduplicates repeated deliveries<\/text><text x=\"424\" y=\"153\" fill=\"#e8ecf1\" font-size=\"13\">Stores central history<\/text><rect x=\"24\" y=\"205\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"38\" y=\"231\" fill=\"#c4ddff\" font-size=\"15\">Outage behaviour<\/text><text x=\"38\" y=\"256\" fill=\"#e8ecf1\" font-size=\"13\">Network may be down for 60 minutes<\/text><text x=\"38\" y=\"277\" fill=\"#e8ecf1\" font-size=\"13\">No draining while disconnected<\/text><text x=\"38\" y=\"298\" fill=\"#e8ecf1\" font-size=\"13\">Storage estimate adds 25% overhead<\/text><rect x=\"410\" y=\"205\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"424\" y=\"231\" fill=\"#c4ddff\" font-size=\"15\">Fleet configuration<\/text><text x=\"424\" y=\"256\" fill=\"#e8ecf1\" font-size=\"13\">Per-device identity<\/text><text x=\"424\" y=\"277\" fill=\"#e8ecf1\" font-size=\"13\">Verified, versioned updates<\/text><text x=\"424\" y=\"298\" fill=\"#e8ecf1\" font-size=\"13\">Roll out to a small group first<\/text><path d=\"M350 110 L410 110\" stroke=\"#a6cbff\" stroke-width=\"2\"/><circle cx=\"410\" cy=\"110\" r=\"3\" fill=\"#a6cbff\"/><text x=\"380.0\" y=\"102.0\" fill=\"#b9d4f8\" text-anchor=\"middle\" font-size=\"12\">events<\/text><path d=\"M188 170 L188 205\" stroke=\"#a6cbff\" stroke-width=\"2\"/><circle cx=\"188\" cy=\"205\" r=\"3\" fill=\"#a6cbff\"/><text x=\"188.0\" y=\"179.5\" fill=\"#b9d4f8\" text-anchor=\"middle\" font-size=\"12\">offline<\/text><path d=\"M572 205 L572 170\" stroke=\"#a6cbff\" stroke-width=\"2\"/><circle cx=\"572\" cy=\"170\" r=\"3\" fill=\"#a6cbff\"/><text x=\"572.0\" y=\"179.5\" fill=\"#b9d4f8\" text-anchor=\"middle\" font-size=\"12\">config<\/text><text x=\"24\" y=\"344\" fill=\"#c9d3e1\" font-size=\"12\">Arrows denote logical data/configuration paths, not guarantees of immediate delivery.<\/text><text x=\"24\" y=\"364\" fill=\"#c9d3e1\" font-size=\"12\">Gateway events are resent with the same ID after an uncertain acknowledgement.<\/text><\/g><\/svg>", "id": "q3", "number": 3}, {"type": "multi", "marks": 2, "prompt": "With reference to FieldSense, select all statements that correctly describe the design\u2019s limitations or controls.", "options": ["Per-device identity reduces the scope of one credential compromise.", "Clock timestamps alone guarantee global event ordering.", "Local processing can reduce reliance on a wide-area round trip for selected decisions.", "Staged updates supply feedback before exposing the entire fleet.", "A 64 MB buffer guarantees operation through every outage duration.", "An offline policy must specify how stale permissions or configuration are handled."], "correct": [0, 2, 3, 5], "explanation": "Identity, local placement, staged updates and explicit offline rules address different concerns. Finite storage and disagreeing clocks remain limitations.", "topics": ["L34"], "id": "q4", "number": 4}, {"type": "single", "marks": 0.5, "prompt": "Parameterised queries separate bound values from query syntax, but they do not decide whether the caller may access the returned rows.", "options": ["True", "False"], "correct": [0], "explanation": "Injection prevention and object authorisation are separate responsibilities.", "topics": ["L29"], "id": "q5", "number": 5}, {"type": "matching", "marks": 4, "prompt": "Match each concept to the description that best distinguishes it.", "options": ["Exercises a running application to observe externally visible behaviour", "Examines dependencies and associated component risks", "Provides an inventory of software components", "Examines source or a related code representation without running the application"], "items": [{"prompt": "SAST", "answer": "Examines source or a related code representation without running the application", "explanation": "SAST: Examines source or a related code representation without running the application."}, {"prompt": "DAST", "answer": "Exercises a running application to observe externally visible behaviour", "explanation": "DAST: Exercises a running application to observe externally visible behaviour."}, {"prompt": "SCA", "answer": "Examines dependencies and associated component risks", "explanation": "SCA: Examines dependencies and associated component risks."}, {"prompt": "SBOM", "answer": "Provides an inventory of software components", "explanation": "SBOM: Provides an inventory of software components."}], "topics": ["L29"], "id": "q6", "number": 6}, {"type": "single", "marks": 0.5, "prompt": "A latent fault must cause an observed failure every time the program runs.", "options": ["True", "False"], "correct": [1], "explanation": "Specific inputs, states or conditions may be required to activate a defect.", "topics": ["L30"], "id": "q7", "number": 7}, {"type": "single", "marks": 0.5, "prompt": "L4 connection balancing necessarily distributes each stream inside one long-lived HTTP/2 connection to a different backend.", "options": ["True", "False"], "correct": [1], "explanation": "Multiplexed streams may remain pinned to the backend selected for that connection.", "topics": ["L28"], "id": "q8", "number": 8}, {"type": "cloze", "marks": 2, "prompt": "Complete the statement using the word bank. Use each term at most once: fault; failure; operating; repair; formatting; encryption. \u201cA static defect is a [1]; observed incorrect runtime behaviour is a [2]. MTTF measures mean [3] time until failure, whereas MTTR measures mean [4] time.\u201d", "items": [{"prompt": "Blank 1", "answers": ["fault"], "explanation": "A fault is a static defect."}, {"prompt": "Blank 2", "answers": ["failure"], "explanation": "A failure is observed erroneous runtime behaviour."}, {"prompt": "Blank 3", "answers": ["operating"], "explanation": "Use the stated measurement scope for mean operating time."}, {"prompt": "Blank 4", "answers": ["repair", "restoration"], "explanation": "MTTR concerns repair/restoration under the chosen convention."}], "topics": ["L30"], "id": "q9", "number": 9}, {"type": "single", "marks": 0.5, "prompt": "A good performance report may omit errors if its p95 latency is below the required threshold.", "options": ["True", "False"], "correct": [1], "explanation": "Every mandatory acceptance criterion matters, and fast failures can distort latency summaries.", "topics": ["L32"], "id": "q10", "number": 10}, {"type": "single", "marks": 0.5, "prompt": "Using AI assistance while inspecting and verifying the generated implementation is different from the narrow \u201cvibe coding\u201d workflow used in the guide.", "options": ["True", "False"], "correct": [0], "explanation": "The narrower definition concerns largely accepting generated behaviour without inspecting its code; the tool alone does not determine the workflow.", "topics": ["L33"], "id": "q11", "number": 11}, {"type": "multi", "marks": 3, "prompt": "Which of the following practices support a defensible technical presentation? Select all that apply.", "options": ["Connect a design mechanism to its requirement and trade-off.", "Describe planned features as already tested to keep the story simple.", "Report observations with their tested conditions and limitations.", "Rehearse a meaningful demo and clearly identify fallback material.", "Use a framework\u2019s popularity as proof of system quality."], "correct": [0, 2, 3], "explanation": "Rationale, bounded evidence and rehearsed honest demonstrations help an audience assess the work. Popularity and misrepresented status do not.", "topics": ["L31"], "id": "q12", "number": 12}, {"type": "single", "marks": 0.5, "prompt": "Exporting all application records proves that proprietary workflow logic and permissions can be migrated without additional work.", "options": ["True", "False"], "correct": [1], "explanation": "Record export and portability of runnable behaviour are distinct concerns.", "topics": ["L33"], "id": "q13", "number": 13}, {"type": "matching", "marks": 4, "prompt": "Match each test situation to the most specific testing purpose.", "options": ["Volume testing", "Integration testing", "Usability testing", "Non-functional regression testing"], "items": [{"prompt": "Existing response-time checks are rerun after a feature change", "answer": "Non-functional regression testing", "explanation": "Existing response-time checks are rerun after a feature change: Non-functional regression testing."}, {"prompt": "Storage and queries are evaluated with a much larger dataset", "answer": "Volume testing", "explanation": "Storage and queries are evaluated with a much larger dataset: Volume testing."}, {"prompt": "Real API and database components exchange data in a test environment", "answer": "Integration testing", "explanation": "Real API and database components exchange data in a test environment: Integration testing."}, {"prompt": "Selected users complete tasks while obstacles are observed", "answer": "Usability testing", "explanation": "Selected users complete tasks while obstacles are observed: Usability testing."}], "topics": ["L30", "L32"], "id": "q14", "number": 14}, {"type": "matching", "marks": 1, "prompt": "Match the measure to the property it reports.", "options": ["A distribution position rather than the maximum latency", "Completed work per unit time"], "items": [{"prompt": "Throughput", "answer": "Completed work per unit time", "explanation": "Throughput: Completed work per unit time."}, {"prompt": "p95 latency", "answer": "A distribution position rather than the maximum latency", "explanation": "p95 latency: A distribution position rather than the maximum latency."}], "topics": ["L32"], "id": "q15", "number": 15}, {"type": "matching", "marks": 4, "prompt": "Relate each symptom to the most relevant corrective practice.", "options": ["Automate shared checks and review actual compliance", "Use operation identity, idempotency and reconciliation", "Establish durable ownership and managed credentials", "Revoke or rotate exposed credentials and investigate use"], "items": [{"prompt": "Secrets remain valid after being deleted from the latest commit", "answer": "Revoke or rotate exposed credentials and investigate use", "explanation": "Secrets remain valid after being deleted from the latest commit: Revoke or rotate exposed credentials and investigate use."}, {"prompt": "Style rules exist only in a document", "answer": "Automate shared checks and review actual compliance", "explanation": "Style rules exist only in a document: Automate shared checks and review actual compliance."}, {"prompt": "A generated workflow repeats a reservation after a timeout", "answer": "Use operation identity, idempotency and reconciliation", "explanation": "A generated workflow repeats a reservation after a timeout: Use operation identity, idempotency and reconciliation."}, {"prompt": "A critical application depends on one person\u2019s account", "answer": "Establish durable ownership and managed credentials", "explanation": "A critical application depends on one person\u2019s account: Establish durable ownership and managed credentials."}], "topics": ["L29", "L30", "L33"], "id": "q16", "number": 16}], "storageKey": "cos301-ct4-example-2-v1", "notes": "Original practice paper based on the reference assessment style. Not an official paper or prediction. No official duration was available in the supplied export.", "multiRule": "Each correct selection earns the question marks divided by the number of correct options. Each incorrect selection deducts the same amount. Omitted options earn zero. Each question is floored at zero. This explicit practice rule is not asserted to be the original marking formula."}</script>
+<script>
+(function () {
+ 'use strict';
+ const paper = JSON.parse(document.getElementById('mock-data').textContent);
+ const node = (tag, cls, text) => {const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
+ const normal = s => String(s ?? '').trim().toLowerCase().replace(/\s+/g,' ').replace(/\.$/,'');
+ const fmt = n => Number(n.toFixed(2)).toString();
+ let state = {};
+ try {const saved=JSON.parse(localStorage.getItem(paper.storageKey));if(saved && typeof saved==='object'&&!Array.isArray(saved))state=saved;}catch{}
+ const status=document.getElementById('storage-status');
+ const markViews=new Map();const memoElements=[];const wordViews=[];
+ function save(){try{localStorage.setItem(paper.storageKey,JSON.stringify(state));status.textContent='Drafts, selections and self-assessment save locally for this paper.';}catch{status.textContent='Browser storage is unavailable. You can still practise, but this session’s work may not survive a reload.';}}
+ function current(q){
+  if(!state[q.id]||typeof state[q.id]!=='object'||Array.isArray(state[q.id]))state[q.id]={};
+  const s=state[q.id];
+  for(const key of ['answers','drafts','selfMarks'])if(!Array.isArray(s[key]))s[key]=[];
+  if(q.options&&['single','multi'].includes(q.type)){
+   s.answers=[...new Set(s.answers.filter(x=>Number.isInteger(x)&&x>=0&&x<q.options.length))];
+   if(q.type==='single')s.answers=s.answers.slice(0,1);
+  }
+  return s;
+ }
+ function score(q){
+  const s=current(q);
+  if(q.type==='single')return s.answers.length===1&&s.answers[0]===q.correct[0]?q.marks:0;
+  if(q.type==='multi'){
+   const hits=s.answers.filter(i=>q.correct.includes(i)).length;
+   return Math.max(0,(hits-(s.answers.length-hits))*q.marks/q.correct.length);
+  }
+  return q.items.reduce((sum,item,i)=>sum+(q.type==='matching'?s.answers[i]===item.answer:item.answers.some(a=>normal(a)===normal(s.answers[i]))) * q.marks/q.items.length,0);
+ }
+ function updateScore(){
+  const objective=paper.questions.filter(q=>q.type!=='essay'),written=paper.questions.filter(q=>q.type==='essay');
+  const objectiveMax=objective.reduce((s,q)=>s+q.marks,0);const writtenMax=written.reduce((s,q)=>s+q.marks,0);
+  const graded=objective.filter(q=>current(q).marked===true);const obj=graded.reduce((s,q)=>s+score(q),0);
+  let self=0, assessed=0,partCount=0;
+  written.forEach(q=>q.parts.forEach((p,i)=>{partCount++;const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=p.marks&&Number.isInteger(value*2)){self+=value;assessed++;}}));
+  const target=document.getElementById('paper-score');target.replaceChildren(node('div','',`Objective: ${fmt(obj)} / ${fmt(objectiveMax)} marks · ${graded.length} / ${objective.length} questions marked`));
+  if(written.length){target.append(node('div','',`Written answers (self-assessed): ${fmt(self)} / ${fmt(writtenMax)} marks · ${assessed} / ${partCount} parts assessed`),node('strong','',`Combined practice total: ${fmt(obj+self)} / ${paper.totalMarks}`),node('div','mock-note','Unmarked work contributes zero to this running total. Written-answer marks are your assessment, not an automated judgement.'));}
+ }
+ function mark(q){current(q).marked=true;save();markViews.get(q.id)?.();updateScore();}
+ function change(q){current(q).marked=false;save();markViews.get(q.id)?.();updateScore();}
+ function addText(parent,text){parent.append(node('p','',text));}
+ function addMemo(card,q){
+  const memo=node('details','mock-memo');memo.append(node('summary','','Model answer and marking guide'));
+  if(q.type==='essay')q.parts.forEach((part,i)=>{
+   memo.append(node('h3','',`Part ${i+1} · ${part.marks} marks`));addText(memo,part.answer);
+   const list=node('ul');part.rubric.forEach(text=>list.append(node('li','',text)));memo.append(list);
+   const self=node('div','mock-self');const label=node('label','',`Your self-assessed mark for part ${i+1} (0–${part.marks})`);const input=node('input');Object.assign(input,{type:'number',min:'0',max:String(part.marks),step:'0.5',id:`${q.id}-mark-${i}`});label.htmlFor=input.id;
+   const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=part.marks&&Number.isInteger(value*2))input.value=String(value);
+   const msg=node('p','mock-note');msg.setAttribute('role','status');
+   input.addEventListener('input',()=>{const valid=input.value!==''&&input.validity.valid&&Number.isFinite(input.valueAsNumber);current(q).selfMarks[i]=valid?input.valueAsNumber:null;input.setAttribute('aria-invalid',String(input.value!==''&&!valid));msg.textContent=input.value!==''&&!valid?`Enter 0 to ${part.marks} in half-mark steps. Invalid marks are not counted.`:'';save();updateScore();});
+   self.append(label,input,msg);memo.append(self);
+  });
+  else if(q.type==='single'||q.type==='multi'){
+   addText(memo,`Correct option${q.correct.length>1?'s':''}: ${q.correct.map(i=>String.fromCharCode(65+i)).join(', ')}.`);q.correct.forEach(i=>addText(memo,`${String.fromCharCode(65+i)}. ${q.options[i]}`));addText(memo,q.explanation);
+   if(q.type==='multi')addText(memo,`Scoring: +${fmt(q.marks/q.correct.length)} per correct selection, −${fmt(q.marks/q.correct.length)} per incorrect selection; minimum 0, maximum ${q.marks}.`);
+  }else q.items.forEach((item,i)=>{memo.append(node('h3','',`${i+1}. ${q.type==='matching'?item.answer:item.answers.join(' / ')} · ${fmt(q.marks/q.items.length)} marks`));addText(memo,item.explanation);});
+  card.append(memo);memoElements.push(memo);
+ }
+ function renderQuestion(q){
+  const s=current(q),card=node('section','mock-question');card.id=q.id;
+  const head=node('div','mock-qhead');head.append(node('h2','',`Question ${q.number}`),node('span','mock-marks',`${fmt(q.marks)} mark${q.marks===1?'':'s'}`));card.append(head);
+  const names={single:q.options?.length===2?'True / False':'Single answer',multi:'Select all that apply · negative marking',matching:'Matching',cloze:'Sentence completion',short:'Short answer / letter',essay:'Structured written response'};
+  card.append(node('p','mock-type',names[q.type]),node('p','mock-prompt',q.prompt));
+  if(q.diagram){const figure=node('div','mock-diagram');figure.innerHTML=q.diagram;card.append(figure);addText(card,'Diagram is part of the question. On a narrow screen, scroll it horizontally to read all labels.');}
+  if(['single','multi'].includes(q.type)){
+   const fieldset=node('fieldset');fieldset.append(node('legend','',q.type==='multi'?'Select all correct options':'Select one option'));
+   q.options.forEach((text,i)=>{const label=node('label','mock-option');const input=node('input');input.type=q.type==='single'?'radio':'checkbox';input.name=q.id;input.checked=s.answers.includes(i);input.addEventListener('change',()=>{s.answers=q.type==='single'?[i]:input.checked?[...new Set([...s.answers,i])]:s.answers.filter(x=>x!==i);change(q);});label.append(input,node('span','',`${String.fromCharCode(65+i)}. ${text}`));fieldset.append(label);});card.append(fieldset);
+  }else if(q.type==='essay'){
+   q.parts.forEach((part,i)=>{const block=node('div','mock-part'),label=node('label','',part.prompt),textarea=node('textarea');textarea.id=`${q.id}-draft-${i}`;label.htmlFor=textarea.id;textarea.value=typeof s.drafts[i]==='string'?s.drafts[i]:'';textarea.addEventListener('input',()=>{s.drafts[i]=textarea.value;save();wordViews.forEach(fn=>fn());});block.append(label,textarea,node('div','mock-print-space'));card.append(block);});
+   const word=node('p','mock-word-count');const update=()=>{const count=s.drafts.join(' ').trim().split(/\s+/).filter(Boolean).length;word.textContent=`${count} words${q.wordLimit?` · suggested maximum ${q.wordLimit}; no automatic penalty`:''}`;word.classList.toggle('mock-invalid',Boolean(q.wordLimit&&count>q.wordLimit));};wordViews.push(update);update();card.append(word);
+  }else{
+   if(q.type==='matching'){
+    addText(card,'Choose the most precise match for each prompt. Each answer is intended to be used once; each row is marked independently.');
+    card.append(node('p','mock-print-bank',`Answer bank: ${q.options.map((x,i)=>`${String.fromCharCode(65+i)}. ${x}`).join(' · ')}`));
+   }
+   q.items.forEach((item,i)=>{const row=node('div','mock-row'),label=node('label','',item.prompt);let input;
+    if(q.type==='matching'){input=node('select');const blank=node('option','','Choose an answer');blank.value='';input.append(blank);q.options.forEach(text=>{const option=node('option','',text);option.value=text;input.append(option);});}
+    else {input=node('input');input.type='text';input.autocomplete='off';}
+    input.id=`${q.id}-answer-${i}`;label.htmlFor=input.id;input.value=typeof s.answers[i]==='string'?s.answers[i]:'';input.addEventListener(q.type==='matching'?'change':'input',()=>{s.answers[i]=input.value;change(q);});row.append(label,input,node('div','mock-print-space'));card.append(row);
+   });
+  }
+  if(q.type!=='essay'){
+   const check=node('button','btn','Mark this question');check.type='button';check.addEventListener('click',()=>mark(q));const feedback=node('div','mock-result');feedback.setAttribute('role','status');
+   const update=()=>{feedback.hidden=s.marked!==true;feedback.textContent=s.marked===true?`${fmt(score(q))} / ${fmt(q.marks)} marks. Open the marking guide for the answer and reasoning. Changing a response clears this marking result.`:'';};markViews.set(q.id,update);update();card.append(check,feedback);
+  }
+  addMemo(card,q);document.getElementById('paper-questions').append(card);
+  const jump=node('a','',`Q${q.number} · ${fmt(q.marks)}`);jump.href='#'+q.id;document.getElementById('question-links').append(jump);
+ }
+ document.getElementById('paper-scope').textContent=`Scope: ${paper.scope}`;
+ document.getElementById('paper-meta').textContent=`${paper.questions.length} questions · ${paper.totalMarks} marks · attempt all questions. ${paper.notes}`;
+ const instructions=document.getElementById('instructions');
+ addText(instructions,`Style reference: ${paper.reference}. The questions and diagrams in this paper are newly authored. Saved responses in the reference export were not treated as an authoritative memorandum.`);
+ addText(instructions,paper.multiRule);
+ addText(instructions,'Matching rows and short-answer subparts share their question’s marks equally. Short answers ignore case, extra spaces and a final full stop; accepted alternatives are shown in the marking guide. Equivalent written reasoning may earn credit under the rubric. Use the rubric to review a defensible alternative the exact-match marker does not recognise.');
+ addText(instructions,'Written responses are not automatically graded. Enter optional self-assessed marks after consulting the model answer. Any word maximum is practice guidance, not an automatically applied penalty. Blank printing omits your saved answers and all marking guides. Marking-guide printing includes the paper and model answers, without your private drafts.');
+ addText(instructions,'Some topic guides are general coverage because lecture notes were unavailable. CT4 is limited to L28–L35; its revision items use L28–L34. ST2 samples L17–L35, including existing SOA and Microservices material.');
+ paper.questions.forEach(renderQuestion);updateScore();status.textContent='Drafts, selections and self-assessment save locally for this paper.';
+ document.getElementById('mark-all').addEventListener('click',()=>{paper.questions.filter(q=>q.type!=='essay').forEach(q=>{current(q).marked=true;markViews.get(q.id)();});save();updateScore();});
+ document.getElementById('show-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=true));
+ document.getElementById('hide-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=false));
+ document.getElementById('reset-paper').addEventListener('click',()=>{if(window.confirm('Clear only this paper’s answers, drafts and self-assessed marks?')){state={};save();location.reload();}});
+ let printState=null;
+ function restorePrint(){if(!printState)return;memoElements.forEach((m,i)=>m.open=printState[i]);document.body.classList.remove('print-memo');printState=null;}
+ function printPaper(withMemo){printState=memoElements.map(m=>m.open);document.body.classList.toggle('print-memo',withMemo);memoElements.forEach(m=>m.open=withMemo);window.print();}
+ addEventListener('afterprint',restorePrint);
+ document.getElementById('print-paper').addEventListener('click',()=>printPaper(false));
+ document.getElementById('print-memo').addEventListener('click',()=>printPaper(true));
+})();
+
+</script>
+</body>
+</html>

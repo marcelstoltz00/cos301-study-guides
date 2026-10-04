@@ -1,0 +1,424 @@
+{
+  "id": "ct4-example-1",
+  "title": "CT4 Example 1",
+  "scope": "L28–L35 (L35 revises L28–L34 only)",
+  "reference": "CT3.html",
+  "totalMarks": 30,
+  "questions": [
+    {
+      "type": "single",
+      "marks": 0.5,
+      "prompt": "A deployment diagram showing three application replicas is sufficient evidence that the application survives a host failure.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Replica count alone says nothing about shared host placement or state dependencies.",
+      "topics": [
+        "L28"
+      ],
+      "id": "q1",
+      "number": 1
+    },
+    {
+      "type": "single",
+      "marks": 0.5,
+      "prompt": "Once a caller has been authenticated, object-level authorisation can be omitted for internal API requests.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Identity does not grant permission for every operation or record; internal reachability is not permission.",
+      "topics": [
+        "L29"
+      ],
+      "id": "q2",
+      "number": 2
+    },
+    {
+      "type": "short",
+      "marks": 6,
+      "prompt": "Analyse the ParcelDesk deployment diagram. For each question, write only the letter of the best answer. All assumptions needed for the questions appear in the diagram or question text.",
+      "items": [
+        {
+          "prompt": "1. Host A is lost. Which assessment is correct? A: Both API instances survive. B: The standby automatically proves ten-minute recovery. C: The database copy may survive, but no API instance remains. D: Separate backups make request handling uninterrupted.",
+          "answers": [
+            "C"
+          ],
+          "explanation": "Both API instances share Host A. A surviving standby does not replace missing API capacity or establish measured RTO."
+        },
+        {
+          "prompt": "2. The worker receives the same order message twice. Which mechanism most directly prevents a second charge? A: A longer request timeout. B: A stable business-operation identity with idempotent processing. C: An extra API process. D: A different ID on every retry.",
+          "answers": [
+            "B"
+          ],
+          "explanation": "At-least-once delivery can repeat messages. Reuse the intended operation identity and enforce one business effect."
+        },
+        {
+          "prompt": "3. The diagram reports 40 seconds of lag and an RPO target of 60 seconds. Which statement is justified? A: The target is guaranteed for every future incident. B: RTO must also be 40 seconds. C: Replication replaces backups. D: The observation is within the target, but lag and recovery need continued measurement.",
+          "answers": [
+            "D"
+          ],
+          "explanation": "An observed lag within a target is bounded evidence. Asynchronous lag can grow, and recovery of committed business data must be verified."
+        }
+      ],
+      "topics": [
+        "L28",
+        "L32"
+      ],
+      "diagram": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 390\" role=\"img\" aria-label=\"ParcelDesk / production — placement and data paths\"><title>ParcelDesk / production — placement and data paths</title><rect width=\"760\" height=\"390\" rx=\"12\" fill=\"#101923\"/><g font-family=\"system-ui,sans-serif\"><text x=\"24\" y=\"30\" fill=\"#e8ecf1\" font-size=\"17\">ParcelDesk / production — placement and data paths</text><rect x=\"24\" y=\"60\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"38\" y=\"86\" fill=\"#c4ddff\" font-size=\"15\">Host A · Zone East</text><text x=\"38\" y=\"111\" fill=\"#e8ecf1\" font-size=\"13\">API v3: two instances</text><text x=\"38\" y=\"132\" fill=\"#e8ecf1\" font-size=\"13\">Database primary: one instance</text><text x=\"38\" y=\"153\" fill=\"#e8ecf1\" font-size=\"13\">All three share Host A</text><rect x=\"410\" y=\"60\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"424\" y=\"86\" fill=\"#c4ddff\" font-size=\"15\">Host B · Zone West</text><text x=\"424\" y=\"111\" fill=\"#e8ecf1\" font-size=\"13\">Database standby</text><text x=\"424\" y=\"132\" fill=\"#e8ecf1\" font-size=\"13\">Asynchronous replication from A</text><text x=\"424\" y=\"153\" fill=\"#e8ecf1\" font-size=\"13\">Last observed lag: 40 seconds</text><rect x=\"24\" y=\"205\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"38\" y=\"231\" fill=\"#c4ddff\" font-size=\"15\">Queue Q → payment worker</text><text x=\"38\" y=\"256\" fill=\"#e8ecf1\" font-size=\"13\">Durable accepted-order queue</text><text x=\"38\" y=\"277\" fill=\"#e8ecf1\" font-size=\"13\">At-least-once delivery</text><text x=\"38\" y=\"298\" fill=\"#e8ecf1\" font-size=\"13\">Poison-message dead-letter route</text><rect x=\"410\" y=\"205\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"424\" y=\"231\" fill=\"#c4ddff\" font-size=\"15\">Backup store</text><text x=\"424\" y=\"256\" fill=\"#e8ecf1\" font-size=\"13\">Historical backups retained separately</text><text x=\"424\" y=\"277\" fill=\"#e8ecf1\" font-size=\"13\">Last successful restore: yesterday</text><text x=\"424\" y=\"298\" fill=\"#e8ecf1\" font-size=\"13\">RPO target: 60 s; RTO target: 10 min</text><path d=\"M350 110 L410 110\" stroke=\"#a6cbff\" stroke-width=\"2\"/><circle cx=\"410\" cy=\"110\" r=\"3\" fill=\"#a6cbff\"/><text x=\"380.0\" y=\"102.0\" fill=\"#b9d4f8\" text-anchor=\"middle\" font-size=\"12\">replicate</text><path d=\"M188 170 L188 205\" stroke=\"#a6cbff\" stroke-width=\"2\"/><circle cx=\"188\" cy=\"205\" r=\"3\" fill=\"#a6cbff\"/><text x=\"188.0\" y=\"179.5\" fill=\"#b9d4f8\" text-anchor=\"middle\" font-size=\"12\">publish</text><path d=\"M572 170 L572 205\" stroke=\"#a6cbff\" stroke-width=\"2\"/><circle cx=\"572\" cy=\"205\" r=\"3\" fill=\"#a6cbff\"/><text x=\"572.0\" y=\"179.5\" fill=\"#b9d4f8\" text-anchor=\"middle\" font-size=\"12\">backup</text><text x=\"24\" y=\"344\" fill=\"#c9d3e1\" font-size=\"12\">Links show labelled logical paths; physical arrows end at dots. Both zones are in Region R.</text><text x=\"24\" y=\"364\" fill=\"#c9d3e1\" font-size=\"12\">Host A loss removes both APIs and the primary. Standby promotion/reconnection require a runbook.</text></g></svg>",
+      "id": "q3",
+      "number": 3
+    },
+    {
+      "type": "multi",
+      "marks": 2,
+      "prompt": "With reference to the diagram, select all statements that are supported by the information shown.",
+      "options": [
+        "Both API instances share the same host-level failure domain.",
+        "Putting the standby in another zone removes every regional dependency.",
+        "The queue eliminates the need to handle duplicate messages.",
+        "Asynchronous replication can leave acknowledged writes absent from the standby.",
+        "Retained historical backups address a different recovery problem from live replicas.",
+        "A dead-letter route provides a place to isolate messages that repeatedly fail processing."
+      ],
+      "correct": [
+        0,
+        3,
+        4,
+        5
+      ],
+      "explanation": "The four supported statements concern shared placement, replication lag, history and poison-message handling. A shared region still matters, and the delivery model permits duplicates.",
+      "topics": [
+        "L28"
+      ],
+      "id": "q4",
+      "number": 4
+    },
+    {
+      "type": "single",
+      "marks": 0.5,
+      "prompt": "An SBOM identifies software components, but it does not certify that the application has no vulnerabilities.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "An inventory supports investigation; security still needs appropriate review, testing and response.",
+      "topics": [
+        "L29"
+      ],
+      "id": "q5",
+      "number": 5
+    },
+    {
+      "type": "matching",
+      "marks": 4,
+      "prompt": "Match each non-functional test to the purpose that most clearly distinguishes it.",
+      "options": [
+        "Spike testing",
+        "Stress testing",
+        "Load testing",
+        "Soak testing"
+      ],
+      "items": [
+        {
+          "prompt": "Sustained activity intended to expose a memory leak over several hours",
+          "answer": "Soak testing",
+          "explanation": "Sustained activity intended to expose a memory leak over several hours: Soak testing."
+        },
+        {
+          "prompt": "A sudden increase from ordinary demand to a large burst",
+          "answer": "Spike testing",
+          "explanation": "A sudden increase from ordinary demand to a large burst: Spike testing."
+        },
+        {
+          "prompt": "Demand deliberately raised beyond the expected capacity to observe failure and recovery",
+          "answer": "Stress testing",
+          "explanation": "Demand deliberately raised beyond the expected capacity to observe failure and recovery: Stress testing."
+        },
+        {
+          "prompt": "Evaluation under a specified normal and planned peak workload",
+          "answer": "Load testing",
+          "explanation": "Evaluation under a specified normal and planned peak workload: Load testing."
+        }
+      ],
+      "topics": [
+        "L32"
+      ],
+      "id": "q6",
+      "number": 6
+    },
+    {
+      "type": "single",
+      "marks": 0.5,
+      "prompt": "Software quality assurance includes checking whether agreed review and development procedures are actually followed.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "An unused process document is weak assurance; demonstrated compliance and process improvement matter.",
+      "topics": [
+        "L30"
+      ],
+      "id": "q7",
+      "number": 7
+    },
+    {
+      "type": "single",
+      "marks": 0.5,
+      "prompt": "In a project presentation, a successful live demonstration proves the system meets every non-functional requirement.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "A demo provides limited evidence for selected conditions. Other quality claims need suitable measurements or checks.",
+      "topics": [
+        "L31"
+      ],
+      "id": "q8",
+      "number": 8
+    },
+    {
+      "type": "cloze",
+      "marks": 2,
+      "prompt": "Complete the statement using the word bank. Use each term at most once: data loss; restoration time; replication; backups; throughput; source formatting. “RPO concerns acceptable [1], whereas RTO concerns acceptable [2]. Live [3] supports continuity; historical [4] can recover earlier states.”",
+      "items": [
+        {
+          "prompt": "Blank 1",
+          "answers": [
+            "data loss"
+          ],
+          "explanation": "RPO is a target for acceptable loss of data, commonly expressed as an interval."
+        },
+        {
+          "prompt": "Blank 2",
+          "answers": [
+            "restoration time"
+          ],
+          "explanation": "RTO limits acceptable restoration duration."
+        },
+        {
+          "prompt": "Blank 3",
+          "answers": [
+            "replication"
+          ],
+          "explanation": "Replication maintains other copies of current state."
+        },
+        {
+          "prompt": "Blank 4",
+          "answers": [
+            "backups"
+          ],
+          "explanation": "Historical recovery can be necessary after deletion is propagated to replicas."
+        }
+      ],
+      "topics": [
+        "L28"
+      ],
+      "id": "q9",
+      "number": 9
+    },
+    {
+      "type": "single",
+      "marks": 0.5,
+      "prompt": "No-code development removes the need to test permissions and connector failure cases.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "The implementation mechanism changes; accountability for permissions and failures remains.",
+      "topics": [
+        "L33"
+      ],
+      "id": "q10",
+      "number": 10
+    },
+    {
+      "type": "single",
+      "marks": 0.5,
+      "prompt": "MTTR can decrease while the underlying fault frequency remains unchanged, improving the modelled availability ratio.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Faster recovery reduces time unavailable without necessarily increasing MTTF.",
+      "topics": [
+        "L30"
+      ],
+      "id": "q11",
+      "number": 11
+    },
+    {
+      "type": "multi",
+      "marks": 3,
+      "prompt": "Which of the following are necessary pieces of context for assessing a performance claim? Select all that apply.",
+      "options": [
+        "A representative workload and request mix.",
+        "The measurement environment and observation duration.",
+        "Only the technology vendor’s name.",
+        "Latency and failure criteria, including how errors are counted.",
+        "A screenshot of the login page alone."
+      ],
+      "correct": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "Performance claims need conditions, measurement scope and acceptance rules. A vendor label or screenshot supplies none of those by itself.",
+      "topics": [
+        "L31",
+        "L32"
+      ],
+      "id": "q12",
+      "number": 12
+    },
+    {
+      "type": "single",
+      "marks": 0.5,
+      "prompt": "A disconnected edge device can be assumed to receive a central credential revocation immediately.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Offline authority needs explicit staleness and reconciliation rules.",
+      "topics": [
+        "L34"
+      ],
+      "id": "q13",
+      "number": 13
+    },
+    {
+      "type": "matching",
+      "marks": 4,
+      "prompt": "Match each development choice or artifact to the misconception it most directly corrects.",
+      "options": [
+        "Data export alone proves application portability",
+        "Hiding a field is sufficient access control",
+        "A working prototype is automatically maintainable in production",
+        "Generated tests can repeat the implementation’s mistaken assumptions"
+      ],
+      "items": [
+        {
+          "prompt": "Independent tests derived from actual requirements",
+          "answer": "Generated tests can repeat the implementation’s mistaken assumptions",
+          "explanation": "Independent tests derived from actual requirements: Generated tests can repeat the implementation’s mistaken assumptions."
+        },
+        {
+          "prompt": "Export of executable workflows and permissions, not just records",
+          "answer": "Data export alone proves application portability",
+          "explanation": "Export of executable workflows and permissions, not just records: Data export alone proves application portability."
+        },
+        {
+          "prompt": "Server-side object-permission checks",
+          "answer": "Hiding a field is sufficient access control",
+          "explanation": "Server-side object-permission checks: Hiding a field is sufficient access control."
+        },
+        {
+          "prompt": "A named owner and release/recovery procedure",
+          "answer": "A working prototype is automatically maintainable in production",
+          "explanation": "A named owner and release/recovery procedure: A working prototype is automatically maintainable in production."
+        }
+      ],
+      "topics": [
+        "L29",
+        "L33"
+      ],
+      "id": "q14",
+      "number": 14
+    },
+    {
+      "type": "matching",
+      "marks": 1,
+      "prompt": "Match the security check to the question it answers.",
+      "options": [
+        "May this caller perform this action on this resource?",
+        "Who is the caller?"
+      ],
+      "items": [
+        {
+          "prompt": "Authentication",
+          "answer": "Who is the caller?",
+          "explanation": "Authentication: Who is the caller?."
+        },
+        {
+          "prompt": "Authorisation",
+          "answer": "May this caller perform this action on this resource?",
+          "explanation": "Authorisation: May this caller perform this action on this resource?."
+        }
+      ],
+      "topics": [
+        "L29"
+      ],
+      "id": "q15",
+      "number": 15
+    },
+    {
+      "type": "matching",
+      "marks": 4,
+      "prompt": "Relate each practice to its main engineering purpose.",
+      "options": [
+        "Preserve an honest, bounded explanation when the live path fails",
+        "Detect recurrence or loss of previously supported behaviour",
+        "Reduce the risk of relying on an outdated topology",
+        "Reduce the impact of one compromised device"
+      ],
+      "items": [
+        {
+          "prompt": "Per-device identities with limited privileges",
+          "answer": "Reduce the impact of one compromised device",
+          "explanation": "Per-device identities with limited privileges: Reduce the impact of one compromised device."
+        },
+        {
+          "prompt": "A labelled fallback recording for a live demo",
+          "answer": "Preserve an honest, bounded explanation when the live path fails",
+          "explanation": "A labelled fallback recording for a live demo: Preserve an honest, bounded explanation when the live path fails."
+        },
+        {
+          "prompt": "Regression coverage after a defect fix",
+          "answer": "Detect recurrence or loss of previously supported behaviour",
+          "explanation": "Regression coverage after a defect fix: Detect recurrence or loss of previously supported behaviour."
+        },
+        {
+          "prompt": "Owner and last-verification date on a deployment view",
+          "answer": "Reduce the risk of relying on an outdated topology",
+          "explanation": "Owner and last-verification date on a deployment view: Reduce the risk of relying on an outdated topology."
+        }
+      ],
+      "topics": [
+        "L28",
+        "L30",
+        "L31",
+        "L34"
+      ],
+      "id": "q16",
+      "number": 16
+    }
+  ],
+  "storageKey": "cos301-ct4-example-1-v1",
+  "notes": "Original practice paper based on the reference assessment style. Not an official paper or prediction. No official duration was available in the supplied export.",
+  "multiRule": "Each correct selection earns the question marks divided by the number of correct options. Each incorrect selection deducts the same amount. Omitted options earn zero. Each question is floored at zero. This explicit practice rule is not asserted to be the original marking formula."
+}

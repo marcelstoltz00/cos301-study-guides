@@ -7,11 +7,13 @@ theme and interactive components.
 import json
 import html
 import pathlib
+import xml.etree.ElementTree as ET
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "assets"
 DATA_DIR = ROOT / "data"
 OUT_DIR = ROOT
+MOCK_PAPERS = ["ct4-example-1", "ct4-example-2", "st2-example-1", "st2-example-2"]
 
 LECTURES = [
     {"id": "L17", "nav": "L17 · Design Systems & CI"},
@@ -42,6 +44,7 @@ JS = (ASSETS / "app.js").read_text()
 def nav_html(current_id):
     links = ['<a href="index.html" class="%s">Home</a>' % ("active" if current_id is None else "")]
     links.append('<a href="ct4-practice-test.html">CT4 Practice Test</a>')
+    links.append('<a href="index.html#practice-papers">Example Papers</a>')
     for lec in LECTURES:
         cls = "active" if lec["id"] == current_id else ""
         links.append(f'<a href="{lec["id"]}.html" class="{cls}">{html.escape(lec["nav"])}</a>')
@@ -207,7 +210,7 @@ INDEX_TEMPLATE = """<!doctype html>
     {cards}
   </div>
 
-  <section class="special-grid" aria-label="Additional practice material">
+  <section id="practice-papers" class="special-grid" aria-label="Additional practice material">
     {special_cards}
   </section>
 </main>
@@ -330,6 +333,18 @@ def build_index():
       '<p>Interactive review covering L17 to L25, MS, and SOA with working multi-select questions.</p>'
       '</a>'
     ]
+    mock_cards = []
+    for paper_id in MOCK_PAPERS:
+        paper = json.loads((DATA_DIR / f"{paper_id}.json").read_text())
+        mock_cards.append(
+            f'<a class="special-card" href="{paper_id}.html">'
+            f'<div class="id">{html.escape(paper["scope"])}</div>'
+            f'<div class="tag">{len(paper["questions"])} questions · {paper["totalMarks"]} marks</div>'
+            f'<h3>{html.escape(paper["title"])}</h3>'
+            '<p>Original paper in the reference assessment style, with diagrams, matching, '
+            'marking guides and blank-paper printing.</p></a>'
+        )
+    special_cards = mock_cards + special_cards
     out = INDEX_TEMPLATE.format(css=CSS, nav=nav_html(None), cards="\n".join(cards), special_cards="\n".join(special_cards))
     (OUT_DIR / "index.html").write_text(out)
     print(f"built index.html ({len(cards)} lecture cards, {len(special_cards)} special cards)")
@@ -358,9 +373,75 @@ def build_ct4_test():
     print(f'built ct4-practice-test.html ({len(data["questions"])} questions)')
 
 
+def build_mock_papers():
+    template = (ASSETS / "mock-exam.html").read_text()
+    style = (ASSETS / "mock-exam.css").read_text()
+    script = (ASSETS / "mock-exam.js").read_text()
+    for paper_id in MOCK_PAPERS:
+        paper = json.loads((DATA_DIR / f"{paper_id}.json").read_text())
+        assert sum(q["marks"] for q in paper["questions"]) == paper["totalMarks"]
+        links = "\n".join(
+            f'<a href="{other}.html"'
+            + (' class="active" aria-current="page"' if other == paper_id else '')
+            + f'>{other.replace("-", " ").upper()}</a>'
+            for other in MOCK_PAPERS
+        )
+        replacements = {
+            "<!-- TITLE -->": html.escape(paper["title"]),
+            "<!-- PAPER_ID -->": paper_id,
+            "<!-- PAPER_LINKS -->": links,
+            "<!-- THEME -->": CSS,
+            "<!-- STYLE -->": style,
+            "<!-- DATA -->": json.dumps(paper).replace("</", "<\\/"),
+            "<!-- SCRIPT -->": script,
+        }
+        out = template
+        for marker, value in replacements.items():
+            out = out.replace(marker, value)
+        (OUT_DIR / f"{paper_id}.html").write_text(out)
+        build_mock_markdown(paper)
+        print(f'built {paper_id}.html ({paper["totalMarks"]} marks)')
+
+
+def build_mock_markdown(paper):
+    lines = [f'# {paper["title"]}', '', f'Scope: {paper["scope"]}. Total: {paper["totalMarks"]} marks.', '',
+             paper["notes"], '', paper["multiRule"], '',
+             'Written answers are self-assessed using the rubric. Suggested word limits carry no automatic penalty.', '',
+             f'[Interactive and printable paper](../{paper["id"]}.html)', '', '## Question paper', '']
+    for q in paper["questions"]:
+        lines += [f'### Question {q["number"]} — {q["marks"]} marks', '', q["prompt"], '']
+        if q.get("diagram"):
+            labels = [n.text for n in ET.fromstring(q["diagram"]).iter() if n.tag.endswith('}text') and n.text]
+            lines += ['Diagram labels (use the HTML paper for spatial relationships):', '', '```text', *labels, '```', '']
+        if q["type"] in ("single", "multi"):
+            lines += [f'- {chr(65+i)}. {option}' for i, option in enumerate(q["options"])] + ['']
+        elif q["type"] == "essay":
+            lines += [part["prompt"] + '\n' for part in q["parts"]]
+        else:
+            if q["type"] == "matching":
+                lines += ['Answer bank: ' + ' · '.join(q["options"]), '']
+            lines += [f'{i+1}. {item["prompt"]}' for i, item in enumerate(q["items"])] + ['']
+    lines += ['---', '', '## Model answers and marking guide', '']
+    for q in paper["questions"]:
+        lines += [f'### Question {q["number"]} — {q["marks"]} marks', '']
+        if q["type"] in ("single", "multi"):
+            lines += ['Correct: ' + ', '.join(chr(65+i) for i in q["correct"]) + '.', '', q["explanation"], '']
+        elif q["type"] == "essay":
+            for i, part in enumerate(q["parts"]):
+                lines += [f'Part {i+1} ({part["marks"]} marks): {part["answer"]}', '']
+                lines += ['- ' + line for line in part["rubric"]] + ['']
+        else:
+            for i, item in enumerate(q["items"]):
+                answer = item["answer"] if q["type"] == "matching" else ' / '.join(item["answers"])
+                lines += [f'{i+1}. **{answer}** — {item["explanation"]}']
+            lines += ['']
+    (ROOT / "markdown" / f'{paper["id"]}.md').write_text('\n'.join(lines) + '\n')
+
+
 if __name__ == "__main__":
     for lec in LECTURES:
         if (DATA_DIR / f"{lec['id']}.json").exists():
             build_lecture(lec)
     build_ct4_test()
+    build_mock_papers()
     build_index()
