@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>COS301 Software Engineering — Study Guides (L17-L25 + SOA + Practice Test)</title>
+<title>COS301 Software Engineering — ST2 Study Guides (L17–L35)</title>
 <style>
 /* ============================================================
    CT3 Study Guides — shared dark academic theme
@@ -610,7 +610,8 @@ body {
 @media (max-width: 640px) {
   .page { padding: var(--space-6) var(--space-4) 100px; }
   .hero h1 { font-size: 24px; }
-  .section-tabs { top: 49px; }
+  .section-tabs { top: 49px; flex-wrap: wrap; }
+  .section-tab { flex: 1 1 calc(50% - var(--space-2)); }
 }
 
 .lecture-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-6); }
@@ -641,7 +642,12 @@ body {
 }
 .overall-progress .progress-bar { flex: 1; }
 .overall-progress .quiz-score { white-space: nowrap; }
-@media (max-width: 640px) { .lecture-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .lecture-grid { grid-template-columns: 1fr; }
+  .overall-progress { display: block; }
+  .overall-progress .progress-bar { margin-bottom: var(--space-2); }
+  .overall-progress .quiz-score { white-space: normal; }
+}
 </style>
 </head>
 <body>
@@ -650,25 +656,35 @@ body {
     <a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a>
     <div class="topnav-links">
       <a href="index.html" class="active">Home</a>
-<a href="L17.html" class="">L17 · Design Systems & CI</a>
-<a href="L18.html" class="">L18 · Domain Modelling & Architectures</a>
+<a href="L17.html" class="">L17 · Design Systems &amp; CI</a>
+<a href="L18.html" class="">L18 · Domain Modelling &amp; Architectures</a>
 <a href="L19.html" class="">L19 · Software Testing in Practice</a>
 <a href="L20.html" class="">L20 · Designed for Humans</a>
-<a href="L21.html" class="">L21 · DevOps & DevSecOps</a>
+<a href="L21.html" class="">L21 · DevOps &amp; DevSecOps</a>
 <a href="L22.html" class="">L22 · Practical Architectural Design</a>
 <a href="L23.html" class="">L23 · Architecture in Practice</a>
 <a href="L24.html" class="">L24 · Security Testing</a>
 <a href="L25.html" class="">L25 · Service Contracts</a>
 <a href="SOA.html" class="">SOA · Service-Oriented Architecture</a>
-<a href="MS.html" class="">Bonus · Microservices Deep Dive</a>
-<a href="architecture-comparison.html" class="">Architecture · Patterns Comparison</a>
+<a href="MS.html" class="">MS · Microservices Deep Dive</a>
+<a href="L28.html" class="">L28 · Deployment Diagrams</a>
+<a href="L29.html" class="">L29 · Secure Software Development</a>
+<a href="L30.html" class="">L30 · Quality Assurance &amp; Coding Standards</a>
+<a href="L31.html" class="">L31 · Presentation Skills</a>
+<a href="L32.html" class="">L32 · Non-Functional Testing</a>
+<a href="L33.html" class="">L33 · Low Code, No Code &amp; Vibe Code</a>
+<a href="L34.html" class="">L34 · Cloud &amp; Edge Engineering</a>
+<a href="L35.html" class="">L35 · ST2 Revision</a>
+    </div>
+  </div>
 </nav>
 
 <main class="page">
   <header class="hero">
     <div class="hero-eyebrow">COS301 &middot; Software Engineering</div>
-    <h1>Class Test Study Guides — L17 to L25 + SOA</h1>
+    <h1>ST2 Study Guides — L17 to L35</h1>
     <p>Content summaries, flashcards, 20 shuffled MCQs, and 12 in-depth technical questions per lecture. Progress is saved locally in your browser.</p>
+    <p>SOA and Microservices cover the existing L26–L27 material. L28 and L30 follow supplied lecture notes; L29 and L31–L34 are general topic guides. L35 brings the material together for revision.</p>
   </header>
 
   <div class="overall-progress">
@@ -677,22 +693,29 @@ body {
   </div>
 
   <div class="lecture-grid">
-    <a class="lecture-card" href="L17.html" data-id="L17" data-tech-total="12" data-flash-total="20"><div class="id">L17</div><h3>Brand Style Guides &amp; Design Systems + CI/CD Industry Best Practices</h3><p>The golden thread from values to code, design tokens and component contracts, and what separates decorative CI from a real merge-blocking pipeline.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
-<a class="lecture-card" href="L18.html" data-id="L18" data-tech-total="12" data-flash-total="20"><div class="id">L18</div><h3>Domain Modelling Recap + Architecture Recap</h3><p>Entities vs value objects, UML relationships, and choosing between monoliths, microservices, event-driven, SOA, CQRS, and MVC-family patterns.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
-<a class="lecture-card" href="L19.html" data-id="L19" data-tech-total="12" data-flash-total="20"><div class="id">L19</div><h3>Software Testing in Practice</h3><p>From a production horror story to a working testing strategy: test types, TDD, coverage, CI gating, and progressive delivery techniques.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
-<a class="lecture-card" href="L20.html" data-id="L20" data-tech-total="12" data-flash-total="20"><div class="id">L20</div><h3>Designed for Humans — UI/UX Survival Guide for Developers</h3><p>Useful, usable, desirable: constraints, discoverability, feedback, the paradox of choice, visual hierarchy, typography, and colour contrast.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
-<a class="lecture-card" href="L21.html" data-id="L21" data-tech-total="12" data-flash-total="20"><div class="id">L21</div><h3>DevOps &amp; DevSecOps</h3><p>The 8-step CI/CD infinite loop from Plan to Monitor, and integrating security throughout via CVE tracking, OWASP, SAST/DAST, and secret scanning.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
-<a class="lecture-card" href="L22.html" data-id="L22" data-tech-total="12" data-flash-total="21"><div class="id">L22</div><h3>Practical Architectural Design</h3><p>Quantify, decide, communicate, enforce: quality attribute scenarios, ADRs, the eight fallacies of distributed computing, tactics vs. patterns, and fitness functions.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
-<a class="lecture-card" href="L23.html" data-id="L23" data-tech-total="12" data-flash-total="15"><div class="id">L23</div><h3>Architecture in Practice</h3><p>Design considerations and best practices applied to two real systems: a high-performance event-driven road-security platform, and a resilient, modular financial-services platform.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
-<a class="lecture-card" href="L24.html" data-id="L24" data-tech-total="12" data-flash-total="20"><div class="id">L24</div><h3>Security Testing — Red Team vs. Blue Team</h3><p>General security testing fundamentals: red/blue/purple teaming, the attack lifecycle, OWASP Top 10, and blue team defense concepts (SIEM, SOC, incident response).</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
-<a class="lecture-card" href="L25.html" data-id="L25" data-tech-total="12" data-flash-total="17"><div class="id">L25</div><h3>API Service Contracts</h3><p>OpenAPI vs. Swagger, contract-first vs. code-first development, mock servers, versioning, and capstone-project best practices for frontend/backend integration.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
-<a class="lecture-card" href="SOA.html" data-id="SOA" data-tech-total="12" data-flash-total="12"><div class="id">SOA</div><h3>Service-Oriented Architecture (SOA)</h3><p>Loose coupling, reusable services, contracts, orchestration, and the trade-offs between SOA, ESBs, and modern microservice design.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
-<a class="lecture-card" href="MS.html" data-id="MS" data-tech-total="12" data-flash-total="20"><div class="id">MS</div><h3>Microservices Deep Dive (Bonus Synthesis Guide)</h3><p>Pulling together the microservices threads scattered across L18, L21, L22, and L23, plus standard industry patterns: sagas, service mesh, resilience, and observability.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+    <a class="lecture-card" href="L17.html" data-id="L17" data-mcq-total="20" data-tech-total="12" data-flash-total="20"><div class="id">L17</div><h3>Brand Style Guides &amp; Design Systems + CI/CD Industry Best Practices</h3><p>The golden thread from values to code, design tokens and component contracts, and what separates decorative CI from a real merge-blocking pipeline.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L18.html" data-id="L18" data-mcq-total="20" data-tech-total="12" data-flash-total="20"><div class="id">L18</div><h3>Domain Modelling Recap + Architecture Recap</h3><p>Entities vs value objects, UML relationships, and choosing between monoliths, microservices, event-driven, SOA, CQRS, and MVC-family patterns.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L19.html" data-id="L19" data-mcq-total="20" data-tech-total="12" data-flash-total="20"><div class="id">L19</div><h3>Software Testing in Practice</h3><p>From a production horror story to a working testing strategy: test types, TDD, coverage, CI gating, and progressive delivery techniques.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L20.html" data-id="L20" data-mcq-total="20" data-tech-total="12" data-flash-total="20"><div class="id">L20</div><h3>Designed for Humans — UI/UX Survival Guide for Developers</h3><p>Useful, usable, desirable: constraints, discoverability, feedback, the paradox of choice, visual hierarchy, typography, and colour contrast.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L21.html" data-id="L21" data-mcq-total="20" data-tech-total="12" data-flash-total="20"><div class="id">L21</div><h3>DevOps &amp; DevSecOps</h3><p>The 8-step CI/CD infinite loop from Plan to Monitor, and integrating security throughout via CVE tracking, OWASP, SAST/DAST, and secret scanning.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L22.html" data-id="L22" data-mcq-total="20" data-tech-total="12" data-flash-total="21"><div class="id">L22</div><h3>Practical Architectural Design</h3><p>Quantify, decide, communicate, enforce: quality attribute scenarios, ADRs, the eight fallacies of distributed computing, tactics vs. patterns, and fitness functions.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L23.html" data-id="L23" data-mcq-total="20" data-tech-total="12" data-flash-total="15"><div class="id">L23</div><h3>Architecture in Practice</h3><p>Design considerations and best practices applied to two real systems: a high-performance event-driven road-security platform, and a resilient, modular financial-services platform.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L24.html" data-id="L24" data-mcq-total="20" data-tech-total="12" data-flash-total="20"><div class="id">L24</div><h3>Security Testing — Red Team vs. Blue Team</h3><p>General security testing fundamentals: red/blue/purple teaming, the attack lifecycle, OWASP Top 10, and blue team defense concepts (SIEM, SOC, incident response).</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L25.html" data-id="L25" data-mcq-total="20" data-tech-total="12" data-flash-total="17"><div class="id">L25</div><h3>API Service Contracts</h3><p>OpenAPI vs. Swagger, contract-first vs. code-first development, mock servers, versioning, and capstone-project best practices for frontend/backend integration.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="SOA.html" data-id="SOA" data-mcq-total="20" data-tech-total="12" data-flash-total="12"><div class="id">SOA</div><h3>Service-Oriented Architecture (SOA)</h3><p>Loose coupling, reusable services, contracts, orchestration, and the trade-offs between SOA, ESBs, and modern microservice design.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="MS.html" data-id="MS" data-mcq-total="20" data-tech-total="12" data-flash-total="20"><div class="id">MS</div><h3>Microservices Deep Dive (Bonus Synthesis Guide)</h3><p>Pulling together the microservices threads scattered across L18, L21, L22, and L23, plus standard industry patterns: sagas, service mesh, resilience, and observability.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L28.html" data-id="L28" data-mcq-total="20" data-tech-total="12" data-flash-total="14"><div class="id">L28</div><h3>Deployment Models &amp; Diagrams</h3><p>Lecture-based guide: physical topology, failure domains, isolation, communication, trust, and recovery.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L29.html" data-id="L29" data-mcq-total="20" data-tech-total="12" data-flash-total="14"><div class="id">L29</div><h3>Secure Software Development</h3><p>General topic guide: security requirements, threat modelling, secure implementation, verification, and response.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L30.html" data-id="L30" data-mcq-total="20" data-tech-total="12" data-flash-total="16"><div class="id">L30</div><h3>Quality Assurance &amp; Coding Standards</h3><p>Lecture-based guide: SQA, faults and failures, reliability metrics, testing, reviews, and enforceable coding standards.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L31.html" data-id="L31" data-mcq-total="20" data-tech-total="12" data-flash-total="12"><div class="id">L31</div><h3>Presentation Skills</h3><p>General topic guide: audience, technical storytelling, evidence, visual communication, demos, timing, and questions.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L32.html" data-id="L32" data-mcq-total="20" data-tech-total="12" data-flash-total="12"><div class="id">L32</div><h3>Non-Functional Testing Recap</h3><p>General recap: measurable quality requirements, performance workloads, reliability, security, usability, and test interpretation.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L33.html" data-id="L33" data-mcq-total="20" data-tech-total="12" data-flash-total="12"><div class="id">L33</div><h3>Low Code, No Code &amp; Vibe Code</h3><p>General topic guide: development approaches, platform constraints, AI-generated code, lifecycle controls, and engineering judgement.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L34.html" data-id="L34" data-mcq-total="20" data-tech-total="12" data-flash-total="12"><div class="id">L34</div><h3>Cloud &amp; Edge Engineering</h3><p>General topic guide: service models, placement, elasticity, failure domains, offline operation, synchronisation, and fleet management.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
+<a class="lecture-card" href="L35.html" data-id="L35" data-mcq-total="20" data-tech-total="12" data-flash-total="14"><div class="id">L35</div><h3>ST2 Revision &amp; Integrated Practice</h3><p>Synthesised revision across L17–L34: concept comparisons, worked calculations, design trade-offs, and cross-topic scenarios.</p><div class="card-progress-bar"><div class="card-progress-fill"></div></div><div class="card-progress-label">Not started</div></a>
   </div>
 
   <section class="special-grid" aria-label="Additional practice material">
     <a class="special-card" href="comprehensive-test.html"><div class="id">Practice</div><div class="tag">Standalone</div><h3>Comprehensive Practice Test</h3><p>Interactive review covering L17 to L25, MS, and SOA with working multi-select questions.</p></a>
-    <a class="special-card" href="architecture-comparison.html"><div class="id">Overview</div><div class="tag">Visual</div><h3>Architecture Patterns Comparison</h3><p>Monolith, N-tier, N-layer, event-driven, SOA, microservices, and distributed monolith — all side-by-side with pros, cons, and rules of thumb.</p></a>
   </section>
 </main>
 
@@ -709,7 +732,7 @@ body {
     var tech = get("ct3-tech-" + id);
     var flash = get("ct3-flash-" + id);
     var quizAnswered = quiz ? Object.keys(quiz.answers || {}).length : 0;
-    var quizTotal = quiz ? (quiz.order || []).length : 0;
+    var quizTotal = card.getAttribute("data-mcq-total") | 0;
     var techReviewed = tech ? Object.keys(tech.reviewed || {}).filter(function (k) { return tech.reviewed[k]; }).length : 0;
     var techTotal = card.getAttribute("data-tech-total") | 0;
     var flashKnown = flash ? Object.keys(flash.known || {}).filter(function (k) { return flash.known[k]; }).length : 0;

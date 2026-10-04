@@ -24,7 +24,15 @@ LECTURES = [
     {"id": "L24", "nav": "L24 · Security Testing"},
     {"id": "L25", "nav": "L25 · Service Contracts"},
     {"id": "SOA", "nav": "SOA · Service-Oriented Architecture"},
-    {"id": "MS", "nav": "Bonus · Microservices Deep Dive"},
+    {"id": "MS", "nav": "MS · Microservices Deep Dive"},
+    {"id": "L28", "nav": "L28 · Deployment Diagrams"},
+    {"id": "L29", "nav": "L29 · Secure Software Development"},
+    {"id": "L30", "nav": "L30 · Quality Assurance & Coding Standards"},
+    {"id": "L31", "nav": "L31 · Presentation Skills"},
+    {"id": "L32", "nav": "L32 · Non-Functional Testing"},
+    {"id": "L33", "nav": "L33 · Low Code, No Code & Vibe Code"},
+    {"id": "L34", "nav": "L34 · Cloud & Edge Engineering"},
+    {"id": "L35", "nav": "L35 · ST2 Revision"},
 ]
 
 CSS = (ASSETS / "theme.css").read_text()
@@ -35,7 +43,7 @@ def nav_html(current_id):
     links = ['<a href="index.html" class="%s">Home</a>' % ("active" if current_id is None else "")]
     for lec in LECTURES:
         cls = "active" if lec["id"] == current_id else ""
-        links.append(f'<a href="{lec["id"]}.html" class="{cls}">{lec["nav"]}</a>')
+        links.append(f'<a href="{lec["id"]}.html" class="{cls}">{html.escape(lec["nav"])}</a>')
     return "\n".join(links)
 
 
@@ -52,7 +60,7 @@ PAGE_TEMPLATE = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title} — CT3 Study Guide</title>
+<title>{title} — ST2 Study Guide</title>
 <style>
 {css}
 </style>
@@ -77,13 +85,15 @@ PAGE_TEMPLATE = """<!doctype html>
   <div class="section-tabs">
     <button class="section-tab active" data-target="panel-content">Study Content</button>
     <button class="section-tab" data-target="panel-flash">Flashcards ({flash_count})</button>
-    <button class="section-tab" data-target="panel-mcq">MCQs (20)</button>
+    <button class="section-tab" data-target="panel-mcq">MCQs ({mcq_count})</button>
     <button class="section-tab" data-target="panel-tech">Technical Questions ({tech_count})</button>
   </div>
 
   <section id="panel-content" class="section-panel active">
     <div id="tldr-box" class="tldr-box"></div>
     <div id="content-body" class="content"></div>
+{sources}
+{extra_content}
   </section>
 
   <section id="panel-flash" class="section-panel">
@@ -130,7 +140,7 @@ INDEX_TEMPLATE = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>COS301 Software Engineering — Study Guides (L17-L25 + SOA + Practice Test)</title>
+<title>COS301 Software Engineering — ST2 Study Guides (L17–L35)</title>
 <style>
 {css}
 .lecture-grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-top: var(--space-6); }}
@@ -161,7 +171,12 @@ INDEX_TEMPLATE = """<!doctype html>
 }}
 .overall-progress .progress-bar {{ flex: 1; }}
 .overall-progress .quiz-score {{ white-space: nowrap; }}
-@media (max-width: 640px) {{ .lecture-grid {{ grid-template-columns: 1fr; }} }}
+@media (max-width: 640px) {{
+  .lecture-grid {{ grid-template-columns: 1fr; }}
+  .overall-progress {{ display: block; }}
+  .overall-progress .progress-bar {{ margin-bottom: var(--space-2); }}
+  .overall-progress .quiz-score {{ white-space: normal; }}
+}}
 </style>
 </head>
 <body>
@@ -177,8 +192,9 @@ INDEX_TEMPLATE = """<!doctype html>
 <main class="page">
   <header class="hero">
     <div class="hero-eyebrow">COS301 &middot; Software Engineering</div>
-    <h1>Class Test Study Guides — L17 to L25 + SOA</h1>
+    <h1>ST2 Study Guides — L17 to L35</h1>
     <p>Content summaries, flashcards, 20 shuffled MCQs, and 12 in-depth technical questions per lecture. Progress is saved locally in your browser.</p>
+    <p>SOA and Microservices cover the existing L26–L27 material. L28 and L30 follow supplied lecture notes; L29 and L31–L34 are general topic guides. L35 brings the material together for revision.</p>
   </header>
 
   <div class="overall-progress">
@@ -208,7 +224,7 @@ INDEX_TEMPLATE = """<!doctype html>
     var tech = get("ct3-tech-" + id);
     var flash = get("ct3-flash-" + id);
     var quizAnswered = quiz ? Object.keys(quiz.answers || {{}}).length : 0;
-    var quizTotal = quiz ? (quiz.order || []).length : 0;
+    var quizTotal = card.getAttribute("data-mcq-total") | 0;
     var techReviewed = tech ? Object.keys(tech.reviewed || {{}}).filter(function (k) {{ return tech.reviewed[k]; }}).length : 0;
     var techTotal = card.getAttribute("data-tech-total") | 0;
     var flashKnown = flash ? Object.keys(flash.known || {{}}).filter(function (k) {{ return flash.known[k]; }}).length : 0;
@@ -249,18 +265,34 @@ def build_lecture(lec):
         nav=nav_html(lec["id"]),
         lecture_id=lec["id"],
         subtitle=html.escape(data["subtitle"]),
+        mcq_count=len(data["mcqs"]),
         tech_count=len(data["techQuestions"]),
         flash_count=len(data.get("flashcards", [])),
         prev_link=prev_link,
         next_link=next_link,
         data_json=data_json,
         js=JS,
+        sources=sources_html(data),
+        extra_content=(ASSETS / f"{lec['id']}-extra.html").read_text()
+        if (ASSETS / f"{lec['id']}-extra.html").exists() else "",
     )
     (OUT_DIR / f"{lec['id']}.html").write_text(out)
     print(
         f"built {lec['id']}.html  ({len(data['mcqs'])} mcqs, {len(data['techQuestions'])} tech qs, "
         f"{len(data.get('flashcards', []))} flashcards)"
     )
+
+
+def sources_html(data):
+    sources = data.get("sources", [])
+    if not sources:
+        return ""
+    links = "\n".join(
+        f'<li><a href="{html.escape(source["url"], quote=True)}">'
+        f'{html.escape(source["title"])}</a></li>'
+        for source in sources
+    )
+    return f'<aside class="content" aria-label="Sources and further reading"><h2>Sources and further reading</h2><ul>{links}</ul></aside>'
 
 
 def build_index():
@@ -272,9 +304,10 @@ def build_index():
         data = json.loads(data_path.read_text())
         tech_total = len(data.get("techQuestions", []))
         flash_total = len(data.get("flashcards", []))
+        mcq_total = len(data["mcqs"])
         cards.append(
             f'<a class="lecture-card" href="{lec["id"]}.html" data-id="{lec["id"]}" '
-            f'data-tech-total="{tech_total}" data-flash-total="{flash_total}">'
+            f'data-mcq-total="{mcq_total}" data-tech-total="{tech_total}" data-flash-total="{flash_total}">'
             f'<div class="id">{lec["id"]}</div>'
             f'<h3>{html.escape(data["title"])}</h3>'
             f'<p>{html.escape(data["subtitle"])}</p>'

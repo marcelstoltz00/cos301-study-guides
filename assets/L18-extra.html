@@ -1,0 +1,88 @@
+<!-- Preserved from the pre-ST2 L18 page so rebuilds retain its UI-pattern appendix. -->
+<style>
+.mermaid {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  text-align: center;
+}
+.mermaid svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+</style>
+<section id="ui-patterns-extra" class="content">
+      <h2>UI Architecture Patterns: MVC, MVP, MVVM, MVT</h2>
+      <p><strong>Exam rule:</strong> focus on ownership: who receives input, who owns UI state, and who decides rendering flow.</p>
+
+      <h3>MVC Core Split</h3>
+      <table>
+        <thead><tr><th>Part</th><th>Responsibility</th><th>Typical role</th></tr></thead>
+        <tbody>
+          <tr><td>Model</td><td>Domain data and business rules</td><td>State and logic</td></tr>
+          <tr><td>Controller</td><td>Receives input and decides what happens next</td><td>Flow control</td></tr>
+          <tr><td>View</td><td>Renders model data for the user</td><td>Presentation</td></tr>
+        </tbody>
+      </table>
+      <div class="mermaid">
+flowchart LR
+    U[User] --> V[View]
+    V --> C[Controller]
+    C --> M[Model]
+    M --> V
+      </div>
+
+      <h3>MVVM vs MVT</h3>
+      <table>
+        <thead><tr><th>Feature</th><th>MVVM</th><th>MVT</th></tr></thead>
+        <tbody>
+          <tr><td>Main intermediary</td><td>ViewModel</td><td>View</td></tr>
+          <tr><td>Rendering style</td><td>Client-side, data-bound UI</td><td>Server-side template rendering</td></tr>
+          <tr><td>Common context</td><td>Angular, Vue, WPF-like patterns</td><td>Django and similar frameworks</td></tr>
+        </tbody>
+      </table>
+      <div class="mermaid">
+flowchart TB
+    subgraph MVVM
+      A1[View] --> B1[ViewModel]
+      B1 --> C1[Model]
+      C1 --> B1
+      B1 --> A1
+    end
+
+    subgraph MVT
+      A2[HTTP Request] --> B2[View]
+      B2 --> C2[Model]
+      C2 --> B2
+      B2 --> D2[Template]
+      D2 --> E2[Rendered HTML]
+    end
+      </div>
+
+      <h3>MVP Positioning</h3>
+      <table>
+        <thead><tr><th>Pattern</th><th>Control flow</th><th>Best fit</th></tr></thead>
+        <tbody>
+          <tr><td>MVC</td><td>Controller coordinates input and next action</td><td>Server-rendered apps</td></tr>
+          <tr><td>MVP</td><td>View emits events; Presenter updates View directly</td><td>Highly testable UI logic</td></tr>
+          <tr><td>MVVM</td><td>View binds declaratively to ViewModel state/commands</td><td>Reactive or state-heavy UIs</td></tr>
+          <tr><td>MVT</td><td>View controls request flow, template renders output</td><td>Django-style apps</td></tr>
+        </tbody>
+      </table>
+
+</section>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("ui-patterns-extra");
+  const render = () => {
+    window.mermaid.initialize({ startOnLoad: false, theme: "dark", securityLevel: "strict" });
+    window.mermaid.run({ nodes: container.querySelectorAll(".mermaid") }).catch(() => {});
+  };
+  if (window.mermaid) { render(); return; }
+  const script = document.createElement("script");
+  script.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
+  script.onload = render;
+  script.onerror = () => {}; // Preserve readable source when offline.
+  document.head.appendChild(script);
+});
+</script>

@@ -1,0 +1,390 @@
+{
+  "id": "L33",
+  "title": "Low Code, No Code & Vibe Code",
+  "subtitle": "General topic guide: development approaches, platform constraints, AI-generated code, lifecycle controls, and engineering judgement.",
+  "contentMarkdown": "## Scope\n\n**General study guide — no L33 slides were supplied.** Definitions describe useful distinctions rather than rigid product categories. “Vibe coding” is used in different ways; this guide states its narrower meaning below. Examples are hypothetical, with no vendor pricing or feature assumptions.\n\n## 1. What changes when less code is written manually?\n\nSoftware still needs requirements, data models, permissions, testing, deployment and maintenance. These approaches change how implementations are expressed and who can build them. They do not remove responsibility for the resulting behaviour.\n\n| Approach | Main construction method | Typical constraint |\n|---|---|---|\n| Traditional programming | Engineers directly design and edit code | Implementation effort and engineering skill |\n| Low code | Visual models, configuration and generated behaviour with extension code | Platform abstractions and extension boundaries |\n| No code | Configuration through supported visual building blocks | Behaviour limited by available building blocks and integrations |\n| AI-assisted engineering | Generated suggestions or changes reviewed and understood by developers | Quality of context, review and verification |\n| Vibe coding, narrow sense | Prompt, run and iterate while largely not inspecting generated code | Limited understanding of what was generated |\n\nA no-code application still runs code, typically managed by its platform. Low code does not specify a universal percentage of handwritten code. A platform can offer both no-code paths and developer extensions.\n\nMartin Fowler's terminology discussion distinguishes vibe coding by accepting generated implementation without examining it. Using an assistant while reviewing the code and taking responsibility for it is a broader engineering workflow. State the definition before comparing benefits or risks.\n\n## 2. Potential benefits and appropriate tasks\n\nVisual tools can shorten repetitive form, workflow and integration work. Domain specialists may directly express business rules, while developers implement complex extensions. Prompt-based prototypes can make an idea concrete quickly enough to gather feedback.\n\nA useful candidate has a well-understood workflow, supported data sources, modest custom requirements and a clear owner. An internal equipment-request form might fit; a specialised low-latency processing engine may exceed platform abstractions. Suitability depends on constraints and verification, not whether the tool is fashionable.\n\nPrototype speed is evidence of fast iteration on that prototype, not proof of lower total lifecycle cost. Include licensing, integration, operations, change effort, training and migration in the comparison.\n\n## 3. Limits and lock-in\n\nPlatform convenience can create dependence on proprietary models, runtimes, connectors and permission systems. Exporting a table does not necessarily export workflow behaviour or a runnable application. Ask separately about data export, application portability and operational independence.\n\nCustom extensions can add flexibility but also require developer skills and versioned interfaces. A workflow may become hard to understand as rules spread across screens, automations and connectors. Debugging needs visibility into inputs, transitions, failures and retries.\n\n| Concern | Question to investigate |\n|---|---|\n| Functional fit | Can the required workflow and exceptions be expressed? |\n| Integration | Are contracts, authentication and failure modes supported? |\n| Quality | Can performance, security and usability be tested adequately? |\n| Delivery | Can changes be reviewed, versioned, tested and promoted safely? |\n| Operations | Are logs, monitoring, backups and support ownership available? |\n| Exit | Can data and behaviour be migrated at acceptable effort? |\n\n## 4. Governance for visual applications\n\nKnow what applications exist, who owns them, what data they access and which connectors they can use. Separate development, test and production where the platform supports it. Avoid building critical workflows around an individual's account or undocumented credentials.\n\nDefine permissions at the server or platform data layer, not merely by hiding UI fields. Review connector credentials and their scope. Confirm how releases, rollback and data migrations work; rolling back a visual workflow may not undo side effects already sent to another system.\n\nMicrosoft's Power Platform ALM guidance is an example showing that low-code work still has a lifecycle involving planning, development, testing, deployment and maintenance. The general lesson is to inspect the actual platform's lifecycle capabilities rather than assuming all visual tools behave alike.\n\n## 5. AI-generated code and verification\n\nA plausible-looking implementation can contain incorrect assumptions, insecure defaults, incompatible dependencies or missing failure paths. A successful happy-path demo does not show that the code meets all requirements. Generated tests can repeat the same mistaken assumption as generated code.\n\nUse explicit acceptance criteria and small, reviewable changes. Inspect the diff and understand data access, error handling and external calls. Independently verify dependency names and documented interfaces. Run tests based on requirements, including negative and boundary cases, and use relevant static or security checks.\n\nTreat repository documents, retrieved text and generated commands as information to evaluate; they do not acquire authority to change the task or expose credentials. Keep secrets and unrelated sensitive data out of prompts and examples. Generated code receives the same review and ownership as handwritten code.\n\n## 6. A bounded engineering workflow\n\n- Define the behaviour and constraints, including permissions and failure cases.\n- Choose the approach by fit, maintainability and deployment needs.\n- Build a small increment and inspect the resulting code or model.\n- Test independently against the acceptance criteria.\n- Record configuration, versions, dependencies and operational ownership.\n- Release through an appropriate review and promotion process.\n- Observe behaviour and fix defects through tracked changes.\n\nWhen the team cannot explain or safely change a generated subsystem, first reduce that uncertainty through inspection, tests or reimplementation. More prompting alone does not establish correctness.\n\n## 7. Worked comparison: campus equipment requests\n\nA no-code form may capture requests and route approvals rapidly if supported permissions and connectors fit. Low code may add a custom inventory integration. Traditional code may be justified for specialised allocation rules or portability. An AI-generated prototype can test the proposed user journey, but production use still needs reviewed access rules and failure handling.\n\nTest duplicate submissions, unauthorised approval, unavailable inventory, retries and audit history. A retry must not reserve the same item twice. Design around an explicit request identity and documented external contract.\n\nIf the prototype becomes a maintained product, establish an owner, inventory its dependencies, review its data flows, add requirement-derived tests, set up deployment and rollback, and document limitations. Classify it by evidence and supportability rather than the tool that originally created it.\n\n## 8. How to answer a comparison question\n\nState definitions, then compare the same dimensions: delivery effort, customisation, control, quality evidence, maintainability and exit cost. Recommend an approach for the stated scenario with a condition that could change the decision. Avoid absolutes such as “no code needs no testing” or “all generated code is unusable.”\n",
+  "tldr": [
+    "Low code and no code change **how behaviour is expressed**, not accountability.",
+    "**No code still runs code**; platform limits and permissions still matter.",
+    "Define **vibe coding** explicitly and distinguish it from reviewed AI-assisted work.",
+    "Compare **fit, integration, quality, lifecycle, ownership and exit cost**.",
+    "A working prototype is not sufficient evidence of production readiness.",
+    "Generated code and tests need **independent, requirement-based verification**."
+  ],
+  "mcqs": [
+    {
+      "id": "m1",
+      "q": "What best describes low-code development?",
+      "options": [
+        "Visual/configuration-led construction with scope for code extensions",
+        "A fixed rule of fewer than ten source files",
+        "Software with no runtime code",
+        "Programming only in assembly"
+      ],
+      "correct": 0,
+      "explanation": "Low code describes an approach and abstraction level, not a universal line-count threshold."
+    },
+    {
+      "id": "m2",
+      "q": "What does no code mean in this guide?",
+      "options": [
+        "The application executes no code",
+        "The system has no data model",
+        "Testing is impossible",
+        "Users configure supported building blocks without routinely writing implementation code"
+      ],
+      "correct": 3,
+      "explanation": "The platform still runs software and imposes capabilities and constraints."
+    },
+    {
+      "id": "m3",
+      "q": "Which statement distinguishes the narrow sense of vibe coding?",
+      "options": [
+        "Every code review assisted by automation",
+        "All visual workflow configuration",
+        "Iterating on generated behaviour largely without inspecting generated implementation",
+        "Any use of an IDE"
+      ],
+      "correct": 2,
+      "explanation": "The key distinction is limited inspection and understanding, not merely using AI."
+    },
+    {
+      "id": "m4",
+      "q": "Which task is a plausible candidate for a visual workflow platform?",
+      "options": [
+        "Every workload with no requirements analysis",
+        "A well-understood internal request-and-approval flow with supported integrations",
+        "Every real-time control problem regardless of constraints",
+        "Any system requiring arbitrary runtime customisation"
+      ],
+      "correct": 1,
+      "explanation": "Fit depends on supported behaviour and constraints."
+    },
+    {
+      "id": "m5",
+      "q": "What does a rapid prototype demonstrate most directly?",
+      "options": [
+        "That the explored interaction can be made concrete quickly",
+        "That production security is complete",
+        "That lifecycle cost is always lower",
+        "That every failure case is covered"
+      ],
+      "correct": 0,
+      "explanation": "Prototype speed does not establish other quality properties."
+    },
+    {
+      "id": "m6",
+      "q": "What is vendor lock-in in this context?",
+      "options": [
+        "The mere use of variables",
+        "A guarantee that data is encrypted",
+        "An absence of any integration",
+        "Dependence that makes moving models, behaviour or operations costly"
+      ],
+      "correct": 3,
+      "explanation": "Proprietary abstractions and runtimes may increase migration effort."
+    },
+    {
+      "id": "m7",
+      "q": "Why is data export not the same as application portability?",
+      "options": [
+        "Export never has value",
+        "Portable applications cannot store data",
+        "Exported records may omit workflows, permissions and executable behaviour",
+        "Data files always contain all application logic"
+      ],
+      "correct": 2,
+      "explanation": "Data and behaviour have distinct migration needs."
+    },
+    {
+      "id": "m8",
+      "q": "Who is responsible for a generated application's behaviour?",
+      "options": [
+        "Only the file formatter",
+        "The team that adopts and operates it",
+        "Nobody because the tool generated it",
+        "Only end users"
+      ],
+      "correct": 1,
+      "explanation": "Generation does not remove engineering ownership or accountability."
+    },
+    {
+      "id": "m9",
+      "q": "What is risky about a workflow owned only by one employee account?",
+      "options": [
+        "Access and operation can fail when that account changes or leaves",
+        "It guarantees excessive performance",
+        "It prevents all audits",
+        "It removes the need for backups"
+      ],
+      "correct": 0,
+      "explanation": "Critical workflows need durable ownership and managed credentials."
+    },
+    {
+      "id": "m10",
+      "q": "Which access-control approach is appropriate?",
+      "options": [
+        "Hide fields and trust all direct requests",
+        "Give every connector administrator access",
+        "Rely on unpredictable record IDs alone",
+        "Enforce permissions at the server or platform data layer"
+      ],
+      "correct": 3,
+      "explanation": "Interface visibility is not a security boundary."
+    },
+    {
+      "id": "m11",
+      "q": "Why review connector permissions?",
+      "options": [
+        "Their names always reveal all permissions",
+        "Permission scopes never change",
+        "Connectors may expose data or perform privileged side effects",
+        "Connectors cannot authenticate"
+      ],
+      "correct": 2,
+      "explanation": "Integration credentials should match the minimum required operations."
+    },
+    {
+      "id": "m12",
+      "q": "Can generated tests alone prove generated code is correct?",
+      "options": [
+        "Yes, if the code is short",
+        "No, both may share the same mistaken assumption",
+        "Yes, if they were generated together",
+        "Yes, if every test is green"
+      ],
+      "correct": 1,
+      "explanation": "Tests need independent grounding in requirements and realistic failure cases."
+    },
+    {
+      "id": "m13",
+      "q": "What should be done with an unfamiliar generated dependency name?",
+      "options": [
+        "Verify the dependency and its documented interface before adoption",
+        "Install any similarly named package",
+        "Assume the name must exist",
+        "Remove all version information"
+      ],
+      "correct": 0,
+      "explanation": "Plausible names or interfaces can be incorrect and require independent checking."
+    },
+    {
+      "id": "m14",
+      "q": "What supports safe changes in a low-code application?",
+      "options": [
+        "Editing production anonymously",
+        "Skipping all documentation",
+        "Sharing one privileged password",
+        "Versioning, review, testing and controlled environment promotion"
+      ],
+      "correct": 3,
+      "explanation": "Visual changes still need a managed lifecycle."
+    },
+    {
+      "id": "m15",
+      "q": "Why may rolling back a workflow not undo its effects?",
+      "options": [
+        "Workflows never contact other systems",
+        "Versioning prevents all side effects",
+        "External actions such as reservations may already have occurred",
+        "Rollback always deletes every external record"
+      ],
+      "correct": 2,
+      "explanation": "State and external effects require explicit recovery or compensation design."
+    },
+    {
+      "id": "m16",
+      "q": "Which comparison is most useful for choosing an approach?",
+      "options": [
+        "Only the length of the first prompt",
+        "Fit, quality evidence, maintainability, ownership and exit effort",
+        "Only the number of marketing claims",
+        "Only whether the UI is colourful"
+      ],
+      "correct": 1,
+      "explanation": "The choice should reflect the complete scenario and lifecycle."
+    },
+    {
+      "id": "m17",
+      "q": "A generated feature works for an administrator. What remains important?",
+      "options": [
+        "Testing less-privileged roles and object scopes",
+        "Assuming all permissions are correct",
+        "Disabling the role system",
+        "Replacing the database name"
+      ],
+      "correct": 0,
+      "explanation": "A privileged happy path can conceal missing access restrictions."
+    },
+    {
+      "id": "m18",
+      "q": "What should a team do if it cannot explain a generated critical module?",
+      "options": [
+        "Add more unexplained generated code",
+        "Ship because it compiles",
+        "Hide the source from reviewers",
+        "Inspect, test or reimplement until it can maintain it responsibly"
+      ],
+      "correct": 3,
+      "explanation": "Maintainability requires sufficient understanding and evidence."
+    },
+    {
+      "id": "m19",
+      "q": "Which requirement helps avoid duplicate reservations on retries?",
+      "options": [
+        "Longer help text only",
+        "Random new IDs for each retry",
+        "A stable request identity and idempotent handling",
+        "A different button colour"
+      ],
+      "correct": 2,
+      "explanation": "Repeated delivery should map to one intended business operation."
+    },
+    {
+      "id": "m20",
+      "q": "What is a reasonable production-readiness criterion for a prototype?",
+      "options": [
+        "Using the newest advertised tool",
+        "Reviewed behaviour, quality evidence and clear operational ownership",
+        "Having a polished screenshot",
+        "Having been generated quickly"
+      ],
+      "correct": 1,
+      "explanation": "Readiness depends on verified requirements and supportability, not origin."
+    }
+  ],
+  "techQuestions": [
+    {
+      "id": "t1",
+      "q": "Compare low code, no code and traditional code for an approval workflow.",
+      "answer": "No code may implement standard forms and routing quickly if its permissions and connectors fit. Low code permits extensions for specialised integration or rules. Traditional code provides more direct control at greater implementation and maintenance effort. Compare testing, deployment, data access and exit needs before choosing; the simplest adequate approach depends on the actual requirements."
+    },
+    {
+      "id": "t2",
+      "q": "Distinguish vibe coding from responsible AI-assisted engineering.",
+      "answer": "In the narrow definition used here, vibe coding iterates through prompts and execution while largely ignoring generated implementation. AI-assisted engineering can instead use generated changes as proposals that developers inspect, understand and verify against requirements. Both can involve the same tool. The distinction concerns the workflow and evidence, not a claim that one tool category always produces good or bad code."
+    },
+    {
+      "id": "t3",
+      "q": "Evaluate a platform's lock-in before adopting it.",
+      "answer": "Inspect export of data, schema, workflow definitions and runnable behaviour separately. Review proprietary connectors, permission models and runtime requirements. Try a small migration or export exercise and estimate the effort to replace critical functions. Weigh that cost against delivery benefits rather than assuming either perfect portability or unacceptable lock-in from the platform label alone."
+    },
+    {
+      "id": "t4",
+      "q": "Design governance for applications built by domain specialists.",
+      "answer": "Keep an inventory with a named business and technical owner, data classification and approved integrations. Define least-privilege access, supported environments and review requirements for important changes. Provide testing, monitoring and handover procedures suited to the platform. Encourage useful domain-led development while ensuring critical workflows can be understood and maintained when their original creator leaves."
+    },
+    {
+      "id": "t5",
+      "q": "A generated results portal passes its own tests. What further review is needed?",
+      "answer": "Derive independent checks from the actual access rules and user workflows. Inspect object and tenant authorisation, data queries, errors and secrets handling. Test lower-privilege users and forbidden actions directly. Confirm dependencies and deployment settings. The existing tests may reflect the same incorrect assumptions as the generated code, so green results alone are insufficient."
+    },
+    {
+      "id": "t6",
+      "q": "How would you move an AI-generated prototype toward maintained production use?",
+      "answer": "Establish requirements and ownership, inventory dependencies and data flows, and review the implementation for correctness and security. Replace unclear or unsuitable sections, add requirement-based tests and document configuration. Set up repeatable deployment, observability and rollback or recovery. Release only within the scope supported by evidence, with unresolved limitations explicitly tracked."
+    },
+    {
+      "id": "t7",
+      "q": "Explain why hidden UI fields do not protect sensitive data in a visual app.",
+      "answer": "A user may query the backing data service or invoke a connector directly. Protection must be enforced where records are read or changed, with identity and resource-level rules. Test unauthorised direct access using representative roles. Review whether the connector itself uses broad shared credentials that bypass the apparent restrictions in the screen."
+    },
+    {
+      "id": "t8",
+      "q": "Plan tests for an inventory connector used by a request workflow.",
+      "answer": "Verify request and response mapping against the contract, authentication, authorisation and expected error cases. Exercise timeout, unavailable service, duplicate submission and retry after an uncertain outcome. Use a stable request identity so one business reservation is not repeated. Test the real boundary in an appropriate integration environment, then monitor failures and reconciliation needs after release."
+    },
+    {
+      "id": "t9",
+      "q": "What costs belong in a low-code versus custom-code comparison?",
+      "answer": "Include delivery effort, platform licensing, integration development, training, test and release tooling, operations, support and eventual migration. Consider how the costs change with users, data volume and custom requirements. Avoid claiming lower total cost solely from the speed of the first form. Use explicit assumptions and revisit the estimate when the required behaviour changes."
+    },
+    {
+      "id": "t10",
+      "q": "How can prompts and acceptance criteria improve a generated change?",
+      "answer": "Specify the intended behaviour, data contracts, permissions, edge cases and constraints, then request a small change. Review the resulting implementation and test against those criteria independently. Clear context reduces ambiguity but does not guarantee compliance. Keep sensitive data out of examples and verify any proposed external dependency or command before use."
+    },
+    {
+      "id": "t11",
+      "q": "Why is deployment rollback not enough for a failed approval workflow?",
+      "answer": "The earlier workflow may already have sent messages, reserved stock or changed records in an external system. Reverting its definition does not reverse those effects. Record operation identities and states, design compensation or reconciliation where appropriate, and verify the resulting data. Recovery must cover both executable version and business state."
+    },
+    {
+      "id": "t12",
+      "q": "Recommend an approach for a specialised latency-sensitive service.",
+      "answer": "Start with measurable latency, workload and integration constraints. Determine whether a platform can expose enough control and measurement to meet them; a small benchmark can test that assumption. If critical behaviour falls outside its supported model, custom code may be appropriate. A visual front end can still coexist with that service, provided contracts and ownership remain clear."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "f1",
+      "term": "Low code",
+      "definition": "Construction through visual models and configuration with developer extension points."
+    },
+    {
+      "id": "f2",
+      "term": "No code",
+      "definition": "Construction through supported configurable building blocks without routine implementation coding."
+    },
+    {
+      "id": "f3",
+      "term": "Citizen developer",
+      "definition": "A domain specialist building applications, often through visual tools, within an ownership and governance model."
+    },
+    {
+      "id": "f4",
+      "term": "Vibe coding, narrow sense",
+      "definition": "Prompt-driven iteration while largely not inspecting the generated code."
+    },
+    {
+      "id": "f5",
+      "term": "AI-assisted engineering",
+      "definition": "Use of generation tools within a workflow of human understanding, review and verification."
+    },
+    {
+      "id": "f6",
+      "term": "Vendor lock-in",
+      "definition": "Dependence that increases the effort of migrating data, behaviour or operations."
+    },
+    {
+      "id": "f7",
+      "term": "Connector",
+      "definition": "An integration component linking an application to an external service or data source."
+    },
+    {
+      "id": "f8",
+      "term": "ALM",
+      "definition": "Application lifecycle management from planning through development, delivery and maintenance."
+    },
+    {
+      "id": "f9",
+      "term": "Shadow IT",
+      "definition": "Technology adopted outside the organisation's normal visibility and governance."
+    },
+    {
+      "id": "f10",
+      "term": "Prototype",
+      "definition": "An exploratory implementation used to test ideas, not automatically a production-ready system."
+    },
+    {
+      "id": "f11",
+      "term": "Independent verification",
+      "definition": "Checking against requirements and evidence rather than only the implementation's own assumptions."
+    },
+    {
+      "id": "f12",
+      "term": "Exit strategy",
+      "definition": "A plan for recovering or migrating data, behaviour and ownership if the platform is replaced."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Martin Fowler — terminology: Vibe Coding",
+      "url": "https://martinfowler.com/bliki/VibeCoding.html"
+    },
+    {
+      "title": "Microsoft — application lifecycle management in Power Platform",
+      "url": "https://learn.microsoft.com/en-us/power-platform/alm/overview-alm"
+    }
+  ]
+}

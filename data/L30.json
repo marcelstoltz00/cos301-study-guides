@@ -1,0 +1,407 @@
+{
+  "id": "L30",
+  "title": "Quality Assurance & Coding Standards",
+  "subtitle": "Lecture-based guide: SQA, faults and failures, reliability metrics, testing, reviews, and enforceable coding standards.",
+  "contentMarkdown": "## Scope and source\n\nBased on the supplied **L29 - Software Quality Assurance.md**, assigned to **L30** by the updated scope. The source filename is retained. Worked questions and code examples are study additions. Historical standards named in the slides are lecture references, not assertions about current certification requirements.\n\n## 1. What counts as quality?\n\nMeeting the specification is necessary but insufficient: specifications can be incomplete, ambiguous or omit qualities users reasonably expect. The notes describe quality as conformance to explicit functional and performance requirements, documented development standards, and implicit professional expectations.\n\nQuality attributes include safety, security, reliability, resilience, robustness, understandability, testability, adaptability, modularity, complexity, portability, usability, reusability, efficiency and learnability. They can conflict: extra redundancy can improve continuity while increasing resource use and complexity. Explain trade-offs in the system's context.\n\n## 2. SQA versus quality control\n\n**Software quality assurance (SQA)** establishes and checks the processes intended to produce quality. **Quality control (QC)** evaluates artifacts and software to discover problems. Testing is part of quality work, not all of it.\n\nThe notes' three-part approach is to establish organisation-wide policies, tailor project-specific procedures and standards, and ensure the agreed procedures are actually followed. An unused standards document provides little assurance.\n\nSQA activities include technical methods, formal technical reviews, testing, standards enforcement, change control, measurement, record keeping and reporting. Reviews occur at requirements, design, code and test stages, with customer feedback during maintenance. Formal reviews seek defects in the artifact rather than blame in its author.\n\nBenefits include fewer latent defects, reduced rework and maintenance, greater reliability and customer satisfaction. Costs include staff time, tooling, cultural change and difficulty allocating scarce resources. Tailor effort to project risk; eliminating assurance to save time can move a larger cost into maintenance.\n\n## 3. Faults, failures and their causes\n\nA **fault** is a static defect that can cause incorrect behaviour. A **failure** is observed erroneous or unexpected runtime behaviour. A faulty leap-year branch may remain dormant until an affected date is processed. Absence of observed failures is not proof of absence of faults.\n\nThe slides identify these defect sources:\n\n| Code | Cause |\n|---|---|\n| IES | Incomplete or erroneous specifications |\n| MCC | Misinterpreted customer communication |\n| IDS | Intentional deviation from specifications |\n| EDL | Error in design logic |\n| EDR | Error in data representation |\n| PLT | Error translating a design into program code |\n| ICI | Inconsistent component interfaces |\n| VPS | Violation of programming standards |\n| IET | Incomplete or erroneous testing |\n| IID | Inaccurate or incomplete documentation |\n| HCI | Ambiguous or inconsistent human/computer interface |\n\nUse these categories to explain prevention: interface reviews address ICI; requirements clarification addresses IES or MCC. Not every defect originates in a programmer's syntax.\n\n## 4. Reliability and availability\n\n**Reliability** concerns failure-free operation over a specified duration in a specified environment. An operational profile describes how the system is actually used; testing rare and common operations in the wrong proportions can distort a reliability estimate. Failure consequences also matter.\n\n**Availability** concerns being operational when needed. A service can fail often but recover rapidly, giving relatively high availability while still interrupting users. Both the frequency and duration of failures matter.\n\nUse the **lecture's convention**:\n\n```text\nMTTF = total observed operating time / number of failures\nMTTR = total observed repair time / number of repairs\nMTBF = MTTF + MTTR\nAvailability = MTTF / (MTTF + MTTR) × 100%\n```\n\nMTBF terminology varies between contexts; state this convention in calculations. The ratio models long-run availability under the assumed operating/repair cycle. Do not treat a small sample as a guarantee of future service.\n\n### Worked example from the notes\n\nUptimes are 180, 220 and 200 hours; repair times are 3, 5 and 4 hours. MTTF = 600/3 = **200 h**. MTTR = 12/3 = **4 h**. MTBF = **204 h**. Availability = 200/204 × 100 = **98.04%**. Use these observed cycles; do not infer additional measurements from the narrative's six-month period.\n\nIf MTTR falls to 1 hour with the same MTTF, availability becomes 200/201 × 100 = **99.50%**. Recovery improvements can raise availability without removing the underlying fault.\n\n## 5. Metrics and design quality\n\nA metric measures a system, process or artifact. **Control metrics** support planning and management, such as elapsed time or effort. **Predictor metrics** estimate product qualities, for example complexity as a signal of maintenance difficulty. An internal attribute is measured from the software; an external attribute is observed through use or maintenance. A predictor is not a proof of the quality it predicts.\n\nMaintainability depends on cohesion, coupling, understandability and adaptability. Structural **fan-in** counts incoming component dependencies or calls under the chosen counting rule; **fan-out** counts outgoing dependencies. High fan-in can indicate widespread reuse and a large change impact. High fan-out can increase coordination and testing complexity. Interpret them with context.\n\nThe notes' information-flow measure is **component length × (fan-in × fan-out)²**, using informational fan counts that also consider data flows and shared structures. For length 10, fan-in 2 and fan-out 3, the result is 10 × 6² = **360**. This is not cyclomatic complexity. Cyclomatic complexity instead describes independent control-flow paths; for one connected control-flow graph, it is E − N + 2.\n\n## 6. Choose the right quality check\n\n| Check | Main purpose |\n|---|---|\n| Unit | Check a unit's service and postconditions with dependencies controlled |\n| Integration | Exercise real interactions and data flows across the boundary under test |\n| Regression | Re-run relevant checks after change to detect lost behaviour or quality |\n| Non-functional | Measure qualities such as performance, resilience and security |\n| Acceptance | Establish whether user requirements and acceptance conditions are met |\n| Configuration | Check supported combinations of settings and environments |\n| Adapter | Verify external protocol/serialization adapters or human-facing interfaces |\n\nThe slides emphasise mocking dependencies in unit tests and avoiding mocks in integration tests. More precisely, the integration being claimed needs real collaborating parts; substituting the very boundary under test prevents evidence about it. A unit test should assert required outcomes, not merely that no exception occurred.\n\n**Equivalence partitioning** selects representatives from input classes expected to behave similarly. **Boundary value analysis** targets edges and nearby values. **Path analysis** uses code structure and is a white-box technique. For an allowed integer range 1–100, useful boundary checks include 0, 1, 2, 99, 100 and 101.\n\n## 7. Coding standards that can be enforced\n\nSpecify domain-meaningful names, language-appropriate casing, consistent formatting, clear responsibilities, exception handling, input checks, comments, tests, security hygiene and version-control conventions. Explain the purpose and give concrete good/bad examples. Short-function and line-length guidance should improve readability rather than become a substitute for design judgement.\n\n```python\n# Bad: suppresses all errors and reports success.\ndef charge(order):\n    try:\n        gateway.charge(order)\n    except Exception:\n        return True\n\n# Better: handle an expected failure without claiming payment succeeded.\ndef charge(order):\n    try:\n        return gateway.charge(order)\n    except GatewayTimeout as error:\n        raise PaymentStatusUnknown(order.id) from error\n```\n\nThis illustrative code assumes those domain exceptions exist. An unknown payment outcome requires reconciliation or an idempotent retry policy; blindly retrying can double-charge. Standards should explain both the pattern and its business reason.\n\nUse comments for intent, rationale and non-obvious behaviour, and keep API documentation accurate. A **formatter** applies layout; a **linter/analyser** checks configured rules; **human review** evaluates semantics and trade-offs. Run consistent checks locally and in CI, document exceptions and review actual code for compliance. Local hooks alone can be bypassed.\n\n**Exam method:** define the term, distinguish its nearest alternative, apply it to a scenario, and explain what evidence would support the claim.\n",
+  "tldr": [
+    "Quality includes **explicit requirements, standards and implicit expectations**.",
+    "**SQA governs processes; QC checks products**. Reviews and testing both contribute.",
+    "A **fault** is a defect; a **failure** is observed incorrect runtime behaviour.",
+    "Lecture formulas: **MTBF = MTTF + MTTR**, availability = MTTF / MTBF.",
+    "Metrics are **indicators**, not automatic proof of maintainability or correctness.",
+    "Know unit, integration, regression, acceptance, configuration and adapter testing.",
+    "Coding standards need **purpose, examples, automation and demonstrated compliance**."
+  ],
+  "mcqs": [
+    {
+      "id": "m1",
+      "q": "Why is conformance to a specification alone insufficient for quality?",
+      "options": [
+        "The specification may omit implicit expectations or be ambiguous",
+        "Specifications never contain performance requirements",
+        "Quality only means attractive interfaces",
+        "Standards replace all requirements"
+      ],
+      "correct": 0,
+      "explanation": "The notes include explicit requirements, development standards and implicit professional expectations."
+    },
+    {
+      "id": "m2",
+      "q": "Which activity is primarily process-oriented SQA?",
+      "options": [
+        "Clicking a failing button once",
+        "Observing one incorrect total",
+        "Timing one database query",
+        "Establishing and checking project review procedures"
+      ],
+      "correct": 3,
+      "explanation": "SQA concerns the practices used to produce and sustain quality."
+    },
+    {
+      "id": "m3",
+      "q": "What is a software fault?",
+      "options": [
+        "Only a hardware power loss",
+        "The total repair duration",
+        "A static defect that can cause a failure",
+        "Every successful execution"
+      ],
+      "correct": 2,
+      "explanation": "A fault may remain dormant until particular inputs or states activate it."
+    },
+    {
+      "id": "m4",
+      "q": "What is a software failure?",
+      "options": [
+        "An unexecuted defective branch by itself",
+        "Observed incorrect or unexpected runtime behaviour",
+        "Any comment in source code",
+        "A code-formatting preference"
+      ],
+      "correct": 1,
+      "explanation": "Failure refers to behaviour, while a fault is the underlying defect."
+    },
+    {
+      "id": "m5",
+      "q": "Which defect category covers mismatched component interfaces?",
+      "options": [
+        "ICI",
+        "MTTF",
+        "RPO",
+        "MTTR"
+      ],
+      "correct": 0,
+      "explanation": "The notes use ICI for inconsistent component interfaces."
+    },
+    {
+      "id": "m6",
+      "q": "Uptimes are 180, 220 and 200 hours. What is MTTF for these cycles?",
+      "options": [
+        "600 hours",
+        "204 hours",
+        "4 hours",
+        "200 hours"
+      ],
+      "correct": 3,
+      "explanation": "Divide the 600 observed operating hours by three failures."
+    },
+    {
+      "id": "m7",
+      "q": "Repair times are 3, 5 and 4 hours. What is MTTR?",
+      "options": [
+        "200 hours",
+        "204 hours",
+        "4 hours",
+        "12 hours"
+      ],
+      "correct": 2,
+      "explanation": "The mean repair duration is 12 divided by three."
+    },
+    {
+      "id": "m8",
+      "q": "Under the lecture convention, MTTF is 200 h and MTTR is 4 h. What is MTBF?",
+      "options": [
+        "800 hours",
+        "204 hours",
+        "196 hours",
+        "50 hours"
+      ],
+      "correct": 1,
+      "explanation": "The notes define MTBF as MTTF plus MTTR."
+    },
+    {
+      "id": "m9",
+      "q": "What availability follows from MTTF 200 h and MTTR 4 h?",
+      "options": [
+        "About 98.04%",
+        "Exactly 100%",
+        "About 2%",
+        "About 50%"
+      ],
+      "correct": 0,
+      "explanation": "Availability is 200 divided by 204, multiplied by 100 percent."
+    },
+    {
+      "id": "m10",
+      "q": "What can improve availability without increasing MTTF?",
+      "options": [
+        "Increasing repair time",
+        "Removing all monitoring",
+        "Counting fewer incidents",
+        "Reducing repair time"
+      ],
+      "correct": 3,
+      "explanation": "Faster recovery reduces the proportion of time unavailable."
+    },
+    {
+      "id": "m11",
+      "q": "Which is a predictor metric example?",
+      "options": [
+        "The team's office number",
+        "The number of days in a semester",
+        "Complexity used as an indicator of maintenance difficulty",
+        "The project's meeting date"
+      ],
+      "correct": 2,
+      "explanation": "Predictor metrics link a measurable attribute to another product quality."
+    },
+    {
+      "id": "m12",
+      "q": "What does structural fan-out measure?",
+      "options": [
+        "Only source-file size",
+        "Outgoing calls or dependencies from a component under a defined counting rule",
+        "All incoming user sessions",
+        "The time to restore a backup"
+      ],
+      "correct": 1,
+      "explanation": "Fan-out concerns how many other components the component depends on."
+    },
+    {
+      "id": "m13",
+      "q": "Length is 10, informational fan-in is 2 and fan-out is 3. What is the lecture's information-flow complexity?",
+      "options": [
+        "360",
+        "60",
+        "36",
+        "15"
+      ],
+      "correct": 0,
+      "explanation": "Apply length × (fan-in × fan-out)²: 10 × 36 = 360."
+    },
+    {
+      "id": "m14",
+      "q": "Which test needs real collaboration across the boundary being evaluated?",
+      "options": [
+        "A formatter check",
+        "A mocked unit test of one function",
+        "A document spell check",
+        "Integration test"
+      ],
+      "correct": 3,
+      "explanation": "Replacing that boundary with a mock prevents verifying its real integration behaviour."
+    },
+    {
+      "id": "m15",
+      "q": "What is regression testing?",
+      "options": [
+        "Testing only source formatting",
+        "Testing only with new users",
+        "Checking that changes have not broken previously supported behaviour or qualities",
+        "Testing only brand-new features"
+      ],
+      "correct": 2,
+      "explanation": "Regression checks may include functional and non-functional tests."
+    },
+    {
+      "id": "m16",
+      "q": "Which method chooses values immediately around limits?",
+      "options": [
+        "Release signing",
+        "Boundary value analysis",
+        "Randomly renaming variables",
+        "Fan-in measurement"
+      ],
+      "correct": 1,
+      "explanation": "Boundary checks target likely off-by-one and limit-handling defects."
+    },
+    {
+      "id": "m17",
+      "q": "Which method is white-box?",
+      "options": [
+        "Path analysis",
+        "Equivalence partitioning from the specification",
+        "User acceptance interviews",
+        "Black-box boundary analysis"
+      ],
+      "correct": 0,
+      "explanation": "Path analysis uses internal control flow to identify test paths."
+    },
+    {
+      "id": "m18",
+      "q": "Why are local pre-commit hooks insufficient by themselves?",
+      "options": [
+        "They always change application behaviour",
+        "They cannot run linters",
+        "They replace code review completely",
+        "They can be bypassed and need consistent CI enforcement"
+      ],
+      "correct": 3,
+      "explanation": "Shared CI checks provide a consistent gate for submitted changes."
+    },
+    {
+      "id": "m19",
+      "q": "What is wrong with catching every exception and returning success?",
+      "options": [
+        "It guarantees availability",
+        "It makes the code strongly typed",
+        "It hides failures and can violate business correctness",
+        "It always increases test coverage"
+      ],
+      "correct": 2,
+      "explanation": "Recovery must be deliberate; reporting success after an unknown failure can corrupt workflow state."
+    },
+    {
+      "id": "m20",
+      "q": "Which comment provides the most useful rationale?",
+      "options": [
+        "Assert the code can never fail",
+        "Explain why a retry must use the same payment identifier",
+        "Repeat that x is assigned to x",
+        "Copy the next line word for word"
+      ],
+      "correct": 1,
+      "explanation": "Comments should clarify intent and non-obvious constraints rather than duplicate obvious syntax."
+    }
+  ],
+  "techQuestions": [
+    {
+      "id": "t1",
+      "q": "Explain the three-part SQA approach and apply it to a student project.",
+      "answer": "Start with organisation-level templates for review, tests and change control. Tailor them to the project's language, risks and team size, then verify that the team follows them through CI evidence, review records and spot checks. A template alone is insufficient. Assign an owner and periodically review whether the practices catch meaningful defects without unnecessary overhead."
+    },
+    {
+      "id": "t2",
+      "q": "Why can software meet written requirements and still have poor quality?",
+      "answer": "Requirements may omit expected security, usability or recovery behaviour, or describe it ambiguously. A feature-complete results portal that exposes another student's records violates an implicit quality expectation. Clarify such expectations into measurable acceptance criteria. Consider competing attributes and document trade-offs instead of assuming every quality can be maximised simultaneously."
+    },
+    {
+      "id": "t3",
+      "q": "Distinguish a fault and a failure with an example and a testing implication.",
+      "answer": "An incorrect date condition in source code is a fault. Rejecting a valid leap-day booking when that branch runs is a failure. If tests never use the affected date, the fault can remain unobserved. Choose partitions and boundaries likely to exercise dormant defects; do not conclude that a passing test suite proves the implementation fault-free."
+    },
+    {
+      "id": "t4",
+      "q": "Calculate all reliability metrics from the lecture's three observed cycles.",
+      "answer": "Operating times total 600 hours and repairs total 12 hours. MTTF = 600/3 = 200 h; MTTR = 12/3 = 4 h. Using the lecture convention, MTBF = 204 h and availability = 200/204 × 100 = 98.04%. State the observation scope and units; these sample averages are estimates, not guarantees for an entire future semester."
+    },
+    {
+      "id": "t5",
+      "q": "Compare reducing faults with improving restoration procedures.",
+      "answer": "Removing a recurrent fault may increase the time between failures, supporting reliability. Automated recovery or clearer runbooks may reduce repair time, increasing availability even if failure frequency remains unchanged. Measure both effects separately. With MTTF 200 h, reducing MTTR from 4 h to 1 h raises the availability estimate from 98.04% to 99.50% without changing MTTF."
+    },
+    {
+      "id": "t6",
+      "q": "How should a team interpret a component with high fan-in?",
+      "answer": "Many callers suggest reuse and potential wide impact if the component changes. The lecture associates this with coupling, but it is not automatically a reason to duplicate a useful shared service. Inspect interface stability, caller assumptions and test coverage. Use the metric to prioritise review and compatibility checks rather than treating a high number as proof of bad design."
+    },
+    {
+      "id": "t7",
+      "q": "Compare control metrics, predictor metrics and external quality attributes.",
+      "answer": "Effort and elapsed time help manage the development process and are control metrics. Code complexity is directly measurable and can be used as a predictor of maintenance difficulty. Ease of maintenance is assessed through actual work and depends on context. Validate the relationship with project evidence; optimising a predictor alone can fail to improve the quality users or maintainers experience."
+    },
+    {
+      "id": "t8",
+      "q": "Design tests for an integer input accepted only from 1 to 100.",
+      "answer": "Partition into valid integers, integers below the minimum, integers above the maximum and invalid types or formats as appropriate to the interface. Test representative values and boundaries 0, 1, 2, 99, 100 and 101. Assert the intended result or error. If internal branching matters, supplement these black-box cases with path-based checks rather than assuming boundaries cover every branch."
+    },
+    {
+      "id": "t9",
+      "q": "How do unit, integration and regression testing complement each other?",
+      "answer": "Unit tests isolate a responsibility and check outputs or postconditions. Integration tests exercise real interactions, such as API serialization and database behaviour. Regression testing is a purpose applied after change across these levels and relevant non-functional checks. Mocks help isolation but cannot establish that the substituted real integration works. Select checks based on the changed behaviour and dependencies."
+    },
+    {
+      "id": "t10",
+      "q": "Draft a practical coding-standard policy outline.",
+      "answer": "State goals such as readability, safe failure handling and consistent collaboration. Define naming and formatting, responsibility boundaries, exception rules, documentation, testing, security hygiene and commit conventions. Include good and bad code examples, tool configuration and how CI enforces it. Explain exceptions and review responsibility. Demonstrate compliance in actual code rather than only listing tool names in a report."
+    },
+    {
+      "id": "t11",
+      "q": "Review the payment function that catches every exception and returns true.",
+      "answer": "It converts unknown outcomes into apparent success and hides errors from monitoring and callers. Handle specific expected failures, preserve useful context and expose an accurate domain outcome such as payment status unknown. Verify provider status or retry with a stable idempotency mechanism. Test successful payment, timeout and explicit rejection; an exception policy must preserve business correctness."
+    },
+    {
+      "id": "t12",
+      "q": "How can a small team adopt SQA without excessive ceremony?",
+      "answer": "Choose lightweight practices tied to its highest risks: a short requirements review, automated formatting and tests, peer review of sensitive changes, and a defect log with owners. Reuse templates and measure whether rework or escaped defects improve. Budget time for setup and maintenance. Expand controls where evidence warrants it rather than copying every process from a much larger organisation."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "f1",
+      "term": "SQA",
+      "definition": "Process-oriented activities intended to establish and sustain software quality."
+    },
+    {
+      "id": "f2",
+      "term": "Quality control",
+      "definition": "Evaluation of products and artifacts to identify quality problems."
+    },
+    {
+      "id": "f3",
+      "term": "Fault",
+      "definition": "A static defect that can cause incorrect runtime behaviour."
+    },
+    {
+      "id": "f4",
+      "term": "Failure",
+      "definition": "Observed erroneous or unexpected behaviour during execution."
+    },
+    {
+      "id": "f5",
+      "term": "Operational profile",
+      "definition": "Description of the conditions and usage mix in which reliability is evaluated."
+    },
+    {
+      "id": "f6",
+      "term": "MTTF",
+      "definition": "Mean observed operating time until failure."
+    },
+    {
+      "id": "f7",
+      "term": "MTTR",
+      "definition": "Mean time to repair or restore under the stated measurement convention."
+    },
+    {
+      "id": "f8",
+      "term": "MTBF in these notes",
+      "definition": "MTTF plus MTTR: mean complete operating-and-repair cycle length."
+    },
+    {
+      "id": "f9",
+      "term": "Availability formula",
+      "definition": "MTTF / (MTTF + MTTR), multiplied by 100 for a percentage."
+    },
+    {
+      "id": "f10",
+      "term": "Control metric",
+      "definition": "Measurement used to plan and manage a development process."
+    },
+    {
+      "id": "f11",
+      "term": "Predictor metric",
+      "definition": "Measurement used as an indicator of another product quality."
+    },
+    {
+      "id": "f12",
+      "term": "Fan-in / fan-out",
+      "definition": "Incoming versus outgoing component calls or dependencies under a defined counting rule."
+    },
+    {
+      "id": "f13",
+      "term": "Equivalence partitioning",
+      "definition": "Dividing cases into classes expected to behave similarly and selecting representatives."
+    },
+    {
+      "id": "f14",
+      "term": "Boundary value analysis",
+      "definition": "Testing at and near the edges of allowed or significant ranges."
+    },
+    {
+      "id": "f15",
+      "term": "Regression testing",
+      "definition": "Checking after change for unintended loss of supported behaviour or quality."
+    },
+    {
+      "id": "f16",
+      "term": "Formatter vs linter",
+      "definition": "A formatter applies layout; a linter checks configured code rules."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Supplied QA notes — mapped to L30 by scope.md",
+      "url": "markdown/L29%20-%20Software%20Quality%20Assurance.md"
+    }
+  ]
+}

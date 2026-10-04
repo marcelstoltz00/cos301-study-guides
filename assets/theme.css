@@ -603,5 +603,6 @@ body {
 @media (max-width: 640px) {
   .page { padding: var(--space-6) var(--space-4) 100px; }
   .hero h1 { font-size: 24px; }
-  .section-tabs { top: 49px; }
+  .section-tabs { top: 49px; flex-wrap: wrap; }
+  .section-tab { flex: 1 1 calc(50% - var(--space-2)); }
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Domain Modelling Recap + Architecture Recap — CT3 Study Guide</title>
+<title>Domain Modelling Recap + Architecture Recap — ST2 Study Guide</title>
 <style>
 /* ============================================================
    CT3 Study Guides — shared dark academic theme
@@ -291,16 +291,6 @@ body {
   text-align: center;
 }
 .diagram svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
-.mermaid {
-  margin: 0 0 var(--space-6);
-  padding: var(--space-4);
-  background: var(--surface);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-lg);
-  overflow-x: auto;
-  text-align: center;
-}
-.mermaid svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
 .diagram-caption {
   margin-top: var(--space-3);
   font-size: 12.5px;
@@ -620,7 +610,8 @@ body {
 @media (max-width: 640px) {
   .page { padding: var(--space-6) var(--space-4) 100px; }
   .hero h1 { font-size: 24px; }
-  .section-tabs { top: 49px; }
+  .section-tabs { top: 49px; flex-wrap: wrap; }
+  .section-tab { flex: 1 1 calc(50% - var(--space-2)); }
 }
 
 </style>
@@ -631,17 +622,25 @@ body {
     <a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a>
     <div class="topnav-links">
       <a href="index.html" class="">Home</a>
-<a href="L17.html" class="">L17 · Design Systems & CI</a>
-<a href="L18.html" class="active">L18 · Domain Modelling & Architectures</a>
+<a href="L17.html" class="">L17 · Design Systems &amp; CI</a>
+<a href="L18.html" class="active">L18 · Domain Modelling &amp; Architectures</a>
 <a href="L19.html" class="">L19 · Software Testing in Practice</a>
 <a href="L20.html" class="">L20 · Designed for Humans</a>
-<a href="L21.html" class="">L21 · DevOps & DevSecOps</a>
+<a href="L21.html" class="">L21 · DevOps &amp; DevSecOps</a>
 <a href="L22.html" class="">L22 · Practical Architectural Design</a>
 <a href="L23.html" class="">L23 · Architecture in Practice</a>
 <a href="L24.html" class="">L24 · Security Testing</a>
 <a href="L25.html" class="">L25 · Service Contracts</a>
 <a href="SOA.html" class="">SOA · Service-Oriented Architecture</a>
-<a href="MS.html" class="">Bonus · Microservices Deep Dive</a>
+<a href="MS.html" class="">MS · Microservices Deep Dive</a>
+<a href="L28.html" class="">L28 · Deployment Diagrams</a>
+<a href="L29.html" class="">L29 · Secure Software Development</a>
+<a href="L30.html" class="">L30 · Quality Assurance &amp; Coding Standards</a>
+<a href="L31.html" class="">L31 · Presentation Skills</a>
+<a href="L32.html" class="">L32 · Non-Functional Testing</a>
+<a href="L33.html" class="">L33 · Low Code, No Code &amp; Vibe Code</a>
+<a href="L34.html" class="">L34 · Cloud &amp; Edge Engineering</a>
+<a href="L35.html" class="">L35 · ST2 Revision</a>
     </div>
   </div>
 </nav>
@@ -663,6 +662,96 @@ body {
   <section id="panel-content" class="section-panel active">
     <div id="tldr-box" class="tldr-box"></div>
     <div id="content-body" class="content"></div>
+
+<!-- Preserved from the pre-ST2 L18 page so rebuilds retain its UI-pattern appendix. -->
+<style>
+.mermaid {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  text-align: center;
+}
+.mermaid svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+</style>
+<section id="ui-patterns-extra" class="content">
+      <h2>UI Architecture Patterns: MVC, MVP, MVVM, MVT</h2>
+      <p><strong>Exam rule:</strong> focus on ownership: who receives input, who owns UI state, and who decides rendering flow.</p>
+
+      <h3>MVC Core Split</h3>
+      <table>
+        <thead><tr><th>Part</th><th>Responsibility</th><th>Typical role</th></tr></thead>
+        <tbody>
+          <tr><td>Model</td><td>Domain data and business rules</td><td>State and logic</td></tr>
+          <tr><td>Controller</td><td>Receives input and decides what happens next</td><td>Flow control</td></tr>
+          <tr><td>View</td><td>Renders model data for the user</td><td>Presentation</td></tr>
+        </tbody>
+      </table>
+      <div class="mermaid">
+flowchart LR
+    U[User] --> V[View]
+    V --> C[Controller]
+    C --> M[Model]
+    M --> V
+      </div>
+
+      <h3>MVVM vs MVT</h3>
+      <table>
+        <thead><tr><th>Feature</th><th>MVVM</th><th>MVT</th></tr></thead>
+        <tbody>
+          <tr><td>Main intermediary</td><td>ViewModel</td><td>View</td></tr>
+          <tr><td>Rendering style</td><td>Client-side, data-bound UI</td><td>Server-side template rendering</td></tr>
+          <tr><td>Common context</td><td>Angular, Vue, WPF-like patterns</td><td>Django and similar frameworks</td></tr>
+        </tbody>
+      </table>
+      <div class="mermaid">
+flowchart TB
+    subgraph MVVM
+      A1[View] --> B1[ViewModel]
+      B1 --> C1[Model]
+      C1 --> B1
+      B1 --> A1
+    end
+
+    subgraph MVT
+      A2[HTTP Request] --> B2[View]
+      B2 --> C2[Model]
+      C2 --> B2
+      B2 --> D2[Template]
+      D2 --> E2[Rendered HTML]
+    end
+      </div>
+
+      <h3>MVP Positioning</h3>
+      <table>
+        <thead><tr><th>Pattern</th><th>Control flow</th><th>Best fit</th></tr></thead>
+        <tbody>
+          <tr><td>MVC</td><td>Controller coordinates input and next action</td><td>Server-rendered apps</td></tr>
+          <tr><td>MVP</td><td>View emits events; Presenter updates View directly</td><td>Highly testable UI logic</td></tr>
+          <tr><td>MVVM</td><td>View binds declaratively to ViewModel state/commands</td><td>Reactive or state-heavy UIs</td></tr>
+          <tr><td>MVT</td><td>View controls request flow, template renders output</td><td>Django-style apps</td></tr>
+        </tbody>
+      </table>
+
+</section>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("ui-patterns-extra");
+  const render = () => {
+    window.mermaid.initialize({ startOnLoad: false, theme: "dark", securityLevel: "strict" });
+    window.mermaid.run({ nodes: container.querySelectorAll(".mermaid") }).catch(() => {});
+  };
+  if (window.mermaid) { render(); return; }
+  const script = document.createElement("script");
+  script.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
+  script.onload = render;
+  script.onerror = () => {}; // Preserve readable source when offline.
+  document.head.appendChild(script);
+});
+</script>
+
   </section>
 
   <section id="panel-flash" class="section-panel">
@@ -773,8 +862,6 @@ body {
         }
         if (lang === "svg") {
           html += `<div class="diagram">${code.join("\n")}</div>`;
-        } else if (lang === "mermaid") {
-          html += `<div class="mermaid">${code.join("\n")}</div>`;
         } else {
           html += `<pre><code class="lang-${escapeHtml(lang || "text")}">${escapeHtml(
             code.join("\n")
@@ -900,76 +987,6 @@ body {
   function renderContent(data) {
     const el = document.getElementById("content-body");
     if (el) el.innerHTML = renderMarkdown(data.contentMarkdown);
-  }
-
-  function appendL18UiPatternSection(data) {
-    if (!data || data.id !== "L18") return;
-    const el = document.getElementById("content-body");
-    if (!el || el.querySelector("#ui-patterns-extra")) return;
-
-    const section = document.createElement("section");
-    section.id = "ui-patterns-extra";
-    section.innerHTML = `
-      <h2>UI Architecture Patterns: MVC, MVP, MVVM, MVT</h2>
-      <p><strong>Exam rule:</strong> focus on ownership: who receives input, who owns UI state, and who decides rendering flow.</p>
-
-      <h3>MVC Core Split</h3>
-      <table>
-        <thead><tr><th>Part</th><th>Responsibility</th><th>Typical role</th></tr></thead>
-        <tbody>
-          <tr><td>Model</td><td>Domain data and business rules</td><td>State and logic</td></tr>
-          <tr><td>Controller</td><td>Receives input and decides what happens next</td><td>Flow control</td></tr>
-          <tr><td>View</td><td>Renders model data for the user</td><td>Presentation</td></tr>
-        </tbody>
-      </table>
-      <div class="mermaid">
-flowchart LR
-    U[User] --> V[View]
-    V --> C[Controller]
-    C --> M[Model]
-    M --> V
-      </div>
-
-      <h3>MVVM vs MVT</h3>
-      <table>
-        <thead><tr><th>Feature</th><th>MVVM</th><th>MVT</th></tr></thead>
-        <tbody>
-          <tr><td>Main intermediary</td><td>ViewModel</td><td>View</td></tr>
-          <tr><td>Rendering style</td><td>Client-side, data-bound UI</td><td>Server-side template rendering</td></tr>
-          <tr><td>Common context</td><td>Angular, Vue, WPF-like patterns</td><td>Django and similar frameworks</td></tr>
-        </tbody>
-      </table>
-      <div class="mermaid">
-flowchart TB
-    subgraph MVVM
-      A1[View] --> B1[ViewModel]
-      B1 --> C1[Model]
-      C1 --> B1
-      B1 --> A1
-    end
-
-    subgraph MVT
-      A2[HTTP Request] --> B2[View]
-      B2 --> C2[Model]
-      C2 --> B2
-      B2 --> D2[Template]
-      D2 --> E2[Rendered HTML]
-    end
-      </div>
-
-      <h3>MVP Positioning</h3>
-      <table>
-        <thead><tr><th>Pattern</th><th>Control flow</th><th>Best fit</th></tr></thead>
-        <tbody>
-          <tr><td>MVC</td><td>Controller coordinates input and next action</td><td>Server-rendered apps</td></tr>
-          <tr><td>MVP</td><td>View emits events; Presenter updates View directly</td><td>Highly testable UI logic</td></tr>
-          <tr><td>MVVM</td><td>View binds declaratively to ViewModel state/commands</td><td>Reactive or state-heavy UIs</td></tr>
-          <tr><td>MVT</td><td>View controls request flow, template renders output</td><td>Django-style apps</td></tr>
-        </tbody>
-      </table>
-    `;
-
-    el.appendChild(section);
   }
 
   function renderTLDR(data) {
@@ -1259,50 +1276,12 @@ flowchart TB
     initTabs();
     renderTLDR(data);
     renderContent(data);
-    appendL18UiPatternSection(data);
     initQuiz(data);
     initTech(data);
     initFlashcards(data);
   });
 })();
 
-</script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const container = document.getElementById("content-body");
-    if (!container) return;
-
-    const boot = () => {
-      if (!window.mermaid) return;
-      window.mermaid.initialize({
-        startOnLoad: false,
-        theme: "dark",
-        securityLevel: "loose"
-      });
-
-      const runMermaid = () => {
-        window.mermaid.run({ nodes: container.querySelectorAll(".mermaid") });
-      };
-
-      runMermaid();
-      const observer = new MutationObserver(() => runMermaid());
-      observer.observe(container, { childList: true, subtree: true });
-    };
-
-    if (window.mermaid) {
-      boot();
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
-    script.onload = boot;
-    script.onerror = () => {
-      // Keep the page functional when previewed offline.
-    };
-    document.head.appendChild(script);
-  });
 </script>
 </body>
 </html>

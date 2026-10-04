@@ -1,0 +1,464 @@
+{
+  "id": "L35",
+  "title": "ST2 Revision & Integrated Practice",
+  "subtitle": "Synthesised revision across L17–L34: concept comparisons, worked calculations, design trade-offs, and cross-topic scenarios.",
+  "contentMarkdown": "## Scope and how to use this guide\n\n**L35 was revision.** This is a newly synthesised revision guide, not a transcript of that session or an official exam paper. It combines the repository's L17–L25, SOA and Microservices material with L28–L34. The user confirmed that the existing SOA/Microservices material covers the L26–L27 portion; their original filenames are retained.\n\nFirst attempt the questions without notes, then compare the model answer by reasoning step. Mark weak topics and revisit their full guide. The older standalone Comprehensive Practice Test covers its original L17–L25, SOA and MS scope; this revision page adds integrated practice including the later topics.\n\n## 1. Topic map\n\n| Material | Recall | Apply |\n|---|---|---|\n| L17 | Style guide, design system, tokens, CI practices | Keep UI decisions consistent through code and checks |\n| L18 | Entities, value objects, relationships, architecture | Model domain boundaries and explain structural choices |\n| L19 | Test levels, doubles, testability | Select tests that establish the intended claim |\n| L20 | User mental models, affordances, feedback | Reduce mistakes and explain system state |\n| L21 | DevOps/DevSecOps feedback loop | Connect build, release, operation and learning |\n| L22 | NFR, quality attribute, tactic, pattern, ADR, test | Trace a requirement through a justified architecture |\n| L23 | Architectural trade-offs and integration | Explain dependency and communication consequences |\n| L24 | Security assessment and defensive feedback | Scope authorised tests and turn findings into fixes |\n| L25 | Contracts, schemas, mocks, compatibility | Coordinate provider and consumer changes |\n| SOA / MS | Service boundaries, contracts, distributed coordination | Avoid coupling and handle partial failure |\n| L28 | Placement, trust, failure domains, recovery | Review a deployment for missing operational facts |\n| L29 | Secure lifecycle, abuse paths, access control | Prevent, verify and respond to vulnerabilities |\n| L30 | SQA, reliability, metrics, coding standards | Calculate measures and demonstrate compliance |\n| L31 | Audience, evidence, demos, limitations | Defend a technical claim clearly |\n| L32 | Workloads, metrics and quality testing | Judge whether test evidence meets an NFR |\n| L33 | Low/no-code and generated implementations | Evaluate fit, ownership and verification |\n| L34 | Cloud/edge placement and offline behaviour | Design synchronisation, recovery and fleet operation |\n\n## 2. High-value distinctions\n\n| Pair | Distinction |\n|---|---|\n| Style guide / design system | Human-readable brand guidance / reusable implemented decisions and components |\n| Entity / value object | Continuity of identity / meaning determined by value |\n| Unit / integration test | Isolated responsibility / real collaboration across the claimed boundary |\n| Authentication / authorisation | Who is calling / what they may do to a resource |\n| QA / QC | Process assurance / artifact and product evaluation |\n| Fault / failure | Latent defect / observed incorrect behaviour |\n| Reliability / availability | Failure-free operation over a period / being operational when needed |\n| Replication / backup | Current copies for continuity / recoverable history |\n| RPO / RTO | Acceptable data-loss interval / acceptable restoration duration |\n| Scalability / elasticity | Capacity for growth / adapting resource allocation to demand |\n| Sync / async | Caller waits for a response / work can be deferred with coordination costs |\n| Prototype / production evidence | Exploration of an idea / verified behaviour and supportability |\n\nMany terms depend on context. For example, organisations use release and deployment terminology differently; explain the actual act of installing software versus exposing it to users. Likewise, use the supplied QA notes' explicitly stated MTBF convention in calculations.\n\n## 3. Trace a requirement all the way to evidence\n\nUse the L22 chain: **NFR → quality attribute → tactic → pattern → ADR → architectural design → NFR test**. An ADR records context, the decision, alternatives and consequences; it is not simply a technology inventory.\n\nExample: “After a single-zone failure, restore checkout within ten minutes, with at most one minute of lost order data.” The quality concern is recovery and availability. Candidate tactics include cross-zone redundancy and replicated storage. Record the chosen design and consistency/latency cost. Draw the actual placement and failover path. Test an induced zone failure and compare measured restoration and missing writes to the requirement.\n\nA claim that “we use cloud microservices” skips nearly every reasoning step. A design can support a target without yet proving that the target is achieved.\n\n## 4. Worked calculations\n\n### Reliability and availability\n\nFor operating periods 180, 220 and 200 hours and repairs 3, 5 and 4 hours:\n\n```text\nMTTF = 600 / 3 = 200 h\nMTTR = 12 / 3 = 4 h\nMTBF = MTTF + MTTR = 204 h  (lecture convention)\nAvailability = 200 / 204 × 100 = 98.04%\n```\n\nFor a request-based SLO allowing 99.9% successful requests, 100,000 valid measured attempts permit at most **100 failures** under that definition. A request-based failure allowance is different from a time-based downtime budget; do not swap denominators.\n\n### Performance and buffering\n\nAt stable throughput 100 requests/s and mean time 0.2 s, Little's Law gives **20 mean in-flight requests**. At 50 events/s and 200 bytes/event, a one-hour outage produces **36 MB decimal raw payload**, before metadata and storage overhead.\n\nShow the formula, substitution, units and interpretation. A correct arithmetic answer with the wrong measurement boundary can still imply the wrong engineering conclusion.\n\n## 5. Integrated case: UniMarket\n\nStudents browse products and create orders. Payment runs through an external provider; staff review disputes. The team uses a design system, an agreed API contract, a queue, a database, and two application replicas on the same host.\n\n- **Domain:** identify order identity, money values, ownership and legal state transitions. Do not choose service boundaries merely by splitting every table.\n- **Contract:** define order input, response, pending/completed/failed states and errors. Mocks enable parallel development; real integration tests still verify the actual implementation.\n- **Security:** authenticate callers and enforce student/staff/object permissions on the server. Review the payment and operator trust boundaries.\n- **Messaging:** assign stable business identifiers, handle redelivery and reconcile uncertain payment outcomes.\n- **Deployment:** same-host replicas share host failure. Show placement, communication, state, backups, recovery and ownership.\n- **UX:** show pending status and prevent accidental duplicate action; an unresponsive spinner is weak feedback.\n- **Quality:** test state transitions, real provider-adapter behaviour, access rejection, expected load and worker recovery.\n- **Delivery:** enforce standards in CI and monitor after release. A clean build cannot establish runtime capacity.\n- **Presentation:** demonstrate a useful journey, explain a failure case, show measurements and state what remains untested.\n\nEach answer should connect a specific problem to a mechanism, verification and trade-off. Listing tool names earns little explanatory value by itself.\n\n## 6. Distributed workflows and compatibility\n\nA service contract reduces mismatched assumptions but cannot eliminate runtime outages, race conditions or incorrect semantics. A schema-compatible response can still contain the wrong student's data. Test contracts, business behaviour and authorisation separately.\n\nFor a multi-service purchase, a saga coordinates local transactions and compensating actions; compensation is a business operation, not a magical global database rollback. An email already sent cannot be unsent. Design for timeouts, duplicates and partial progress.\n\nChanging a published field name can break consumers. Use a compatible migration or explicit versioned contract, communicate the change and verify provider/consumer behaviour. A new version label alone does not perform that migration.\n\n## 7. Recovery, testing and evidence traps\n\nA replica is not a backup, an untested backup is not measured recovery, and adding instances does not remove every bottleneck. A security scanner passing does not prove access rules. A high coverage number does not establish meaningful assertions. A working generated demo does not prove supportability.\n\nWhen interpreting a result, ask: **Which requirement? Which conditions? Which metric? Which observation? What remains outside the evidence?** This same discipline improves a written exam answer, an ADR and a project presentation.\n\n## 8. A practical revision cycle\n\nTry a short definition, a comparison and a scenario for each weak topic. Practise calculations without looking at the worked result. Draw a deployment from memory and use L28's eight questions to review it. Explain one architecture choice aloud with its requirement and evidence, then answer a challenge about its limitation.\n\nUse the flashcards for recall, MCQs for discriminating similar concepts and technical questions for connected explanations. The model answers illustrate reasoning; their length is not an official mark allocation or mandatory exam format.\n",
+  "tldr": [
+    "Revise the **distinctions**, then practise applying them to one connected system.",
+    "Trace **requirement → design decision → deployment → test evidence**.",
+    "Show **formula, units, assumptions and interpretation** for calculations.",
+    "Contracts, replicas, scanners and generated code each provide **limited evidence**.",
+    "Distributed workflows need **partial-failure, retry and compatibility** reasoning.",
+    "A strong answer explains **mechanism, verification and trade-off**, not just tool names."
+  ],
+  "mcqs": [
+    {
+      "id": "m1",
+      "q": "What distinguishes a design system from a brand style guide?",
+      "options": [
+        "Reusable implemented tokens and components operationalise design decisions",
+        "A design system is only a logo file",
+        "Style guides always contain production code",
+        "Neither affects consistency"
+      ],
+      "correct": 0,
+      "explanation": "Design systems carry reusable decisions into implementation, while brand guidance describes identity and style."
+    },
+    {
+      "id": "m2",
+      "q": "A customer's address changes but they remain the same customer. What does this suggest?",
+      "options": [
+        "Customer must be a value object",
+        "Identity never matters",
+        "Every attribute change creates a new domain type",
+        "Customer is an entity with identity independent of those values"
+      ],
+      "correct": 3,
+      "explanation": "Entity identity persists through changes to descriptive attributes."
+    },
+    {
+      "id": "m3",
+      "q": "A stub returns a canned payment result. What has it not established?",
+      "options": [
+        "That the test can execute",
+        "That the stub has a configured response",
+        "That the real payment provider integration works",
+        "That the caller can handle that canned result"
+      ],
+      "correct": 2,
+      "explanation": "A double substitutes behaviour and cannot verify the real substituted boundary."
+    },
+    {
+      "id": "m4",
+      "q": "Which UX response best supports asynchronous order processing?",
+      "options": [
+        "Allow uncontrolled repeated submissions",
+        "Show an explicit pending state and eventual outcome",
+        "Show immediate confirmed payment before verification",
+        "Hide all progress"
+      ],
+      "correct": 1,
+      "explanation": "Users need accurate feedback about accepted but incomplete work."
+    },
+    {
+      "id": "m5",
+      "q": "What is DevSecOps intended to do?",
+      "options": [
+        "Integrate security work across delivery and operation",
+        "Delay all security until one final scan",
+        "Replace all operations with unit tests",
+        "Remove ownership for incidents"
+      ],
+      "correct": 0,
+      "explanation": "Security concerns and feedback belong throughout the lifecycle."
+    },
+    {
+      "id": "m6",
+      "q": "What should an ADR primarily record?",
+      "options": [
+        "Only a tool's logo",
+        "Every source line",
+        "Only the meeting duration",
+        "Context, decision, alternatives and consequences"
+      ],
+      "correct": 3,
+      "explanation": "Architectural decisions are assessable when their rationale and trade-offs are preserved."
+    },
+    {
+      "id": "m7",
+      "q": "Why is “the system is scalable” an incomplete NFR?",
+      "options": [
+        "All NFRs must name a vendor",
+        "It specifies too many units",
+        "It lacks measurable workload, conditions and response criteria",
+        "Scalability cannot be tested"
+      ],
+      "correct": 2,
+      "explanation": "A testable requirement needs concrete acceptance conditions."
+    },
+    {
+      "id": "m8",
+      "q": "What remains necessary when provider and consumer share a schema?",
+      "options": [
+        "Removing error responses",
+        "Tests of real behaviour, permissions and integration",
+        "No further verification",
+        "Only matching font sizes"
+      ],
+      "correct": 1,
+      "explanation": "Schema agreement reduces mismatch but does not establish all runtime semantics."
+    },
+    {
+      "id": "m9",
+      "q": "Renaming a published response field is usually what kind of change for existing clients?",
+      "options": [
+        "Potentially breaking",
+        "Automatically backward compatible",
+        "Only a deployment-placement change",
+        "A guarantee of better performance"
+      ],
+      "correct": 0,
+      "explanation": "Existing consumers may still read the old field name."
+    },
+    {
+      "id": "m10",
+      "q": "What does a saga compensation represent?",
+      "options": [
+        "An automatic rollback of every external effect",
+        "A ban on asynchronous messaging",
+        "A replacement for all persistence",
+        "A business action that counteracts a completed local step where possible"
+      ],
+      "correct": 3,
+      "explanation": "Distributed side effects may require explicit compensation and some are irreversible."
+    },
+    {
+      "id": "m11",
+      "q": "Two application replicas share one host. What remains?",
+      "options": [
+        "No need for recovery tests",
+        "Independent power supplies by definition",
+        "A host-level single point of failure for that tier",
+        "Guaranteed regional resilience"
+      ],
+      "correct": 2,
+      "explanation": "Shared placement means both replicas can fail with that host."
+    },
+    {
+      "id": "m12",
+      "q": "Which pair is correctly distinguished?",
+      "options": [
+        "Authentication replaces input validation",
+        "Authentication identifies; authorisation permits an action on a resource",
+        "Authentication grants every permission",
+        "Authorisation encrypts every packet"
+      ],
+      "correct": 1,
+      "explanation": "Identity verification and access decisions are separate responsibilities."
+    },
+    {
+      "id": "m13",
+      "q": "Under the lecture convention, MTTF 200 h and MTTR 4 h imply what availability?",
+      "options": [
+        "About 98.04%",
+        "50%",
+        "2%",
+        "Exactly 100%"
+      ],
+      "correct": 0,
+      "explanation": "The ratio is 200 divided by 204, multiplied by 100."
+    },
+    {
+      "id": "m14",
+      "q": "A 99.9% request-success objective across 100,000 attempts permits how many failures?",
+      "options": [
+        "1,000",
+        "10,000",
+        "Zero",
+        "100"
+      ],
+      "correct": 3,
+      "explanation": "The allowed failure fraction is 0.1%, yielding 100 failed attempts."
+    },
+    {
+      "id": "m15",
+      "q": "Which test targets progressive memory growth?",
+      "options": [
+        "A diagram export",
+        "A code-style check",
+        "A soak test",
+        "One quick happy-path demonstration"
+      ],
+      "correct": 2,
+      "explanation": "Extended sustained operation can expose accumulating resources."
+    },
+    {
+      "id": "m16",
+      "q": "A fast test run has excessive failures. What is the appropriate conclusion?",
+      "options": [
+        "The app is proven production-ready",
+        "The combined performance requirement may still fail",
+        "Low latency cancels the failures",
+        "Errors do not count during any load test"
+      ],
+      "correct": 1,
+      "explanation": "Useful service requires both timely and successful behaviour under the stated rules."
+    },
+    {
+      "id": "m17",
+      "q": "Why is a generated prototype not automatically ready for production?",
+      "options": [
+        "Correctness, security, maintainability and operation still need evidence",
+        "Generated code can never be used",
+        "Prototypes have no users",
+        "Source code length determines readiness"
+      ],
+      "correct": 0,
+      "explanation": "The implementation's origin does not establish quality or supportability."
+    },
+    {
+      "id": "m18",
+      "q": "What must a cloud-edge design specify for a network outage?",
+      "options": [
+        "Only cloud provider branding",
+        "That every operation stays instantly consistent",
+        "That device storage is infinite",
+        "Permitted offline actions, buffering and reconciliation rules"
+      ],
+      "correct": 3,
+      "explanation": "Offline behaviour changes what state can be known and how updates are coordinated."
+    },
+    {
+      "id": "m19",
+      "q": "Which presentation claim is most defensible?",
+      "options": [
+        "Claim zero risk after compilation",
+        "Describe planned features as tested",
+        "Report a measured result with conditions and limitations",
+        "State that one demo proves all quality attributes"
+      ],
+      "correct": 2,
+      "explanation": "Evidence supports bounded conclusions under observed conditions."
+    },
+    {
+      "id": "m20",
+      "q": "Which answer best connects architecture to quality?",
+      "options": [
+        "Choose the most distributed design every time",
+        "State the requirement, justify a tactic, draw placement and test the result",
+        "List technologies without rationale",
+        "Count repository files"
+      ],
+      "correct": 1,
+      "explanation": "A reasoning chain makes the decision and its evidence assessable."
+    }
+  ],
+  "techQuestions": [
+    {
+      "id": "t1",
+      "q": "Design and justify a recoverable UniMarket checkout deployment.",
+      "answer": "Start with explicit RPO and RTO targets and the failure scenario to tolerate. Place necessary instances and state replicas across appropriate domains, label protocols and trust boundaries, and document failover and backups. Check entry points and dependencies for shared failure. Exercise the failure and restore paths and compare data loss and usable-service recovery with the targets, noting latency and cost trade-offs."
+    },
+    {
+      "id": "t2",
+      "q": "Trace a performance requirement through the L22 architecture chain.",
+      "answer": "Specify operation, workload, environment, metric and threshold. Identify the relevant quality attribute and choose a tactic such as caching or capacity distribution based on the bottleneck. Record alternatives and consequences in an ADR, show the actual design, and run a representative test. A result outside the threshold should feed back into the decision rather than be hidden by the architecture label."
+    },
+    {
+      "id": "t3",
+      "q": "Create a layered testing plan for order and payment processing.",
+      "answer": "Unit-test state transitions and duplicate handling with controlled dependencies. Integration-test the real adapter boundary and serialization. Test end-to-end user journeys, including pending and failed outcomes. Add access-control negative cases, expected-load checks and worker-outage recovery. Keep regression checks for fixed defects. Explain what each level proves and avoid treating a mocked provider as evidence of real integration."
+    },
+    {
+      "id": "t4",
+      "q": "Review a contract-first team's claim that integration is now guaranteed.",
+      "answer": "A shared contract reduces interface ambiguity and enables mocks and parallel development. It does not guarantee correct business semantics, valid permissions, network availability or compatibility with every deployed version. Validate provider and consumer behaviour against the contract, test the real integration and manage changes. Include error cases and version migration instead of assuming matching schemas eliminate runtime failure."
+    },
+    {
+      "id": "t5",
+      "q": "Threat-model a multi-tenant dispute-review feature.",
+      "answer": "Identify sensitive records, student and staff identities, object ownership and module or tenant scope. Mark browser, application, storage and operator boundaries. Examine unauthorised record access, tampering, audit gaps and resource exhaustion. Enforce server-side permissions, validate data and protect appropriate logs. Test both permitted and forbidden paths and assess whether failed security dependencies deny access safely."
+    },
+    {
+      "id": "t6",
+      "q": "Explain how domain boundaries affect SOA or microservice design.",
+      "answer": "Start from coherent business responsibilities and invariants, not one service per table. Define contracts and ownership so consumers need not reach into another service's data store. Consider transaction and coordination needs before splitting. More boundaries introduce network and partial-failure costs; choose them for a justified organisational or quality benefit and verify the resulting integration behaviour."
+    },
+    {
+      "id": "t7",
+      "q": "Calculate and interpret reliability and request-success measures.",
+      "answer": "For operating periods totalling 600 h across three failures, MTTF is 200 h; repairs totalling 12 h give MTTR 4 h. Lecture MTBF is 204 h and availability 98.04%. Separately, a 99.9% request-success objective across 100,000 attempts allows 100 failures. These use different denominators and cannot be substituted without a measurement model."
+    },
+    {
+      "id": "t8",
+      "q": "Design an offline attendance flow and test its reconciliation.",
+      "answer": "Specify whether local acceptance is provisional, how cached authority ages and which actions require central confirmation. Persist bounded events with stable identities and ordering information where needed. On reconnect, deduplicate and resolve conflicts under explicit rules. Test revocation during disconnection, duplicate delivery, full storage and clock drift. Check final business state as well as message arrival."
+    },
+    {
+      "id": "t9",
+      "q": "Evaluate a no-code or generated prototype for continued production use.",
+      "answer": "Compare required behaviour with supported platform or code capabilities, then inspect access rules, dependencies, integrations and failure paths. Establish ownership and independent acceptance tests. Confirm deployment, monitoring, recovery and migration options. Retain the approach if evidence supports its maintainability and quality; otherwise replace or isolate the unsuitable parts rather than judging solely by prototype speed."
+    },
+    {
+      "id": "t10",
+      "q": "Connect coding standards, CI and quality assurance.",
+      "answer": "Standards define concrete expectations for names, structure, errors, tests and security hygiene. Local tools give rapid feedback, CI applies shared checks, and peer review addresses semantics and trade-offs. SQA verifies the process is actually followed and uses defect evidence to improve it. Passing formatting checks alone does not establish correct business behaviour or runtime qualities."
+    },
+    {
+      "id": "t11",
+      "q": "Plan a presentation that demonstrates architecture and its limits.",
+      "answer": "Begin with the user problem and measurable requirements, explain one consequential design decision, and show the corresponding workflow and quality evidence. Rehearse a relevant failure case and a labelled fallback. State tested conditions and remaining gaps, such as regional recovery not yet exercised. Answer challenges with evidence and a verification plan rather than broader claims unsupported by the results."
+    },
+    {
+      "id": "t12",
+      "q": "Analyse an order that may have charged successfully before a timeout.",
+      "answer": "A timeout does not prove that the external operation failed. Record the order and payment operation identity, query or reconcile provider status where supported, and retry only under a safe idempotency policy. Keep the user informed of an accurate pending or unknown state. Test timeout after the side effect and duplicate delivery; compensation must reflect real business state rather than assuming an automatic global rollback."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "f1",
+      "term": "Design token",
+      "definition": "A named reusable design decision shared across interface implementations."
+    },
+    {
+      "id": "f2",
+      "term": "Entity / value object",
+      "definition": "Identity persists through changes / meaning is determined by constituent values."
+    },
+    {
+      "id": "f3",
+      "term": "ADR",
+      "definition": "Architectural decision record explaining context, decision, alternatives and consequences."
+    },
+    {
+      "id": "f4",
+      "term": "Contract-first",
+      "definition": "Agreeing the interface before parallel implementation and verifying conformance later."
+    },
+    {
+      "id": "f5",
+      "term": "Saga",
+      "definition": "Coordination of local transactions with business compensations for partial failure."
+    },
+    {
+      "id": "f6",
+      "term": "RPO / RTO",
+      "definition": "Acceptable data-loss interval / acceptable service-restoration duration."
+    },
+    {
+      "id": "f7",
+      "term": "QA / QC",
+      "definition": "Assurance of development processes / evaluation of products and artifacts."
+    },
+    {
+      "id": "f8",
+      "term": "Reliability / availability",
+      "definition": "Failure-free operation over time / being operational when required."
+    },
+    {
+      "id": "f9",
+      "term": "Authentication / authorisation",
+      "definition": "Establishing identity / checking a permitted action on a resource."
+    },
+    {
+      "id": "f10",
+      "term": "Load / soak",
+      "definition": "Expected demand evaluation / sustained evaluation for time-dependent degradation."
+    },
+    {
+      "id": "f11",
+      "term": "Scalability / elasticity",
+      "definition": "Capacity to handle growth / adapting resources to changing demand."
+    },
+    {
+      "id": "f12",
+      "term": "Idempotency",
+      "definition": "Repetition preserves the intended business effect instead of duplicating it."
+    },
+    {
+      "id": "f13",
+      "term": "Evidence boundary",
+      "definition": "The conditions and claims that an observation can actually support."
+    },
+    {
+      "id": "f14",
+      "term": "Revision answer pattern",
+      "definition": "Definition, mechanism, scenario, verification and trade-off."
+    }
+  ],
+  "sources": [
+    {
+      "title": "L17 — full study guide",
+      "url": "L17.html"
+    },
+    {
+      "title": "L18 — full study guide",
+      "url": "L18.html"
+    },
+    {
+      "title": "L19 — full study guide",
+      "url": "L19.html"
+    },
+    {
+      "title": "L20 — full study guide",
+      "url": "L20.html"
+    },
+    {
+      "title": "L21 — full study guide",
+      "url": "L21.html"
+    },
+    {
+      "title": "L22 — full study guide",
+      "url": "L22.html"
+    },
+    {
+      "title": "L23 — full study guide",
+      "url": "L23.html"
+    },
+    {
+      "title": "L24 — full study guide",
+      "url": "L24.html"
+    },
+    {
+      "title": "L25 — full study guide",
+      "url": "L25.html"
+    },
+    {
+      "title": "SOA — full study guide",
+      "url": "SOA.html"
+    },
+    {
+      "title": "MS — full study guide",
+      "url": "MS.html"
+    },
+    {
+      "title": "L28 — full study guide",
+      "url": "L28.html"
+    },
+    {
+      "title": "L29 — full study guide",
+      "url": "L29.html"
+    },
+    {
+      "title": "L30 — full study guide",
+      "url": "L30.html"
+    },
+    {
+      "title": "L31 — full study guide",
+      "url": "L31.html"
+    },
+    {
+      "title": "L32 — full study guide",
+      "url": "L32.html"
+    },
+    {
+      "title": "L33 — full study guide",
+      "url": "L33.html"
+    },
+    {
+      "title": "L34 — full study guide",
+      "url": "L34.html"
+    }
+  ]
+}

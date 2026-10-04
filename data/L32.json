@@ -1,0 +1,391 @@
+{
+  "id": "L32",
+  "title": "Non-Functional Testing Recap",
+  "subtitle": "General recap: measurable quality requirements, performance workloads, reliability, security, usability, and test interpretation.",
+  "contentMarkdown": "## Scope\n\n**General recap — no L32 slides were supplied.** This guide connects the existing testing material with the supplied QA notes and deployment concepts. Numerical workloads and targets are illustrative study exercises, not course-prescribed thresholds.\n\n## 1. From “it works” to “how well does it work?”\n\nFunctional testing asks whether an operation produces the required behaviour. Non-functional testing evaluates qualities and constraints such as performance, reliability, security, usability, compatibility and resource efficiency. The distinction is useful but not absolute: security rules can be functional requirements, while security assurance spans both categories.\n\nReplace vague words such as “fast” with measurable conditions. A useful requirement identifies the operation, environment, workload, metric, threshold and observation window. Example: **Under 200 requests/second with the specified request mix, p95 successful checkout latency is at most 500 ms, errors are below 1%, for 30 minutes on the stated environment.** Define how timeouts and failed requests are counted so results cannot be improved by dropping them.\n\n## 2. Match the test to the question\n\n| Test | Workload or condition | Main question |\n|---|---|---|\n| Load | Expected and peak planned traffic | Does the system meet targets under expected use? |\n| Stress | Push beyond normal capacity | Where does it degrade or fail, and can it recover? |\n| Spike | Rapid traffic increase/decrease | Can it handle abrupt changes and scaling delay? |\n| Soak/endurance | Sustained work for an extended period | Do leaks, accumulation or degradation emerge? |\n| Volume | Large stored or processed datasets | What happens when data size grows? |\n| Scalability | Compare capacity as resources change | How does useful capacity grow relative to resources? |\n| Recovery/failover | Controlled component failure and restoration | Can service and data recover within targets? |\n\nDo not confuse load shape with test level. A system-level test can be a load test; a regression suite can include a performance check.\n\n## 3. Define representative workloads\n\nUse an operational profile: request mix, arrival rate, session behaviour, read/write ratio, data sizes, cache state and geographic/network conditions. A cached homepage is not representative of a database-heavy checkout flow. Separate warm-up from the measured window and document both.\n\n**Requests per second and concurrent users are not interchangeable.** Think time, response time and requests per journey connect them. A closed workload with a fixed number of waiting users can reduce its offered rate when the system slows, masking overload. State whether arrivals are externally paced or depend on completions.\n\nUse repeatable data and a documented environment. Watch the load generator itself: if it is CPU-limited or network-limited, the apparent server capacity may simply be the client's limit. Use authorised, controlled test environments and isolate destructive failure experiments.\n\n## 4. Measure more than an average\n\n**Latency** measures elapsed time for an operation. **Throughput** counts completed work per time. **Error rate** measures failed work under a defined classification. **Saturation** indicates how close resources or queues are to useful capacity. Google's SRE monitoring chapter groups latency, traffic, errors and saturation as four useful signals.\n\nA p95 latency value means roughly 95% of observations are at or below it under the stated method. It says nothing about how large the slowest 5% can be. Report tail percentiles and errors alongside central tendency. Do not average p95 values from different servers and assume the result is the global p95; aggregate the observations or compatible distributions.\n\nRecord CPU, memory, disk/network I/O, database wait times, connection pools, queue depth and garbage-collection behaviour where relevant. Correlate saturation with user-visible degradation before choosing a fix.\n\n## 5. Two useful calculations\n\n```text\nThroughput = completed operations / observation duration\nError rate = failed operations / attempted operations × 100%\nLittle's Law (stable system): L = λ × W\n```\n\nIn Little's Law, L is mean work in the system, λ is mean throughput and W is mean time in the system, with consistent boundaries and units. At 100 requests/s and 0.2 s mean time, mean in-flight requests are **20**. This is not a count of logged-in users. The stable-average relationship should not be applied blindly to a growing overload queue.\n\nIf 120 of 12,000 attempted requests fail, error rate is **1%**. If a target says “below 1%”, this run does not pass that strict threshold. State whether errors include timeouts and semantically incorrect success responses.\n\n## 6. Diagnose before optimising\n\nPlot throughput, latency and errors as load rises. Throughput may plateau while queues and tail latency grow. High API capacity cannot compensate for a saturated database connection pool. Adding app replicas can even increase pressure on that dependency.\n\nChange one relevant factor at a time where practical, rerun comparable workloads and retain baselines. Include uncertainty and repeatability in the conclusion. A pass is bounded by the tested conditions; a single successful run does not prove capacity for every workload.\n\n## 7. Reliability and recovery\n\nTest process, host and network failures appropriate to the design. Verify service recovery, state integrity and duplicate handling, not just restart messages. Compare measured restoration time to **RTO** and lost data to **RPO**. Test restores from backups because replicas can reproduce deletion or corruption.\n\nControl blast radius, define stop conditions and monitor user-visible impact during failure experiments. For a queue-backed system, test backlog growth during an outage and draining after recovery without repeated business effects.\n\n## 8. Other quality dimensions\n\n| Quality | Example evidence |\n|---|---|\n| Security | Role/object access tests, dependency review, targeted dynamic checks |\n| Usability | Representative users completing defined tasks; success, time and observed difficulties |\n| Accessibility | Keyboard navigation, focus behaviour, readable contrast and assistive-technology checks |\n| Compatibility | Behaviour across explicitly supported browsers, devices or versions |\n| Maintainability | Change effort, comprehensibility and testability, interpreted with code metrics |\n| Resource efficiency | Useful work relative to CPU, memory, bandwidth or energy under stated conditions |\n\nAn automated accessibility scan or a high code-coverage number supplies partial evidence. Combine tools with task-based evaluation and review. Choose representative users and environments for the claims you want to make.\n\n## 9. A reviewable test report\n\nRecord requirement and acceptance rule, system version, environment, dataset, workload, warm-up and duration, tools/configuration, results, anomalies, bottlenecks and follow-up. Preserve enough information to reproduce the run.\n\n**Worked conclusion:** “At 200 requests/s, p95 was 470 ms but errors were 1.4%, so the combined latency-and-error requirement failed. Database waits grew during the run. Investigate that dependency, then repeat the same workload.” Passing one metric does not cancel failure of another required metric.\n\nKeep suitable checks as regression coverage so a later feature does not silently remove an established quality.\n",
+  "tldr": [
+    "Define **workload, environment, metric, threshold and duration** before testing.",
+    "Know **load, stress, spike, soak, volume, scalability and recovery** tests.",
+    "Track **latency, throughput, errors and saturation** together.",
+    "**p95 is not the maximum**, and users are not requests per second.",
+    "For stable averages, **L = λW** with matching boundaries and units.",
+    "Measure recovery against **RPO/RTO** and verify state integrity.",
+    "A test result supports only the **conditions actually exercised**."
+  ],
+  "mcqs": [
+    {
+      "id": "m1",
+      "q": "Which is a testable performance requirement?",
+      "options": [
+        "p95 latency at most 500 ms at a specified workload and environment",
+        "The application should be quick",
+        "Users should never wait",
+        "The system should be modern"
+      ],
+      "correct": 0,
+      "explanation": "A measurable requirement needs a workload, environment, metric and acceptance threshold."
+    },
+    {
+      "id": "m2",
+      "q": "Which test targets memory leaks over time?",
+      "options": [
+        "A one-request smoke test",
+        "A style check",
+        "A requirements interview",
+        "Soak testing"
+      ],
+      "correct": 3,
+      "explanation": "Sustained operation can reveal accumulating resources or degradation."
+    },
+    {
+      "id": "m3",
+      "q": "Which test deliberately exceeds expected capacity?",
+      "options": [
+        "Formatting",
+        "A documentation review",
+        "Stress testing",
+        "Acceptance testing only"
+      ],
+      "correct": 2,
+      "explanation": "Stress testing examines overload behaviour, limits and recovery."
+    },
+    {
+      "id": "m4",
+      "q": "Which test focuses on abrupt traffic changes?",
+      "options": [
+        "A unit test of naming rules",
+        "Spike testing",
+        "Volume testing only",
+        "Static analysis"
+      ],
+      "correct": 1,
+      "explanation": "Spike tests reveal response to sudden changes and scaling delays."
+    },
+    {
+      "id": "m5",
+      "q": "Which test primarily increases dataset size?",
+      "options": [
+        "Volume testing",
+        "Peer review",
+        "A short idle test",
+        "A usability interview"
+      ],
+      "correct": 0,
+      "explanation": "Large data volumes can change query, storage and processing behaviour."
+    },
+    {
+      "id": "m6",
+      "q": "What does p95 latency describe?",
+      "options": [
+        "Every request completes at that value",
+        "The maximum latency",
+        "The arithmetic mean",
+        "About 95% of measured latencies are at or below that value"
+      ],
+      "correct": 3,
+      "explanation": "Tail percentiles describe distribution positions, not maxima or averages."
+    },
+    {
+      "id": "m7",
+      "q": "Why report error rate with latency?",
+      "options": [
+        "Latency already proves correctness",
+        "Error rates only apply to unit tests",
+        "Fast failures can make latency look good while service is poor",
+        "Errors never affect users"
+      ],
+      "correct": 2,
+      "explanation": "Performance evidence must include whether useful work succeeded."
+    },
+    {
+      "id": "m8",
+      "q": "Why are 100 users not necessarily 100 requests per second?",
+      "options": [
+        "Request rate is always fixed by CPU count",
+        "User think time and request behaviour affect arrival rate",
+        "Users never make requests",
+        "Servers cannot measure throughput"
+      ],
+      "correct": 1,
+      "explanation": "Concurrent users and request rate measure different aspects of workload."
+    },
+    {
+      "id": "m9",
+      "q": "A stable system completes 100 requests/s with mean time 0.2 s. What is mean in-flight work?",
+      "options": [
+        "20 requests",
+        "500 requests",
+        "100 users",
+        "0.002 requests"
+      ],
+      "correct": 0,
+      "explanation": "Little's Law gives L = 100 × 0.2 = 20 within the measured boundary."
+    },
+    {
+      "id": "m10",
+      "q": "120 of 12,000 attempts fail. What is the error rate?",
+      "options": [
+        "10%",
+        "0.1%",
+        "12%",
+        "1%"
+      ],
+      "correct": 3,
+      "explanation": "Divide failures by attempts and multiply by 100."
+    },
+    {
+      "id": "m11",
+      "q": "A requirement says errors below 1%. Does exactly 1% pass?",
+      "options": [
+        "Yes, if average latency is low",
+        "It passes automatically after warm-up",
+        "No, it does not satisfy the strict threshold",
+        "Yes, below always means at most"
+      ],
+      "correct": 2,
+      "explanation": "Acceptance wording matters: below differs from less than or equal to."
+    },
+    {
+      "id": "m12",
+      "q": "What can make a load test understate server capacity?",
+      "options": [
+        "Measuring the warm-up separately",
+        "A saturated load generator",
+        "A documented dataset",
+        "Recording both errors and latency"
+      ],
+      "correct": 1,
+      "explanation": "The driver may be unable to supply the intended workload."
+    },
+    {
+      "id": "m13",
+      "q": "What is a risk of a fixed-user closed workload?",
+      "options": [
+        "Offered request rate may fall as responses slow",
+        "It always overwhelms the server",
+        "It cannot measure latency",
+        "It guarantees production realism"
+      ],
+      "correct": 0,
+      "explanation": "Waiting clients may hide the impact of externally sustained demand."
+    },
+    {
+      "id": "m14",
+      "q": "What should be compared in a scalability test?",
+      "options": [
+        "Only the number of code comments",
+        "Only response colour",
+        "Only the tool licence",
+        "Useful capacity as allocated resources change"
+      ],
+      "correct": 3,
+      "explanation": "Scaling is about the measured capacity/resource relationship, not merely adding instances."
+    },
+    {
+      "id": "m15",
+      "q": "What must a recovery test verify beyond process restart?",
+      "options": [
+        "Only a green deployment icon",
+        "Only the absence of compilation errors",
+        "Service restoration and data integrity against recovery targets",
+        "Only the process ID"
+      ],
+      "correct": 2,
+      "explanation": "Running processes do not prove usable service or correct recovered state."
+    },
+    {
+      "id": "m16",
+      "q": "Why test backup restoration separately from replication?",
+      "options": [
+        "Replication makes RPO meaningless",
+        "Replicated deletion can require recovery from historical data",
+        "Replication cannot carry writes",
+        "Backup files always restore successfully"
+      ],
+      "correct": 1,
+      "explanation": "Replication and history-based restoration address different failure cases."
+    },
+    {
+      "id": "m17",
+      "q": "Which observation best supports a usability claim?",
+      "options": [
+        "Representative users completing relevant tasks with observed outcomes",
+        "A developer liking the colours",
+        "A high server CPU score",
+        "A larger database"
+      ],
+      "correct": 0,
+      "explanation": "Usability concerns users performing intended tasks in context."
+    },
+    {
+      "id": "m18",
+      "q": "Can an automated accessibility scan establish complete accessibility?",
+      "options": [
+        "Yes, for every interaction",
+        "Yes, if the page compiles",
+        "Yes, if contrast passes",
+        "No, it supplies partial evidence requiring other checks"
+      ],
+      "correct": 3,
+      "explanation": "Interactive behaviour and real assistive use need additional evaluation."
+    },
+    {
+      "id": "m19",
+      "q": "What is wrong with averaging two servers' p95 values as global p95?",
+      "options": [
+        "Servers cannot measure response time",
+        "Global p95 must equal the faster server",
+        "Percentiles do not generally combine by arithmetic averaging",
+        "Percentiles are always negative"
+      ],
+      "correct": 2,
+      "explanation": "Use combined observations or compatible distributions to estimate the overall percentile."
+    },
+    {
+      "id": "m20",
+      "q": "Latency passes but the required error threshold fails. What is the result?",
+      "options": [
+        "Only the better metric counts",
+        "The combined requirement fails",
+        "The whole test passes",
+        "Errors can be omitted"
+      ],
+      "correct": 1,
+      "explanation": "All mandatory acceptance criteria must be satisfied."
+    }
+  ],
+  "techQuestions": [
+    {
+      "id": "t1",
+      "q": "Turn “the system must be scalable” into a test plan.",
+      "answer": "Identify a representative workload and acceptable latency and error limits. Measure maximum sustainable useful throughput with a baseline resource allocation, then repeat with explicitly increased resources. Keep other conditions comparable and record bottlenecks and cost. State the capacity gain relative to resource growth; merely launching more instances is not evidence that the application scales effectively."
+    },
+    {
+      "id": "t2",
+      "q": "Distinguish load, stress, spike and soak testing with one application.",
+      "answer": "For checkout, load testing exercises normal and peak expected purchases. Stress testing raises demand past planned capacity to inspect degradation and recovery. Spike testing introduces a sudden promotion-driven burst. Soak testing runs sustained activity long enough to reveal leaks or accumulation. Each needs workload definitions, stop conditions and user-visible acceptance criteria suited to its purpose."
+    },
+    {
+      "id": "t3",
+      "q": "Explain why average latency alone is weak evidence.",
+      "answer": "A small set of very slow requests can be hidden by a low average, while fast error responses can make the average look better. Report latency distributions or tail percentiles alongside error rate and throughput. State the measurement boundary and treatment of timeouts. The statistic should answer the user experience question rather than merely provide a favourable number."
+    },
+    {
+      "id": "t4",
+      "q": "Apply Little's Law and state its limitations.",
+      "answer": "With stable throughput of 100 requests/s and mean time in the measured system of 0.2 s, L = λW gives 20 mean in-flight requests. Use the same boundary for all quantities and seconds consistently. This is not twenty logged-in users. Do not apply the simple stable-average interpretation to an unbounded queue that keeps growing during overload."
+    },
+    {
+      "id": "t5",
+      "q": "Design a representative workload for an online marketplace.",
+      "answer": "Specify browsing, searching, login and checkout proportions; read/write mix; dataset size; session pacing; cache state; and external-service behaviour. Use realistic accounts and data while avoiding sensitive production information. Choose an arrival model consistent with the question. Monitor the driver so insufficient generated demand is not mistaken for application capacity, and preserve the configuration for repeated runs."
+    },
+    {
+      "id": "t6",
+      "q": "Interpret rising p95, plateaued throughput and increasing database waits.",
+      "answer": "The evidence suggests a downstream database or access-pool bottleneck rather than lack of API replicas alone. Inspect query latency, connection limits, locking and I/O together with API queues. Form a specific hypothesis, change a relevant factor and repeat a comparable test. More API instances may increase database pressure, so verify the mechanism before scaling them."
+    },
+    {
+      "id": "t7",
+      "q": "A report shows p95 470 ms and errors 1.4% against 500 ms and below 1%. Assess it.",
+      "answer": "The latency criterion passes, but the error criterion fails, so the combined requirement is not met. Verify how errors and timeouts were counted and whether the load was sustained. Report both results without averaging them into a single success claim. Investigate the failure cause and repeat under the same conditions after remediation."
+    },
+    {
+      "id": "t8",
+      "q": "Design a recovery test for a database-backed service.",
+      "answer": "Define the permitted failure, RTO, RPO, test scope and stop conditions. Generate identifiable writes, induce the controlled failure, exercise failover or restore, and measure when the service becomes usable. Check which writes survived and whether duplicates or corruption appeared. Compare measured results with targets and record manual steps or dependencies that slowed recovery."
+    },
+    {
+      "id": "t9",
+      "q": "Why can a successful short load test miss production problems?",
+      "answer": "It may omit long-term memory leaks, growing queues, large datasets, cache churn or unusual request mixes. A convenient test environment may also differ in network latency and downstream capacity. State those limits and add targeted soak, volume or failure tests where risk warrants them. Do not treat a short favourable result as an unrestricted capacity guarantee."
+    },
+    {
+      "id": "t10",
+      "q": "Propose complementary usability and accessibility checks.",
+      "answer": "Have representative users attempt important tasks and observe completion, mistakes, time and confusion. Check keyboard navigation, visible focus, meaningful labels and assistive-technology behaviour, using automated scans as one input. Include users or conditions relevant to the product's audience. Report barriers and task evidence separately from server performance because one cannot establish the other."
+    },
+    {
+      "id": "t11",
+      "q": "What information makes a non-functional test reproducible?",
+      "answer": "Record software version, infrastructure and configuration, dataset, workload mix and pacing, tool versions, warm-up, run duration, metrics and thresholds. Preserve scripts and describe external dependencies and unusual events. Include resource observations and exact failure criteria. Another run can then distinguish a real regression from changed data, environment or measurement method."
+    },
+    {
+      "id": "t12",
+      "q": "How should non-functional testing become regression coverage?",
+      "answer": "Select repeatable checks tied to important quality risks and stable baselines. Run inexpensive checks regularly and schedule heavier capacity or recovery experiments at appropriate change points. Track environment variation and investigate meaningful deviations instead of failing on arbitrary noise. Include performance, access-control and recovery concerns where changes could silently weaken an established property."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "f1",
+      "term": "Load test",
+      "definition": "Evaluation under expected or planned peak traffic."
+    },
+    {
+      "id": "f2",
+      "term": "Stress test",
+      "definition": "Evaluation beyond expected capacity, including degradation and recovery."
+    },
+    {
+      "id": "f3",
+      "term": "Spike test",
+      "definition": "Evaluation under abrupt demand changes."
+    },
+    {
+      "id": "f4",
+      "term": "Soak test",
+      "definition": "Sustained operation used to reveal time-dependent degradation."
+    },
+    {
+      "id": "f5",
+      "term": "Volume test",
+      "definition": "Evaluation as stored or processed data size increases."
+    },
+    {
+      "id": "f6",
+      "term": "Scalability test",
+      "definition": "Measurement of capacity change relative to resource change."
+    },
+    {
+      "id": "f7",
+      "term": "p95 latency",
+      "definition": "A value at or above approximately 95% of observed latencies."
+    },
+    {
+      "id": "f8",
+      "term": "Throughput",
+      "definition": "Completed useful operations per unit time under a defined counting rule."
+    },
+    {
+      "id": "f9",
+      "term": "Saturation",
+      "definition": "How close a resource or queue is to its useful capacity limit."
+    },
+    {
+      "id": "f10",
+      "term": "Little's Law",
+      "definition": "L = λW for consistent stable averages and measurement boundaries."
+    },
+    {
+      "id": "f11",
+      "term": "Operational profile",
+      "definition": "Representative distribution of operations and conditions of use."
+    },
+    {
+      "id": "f12",
+      "term": "Acceptance threshold",
+      "definition": "A measurable rule used to decide whether a requirement is met."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Google SRE — latency, traffic, errors and saturation",
+      "url": "https://sre.google/sre-book/monitoring-distributed-systems/"
+    },
+    {
+      "title": "Supplied QA notes — reliability and testing recap",
+      "url": "markdown/L29%20-%20Software%20Quality%20Assurance.md"
+    }
+  ]
+}

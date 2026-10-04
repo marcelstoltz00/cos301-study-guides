@@ -1,0 +1,397 @@
+{
+  "id": "L28",
+  "title": "Deployment Models & Diagrams",
+  "subtitle": "Lecture-based guide: physical topology, failure domains, isolation, communication, trust, and recovery.",
+  "contentMarkdown": "## Scope and source\n\nBased on the supplied L28 Deployment Diagrams notes. The worked design and questions are study exercises. UML vocabulary and recovery caveats below are supporting explanations, rather than additional claims about the exam.\n\n## 1. Purpose: where does the software actually run?\n\nA deployment diagram connects software to its runtime infrastructure. It answers **where instances run, how they communicate, and what happens when infrastructure fails**. In the 4+1 architectural model this is the physical view. A view describes the system from selected concerns; a viewpoint supplies conventions for constructing that view.\n\nA logical component diagram can remain the same across environments. Deployment views usually cannot: production and staging can have different replica counts, recovery arrangements, and boundaries. Name one system and one environment per view. Choose detail for the reader: an operator needs recovery paths; a security reviewer needs trust and identity; a cost reviewer needs instance counts and sizes.\n\n### Eight questions to remember\n\n| Question | Evidence the diagram should contain |\n|---|---|\n| Which system and environment? | Name, purpose, production/staging scope |\n| Which failure domains? | Region, zone/site, host, runtime nesting |\n| What runs where, how many copies? | Deployable name, version, instance count |\n| What provides isolation? | VM, runtime, account, process and policy boundaries |\n| How do boxes communicate? | Directed, labelled protocol connections |\n| Where does trust change? | Boundaries, authentication and authorisation points |\n| Where is state, how is it recovered? | Stores, replicas, backups, RPO and RTO |\n| Who maintains the view? | Owner, source of truth, verification date |\n\n## 2. Names and notation\n\nUse **the concept first, product second**: “workload packet filter (security group)” is understandable beyond one provider. Common concepts include private network, failure-isolated site, L4/L7 entry point, workload identity, relational store, object store, secret store and durable queue.\n\nA legend resolves overloaded words: a C4 container is a runnable application or data store, not necessarily an operating-system container; a service can mean a business capability or a Kubernetes networking resource. A node may mean a deployment target or a worker machine.\n\n**UML supplement:** a node is a computational resource; a device represents hardware; an execution environment hosts executable software; an artifact is a deployable physical piece such as an executable or package. Deploy artifacts to nodes and show communication paths between nodes. A component describes modular software structure; an artifact can implement it. Do not mix these levels without a legend.\n\n## 3. Failure domains and isolation\n\nNest according to shared failure: **region → zone/site → host → runtime → process**. Three replicas on one host survive a process crash only if the others remain healthy; they do not survive loss of that host. Two zones in one region still share regional risks.\n\nSecurity isolation and failure isolation answer different questions. An account separates credentials and administration; a zone separates some infrastructure failures. Neither automatically implies the other.\n\n| Boundary | What to remember |\n|---|---|\n| Separate account/subscription | Can reduce administrative blast radius when credentials and permissions are separated |\n| VM/hypervisor | Separate guest kernels; still depends on configuration and hypervisor security |\n| Sandboxed runtime | Adds a boundary beyond an ordinary shared-kernel container |\n| Ordinary OS container | Shares the host kernel; a kernel compromise may cross isolation |\n| Kubernetes namespace | Naming and access-control scope; not network isolation by itself |\n| Application tenant check | Requires correct enforcement on every relevant access |\n| Threads in one process | Share process memory; no independent security boundary |\n\n## 4. Label every connection\n\nUse a consistent pattern: **protocol/version :port, encryption, authentication, sync/async**. Specify in the legend that arrows show the connection initiator; responses can travel back on that connection.\n\nExample: `order-api → database: PostgreSQL :5432, TLS, certificate authentication, sync, pool 20`. These are example configured values, not mandatory ports for all deployments. JDBC and ODBC are client APIs, not the database wire protocol. Show the actual protocol and configured port so network rules can be reviewed.\n\nAn L4 balancer distributes connections. One long-lived HTTP/2 connection can carry many requests to one selected backend; adding replicas alone may not spread those requests. An appropriate L7 balancer or client-side balancing can distribute work more effectively. HTTP/1.1 can also reuse connections: the important distinction is connection-level versus request-level balancing.\n\n**Synchronous calls** put downstream latency and availability directly on the request path. **Asynchronous messaging** can absorb a temporary consumer outage, but only within queue capacity and retention. Show durability, consumer lag, retries, dead-letter handling and backpressure. At-least-once delivery needs idempotent processing to avoid duplicate effects.\n\n## 5. Trust and identity\n\nA trust boundary separates security assumptions, policies or privilege levels. Examples include internet/private network, tenant boundaries, operator access and artifact registry/runtime. Show TLS termination and each hop after it. Encrypted transport alone does not prove that a caller may perform an action. mTLS can authenticate both endpoints when certificates are validated, but resource authorisation remains necessary.\n\nUse STRIDE to question crossings: **Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, Elevation of privilege**. For browser-to-API traffic, consider stolen sessions, modified input, missing audit evidence, verbose errors, resource exhaustion and unauthorised administration.\n\n## 6. State, replication and recovery\n\n**RPO** is the target maximum acceptable data-loss interval. **RTO** is the target maximum acceptable restoration time. Targets need measurements: asynchronous replication lag may exceed a target during an incident. Synchronous replication can protect acknowledged writes against the failures covered by its configuration, but does not promise survival of every possible disaster.\n\nReplication improves continuity; backups preserve recoverable history. A mistaken deletion can propagate to every live replica. Record database engine/version, replication mode, placement, failover mechanism, backup retention and restore tests.\n\n### Worked review: checkout outage\n\nThe notes describe a lost primary database host, no standby in a separate failure domain, and a last usable backup 19 hours old. A useful diagram would have exposed the single database host, recovery location, backup age and restoration procedure. It would also have shown that adding application replicas alone cannot remove a database single point of failure.\n\n```text\nUniMarket / production — illustrative deployment\nRegion R\n  Zone A                         Zone B\n    API v2 x2                      API v2 x2\n    DB primary  --sync replica-->   DB standby\n\nClient -> HTTPS entry point -> API instances\nAPI -> DB endpoint: PostgreSQL :5432, TLS, authenticated, sync\nDB -> separately protected backup store: scheduled backup\nLegend: placement boxes = shared failure; arrows labelled by role.\nRecovery: named failover owner + measured RPO/RTO + restore procedure.\n```\n\nCross-zone placement addresses a zone failure, not a whole-region outage. The entry point, database endpoint and backup system also need their own resilience review.\n\n```svg\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 720 310\" role=\"img\" aria-labelledby=\"deployment-title deployment-desc\" font-family=\"system-ui,sans-serif\">\n<title id=\"deployment-title\">Database replication across two zones in one region</title>\n<desc id=\"deployment-desc\">Zone A contains two API instances and the primary database. Zone B contains two API instances and a standby. Synchronous replication crosses zones. Both zones share a region failure domain. This placement view omits client and request paths.</desc>\n<rect x=\"5\" y=\"5\" width=\"710\" height=\"300\" rx=\"12\" fill=\"#12161b\" stroke=\"#9aa4b2\"/>\n<text x=\"25\" y=\"32\" fill=\"#e8ecf1\" font-size=\"17\">Production · Region R (shared regional failure domain)</text>\n<rect x=\"25\" y=\"50\" width=\"310\" height=\"205\" rx=\"8\" fill=\"#1a1f26\" stroke=\"#4a90f8\"/>\n<rect x=\"385\" y=\"50\" width=\"310\" height=\"205\" rx=\"8\" fill=\"#1a1f26\" stroke=\"#4a90f8\"/>\n<g fill=\"#e8ecf1\" font-size=\"16\" text-anchor=\"middle\">\n<text x=\"180\" y=\"78\">Zone A</text><text x=\"540\" y=\"78\">Zone B</text>\n</g>\n<g fill=\"#12161b\" stroke=\"#64748b\"><rect x=\"55\" y=\"96\" width=\"250\" height=\"44\" rx=\"5\"/><rect x=\"415\" y=\"96\" width=\"250\" height=\"44\" rx=\"5\"/><rect x=\"55\" y=\"185\" width=\"250\" height=\"44\" rx=\"5\"/><rect x=\"415\" y=\"185\" width=\"250\" height=\"44\" rx=\"5\"/></g>\n<g fill=\"#e8ecf1\" font-size=\"15\" text-anchor=\"middle\"><text x=\"180\" y=\"124\">API v2 · 2 instances</text><text x=\"540\" y=\"124\">API v2 · 2 instances</text><text x=\"180\" y=\"213\">Database primary</text><text x=\"540\" y=\"213\">Database standby</text></g>\n<path d=\"M305 207 H406\" stroke=\"#22c55e\" stroke-width=\"2\"/><path d=\"M404 202 L414 207 L404 212\" fill=\"#22c55e\"/>\n<text x=\"360\" y=\"174\" text-anchor=\"middle\" fill=\"#86efac\" font-size=\"14\">Synchronous replication</text>\n<text x=\"25\" y=\"281\" fill=\"#9aa4b2\" font-size=\"14\">Placement view only: client paths and backup store omitted here.</text>\n</svg>\n```\n\n## 7. Keep the view trustworthy\n\nKeep diagram source beside infrastructure code, review changes together and render in CI. One model can produce several views with consistent names. Record an owner, source path, verification date and commit where appropriate. A generated view still needs checking against deployed reality.\n\nLeave internal class structure, every environment variable and the full delivery pipeline out unless they answer the chosen deployment concern. **Exam method:** name the failure or threat, point to the missing topology fact, propose a change, and state the cost or remaining limitation.\n",
+  "tldr": [
+    "Deployment views explain **placement, communication and operational consequences** for one environment.",
+    "Remember the **eight questions**: scope, failure, instances, isolation, connections, trust, state, ownership.",
+    "**Replica count is not failure independence**; inspect shared parents.",
+    "Label the **wire protocol**, configured port, encryption, identity and sync/async behaviour.",
+    "**mTLS authenticates peers**; permissions still require authorisation.",
+    "**Replication is not backup**; distinguish measured recovery from RPO/RTO targets.",
+    "Keep diagrams in version control and verify them against reality."
+  ],
+  "mcqs": [
+    {
+      "id": "m1",
+      "q": "Which question most directly belongs to a deployment view?",
+      "options": [
+        "Which hosts run the production API instances?",
+        "Which classes inherit from User?",
+        "What colour is the checkout button?",
+        "Which sprint contains the next story?"
+      ],
+      "correct": 0,
+      "explanation": "Deployment views map running software to infrastructure and communication paths."
+    },
+    {
+      "id": "m2",
+      "q": "Why label production versus staging explicitly?",
+      "options": [
+        "UML only permits production diagrams",
+        "Staging cannot contain databases",
+        "It replaces the need for versions",
+        "Their topology and recovery controls may differ"
+      ],
+      "correct": 3,
+      "explanation": "Mixing environments can hide missing replicas or recovery controls."
+    },
+    {
+      "id": "m3",
+      "q": "Three replicas share one physical host. Which failure can remove all three?",
+      "options": [
+        "One invalid client password",
+        "A change to an unrelated DNS name",
+        "Loss of that host",
+        "One isolated application exception"
+      ],
+      "correct": 2,
+      "explanation": "The host is a shared failure domain for every instance on it."
+    },
+    {
+      "id": "m4",
+      "q": "Which label follows the lecture's naming approach?",
+      "options": [
+        "Security thing",
+        "Workload packet filter (provider security group)",
+        "Product logo only",
+        "Unexplained provider acronym only"
+      ],
+      "correct": 1,
+      "explanation": "Concept-first labels make the role understandable across platforms."
+    },
+    {
+      "id": "m5",
+      "q": "Which distinction belongs in the legend?",
+      "options": [
+        "Whether container means a deployable application or an OS container",
+        "Whether the diagram author prefers tabs",
+        "Whether the exam is multiple choice",
+        "Whether function names use verbs"
+      ],
+      "correct": 0,
+      "explanation": "Architecture terminology is overloaded; readers need the intended meaning."
+    },
+    {
+      "id": "m6",
+      "q": "What does a Kubernetes namespace alone guarantee here?",
+      "options": [
+        "A separate host kernel",
+        "A separate physical site",
+        "Complete tenant isolation",
+        "A naming and access-control scope, not automatic network isolation"
+      ],
+      "correct": 3,
+      "explanation": "A namespace needs additional controls to enforce network and workload isolation."
+    },
+    {
+      "id": "m7",
+      "q": "Why is JDBC alone insufficient on a network arrow?",
+      "options": [
+        "It means traffic is encrypted",
+        "It defines the firewall configuration completely",
+        "It names an API rather than the actual wire protocol and port",
+        "It always uses UDP"
+      ],
+      "correct": 2,
+      "explanation": "A reviewer needs the database protocol, configured port and security properties."
+    },
+    {
+      "id": "m8",
+      "q": "Under the lecture's arrow convention, what does direction identify?",
+      "options": [
+        "The higher-cost service",
+        "The side initiating the connection",
+        "The only direction data can travel",
+        "The stronger machine"
+      ],
+      "correct": 1,
+      "explanation": "Responses can return on an initiated connection; document the convention."
+    },
+    {
+      "id": "m9",
+      "q": "Why can HTTP/2 traffic concentrate behind an L4 balancer?",
+      "options": [
+        "Multiple streams share a connection assigned to one backend",
+        "HTTP/2 forbids multiple replicas",
+        "L4 balancing understands every request body",
+        "HTTP/2 creates a new host per request"
+      ],
+      "correct": 0,
+      "explanation": "Connection balancing does not automatically balance multiplexed requests."
+    },
+    {
+      "id": "m10",
+      "q": "What must an at-least-once consumer handle?",
+      "options": [
+        "Guaranteed global ordering",
+        "Guaranteed zero queue lag",
+        "A ban on retries",
+        "Duplicate message delivery"
+      ],
+      "correct": 3,
+      "explanation": "Idempotent effects or deduplication prevent repeat delivery causing repeat business actions."
+    },
+    {
+      "id": "m11",
+      "q": "What is RPO?",
+      "options": [
+        "The count of running replicas",
+        "The time needed to compile",
+        "The target maximum acceptable data-loss interval",
+        "The target restoration duration"
+      ],
+      "correct": 2,
+      "explanation": "RPO concerns lost data; RTO concerns time to restore service."
+    },
+    {
+      "id": "m12",
+      "q": "What is RTO?",
+      "options": [
+        "The number of database transactions",
+        "The target maximum acceptable restoration time",
+        "The guaranteed age of every backup",
+        "The duration of every network connection"
+      ],
+      "correct": 1,
+      "explanation": "RTO is a recovery target whose feasibility must be tested."
+    },
+    {
+      "id": "m13",
+      "q": "Why keep backups when replication exists?",
+      "options": [
+        "Replicas can copy accidental deletion or corruption",
+        "Replicas never improve availability",
+        "Backups prevent all application errors",
+        "Backups always restore instantly"
+      ],
+      "correct": 0,
+      "explanation": "Recovery history is a different control from keeping current copies available."
+    },
+    {
+      "id": "m14",
+      "q": "What does validated mTLS primarily establish?",
+      "options": [
+        "Permission for every business action",
+        "Unlimited request capacity",
+        "Freedom from input validation",
+        "The identities of both communicating endpoints"
+      ],
+      "correct": 3,
+      "explanation": "Authentication does not decide every resource permission."
+    },
+    {
+      "id": "m15",
+      "q": "Which is an example of a trust boundary?",
+      "options": [
+        "A page break in the document",
+        "A colour change without a defined meaning",
+        "A transition from public clients into a private application tier",
+        "Two functions using the same indentation"
+      ],
+      "correct": 2,
+      "explanation": "A trust boundary marks a change in security assumptions or policy."
+    },
+    {
+      "id": "m16",
+      "q": "Which STRIDE category covers unauthorised privilege gain?",
+      "options": [
+        "Maintainability",
+        "Elevation of privilege",
+        "Repudiation",
+        "Availability"
+      ],
+      "correct": 1,
+      "explanation": "Elevation of privilege concerns gaining capabilities beyond an authorised level."
+    },
+    {
+      "id": "m17",
+      "q": "What metadata best combats diagram rot?",
+      "options": [
+        "Owner, source of truth and last verification date",
+        "Only the author's favourite colours",
+        "Only the export resolution",
+        "Only the presentation duration"
+      ],
+      "correct": 0,
+      "explanation": "Ownership and traceability support review and maintenance."
+    },
+    {
+      "id": "m18",
+      "q": "Which item usually belongs in another view?",
+      "options": [
+        "Database standby placement",
+        "Protocol and port labels",
+        "Zone boundaries",
+        "Internal class inheritance inside the API"
+      ],
+      "correct": 3,
+      "explanation": "Class structure is generally below the deployment abstraction level."
+    },
+    {
+      "id": "m19",
+      "q": "What is a UML artifact in the supporting vocabulary?",
+      "options": [
+        "A business actor",
+        "A failure probability",
+        "A deployable physical software item such as a package",
+        "Any user story"
+      ],
+      "correct": 2,
+      "explanation": "Artifacts are deployed to nodes; components describe software structure."
+    },
+    {
+      "id": "m20",
+      "q": "Which claim about async queues is defensible?",
+      "options": [
+        "They need no monitoring",
+        "They can buffer an outage within capacity and retention limits",
+        "They eliminate all downstream failures",
+        "They guarantee exactly-once business effects"
+      ],
+      "correct": 1,
+      "explanation": "Queues change coupling but add lag, capacity, retry and recovery concerns."
+    }
+  ],
+  "techQuestions": [
+    {
+      "id": "t1",
+      "q": "Review a diagram containing only Browser → API → Database. What is missing?",
+      "answer": "Identify the system and environment first. Add nested failure domains, runtime versions and replica counts, isolation and trust boundaries, and actual connection labels. For the database, show replicas, backups, failover and RPO/RTO. Add an owner and verification source. These details let a reviewer reason about failures rather than merely recognise three logical responsibilities."
+    },
+    {
+      "id": "t2",
+      "q": "How would you redesign the checkout deployment after the incident in the notes?",
+      "answer": "Place a database standby in a separate relevant failure domain and define promotion, client reconnection and integrity checks. Add separately protected backups and exercise restores. Set recovery targets from the business requirement and measure them. Application replicas help only if entry points and state dependencies also remain available; cross-zone deployment still shares regional risks."
+    },
+    {
+      "id": "t3",
+      "q": "Compare a component diagram and a deployment diagram for the same application.",
+      "answer": "The component view shows responsibilities and dependencies such as checkout using payment services. The deployment view places particular versions and instances on runtimes and hosts in one environment. The logical dependency can stay constant while production gains more zones or replicas. Use each view to answer its intended question and keep names consistent across them."
+    },
+    {
+      "id": "t4",
+      "q": "Explain why four containers in two namespaces may still have a large shared blast radius.",
+      "answer": "All four may share one host and kernel, so host loss or kernel compromise can affect them together. Namespace separation does not automatically block network traffic. Review placement, privileges, network policy and identity alongside the naming scope. If the threat requires a stronger boundary, consider separate VMs or administrative domains and state their operational cost."
+    },
+    {
+      "id": "t5",
+      "q": "Write and explain a useful API-to-database edge label.",
+      "answer": "Use a configured example such as PostgreSQL :5432, TLS, certificate authentication, sync, pool 20. The arrow identifies the initiator; the label identifies the wire protocol, allowed network port, transport protection, peer identity, request coupling and a capacity constraint. Add an authorisation policy separately. Do not use JDBC as a substitute for the wire protocol."
+    },
+    {
+      "id": "t6",
+      "q": "Why might adding API replicas fail to improve gRPC throughput?",
+      "answer": "A client may reuse a single HTTP/2 connection whose streams remain on one backend selected by an L4 balancer. The other replicas can be idle. Measure per-instance traffic and connection distribution, then consider request-aware L7 or client-side balancing. Replicas will also fail to help if a database or shared connection pool is the true bottleneck."
+    },
+    {
+      "id": "t7",
+      "q": "Explain a safe asynchronous payment workflow at the diagram level.",
+      "answer": "Show checkout publishing to a durable queue, payment consumers, acknowledgements, bounded retries and a dead-letter path. Include authentication and protocol labels. A stable business identifier supports deduplication so retries do not repeat a charge. Monitor lag and capacity; expose pending payment to users because queue acceptance is not completed payment. Define how failed messages are investigated and replayed."
+    },
+    {
+      "id": "t8",
+      "q": "Distinguish RPO, RTO, replication and backup using a concrete example.",
+      "answer": "A target RPO of five minutes permits at most five minutes of lost committed business data; a target RTO of thirty minutes limits restoration time. An asynchronous replica may help meet these targets but its observed lag must be checked. Backups recover earlier states after deletion. A timed failover and restore exercise tests whether the chosen mechanisms actually achieve the targets."
+    },
+    {
+      "id": "t9",
+      "q": "Apply STRIDE to a browser-to-API boundary.",
+      "answer": "Spoofing suggests protecting and validating sessions; tampering suggests transport protection and input validation. Repudiation suggests attributable audit events; disclosure suggests restricting response and log data. Denial of service suggests resource limits; privilege elevation suggests server-side permission checks. Tie each threat to an asset and test rather than merely listing six labels, and include residual risks such as stolen valid credentials."
+    },
+    {
+      "id": "t10",
+      "q": "Does TLS termination at an edge proxy make the entire path secure?",
+      "answer": "No. Inspect the proxy-to-application and application-to-database hops independently. Determine transport protection, caller verification and resource authorisation for each. Mark the termination point and relevant trust boundaries. A private network is not proof of identity, and mTLS is not permission to access arbitrary tenant records. Test both accepted and rejected access paths."
+    },
+    {
+      "id": "t11",
+      "q": "How do diagrams as code and model-based views reduce maintenance errors?",
+      "answer": "Versioned diagram text can change in the same review as infrastructure code and be rendered by CI. A shared model lets one service rename propagate to several views. Neither guarantees that deployment matches documentation: retain ownership, verification dates and comparison with runtime inventory. Avoid exposing secrets while recording enough configuration to explain topology and recovery."
+    },
+    {
+      "id": "t12",
+      "q": "What would you include in separate operator and security-review views?",
+      "answer": "The operator view emphasises placement, capacity, health checks, failover, state recovery and operational ownership. The security view emphasises entry points, trust transitions, identities, permissions, isolation and operator or supply-chain access. Both come from consistent system names and deployment facts. Separate views reduce clutter while preserving the information each reader needs to make a decision."
+    }
+  ],
+  "flashcards": [
+    {
+      "id": "f1",
+      "term": "Deployment view",
+      "definition": "Environment-specific mapping of software instances to runtime infrastructure and communication."
+    },
+    {
+      "id": "f2",
+      "term": "Failure domain",
+      "definition": "A scope in which a single infrastructure failure can affect multiple components."
+    },
+    {
+      "id": "f3",
+      "term": "Trust boundary",
+      "definition": "A crossing where security assumptions, policies or privilege levels change."
+    },
+    {
+      "id": "f4",
+      "term": "Artifact",
+      "definition": "A deployable physical software item such as an executable, package or image."
+    },
+    {
+      "id": "f5",
+      "term": "Execution environment",
+      "definition": "Runtime that hosts executable software, such as a JVM."
+    },
+    {
+      "id": "f6",
+      "term": "Replica",
+      "definition": "Another running copy; useful only against failures its placement and design can tolerate."
+    },
+    {
+      "id": "f7",
+      "term": "RPO",
+      "definition": "Target maximum acceptable interval of data loss after an incident."
+    },
+    {
+      "id": "f8",
+      "term": "RTO",
+      "definition": "Target maximum acceptable time to restore service after an incident."
+    },
+    {
+      "id": "f9",
+      "term": "Synchronous replication",
+      "definition": "Replication participating in acknowledgement according to the configured durability policy."
+    },
+    {
+      "id": "f10",
+      "term": "Asynchronous replication",
+      "definition": "Replication that can lag behind acknowledged writes."
+    },
+    {
+      "id": "f11",
+      "term": "Idempotent consumer",
+      "definition": "A consumer whose repeated processing does not repeat the intended business effect."
+    },
+    {
+      "id": "f12",
+      "term": "L4 vs L7 balancing",
+      "definition": "Connection/transport-level distribution versus application-aware distribution."
+    },
+    {
+      "id": "f13",
+      "term": "mTLS",
+      "definition": "Mutual TLS authentication of endpoints using validated certificates."
+    },
+    {
+      "id": "f14",
+      "term": "Diagram rot",
+      "definition": "Documentation diverging from deployed reality because it is not maintained and verified."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Supplied L28 lecture notes",
+      "url": "markdown/L28%20-%20Deployment%20Diagrams.md"
+    }
+  ]
+}
