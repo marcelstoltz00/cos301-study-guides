@@ -386,5 +386,73 @@
       "title": "Microsoft — application lifecycle management in Power Platform",
       "url": "https://learn.microsoft.com/en-us/power-platform/alm/overview-alm"
     }
-  ]
+  ],
+  "learning": {
+    "before": "5. AI-generated code and verification",
+    "title": "Move from a quick idea to maintained software",
+    "intro": "The path is about evidence and ownership. A visual or generated implementation still needs the later stages.",
+    "steps": [
+      {
+        "label": "Specify",
+        "title": "1. Make the desired behaviour explicit",
+        "explanation": "Write the important workflow, permission rules and failure cases. Choose an approach that can express them rather than starting with a platform label.",
+        "example": "An equipment request must not reserve the same item twice when the user retries.",
+        "trap": "A vague prompt can lead to a plausible implementation of the wrong requirement."
+      },
+      {
+        "label": "Build",
+        "title": "2. Produce a small inspectable increment",
+        "explanation": "Use visual configuration, extension code or generated code as appropriate. Keep a version of the artifact and understand important integration boundaries.",
+        "example": "A form and approval route use platform blocks; an inventory adapter implements a documented contract.",
+        "trap": "No code describes how the builder works, not an absence of executable software."
+      },
+      {
+        "label": "Verify",
+        "title": "3. Check independently of the implementation",
+        "explanation": "Inspect behaviour and derive tests from actual requirements. Generated tests can reproduce the same mistaken assumption as generated code.",
+        "example": "Use another account to attempt an unauthorised approval, and repeat an uncertain reservation operation.",
+        "trap": "Compilation and a happy-path demo do not establish production readiness."
+      },
+      {
+        "label": "Own",
+        "title": "4. Plan changes, operation and exit",
+        "explanation": "Assign durable ownership, review credentials and confirm how data and workflows are recovered or migrated. Account for the full lifecycle cost.",
+        "example": "Exporting a CSV preserves records, but rebuilding proprietary workflow behaviour may still take substantial work.",
+        "trap": "Data export is not the same as a portable runnable application."
+      }
+    ],
+    "lab": "approach",
+    "labTitle": "Inspect the fit of a visual platform",
+    "labIntro": "Toggle scenario requirements to see what evidence you would need. This is a reasoning checklist, not a vendor comparison or an automatic purchasing recommendation.",
+    "checks": [
+      {
+        "prompt": "A generated feature passes tests generated from the same prompt. What should you add?",
+        "options": [
+          "Independent checks based on the real requirements.",
+          "A claim that the code has no defects.",
+          "Only a longer prompt next time."
+        ],
+        "correct": 0,
+        "feedback": [
+          "Correct. Review and test assumptions independently, including failures and permissions.",
+          "Passing tests establishes only the behaviour those tests meaningfully assert.",
+          "Better context can help, but it does not replace verification."
+        ]
+      },
+      {
+        "prompt": "Rolling back an approval workflow leaves a reservation in an external service. Why?",
+        "options": [
+          "Version control is impossible for visual models.",
+          "Changing the executable version does not undo completed external effects.",
+          "The rollback must have erased all business state."
+        ],
+        "correct": 1,
+        "feedback": [
+          "Visual artifacts can have lifecycle controls; the question concerns side effects.",
+          "Correct. Plan reconciliation or compensation using stable operation identities.",
+          "An external reservation can persist beyond the workflow version that created it."
+        ]
+      }
+    ]
+  }
 }

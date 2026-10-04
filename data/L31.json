@@ -377,5 +377,73 @@
       "definition": "Practising complete delivery to find timing, clarity and setup problems."
     }
   ],
-  "sources": []
+  "sources": [],
+  "learning": {
+    "before": "3. Claims need appropriate evidence",
+    "title": "Build an explanation the audience can assess",
+    "intro": "Select the four parts of a technical argument. Each part answers a different audience question.",
+    "steps": [
+      {
+        "label": "Problem",
+        "title": "1. Why does this matter?",
+        "explanation": "Begin with a user and a concrete need. Select the depth for the audience, but keep the same factual behaviour across client and technical explanations.",
+        "example": "Students need to know whether a submitted order is awaiting payment or completed.",
+        "trap": "A list of frameworks does not explain the user’s problem."
+      },
+      {
+        "label": "Mechanism",
+        "title": "2. Why should this design help?",
+        "explanation": "Connect a design choice to the requirement and describe how it works. Name an important cost rather than presenting the choice as universally best.",
+        "example": "A durable queue holds accepted work while payment workers recover, at the cost of delayed completion and retry handling.",
+        "trap": "Calling a system modern is not a causal explanation."
+      },
+      {
+        "label": "Evidence",
+        "title": "3. What did you observe?",
+        "explanation": "Show a relevant workflow or measurement with its conditions. Explain what the observation supports and how it connects to the claim.",
+        "example": "Stop a worker, submit a sample order, restart it and verify one payment effect for that order ID.",
+        "trap": "A screenshot of a screen does not prove server-side permissions."
+      },
+      {
+        "label": "Limits",
+        "title": "4. What remains uncertain?",
+        "explanation": "State untested conditions and the next verification step. Honest boundaries make the conclusion more useful, not less technical.",
+        "example": "The team tested a five-minute worker outage; it has not established behaviour during a full regional outage.",
+        "trap": "One successful demonstration is not evidence for every possible failure."
+      }
+    ],
+    "lab": "presentation",
+    "labTitle": "Rehearse a ten-minute presentation",
+    "labIntro": "Allocate minutes, then see what must be cut or strengthened. This is an illustrative practice budget, not the course’s marking rubric.",
+    "checks": [
+      {
+        "prompt": "A live demo fails. Which response preserves a useful and honest presentation?",
+        "options": [
+          "Pretend a recording is live.",
+          "Debug for the rest of the slot.",
+          "Acknowledge it, try a bounded recovery and use a labelled fallback."
+        ],
+        "correct": 2,
+        "feedback": [
+          "The audience needs to distinguish live evidence from a recording.",
+          "Unbounded debugging can consume the time needed for the argument and conclusion.",
+          "Correct. Rehearse a fallback and state what it demonstrates."
+        ]
+      },
+      {
+        "prompt": "You measured a single-zone recovery but are asked about a regional outage. What should you say?",
+        "options": [
+          "Report the zone result and explain that regional recovery is untested.",
+          "Reuse the zone recovery number as a regional guarantee.",
+          "Cloud hosting makes the distinction irrelevant."
+        ],
+        "correct": 0,
+        "feedback": [
+          "Correct. State what is known and describe the additional test needed.",
+          "Different failure domains can affect different dependencies.",
+          "A provider label does not establish application recovery behaviour."
+        ]
+      }
+    ]
+  }
 }

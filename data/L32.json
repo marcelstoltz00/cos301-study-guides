@@ -387,5 +387,73 @@
       "title": "Supplied QA notes — reliability and testing recap",
       "url": "markdown/L29%20-%20Software%20Quality%20Assurance.md"
     }
-  ]
+  ],
+  "learning": {
+    "before": "4. Measure more than an average",
+    "title": "Follow a request to the real bottleneck",
+    "intro": "Read this from left to right. Capacity at one stage does not establish the capacity of the whole path.",
+    "steps": [
+      {
+        "label": "Load driver",
+        "title": "1. Define the offered work",
+        "explanation": "Specify request mix, arrival rate, data and pacing. Monitor the driver so its own resource limit is not mistaken for server capacity.",
+        "example": "A fixed-user test can send fewer requests when responses slow because clients are waiting.",
+        "trap": "Concurrent user count is not the same unit as requests per second."
+      },
+      {
+        "label": "Application",
+        "title": "2. Observe useful outcomes",
+        "explanation": "Measure successful and failed work together with latency. Timeouts and fast failures affect what a performance result means.",
+        "example": "An overloaded API may reject quickly, lowering an average latency while delivering fewer useful results.",
+        "trap": "A fast error response does not satisfy a successful checkout requirement."
+      },
+      {
+        "label": "Dependency",
+        "title": "3. Look for accumulated waiting",
+        "explanation": "Measure queues, connection pools and dependent services. A saturated database can constrain otherwise idle application instances.",
+        "example": "More API replicas can create more competing database requests rather than higher completed throughput.",
+        "trap": "Adding capacity to the wrong tier need not remove the bottleneck."
+      },
+      {
+        "label": "Distribution",
+        "title": "4. Report the tail and the context",
+        "explanation": "Inspect percentiles alongside throughput and errors. Use consistent measurement boundaries and state the duration and environment.",
+        "example": "If nineteen requests take 100 ms and one takes 2,000 ms, the maximum exposes a tail that p95 may not show under the nearest-rank method.",
+        "trap": "A percentile is not a maximum, and averaging several p95 values is not generally a global p95."
+      }
+    ],
+    "lab": "latency",
+    "labTitle": "See an average hide the tail",
+    "labIntro": "Twenty illustrative successful requests: the ordinary requests take 100 ms. Change how many are slow and their duration. This lab uses the explicit nearest-rank percentile method.",
+    "checks": [
+      {
+        "prompt": "p95 passes, but the required error threshold fails. What is the overall result?",
+        "options": [
+          "Pass: use the more favourable metric.",
+          "Fail: every mandatory criterion must hold.",
+          "The errors should be excluded."
+        ],
+        "correct": 1,
+        "feedback": [
+          "Passing one criterion cannot cancel another required failure.",
+          "Correct. Report both outcomes and investigate the failing criterion.",
+          "Specify error accounting before testing rather than discarding inconvenient observations."
+        ]
+      },
+      {
+        "prompt": "You need to find a memory leak that appears after hours. Which test shape fits?",
+        "options": [
+          "A sustained soak test.",
+          "A single idle request.",
+          "A diagram export."
+        ],
+        "correct": 0,
+        "feedback": [
+          "Correct. Sustained operation can reveal accumulation over time.",
+          "One request is unlikely to expose a long-running accumulation problem.",
+          "A static view does not measure runtime resource growth."
+        ]
+      }
+    ]
+  }
 }

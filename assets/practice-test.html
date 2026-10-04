@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COS301 Class Test 4 — Comprehensive Practice Test (L28–L35)</title>
+<link rel="stylesheet" href="assets/theme.css">
+<style>
+:root {
+  --panel: rgba(18, 22, 27, 0.94);
+  --panel-border: rgba(38, 45, 55, 0.96);
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(74, 144, 248, 0.16), transparent 28%),
+    radial-gradient(circle at top right, rgba(34, 197, 94, 0.1), transparent 22%),
+    var(--bg);
+}
+
+.test-hero {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  background: linear-gradient(180deg, rgba(26, 31, 38, 0.96), rgba(18, 22, 27, 0.96));
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.24);
+}
+
+.test-kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.test-hero h1 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.08;
+}
+
+.test-hero p {
+  margin: 0;
+  color: var(--text-dim);
+  max-width: 72ch;
+}
+
+.test-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing);
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  background: #202731;
+  transform: translateY(-1px);
+}
+
+.stats-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  margin-top: var(--space-4);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  background: rgba(10, 13, 16, 0.36);
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.stat-pill {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.quick-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  color: var(--text-dim);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.quick-links a:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.lecture-section {
+  margin-top: var(--space-6);
+}
+
+.lecture-section > header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.lecture-section h2 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.lecture-section > header p {
+  margin: 0;
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.test-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.question-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.14);
+}
+
+.question-card header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.lecture-badge,
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.lecture-badge {
+  background: rgba(74, 144, 248, 0.14);
+  color: #a9c8fb;
+  border: 1px solid rgba(74, 144, 248, 0.3);
+}
+
+.type-badge {
+  background: rgba(34, 197, 94, 0.12);
+  color: #9debb9;
+  border: 1px solid rgba(34, 197, 94, 0.26);
+}
+
+.question-card h3 {
+  margin: 0 0 var(--space-3);
+  font-size: 20px;
+}
+
+.prompt {
+  margin: 0 0 var(--space-4);
+  color: var(--text);
+}
+
+.options {
+  margin: 0 0 var(--space-4);
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.option-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background: rgba(26, 31, 38, 0.72);
+  color: var(--text);
+  padding: 11px 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing), transform var(--duration-fast) var(--easing);
+}
+
+.option-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.option-btn .letter {
+  flex: none;
+  min-width: 28px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.option-btn.selected {
+  border-color: rgba(74, 144, 248, 0.65);
+  background: rgba(74, 144, 248, 0.12);
+}
+
+.option-btn.correct {
+  border-color: rgba(34, 197, 94, 0.8);
+  background: rgba(34, 197, 94, 0.14);
+}
+
+.option-btn.incorrect {
+  border-color: rgba(245, 99, 99, 0.8);
+  background: rgba(245, 99, 99, 0.12);
+}
+
+.option-btn.reveal-correct {
+  border-color: rgba(34, 197, 94, 0.55);
+}
+
+.question-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.feedback {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  background: rgba(11, 14, 17, 0.4);
+  color: var(--text-dim);
+  display: none;
+}
+
+.feedback.visible {
+  display: block;
+}
+
+.feedback strong {
+  color: var(--text);
+}
+
+.solution-toggle {
+  margin-left: auto;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .question-card {
+    padding: var(--space-4);
+  }
+
+  .lecture-section > header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.lecture-section { scroll-margin-top: 80px; }
+.lecture-section h2 a { color: var(--accent); text-decoration: none; }
+.lecture-section h2 a:hover { text-decoration: underline; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a>
+    <div class="topnav-links">
+      <a href="index.html">Home</a>
+      <!-- GUIDE_LINKS -->
+      <a href="ct4-practice-test.html" class="active" aria-current="page">CT4 Test</a>
+    </div>
+  </div>
+</nav>
+<main class="page">
+  <header class="test-hero">
+    <div class="test-kicker">COS301 · Class Test 4 · L28–L35</div>
+    <h1>Class Test 4 — Comprehensive Practice Test</h1>
+    <p><!-- QUESTION_COUNT --> questions covering L28–L35, with six per lecture: three single-answer and three multi-select. Each question is worth one point; multi-select answers need every correct option and no extras.</p>
+    <p>L35 is integrated revision of L28–L34 only. Questions follow the available guides: L28 and L30 use supplied notes; L29 and L31–L34 are general topic coverage. This is practice material, not an official paper.</p>
+    <p>Answer from memory, then check your response for feedback. Selections and progress save locally in this browser, separately from the older test and lecture quizzes.</p>
+    <div class="test-toolbar">
+      <button class="btn" type="button" id="show-all">Show all answers</button>
+      <button class="btn" type="button" id="hide-all">Hide all answers</button>
+      <button class="btn" type="button" id="reset-all">Reset all attempts</button>
+    </div>
+    <div class="stats-bar">
+      <div class="stats-row" aria-live="polite" aria-atomic="true">
+        <div class="stat-pill" id="stat-answered">0 / <!-- QUESTION_COUNT --> answered</div>
+        <div class="stat-pill" id="stat-correct">0 correct</div>
+        <div class="stat-pill" id="stat-multi"><!-- MULTI_COUNT --> multi-select questions</div>
+      </div>
+      <div class="quick-links" aria-label="Jump to lecture">
+        <!-- SECTION_LINKS -->
+      </div>
+    </div>
+  </header>
+  <div id="quiz-root"></div>
+  <noscript><p>Enable JavaScript to use the interactive practice test. The question bank is available in <a href="data/CT4.json">CT4.json</a>.</p></noscript>
+  <p class="note">Showing a solution does not mark a question answered. Reset a question to retry it. Use each section's guide link to review the topic.</p>
+</main>
+<script id="test-data" type="application/json"><!-- TEST_DATA --></script>
+<script>
+<!-- TEST_JS -->
+</script>
+</body>
+</html>

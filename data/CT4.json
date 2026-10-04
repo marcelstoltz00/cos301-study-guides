@@ -1,0 +1,882 @@
+{
+  "id": "CT4",
+  "title": "Class Test 4 — Comprehensive Practice Test",
+  "scope": "L28–L35",
+  "storageKey": "ct4-comprehensive-test-v1",
+  "lectures": [
+    {
+      "id": "L28",
+      "title": "Deployment Models & Diagrams"
+    },
+    {
+      "id": "L29",
+      "title": "Secure Software Development"
+    },
+    {
+      "id": "L30",
+      "title": "Quality Assurance & Coding Standards"
+    },
+    {
+      "id": "L31",
+      "title": "Presentation Skills"
+    },
+    {
+      "id": "L32",
+      "title": "Non-Functional Testing Recap"
+    },
+    {
+      "id": "L33",
+      "title": "Low Code, No Code & Vibe Code"
+    },
+    {
+      "id": "L34",
+      "title": "Cloud & Edge Engineering"
+    },
+    {
+      "id": "L35",
+      "title": "Integrated Revision — L28–L34 only"
+    }
+  ],
+  "questions": [
+    {
+      "id": "l28-1",
+      "lecture": "L28",
+      "type": "single",
+      "prompt": "A production diagram shows three API replicas inside one host boundary. What can a reviewer conclude?",
+      "options": [
+        "The replicas survive any zone failure",
+        "Host loss can remove all three replicas",
+        "Each replica has an independent kernel",
+        "Replica count establishes the database RPO"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "The host is a shared failure domain. Multiple processes or containers can tolerate some individual failures, but not loss of their common host. Placement must match the failure the design is intended to survive."
+    },
+    {
+      "id": "l28-2",
+      "lecture": "L28",
+      "type": "multi",
+      "prompt": "Select all information that makes an API-to-database connection reviewable.",
+      "options": [
+        "Only the name JDBC",
+        "Transport protection and caller authentication",
+        "Only the cloud provider logo",
+        "Connection-initiator convention and sync/async behaviour",
+        "Actual wire protocol and configured port"
+      ],
+      "correct": [
+        1,
+        3,
+        4
+      ],
+      "explanation": "A useful edge identifies what is sent on the network, how it is protected, who initiates the connection and how requests are coupled. JDBC names a client API rather than the underlying wire protocol; a logo does not describe the connection."
+    },
+    {
+      "id": "l28-3",
+      "lecture": "L28",
+      "type": "single",
+      "prompt": "An asynchronous replica lags behind acknowledged database writes. Which statement is most accurate?",
+      "options": [
+        "Failover may lose unreplicated writes, so lag and recovery must be measured against targets",
+        "Its replication automatically preserves deleted historical records",
+        "Its existence guarantees zero data loss",
+        "RTO measures the amount of unreplicated data"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Asynchronous replication can lose acknowledged writes that have not reached the replica. RPO is a target for acceptable data loss, while RTO concerns restoration time. A replica can also copy accidental deletion, so backups remain necessary."
+    },
+    {
+      "id": "l28-4",
+      "lecture": "L28",
+      "type": "multi",
+      "prompt": "Select all accurate distinctions between isolation and trust controls.",
+      "options": [
+        "Resource authorisation is still needed after peer authentication",
+        "Two administrative accounts necessarily occupy different physical sites",
+        "An ordinary OS container can share its host's kernel",
+        "A Kubernetes namespace alone does not guarantee network isolation",
+        "Validated mTLS grants access to every database record"
+      ],
+      "correct": [
+        0,
+        2,
+        3
+      ],
+      "explanation": "Container, namespace, identity and physical-placement boundaries provide different protections. mTLS can authenticate endpoints, but permission for a particular resource still requires an authorisation rule. Administrative separation does not prove failure-domain separation."
+    },
+    {
+      "id": "l28-5",
+      "lecture": "L28",
+      "type": "single",
+      "prompt": "A gRPC client uses one long-lived HTTP/2 connection through an L4 balancer. Why may new backend replicas remain idle?",
+      "options": [
+        "HTTP/2 requires all replicas to share memory",
+        "TLS disables load balancing",
+        "The client has necessarily exceeded its RPO",
+        "The balancer assigns the connection to one backend while many streams reuse it"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "An L4 balancer makes transport-level decisions. Many HTTP/2 streams may reuse one connection and therefore one chosen backend. Request-aware balancing or an appropriate client-side strategy may distribute this work; adding replicas alone need not do so."
+    },
+    {
+      "id": "l28-6",
+      "lecture": "L28",
+      "type": "multi",
+      "prompt": "Which additions would help reviewers detect the checkout outage risk described in L28? Select all that apply.",
+      "options": [
+        "Database placement and standby failure domain",
+        "An unlabeled database icon",
+        "Backup age and a tested restore procedure",
+        "Recovery targets, diagram owner and verification date",
+        "An assumption that three API instances make the database redundant"
+      ],
+      "correct": [
+        0,
+        2,
+        3
+      ],
+      "explanation": "The incident involved a lost primary host, no independent standby and an old usable backup. Placement and recovery evidence would expose that risk. Ownership and verification help keep the diagram aligned with deployed reality."
+    },
+    {
+      "id": "l29-1",
+      "lecture": "L29",
+      "type": "single",
+      "prompt": "A logged-in student changes a results URL to another student's record and receives it. Which missing control most directly explains the problem?",
+      "options": [
+        "A longer, less guessable URL alone",
+        "More database replicas",
+        "Server-side authorisation for the requested record",
+        "A second login screen"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "Authentication establishes who is calling. The server must still decide whether that caller may read this particular record, including ownership, role and tenant or module scope. Hiding or obscuring identifiers does not replace that decision."
+    },
+    {
+      "id": "l29-2",
+      "lecture": "L29",
+      "type": "multi",
+      "prompt": "Select all correct pairings of a security technique and its role.",
+      "options": [
+        "SCA: examine third-party components and associated risks",
+        "DAST: exercise a running application",
+        "SBOM: prove that every listed component is safe",
+        "SAST: examine code without executing the application",
+        "DAST: certify that no vulnerability remains"
+      ],
+      "correct": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "Static analysis, dynamic testing and dependency analysis reveal different classes of evidence. An SBOM is an inventory, and no clean scanner result proves the absence of vulnerabilities. The techniques complement review and requirement-based tests."
+    },
+    {
+      "id": "l29-3",
+      "lecture": "L29",
+      "type": "single",
+      "prompt": "What primarily prevents a user-supplied SQL value from being treated as query syntax?",
+      "options": [
+        "Encoding the value in Base64",
+        "Checking input only in the browser",
+        "Using a parameterised query",
+        "Encrypting the network connection"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "Parameter binding separates data values from SQL syntax. Server-side domain validation and authorisation are still required. Encoding, transport encryption and client-side checks do not by themselves prevent SQL injection in a concatenated query."
+    },
+    {
+      "id": "l29-4",
+      "lecture": "L29",
+      "type": "multi",
+      "prompt": "A deployment credential was committed to a repository. Select all appropriate response actions.",
+      "options": [
+        "Reduce future privilege and add checks addressing the leak path",
+        "Revoke or rotate the credential",
+        "Investigate exposure and unexpected use",
+        "Treat deleting the latest file as sufficient invalidation",
+        "Reuse the same credential under a different variable name"
+      ],
+      "correct": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "Copies can remain in history or elsewhere after visible text is removed. Invalidate the exposed authority, investigate its use, update legitimate dependants and address the cause. Renaming the variable does not change the credential's validity."
+    },
+    {
+      "id": "l29-5",
+      "lecture": "L29",
+      "type": "single",
+      "prompt": "A required permission-policy service is unavailable. What is a fail-secure response for a protected write?",
+      "options": [
+        "Trust a role submitted in the request body",
+        "Disable all auditing and accept the write",
+        "Grant the write because the caller is logged in",
+        "Reject or defer the write under an explicit policy rather than treating the error as permission"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "Failure to obtain an authorisation decision should not silently grant access. Any permitted cached-policy behaviour needs explicit freshness and revocation rules. This is a security/availability decision for the operation, not a reason to trust client-supplied roles."
+    },
+    {
+      "id": "l29-6",
+      "lecture": "L29",
+      "type": "multi",
+      "prompt": "Which activities support secure development across the lifecycle? Select all that apply.",
+      "options": [
+        "Leave all security work until the final penetration test",
+        "Review trust boundaries and protect build credentials",
+        "Verify vulnerability fixes and add regression tests",
+        "Assume a signed release cannot contain malicious logic",
+        "Define assets, misuse cases and access criteria during requirements"
+      ],
+      "correct": [
+        1,
+        2,
+        4
+      ],
+      "explanation": "Secure development spans preparation, design, implementation, verification, release and response. A signature supports integrity and signer verification under a trust model, not proof of safe logic. A final test cannot substitute for all earlier controls."
+    },
+    {
+      "id": "l30-1",
+      "lecture": "L30",
+      "type": "single",
+      "prompt": "A server runs for 180, 220 and 200 hours between repairs lasting 3, 5 and 4 hours. Under the lecture convention, which result is correct?",
+      "options": [
+        "MTTF 600 h; MTTR 12 h; availability 50%",
+        "MTTF 200 h; MTTR 4 h; MTBF 196 h",
+        "MTTF 200 h; MTTR 4 h; MTBF 204 h; availability about 98.04%",
+        "MTTF 204 h; MTTR 4 h; availability 100%"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "MTTF = (180 + 220 + 200)/3 = 200 h and MTTR = (3 + 5 + 4)/3 = 4 h. The notes use MTBF = MTTF + MTTR = 204 h. Availability = 200/204 × 100 = approximately 98.04%."
+    },
+    {
+      "id": "l30-2",
+      "lecture": "L30",
+      "type": "multi",
+      "prompt": "Select all correct statements about quality assurance, quality control and defects.",
+      "options": [
+        "A passing specification check proves every implicit quality expectation is met",
+        "A failure is observed incorrect runtime behaviour",
+        "SQA includes establishing and checking development procedures",
+        "Testing alone is the whole of SQA",
+        "A fault may remain dormant without an observed failure"
+      ],
+      "correct": [
+        1,
+        2,
+        4
+      ],
+      "explanation": "SQA includes reviews, standards, change control, measurement and other process activities. QC evaluates artifacts and behaviour. Faults are defects; failures occur when incorrect behaviour is observed. Incomplete specifications can omit important expectations."
+    },
+    {
+      "id": "l30-3",
+      "lecture": "L30",
+      "type": "single",
+      "prompt": "A component has length 10, informational fan-in 2 and fan-out 3. What is its information-flow complexity using the notes' formula?",
+      "options": [
+        "60",
+        "360",
+        "15",
+        "36"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Use component length × (fan-in × fan-out)². Here 10 × (2 × 3)² = 10 × 36 = 360. This measure is not cyclomatic complexity and should be interpreted as an indicator rather than proof of maintainability."
+    },
+    {
+      "id": "l30-4",
+      "lecture": "L30",
+      "type": "multi",
+      "prompt": "Which practices make a coding standard enforceable and useful? Select all that apply.",
+      "options": [
+        "Explain the purpose and give good/bad examples",
+        "Configure shared formatting and lint rules in CI",
+        "Treat local hooks as impossible to bypass",
+        "Review error handling, tests and meaningful compliance in actual code",
+        "Accept catch-all exception handlers that report success for unknown failures"
+      ],
+      "correct": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "Standards need concrete rules, rationale, examples and evidence of compliance. Automation catches routine issues, while human review examines semantics and trade-offs. Hooks can be bypassed; swallowing failures can violate business correctness even when style checks pass."
+    },
+    {
+      "id": "l30-5",
+      "lecture": "L30",
+      "type": "single",
+      "prompt": "Which statement best distinguishes a fault from a failure?",
+      "options": [
+        "A fault must already have affected every user",
+        "A wrong leap-year condition is a fault; rejecting a valid leap-day booking is a failure",
+        "A failure is any suspicious source-code line, executed or not",
+        "A fault is always a hardware outage"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "The incorrect condition is a static defect that may remain dormant. The rejection is observed erroneous runtime behaviour when a relevant input activates it. Test selection influences whether such defects are exposed."
+    },
+    {
+      "id": "l30-6",
+      "lecture": "L30",
+      "type": "multi",
+      "prompt": "Select all appropriate interpretations of testing and metrics in the QA notes.",
+      "options": [
+        "Regression checks can include non-functional qualities",
+        "High fan-in automatically proves bad design",
+        "Complexity can be a predictor without proving maintenance difficulty",
+        "Boundary analysis tests values at and around significant limits",
+        "Replacing the integration boundary with a mock proves the real boundary works"
+      ],
+      "correct": [
+        0,
+        2,
+        3
+      ],
+      "explanation": "Boundary checks target limit-handling defects. Regression testing concerns lost behaviour or quality after changes, across several test types. Metrics require context; a reused component may have high fan-in. Mocked behaviour cannot establish the real integration being replaced."
+    },
+    {
+      "id": "l31-1",
+      "lecture": "L31",
+      "type": "single",
+      "prompt": "Which statement is the strongest evidence-backed performance claim in a project presentation?",
+      "options": [
+        "We chose a modern framework, so performance is proven",
+        "A screenshot shows that the application scales",
+        "The system is extremely fast",
+        "p95 checkout latency was 240 ms at 100 requests/s during a stated ten-minute test, with the error rate and environment reported"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "A useful claim states the metric, workload, observation window and environment, with relevant failure information. These conditions bound the conclusion. Framework choice and screenshots do not establish runtime performance."
+    },
+    {
+      "id": "l31-2",
+      "lecture": "L31",
+      "type": "multi",
+      "prompt": "Select all practices that improve a technical presentation.",
+      "options": [
+        "Present a recorded demo as live when the network fails",
+        "Explain a design choice through its requirement and trade-off",
+        "Use colour as the only way to distinguish critical states",
+        "Label diagram arrows and chart units",
+        "Distinguish implemented, tested and planned behaviour"
+      ],
+      "correct": [
+        1,
+        3,
+        4
+      ],
+      "explanation": "Clear rationale, interpretable visuals and accurate statements of system state help the audience assess the work. Colour alone may be inaccessible. A recording can be a useful fallback if it is honestly identified."
+    },
+    {
+      "id": "l31-3",
+      "lecture": "L31",
+      "type": "single",
+      "prompt": "A live demo's external service fails with little time remaining. What is the best response?",
+      "options": [
+        "Debug indefinitely and omit the conclusion",
+        "Claim the failed request succeeded",
+        "Acknowledge the failure, attempt a bounded recovery and switch to a labelled fallback if necessary",
+        "Skip mentioning the failure and present a recording as live"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "Rehearsed fallback handling preserves time without misrepresenting the evidence. A bounded recovery prevents the entire presentation becoming an unplanned debugging session. Explain what the alternative material does and does not demonstrate."
+    },
+    {
+      "id": "l31-4",
+      "lecture": "L31",
+      "type": "multi",
+      "prompt": "What should be included in a purposeful demonstration plan? Select all that apply.",
+      "options": [
+        "Actions linked to a central requirement and expected outcome",
+        "Visible production credentials to establish authenticity",
+        "A useful negative case and a prepared fallback",
+        "A claim that one happy path proves every quality attribute",
+        "Known initial state and realistic non-sensitive sample data"
+      ],
+      "correct": [
+        0,
+        2,
+        4
+      ],
+      "explanation": "A demo is a planned, bounded observation. A known state, requirement-linked journey and selected failure case support interpretation. Protect sensitive data and avoid treating a small demonstration as exhaustive verification."
+    },
+    {
+      "id": "l31-5",
+      "lecture": "L31",
+      "type": "single",
+      "prompt": "An examiner asks about regional failover, but the team measured only a single-zone outage. How should the speaker answer?",
+      "options": [
+        "Invent a likely number to avoid uncertainty",
+        "State the measured scope, identify the untested scenario and explain how it would be evaluated",
+        "Convert the zone result into a regional guarantee",
+        "Say cloud deployment makes the distinction irrelevant"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Honest scope boundaries are more useful than fabricated certainty. Regional dependencies may differ from zone-level ones, so a regional claim needs its own design review and recovery evidence."
+    },
+    {
+      "id": "l31-6",
+      "lecture": "L31",
+      "type": "multi",
+      "prompt": "Which rehearsal and delivery choices are useful? Select all that apply.",
+      "options": [
+        "Preserve every optional detail even if the conclusion must be dropped",
+        "Keep supporting detail in an appendix for questions",
+        "Rehearse aloud with the actual slides and demo setup",
+        "Estimate total time from silent slide reading alone",
+        "Plan team handoffs and use consistent terminology"
+      ],
+      "correct": [
+        1,
+        2,
+        4
+      ],
+      "explanation": "Full rehearsal includes speaking, setup and transitions. Clear handoffs and optional appendix material preserve a coherent main argument within the available time. Protect the central claim, evidence and conclusion when cutting detail."
+    },
+    {
+      "id": "l32-1",
+      "lecture": "L32",
+      "type": "single",
+      "prompt": "Under a stable workload, throughput is 100 requests/s and mean time in the measured system is 0.2 s. What does Little's Law give?",
+      "options": [
+        "20 mean in-flight requests",
+        "500 logged-in users",
+        "100 concurrent users",
+        "A maximum latency of 20 seconds"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "L = λW = 100 × 0.2 = 20. The quantities must use consistent boundaries and units. This is mean work in the measured system, not a count of logged-in users or a guarantee under a growing overload queue."
+    },
+    {
+      "id": "l32-2",
+      "lecture": "L32",
+      "type": "multi",
+      "prompt": "Select all correct test-purpose pairings.",
+      "options": [
+        "Soak: reveal degradation during sustained operation",
+        "Spike: examine abrupt demand changes",
+        "Volume: measure only the loudness of alerts",
+        "Stress: explore overload and recovery beyond expected capacity",
+        "Load: prove behaviour under every possible future workload"
+      ],
+      "correct": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "Soak, spike and stress tests answer different questions about time, demand shape and limits. Volume testing concerns data size. A load test establishes evidence only for the workload and conditions actually exercised."
+    },
+    {
+      "id": "l32-3",
+      "lecture": "L32",
+      "type": "single",
+      "prompt": "A test produces p95 latency 470 ms and 120 failures from 12,000 attempts. The criteria are p95 at most 500 ms and errors below 1%. What is the result?",
+      "options": [
+        "Fail: latency passes, but exactly 1% errors does not meet below 1%",
+        "Fail: p95 must always equal the maximum latency",
+        "Pass, because latency is within its threshold",
+        "Pass, because 1% is below 1%"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Error rate = 120/12,000 × 100 = 1%. The word below specifies a strict threshold, so equality fails that criterion. All required criteria must hold; good latency does not cancel an excessive error rate."
+    },
+    {
+      "id": "l32-4",
+      "lecture": "L32",
+      "type": "multi",
+      "prompt": "Which observations improve interpretation of a load test? Select all that apply.",
+      "options": [
+        "Monitor the load generator and important server bottlenecks",
+        "Average per-server p95 values and call that the exact global p95",
+        "Record request mix, dataset, warm-up and environment",
+        "Report latency distribution, errors and throughput together",
+        "Infer requests/s directly from logged-in user count without other information"
+      ],
+      "correct": [
+        0,
+        2,
+        3
+      ],
+      "explanation": "Workload and environment define what was tested. Driver saturation can limit offered demand, while resource measurements help explain server behaviour. Users and request rate differ, and percentiles do not generally combine through simple averaging."
+    },
+    {
+      "id": "l32-5",
+      "lecture": "L32",
+      "type": "single",
+      "prompt": "During increasing load, throughput plateaus, p95 rises and database waits grow. What is the best next step?",
+      "options": [
+        "Add API replicas immediately and declare scalability solved",
+        "Investigate database and connection-pool constraints, then test a specific change under comparable load",
+        "Remove slow requests from the results",
+        "Report only the fastest request"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "The evidence suggests a downstream constraint, although it needs investigation. Extra application replicas may increase database pressure. Diagnose a mechanism and compare controlled measurements rather than assuming the correct fix."
+    },
+    {
+      "id": "l32-6",
+      "lecture": "L32",
+      "type": "multi",
+      "prompt": "Which checks belong in a meaningful recovery test? Select all that apply.",
+      "options": [
+        "Assume a backup file guarantees successful restoration",
+        "Measure when usable service is restored against RTO",
+        "Verify lost or preserved writes against RPO",
+        "Count a restarted process as proof that all data is correct",
+        "Check integrity and duplicate business effects"
+      ],
+      "correct": [
+        1,
+        2,
+        4
+      ],
+      "explanation": "Recovery concerns useful service and correct state, not only process liveness. Measure the target properties, inspect business outcomes and test real restoration. An untested backup cannot establish recovery time or successful data recovery."
+    },
+    {
+      "id": "l33-1",
+      "lecture": "L33",
+      "type": "single",
+      "prompt": "Which comparison best matches the guide's definitions?",
+      "options": [
+        "Low code combines visual/configuration-led work with extension points; no code uses supported configurable building blocks",
+        "Every AI-assisted code review is necessarily vibe coding",
+        "No code means no executable code exists",
+        "Low code is defined by a universal maximum of 100 lines"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "These labels concern how behaviour is expressed and what the platform exposes. No-code systems still execute software. The narrower vibe-coding definition concerns largely not inspecting generated implementation, not every use of AI assistance."
+    },
+    {
+      "id": "l33-2",
+      "lecture": "L33",
+      "type": "multi",
+      "prompt": "Select all responsibilities that remain when building a low-code application.",
+      "options": [
+        "Assume hidden fields enforce server-side access",
+        "Test workflow errors and external integrations",
+        "Plan deployment, monitoring and recovery",
+        "Assume the platform makes requirements analysis unnecessary",
+        "Define ownership and review connector permissions"
+      ],
+      "correct": [
+        1,
+        2,
+        4
+      ],
+      "explanation": "Visual tools change implementation methods but do not remove accountability. Permissions must be enforced at the appropriate data or service boundary. The lifecycle still includes requirements, verification, release and operation."
+    },
+    {
+      "id": "l33-3",
+      "lecture": "L33",
+      "type": "single",
+      "prompt": "A platform exports all records as CSV but cannot export workflows or runnable behaviour. Which conclusion follows?",
+      "options": [
+        "The entire application is portable without migration work",
+        "Data export exists, but application portability remains limited",
+        "The system has no vendor dependence",
+        "All permissions are encoded in the CSV by definition"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Data export and executable behaviour are distinct migration concerns. Workflows, permission models and proprietary integrations may still need rebuilding. Evaluate exit effort rather than equating access to records with a portable application."
+    },
+    {
+      "id": "l33-4",
+      "lecture": "L33",
+      "type": "multi",
+      "prompt": "Which checks are appropriate before adopting generated code? Select all that apply.",
+      "options": [
+        "Treat compilation as proof of production readiness",
+        "Derive negative and boundary tests from actual requirements",
+        "Inspect the change and understand sensitive data flows",
+        "Independently verify unfamiliar dependencies and interfaces",
+        "Trust generated tests solely because they pass"
+      ],
+      "correct": [
+        1,
+        2,
+        3
+      ],
+      "explanation": "Generated code and generated tests can share a mistaken assumption. Independent requirements, review and verification improve confidence. A successful build or happy path does not establish security, maintainability or correct failure handling."
+    },
+    {
+      "id": "l33-5",
+      "lecture": "L33",
+      "type": "single",
+      "prompt": "An approval workflow timed out after reserving stock. Reverting its visual definition did not release the stock. Why?",
+      "options": [
+        "No-code systems cannot store state",
+        "Reverting executable behaviour does not automatically reverse side effects already performed",
+        "Version control can never be used with workflows",
+        "A rollback always prevents all external effects"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "External reservations, messages or records may persist after code or model rollback. Recovery needs operation identities, reconciliation or explicit compensation where appropriate. Application version and business state are different recovery concerns."
+    },
+    {
+      "id": "l33-6",
+      "lecture": "L33",
+      "type": "multi",
+      "prompt": "Select all useful criteria when choosing between a visual platform and custom code.",
+      "options": [
+        "Fit for required workflows and exception cases",
+        "Only the speed of the first demo",
+        "Quality evidence, integration constraints and maintainability",
+        "Only the vendor's popularity",
+        "Operational ownership and migration or exit effort"
+      ],
+      "correct": [
+        0,
+        2,
+        4
+      ],
+      "explanation": "A defensible decision considers the lifecycle and required behaviour. Prototype speed is one benefit but does not prove total cost, quality or supportability. State assumptions and identify constraints that would change the decision."
+    },
+    {
+      "id": "l34-1",
+      "lecture": "L34",
+      "type": "single",
+      "prompt": "Which distinction between cloud service and deployment models is correct?",
+      "options": [
+        "IaaS describes a service-responsibility model; hybrid describes a deployment model",
+        "SaaS means the customer manages every physical server",
+        "Public cloud means the application must be publicly accessible",
+        "PaaS guarantees all application access rules are correct"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Service models describe what capability is supplied and which responsibilities remain. Deployment models describe organisational use and arrangement. Neither public cloud nor a managed platform automatically determines application visibility or permission correctness."
+    },
+    {
+      "id": "l34-2",
+      "lecture": "L34",
+      "type": "multi",
+      "prompt": "Select all accurate statements about scaling and placement.",
+      "options": [
+        "More API replicas necessarily remove database bottlenecks",
+        "Two zones can still share a regional dependency",
+        "A stateless application tier means the entire system has no state",
+        "Horizontal scaling changes instance count",
+        "Elasticity adapts resource allocation as demand changes"
+      ],
+      "correct": [
+        1,
+        3,
+        4
+      ],
+      "explanation": "Scaling and elasticity have different meanings and practical limits. Shared dependencies can constrain both capacity and resilience. State moved out of application instances still needs its own management, capacity and recovery design."
+    },
+    {
+      "id": "l34-3",
+      "lecture": "L34",
+      "type": "single",
+      "prompt": "A gateway buffers 50 events/s at 200 bytes/event during a one-hour outage. How much raw payload is produced before overhead?",
+      "options": [
+        "36,000,000 bytes, or 36 MB decimal",
+        "360,000,000 bytes",
+        "10,000 bytes",
+        "3,600,000 bytes"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Multiply 50 × 200 × 3,600 = 36,000,000 bytes. Provision additional capacity for metadata, durable-storage overhead and a justified margin. Define behaviour if the outage lasts longer or storage fills."
+    },
+    {
+      "id": "l34-4",
+      "lecture": "L34",
+      "type": "multi",
+      "prompt": "What must a reliable store-and-forward design consider? Select all that apply.",
+      "options": [
+        "Perfect event ordering from wall-clock timestamps alone",
+        "Stable event identifiers across retries",
+        "Unlimited offline storage by assumption",
+        "Deduplication and acknowledgement failure cases",
+        "Buffer limits and an explicit overflow or backpressure policy"
+      ],
+      "correct": [
+        1,
+        3,
+        4
+      ],
+      "explanation": "Retry can redeliver an event, including after receiver success but lost acknowledgement. Stable IDs support deduplication. Storage is finite and clocks can drift, so ordering and overflow behaviour need deliberate rules."
+    },
+    {
+      "id": "l34-5",
+      "lecture": "L34",
+      "type": "single",
+      "prompt": "When is placing computation at the edge most clearly justified?",
+      "options": [
+        "Whenever a cloud provider offers it, regardless of requirements",
+        "When a local decision must avoid wide-area latency or continue under defined disconnection conditions",
+        "When unlimited local compute is guaranteed",
+        "When all data consistency questions should be ignored"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Edge placement can support latency, connectivity or bandwidth requirements, but local capacity and state semantics still matter. Compare end-to-end behaviour and define what remains permitted during disconnection."
+    },
+    {
+      "id": "l34-6",
+      "lecture": "L34",
+      "type": "multi",
+      "prompt": "Select all useful practices for managing a device fleet.",
+      "options": [
+        "One permanent administrator secret shared by every device",
+        "Verified updates, staged rollout and health checks",
+        "Assume disconnected devices immediately receive central revocations",
+        "Track versions, last contact and recovery for interrupted updates",
+        "Per-device identity with appropriately limited permissions"
+      ],
+      "correct": [
+        1,
+        3,
+        4
+      ],
+      "explanation": "Fleet management must account for compromised, lost and disconnected devices. Individual identity and staged updates reduce blast radius. Offline revocation and interrupted deployment need explicit policies and recovery; central changes cannot be assumed instantly known everywhere."
+    },
+    {
+      "id": "l35-1",
+      "lecture": "L35",
+      "type": "single",
+      "prompt": "Revision scenario: checkout accepts an order into a durable queue while the payment worker is offline. What should the user see?",
+      "options": [
+        "An accurate pending state, followed by the verified outcome",
+        "A guarantee that the payment provider will never reject it",
+        "Payment confirmed merely because enqueue succeeded",
+        "No status until the whole queue is empty"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "This combines deployment, asynchronous behaviour, testing and communication. Queue acceptance is not payment completion. Use stable business identifiers, monitor backlog and verify eventual outcomes without duplicate effects; communicate the real state to the user."
+    },
+    {
+      "id": "l35-2",
+      "lecture": "L35",
+      "type": "multi",
+      "prompt": "An AI-generated request workflow will become a maintained product. Which evidence should the review require? Select all that apply.",
+      "options": [
+        "Tests of retries, external effects and duplicate handling",
+        "Generated tests as the only source of requirements",
+        "Independently checked access rules and failure paths",
+        "Clear ownership, deployment and recovery procedures",
+        "A polished demo as sufficient proof of production readiness"
+      ],
+      "correct": [
+        0,
+        2,
+        3
+      ],
+      "explanation": "L29, L30 and L33 all require accountable implementation and verification. Generation does not remove security, quality or operational responsibilities. Requirements and independent checks must support the decision to operate the workflow."
+    },
+    {
+      "id": "l35-3",
+      "lecture": "L35",
+      "type": "single",
+      "prompt": "A system has frequent short failures but fast repair. Which conclusion correctly separates reliability and availability?",
+      "options": [
+        "High availability proves that failures never occur",
+        "Fast recovery can improve availability without reducing failure frequency",
+        "Reliability and availability always have identical measurements",
+        "Reducing repair time necessarily removes the underlying fault"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "L30 distinguishes failure-free operation over time from being operational when needed. Reducing MTTR can increase the availability ratio while users still experience recurring interruptions. Both failure frequency and recovery duration are relevant evidence."
+    },
+    {
+      "id": "l35-4",
+      "lecture": "L35",
+      "type": "multi",
+      "prompt": "A team claims its cross-zone deployment meets recovery targets. Which steps would substantiate the claim? Select all that apply.",
+      "options": [
+        "Show actual placement, dependencies and recovery mechanisms",
+        "Count replicas without inspecting shared parents",
+        "Induce the relevant controlled failure and measure usable-service recovery",
+        "Use a diagram export as the only recovery test",
+        "Check preserved writes, lost data and remaining shared dependencies"
+      ],
+      "correct": [
+        0,
+        2,
+        4
+      ],
+      "explanation": "Combining L28, L32 and L34 requires both a plausible design and measured outcomes. Placement makes shared failure visible; a controlled recovery exercise measures restoration and data integrity. The result remains bounded by the failure scenario and conditions tested."
+    },
+    {
+      "id": "l35-5",
+      "lecture": "L35",
+      "type": "single",
+      "prompt": "A presenter says: “Our app is secure because the scanner passed, and scalable because we deployed it in the cloud.” What is the strongest critique?",
+      "options": [
+        "A bigger cloud instance would prove both claims",
+        "The evidence is insufficient: permissions and abuse paths need checks, and capacity needs representative measurements",
+        "Both claims are fully established by those facts",
+        "Only the slide design needs improvement"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "This combines L29, L31, L32 and L34. Scanner results have limited scope, and cloud placement is not a performance result. A defensible presentation reports the checks actually performed, workload and environment, measured outcomes and remaining limitations."
+    },
+    {
+      "id": "l35-6",
+      "lecture": "L35",
+      "type": "multi",
+      "prompt": "Which statements correctly connect multiple CT4 topics? Select all that apply.",
+      "options": [
+        "Offline acceptance needs explicit staleness and reconciliation rules",
+        "A coding standard needs demonstrated compliance, not just a document",
+        "A p95 latency pass cancels failure of a required error-rate threshold",
+        "mTLS can establish endpoint identity while resource authorisation remains necessary",
+        "Replication automatically supplies historical recovery from accidental deletion"
+      ],
+      "correct": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "Identity and permission are different concerns; disconnected operation changes available knowledge; process assurance requires evidence. Replicas can copy deletion, and all mandatory test criteria must pass. These distinctions help avoid overstated security, recovery and quality claims."
+    }
+  ]
+}

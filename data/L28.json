@@ -393,5 +393,73 @@
       "title": "Supplied L28 lecture notes",
       "url": "markdown/L28%20-%20Deployment%20Diagrams.md"
     }
-  ]
+  ],
+  "learning": {
+    "before": "3. Failure domains and isolation",
+    "title": "Follow a request through the deployment",
+    "intro": "Select each box. The arrows show the illustrative request path, not separate failure domains. Then change the placement in the failure experiment.",
+    "steps": [
+      {
+        "label": "Client",
+        "title": "1. Start outside the trust boundary",
+        "explanation": "A user request begins in an environment the application does not control. Identify what the user can send and where the server first validates identity and input.",
+        "example": "A valid session can identify Alice; it does not permit reading Bob’s order.",
+        "trap": "A request arriving from an internal address is not automatically authorised."
+      },
+      {
+        "label": "Entry point",
+        "title": "2. Choose a backend",
+        "explanation": "The entry point routes traffic to a running instance. Its own placement and health matter: multiple backends do not help when the only entry point fails.",
+        "example": "An L4 balancer assigns a connection. Many HTTP/2 streams can reuse that one assignment.",
+        "trap": "A box labelled load balancer does not prove that requests are balanced at the application layer."
+      },
+      {
+        "label": "API instances",
+        "title": "3. Look outside the replica boxes",
+        "explanation": "Trace each instance to its host, zone and region. Redundancy protects only against failures that leave a usable instance and its dependencies alive.",
+        "example": "Two API processes on Host A both disappear when Host A is lost.",
+        "trap": "Counting replicas without examining their common parents hides shared failure."
+      },
+      {
+        "label": "State store",
+        "title": "4. Follow the dependency to state",
+        "explanation": "The request may still depend on one database. Show the primary, standby, promotion path and backup history. Confirm the recovery targets through exercises.",
+        "example": "A standby can support continuity after host loss; a historical backup can recover an accidental deletion copied to that standby.",
+        "trap": "Replication is not a substitute for recoverable history."
+      }
+    ],
+    "lab": "deployment",
+    "labTitle": "What survives this failure?",
+    "labIntro": "Predict first: will this placement leave an API and a usable database copy? This simplified model excludes entry-point failures and models topology, not failover time.",
+    "checks": [
+      {
+        "prompt": "Two APIs are in separate zones, but both use one database host. That database host fails. What is the strongest conclusion?",
+        "options": [
+          "The replicas guarantee checkout works.",
+          "The database dependency may stop both request paths.",
+          "There must be zero data loss."
+        ],
+        "correct": 1,
+        "feedback": [
+          "API placement alone does not protect a shared database dependency.",
+          "Correct. Review the complete request path, including state and failover.",
+          "Topology alone cannot establish a measured RPO."
+        ]
+      },
+      {
+        "prompt": "A deletion reaches the primary and its live replica. Which control addresses recovery of the older records?",
+        "options": [
+          "A recoverable historical backup or point-in-time recovery path.",
+          "One more replica of the already deleted state.",
+          "Increasing the HTTP timeout."
+        ],
+        "correct": 0,
+        "feedback": [
+          "Correct. Test restoration and retention rather than assuming a copy is usable.",
+          "Another current copy can faithfully preserve the deletion.",
+          "Transport timing does not restore historical data."
+        ]
+      }
+    ]
+  }
 }

@@ -387,5 +387,73 @@
       "title": "NIST — Fog Computing Conceptual Model",
       "url": "https://www.nist.gov/publications/fog-computing-conceptual-model"
     }
-  ]
+  ],
+  "learning": {
+    "before": "6. Offline operation is a consistency decision",
+    "title": "Follow one event through an outage",
+    "intro": "Select the stages to see what changes when a gateway loses its central connection. Local operation must follow a stated policy.",
+    "steps": [
+      {
+        "label": "Sense",
+        "title": "1. Create an identifiable event",
+        "explanation": "Capture the observation and enough context to interpret it. Stable identities help recognise retransmissions later.",
+        "example": "A gateway records event device-7/sequence-42 rather than generating a different business identity for every retry.",
+        "trap": "A timestamp alone may not establish ordering when device clocks disagree."
+      },
+      {
+        "label": "Buffer",
+        "title": "2. Persist before promising later delivery",
+        "explanation": "A durable bounded buffer can preserve events during disconnection. Define what happens when capacity is exhausted or local storage fails.",
+        "example": "A one-hour outage at 50 events/s and 200 bytes/event creates 36 MB of raw payload.",
+        "trap": "Store-and-forward does not imply infinite disk space or survival of every device failure."
+      },
+      {
+        "label": "Reconnect",
+        "title": "3. Expect uncertain acknowledgements",
+        "explanation": "Transmission can succeed even if the acknowledgement is lost. Retry with the same identity and define deduplication and ordering at the receiver.",
+        "example": "The gateway resends sequence-42 after losing its acknowledgement; the receiver avoids applying its effect twice.",
+        "trap": "A retry is not proof that the previous attempt did nothing."
+      },
+      {
+        "label": "Reconcile",
+        "title": "4. Check the final business state",
+        "explanation": "Resolve conflicts and stale decisions under an explicit policy. Observe backlog, last contact and software version across the fleet.",
+        "example": "An attendance event accepted offline may be provisional until central permissions are checked.",
+        "trap": "Disconnected devices cannot instantly know every central revocation."
+      }
+    ],
+    "lab": "buffer",
+    "labTitle": "Size the offline buffer",
+    "labIntro": "Estimate raw payload and a chosen storage overhead. Decimal MB = 1,000,000 bytes. This is a capacity model, not a measured device-storage guarantee.",
+    "checks": [
+      {
+        "prompt": "A device was offline when access was revoked centrally. Which design question must be answered?",
+        "options": [
+          "Whether cached authority can remain valid, and for how long.",
+          "How to assume the device immediately learned the revocation.",
+          "Whether timestamps can replace permission checks."
+        ],
+        "correct": 0,
+        "feedback": [
+          "Correct. Define staleness, permitted operations and reconciliation for the risk.",
+          "A network partition prevents assuming immediate communication.",
+          "Time information does not itself decide resource permission."
+        ]
+      },
+      {
+        "prompt": "Why stage a fleet update before deploying it everywhere?",
+        "options": [
+          "It guarantees the update contains no defects.",
+          "It limits initial exposure and lets health evidence inform expansion.",
+          "It removes the need to handle interrupted updates."
+        ],
+        "correct": 1,
+        "feedback": [
+          "A rollout strategy reduces exposure; it does not prove perfect software.",
+          "Correct. Track versions, observe the first group and retain a recovery path.",
+          "Power and network interruptions still require explicit recovery behaviour."
+        ]
+      }
+    ]
+  }
 }

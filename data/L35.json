@@ -460,5 +460,73 @@
       "title": "L34 — full study guide",
       "url": "L34.html"
     }
-  ]
+  ],
+  "learning": {
+    "before": "3. Trace a requirement all the way to evidence",
+    "title": "Connect the CT4 topics through one checkout design",
+    "intro": "This walkthrough stays within L28–L34. The rest of this broader revision guide also covers the earlier ST2 material.",
+    "steps": [
+      {
+        "label": "Need",
+        "title": "1. State a measurable outcome",
+        "explanation": "Replace “reliable” with a failure scenario, restoration target and acceptable data loss. Include user-visible states and permissions.",
+        "example": "After a worker outage, accepted orders remain pending and eventually finish without duplicate payment effects.",
+        "trap": "A technology name is not an acceptance criterion."
+      },
+      {
+        "label": "Design",
+        "title": "2. Explain a mechanism and its cost",
+        "explanation": "Choose placement, communication and state management that could support the requirement. Show shared dependencies and trust boundaries.",
+        "example": "A durable queue buffers accepted work, but introduces backlog, retries and delayed completion.",
+        "trap": "A plausible topology supports a target; it does not measure achievement."
+      },
+      {
+        "label": "Test",
+        "title": "3. Try to falsify the claim",
+        "explanation": "Exercise important failure and misuse paths and record relevant metrics. Verify the final business state as well as process liveness.",
+        "example": "Stop a worker, submit identifiable orders, restart it and verify one intended payment effect per order.",
+        "trap": "A restarted process does not prove correct recovery of business data."
+      },
+      {
+        "label": "Explain",
+        "title": "4. Report a bounded conclusion",
+        "explanation": "Communicate the result with workload, environment and limitations. Use the outcome to improve the next design or test.",
+        "example": "The test covers a bounded worker outage, not a regional failure or unlimited queue capacity.",
+        "trap": "One favourable observation cannot establish every quality attribute."
+      }
+    ],
+    "lab": "revision",
+    "labTitle": "Choose evidence for the claim",
+    "labIntro": "Switch between CT4 claims. Select the evidence set that actually supports each one, then inspect why the alternatives fall short.",
+    "checks": [
+      {
+        "prompt": "A service uses TLS, a cloud database and generated tests. Is its security established?",
+        "options": [
+          "Yes: those three labels are sufficient.",
+          "No: access rules and abuse paths still need appropriate verification.",
+          "Yes, if its UI has no admin button."
+        ],
+        "correct": 1,
+        "feedback": [
+          "These are mechanisms or artifacts, not a complete argument for security.",
+          "Correct. Ask what each control and test actually establishes.",
+          "The server must enforce permissions independently of UI visibility."
+        ]
+      },
+      {
+        "prompt": "What makes a strong scenario answer across these topics?",
+        "options": [
+          "A long list of tool names.",
+          "A requirement, mechanism, verification method and trade-off.",
+          "A claim that every quality can be maximised at once."
+        ],
+        "correct": 1,
+        "feedback": [
+          "Tools matter when their mechanism addresses the specific problem.",
+          "Correct. The chain makes the reasoning assessable.",
+          "Quality and operational choices often have competing consequences."
+        ]
+      }
+    ]
+  }
 }

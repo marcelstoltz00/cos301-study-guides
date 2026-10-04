@@ -403,5 +403,73 @@
       "title": "Supplied QA notes — mapped to L30 by scope.md",
       "url": "markdown/L29%20-%20Software%20Quality%20Assurance.md"
     }
-  ]
+  ],
+  "learning": {
+    "before": "4. Reliability and availability",
+    "title": "Trace one defect through assurance and control",
+    "intro": "This is an example lifecycle, not a promise that every defect follows one path. Select the stage to see what evidence it contributes.",
+    "steps": [
+      {
+        "label": "Agree rules",
+        "title": "1. Prevent ambiguity",
+        "explanation": "Quality starts with explicit requirements and expected qualities. A shared error-handling standard gives reviewers something concrete to evaluate.",
+        "example": "The payment workflow must never report confirmed success for an unknown outcome.",
+        "trap": "A standards document with no examples or enforcement is weak assurance."
+      },
+      {
+        "label": "Review change",
+        "title": "2. Inspect the artifact",
+        "explanation": "Review requirements, design and code for contradictions and unsafe assumptions. A static fault can be found before anyone observes a runtime failure.",
+        "example": "A reviewer notices catch-all handling that returns success after a payment timeout.",
+        "trap": "Passing formatting checks does not establish correct business semantics."
+      },
+      {
+        "label": "Exercise behaviour",
+        "title": "3. Activate the important paths",
+        "explanation": "Test positive, negative and boundary cases with meaningful assertions. Use real collaborators when claiming evidence about an integration.",
+        "example": "Force a timeout after a provider may have accepted payment; assert an unknown state rather than paid.",
+        "trap": "No exception was thrown is not a sufficient assertion for every service."
+      },
+      {
+        "label": "Learn from operation",
+        "title": "4. Measure and improve",
+        "explanation": "Observe incidents and repair duration, then feed defects back into requirements, standards and regression coverage. Interpret metrics with their units and context.",
+        "example": "A runbook shortens restoration time even before the underlying fault is removed.",
+        "trap": "Better availability does not necessarily mean fewer failures."
+      }
+    ],
+    "lab": "reliability",
+    "labTitle": "Separate reliability from recovery",
+    "labIntro": "Change mean operating time and mean repair time. The calculator uses the lecture convention MTBF = MTTF + MTTR and a simplified long-run availability ratio.",
+    "checks": [
+      {
+        "prompt": "MTTF stays the same while MTTR halves. What can improve?",
+        "options": [
+          "Availability, without necessarily changing failure frequency.",
+          "The number of underlying faults must halve.",
+          "The system must now have zero downtime."
+        ],
+        "correct": 0,
+        "feedback": [
+          "Correct. Less time repairing improves the operating-time proportion.",
+          "A faster restoration procedure can leave the original fault unchanged.",
+          "A shorter repair duration is not zero downtime."
+        ]
+      },
+      {
+        "prompt": "A mocked unit test passes for a database adapter. What is still unproven?",
+        "options": [
+          "Whether the caller handles the mocked result.",
+          "Whether the real database integration behaves as expected.",
+          "Whether the test can run."
+        ],
+        "correct": 1,
+        "feedback": [
+          "That selected caller behaviour may be exactly what the test established.",
+          "Correct. Exercise the real boundary to claim integration evidence.",
+          "A passing run already shows that this test executed."
+        ]
+      }
+    ]
+  }
 }

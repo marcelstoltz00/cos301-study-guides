@@ -41,6 +41,7 @@ JS = (ASSETS / "app.js").read_text()
 
 def nav_html(current_id):
     links = ['<a href="index.html" class="%s">Home</a>' % ("active" if current_id is None else "")]
+    links.append('<a href="ct4-practice-test.html">CT4 Practice Test</a>')
     for lec in LECTURES:
         cls = "active" if lec["id"] == current_id else ""
         links.append(f'<a href="{lec["id"]}.html" class="{cls}">{html.escape(lec["nav"])}</a>')
@@ -261,7 +262,7 @@ def build_lecture(lec):
 
     out = PAGE_TEMPLATE.format(
         title=html.escape(data["title"]),
-        css=CSS,
+        css=CSS + ((ASSETS / "learning.css").read_text() if data.get("learning") else ""),
         nav=nav_html(lec["id"]),
         lecture_id=lec["id"],
         subtitle=html.escape(data["subtitle"]),
@@ -271,7 +272,7 @@ def build_lecture(lec):
         prev_link=prev_link,
         next_link=next_link,
         data_json=data_json,
-        js=JS,
+        js=JS + ("\n" + (ASSETS / "learning.js").read_text() if data.get("learning") else ""),
         sources=sources_html(data),
         extra_content=(ASSETS / f"{lec['id']}-extra.html").read_text()
         if (ASSETS / f"{lec['id']}-extra.html").exists() else "",
@@ -316,6 +317,12 @@ def build_index():
             f"</a>"
         )
     special_cards = [
+      '<a class="special-card" href="ct4-practice-test.html">'
+      '<div class="id">Class Test 4 · L28–L35</div>'
+      '<div class="tag">48 questions</div>'
+      '<h3>CT4 Comprehensive Practice Test</h3>'
+      '<p>Six questions per lecture, including calculations, scenarios and multi-select. L35 revises L28–L34 only. Separate saved progress and explained answers.</p>'
+      '</a>',
       '<a class="special-card" href="comprehensive-test.html">'
       '<div class="id">Practice</div>'
       '<div class="tag">Standalone</div>'
@@ -328,8 +335,32 @@ def build_index():
     print(f"built index.html ({len(cards)} lecture cards, {len(special_cards)} special cards)")
 
 
+def build_ct4_test():
+    data = json.loads((DATA_DIR / "CT4.json").read_text())
+    template = (ASSETS / "practice-test.html").read_text()
+    replacements = {
+        "<!-- GUIDE_LINKS -->": "\n".join(
+            f'<a href="{lecture["id"]}.html">{lecture["id"]}</a>'
+            for lecture in data["lectures"]
+        ),
+        "<!-- SECTION_LINKS -->": "\n".join(
+            f'<a href="#{lecture["id"].lower()}">{lecture["id"]}</a>'
+            for lecture in data["lectures"]
+        ),
+        "<!-- QUESTION_COUNT -->": str(len(data["questions"])),
+        "<!-- MULTI_COUNT -->": str(sum(q["type"] == "multi" for q in data["questions"])),
+        "<!-- TEST_DATA -->": json.dumps(data).replace("</", "<\\/"),
+        "<!-- TEST_JS -->": (ASSETS / "practice-test.js").read_text(),
+    }
+    for marker, value in replacements.items():
+        template = template.replace(marker, value)
+    (OUT_DIR / "ct4-practice-test.html").write_text(template)
+    print(f'built ct4-practice-test.html ({len(data["questions"])} questions)')
+
+
 if __name__ == "__main__":
     for lec in LECTURES:
         if (DATA_DIR / f"{lec['id']}.json").exists():
             build_lecture(lec)
+    build_ct4_test()
     build_index()
