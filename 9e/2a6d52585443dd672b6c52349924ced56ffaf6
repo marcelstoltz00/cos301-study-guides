@@ -1,0 +1,78 @@
+ct4-practice-test.html
+  s_da5a8fbd6fc1ce::t_d3e2a00e323da9 6,333,335-336,345,347
+  s_da5a8fbd6fc1ce::t_a3e1387eb3640e 364
+markdown/st2-example-2.md
+  s_da5a8fbd6fc1ce::t_d3e2a00e323da9 27,38,48,59,73,80,112,119,136,143,149,154
+  s_da5a8fbd6fc1ce::t_a3e1387eb3640e 3
+data/ct4-example-2.json
+  s_da5a8fbd6fc1ce::t_672f4494e8c4da 4,6,60,98,116,134,175,193,211,234,252,291,317,357
+assets/practice-test.html
+  s_da5a8fbd6fc1ce::t_0968d0fed27742 6,327,329-330
+README.md
+  s_da5a8fbd6fc1ce::t_0defb36c7e4033 1,14
+  s_da5a8fbd6fc1ce::t_0968d0fed27742 5,7,13,22,27,37,42-43
+assessment-style-review.md
+  s_da5a8fbd6fc1ce::t_0defb36c7e4033 27,57
+  s_da5a8fbd6fc1ce::t_e8efc436537913 61-62,64
+st2-example-1.html
+  s_da5a8fbd6fc1ce::t_a3e1387eb3640e 720,818
+data/st2-example-1.json
+  s_da5a8fbd6fc1ce::t_cbbca9353127c6 4
+  s_da5a8fbd6fc1ce::t_672f4494e8c4da 6,213,249,280,326,359
+data/ct4-example-1.json
+  s_da5a8fbd6fc1ce::t_672f4494e8c4da 4,6,333,359
+index.html
+  s_da5a8fbd6fc1ce::t_a3e1387eb3640e 720-721
+  s_da5a8fbd6fc1ce::t_d3e2a00e323da9 688,714,718-719,722
+L33.html
+  s_da5a8fbd6fc1ce::t_d3e2a00e323da9 757
+data/st2-example-2.json
+  s_da5a8fbd6fc1ce::t_672f4494e8c4da 6,52,92,133,174,206,234,269
+  s_da5a8fbd6fc1ce::t_cbbca9353127c6 4
+assets/mock-exam.js
+  s_da5a8fbd6fc1ce::t_cbbca9353127c6 97
+markdown/L35.md
+  s_da5a8fbd6fc1ce::t_0defb36c7e4033 3,114
+assets/build.py
+  s_da5a8fbd6fc1ce::t_0a2d27140b55a7 200,323-324,326
+L35.html
+  s_da5a8fbd6fc1ce::t_d3e2a00e323da9 712,741,771
+  s_da5a8fbd6fc1ce::t_d7af48681ac1c2 776
+st2-example-2.html
+  s_da5a8fbd6fc1ce::t_a3e1387eb3640e 720,818
+data/CT4.json
+  s_da5a8fbd6fc1ce::t_672f4494e8c4da 4,33
+  s_da5a8fbd6fc1ce::t_cbbca9353127c6 735,751
+ct4-example-2.html
+  s_da5a8fbd6fc1ce::t_d3e2a00e323da9 720
+  s_da5a8fbd6fc1ce::t_a3e1387eb3640e 818
+markdown/ct4-example-1.md
+  s_da5a8fbd6fc1ce::t_d3e2a00e323da9 3,140,151,238,245
+data/L35.json
+  s_da5a8fbd6fc1ce::t_f2ee8d1ac9e935 221,223-226,228-234,299-306
+  s_da5a8fbd6fc1ce::t_672f4494e8c4da 4-5,474
+markdown/ct4-example-2.md
+  s_da5a8fbd6fc1ce::t_d3e2a00e323da9 3,29,36,47,54,61,70,77,84,94,101,112,121,148,154,161,167,173,180,186,192,198,204,211,216
+markdown/st2-example-1.md
+  s_da5a8fbd6fc1ce::t_d3e2a00e323da9 58,69,83,90,102,174,181,187,192,200
+  s_da5a8fbd6fc1ce::t_a3e1387eb3640e 3
+ct4-example-1.html
+  s_da5a8fbd6fc1ce::t_d3e2a00e323da9 720
+  s_da5a8fbd6fc1ce::t_a3e1387eb3640e 818
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9e2a6d52585443dd672b6c52349924ced56ffaf6",
+  "prompts": {},
+  "sessions": {
+    "s_da5a8fbd6fc1ce": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a10baf-bf0d-7352-8b23-9981f8a67ae1",
+        "model": "gpt-5.5"
+      },
+      "human_author": "marcelstoltz00 <marcelstoltz00@gmail.com>"
+    }
+  }
+}
