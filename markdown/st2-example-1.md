@@ -1,6 +1,6 @@
 # ST2 Example 1
 
-Scope: L17–L35, including SOA and Microservices. Total: 60 marks.
+Scope: L17–L33 and L35, including SOA and Microservices. Total: 51 marks.
 
 Original practice paper based on the reference assessment style. Not an official paper or prediction. No official duration was available in the supplied export.
 
@@ -55,40 +55,7 @@ For each scenario, choose the most suitable test type from load, stress, soak, o
 
 3. The team sends another student’s record ID using a valid student session to determine whether the server blocks unauthorised access. (2 marks)
 
-### Question 5 — 5 marks
-
-You are reviewing the CampusCart incident evidence below. Infer behaviour from the stated rates and delivery rules; do not assume the word “queue” provides unlimited capacity or exactly-once business effects.
-
-Diagram labels (use the HTML paper for spatial relationships):
-
-```text
-CampusCart production — evidence from a worker outage
-API / Zone A
-Accepts orders into durable Queue Q
-Responds: payment pending
-Calls use a stable order operation ID
-Payment worker / Zone B
-At-least-once delivery from Q
-Calls external provider with that ID
-Acknowledges after recording outcome
-Observation before outage
-Queue depth: 0
-API acceptance rate: 50 orders/s
-Worker completion rate: 50 orders/s
-Observation during outage
-Worker unavailable for 120 seconds
-API still accepts 50 orders/s
-No worker completions during outage
-via Q
-Assume constant rates, no expiry, no other consumers and enough queue capacity for 120 seconds.
-After restart, a lost acknowledgement may cause redelivery of an already processed order.
-```
-
-1. Identify two observations showing that API acceptance is decoupled from immediate payment completion. Cite the evidence for each. (2 marks)
-
-2. Calculate the additional backlog after 120 seconds, then explain two controls needed to process the backlog without duplicate charges after restart. (3 marks)
-
-### Question 6 — 4 marks
+### Question 5 — 4 marks
 
 Match each quality/delivery artifact to its purpose.
 
@@ -99,7 +66,7 @@ Answer bank: Records decision context, alternatives and consequences · Defines 
 3. API service contract
 4. CI quality gate
 
-### Question 7 — 5 marks
+### Question 6 — 5 marks
 
 Which statements are defensible engineering claims? Select all that apply. Negative marking applies using the explicit practice rule on this paper.
 
@@ -113,14 +80,14 @@ Which statements are defensible engineering claims? Select all that apply. Negat
 - H. An automated vulnerability scan is equivalent to an authorised red-team exercise that also evaluates detection and response.
 - I. Source formatting alone establishes runtime availability.
 
-### Question 8 — 2 marks
+### Question 7 — 2 marks
 
 For each scenario below, write only the most specific testing term. Base the answer on the purpose explicitly stated.
 
 1. 1. After modifying the cache, the team reruns existing response-time tests to detect a loss of previously achieved performance.
 2. 2. The database is populated with ten times as many records, while arrival rate stays fixed, to assess the effect of data size.
 
-### Question 9 — 5 marks
+### Question 8 — 5 marks
 
 Match each term in Column A with the most precise description in Column B.
 
@@ -132,20 +99,7 @@ Answer bank: Observed incorrect or unexpected runtime behaviour · Target maximu
 4. RTO
 5. Least privilege
 
-### Question 10 — 4 marks
-
-A field gateway records events while disconnected. Its durable buffer is bounded, retry uses stable event IDs, and the server deduplicates received events. The gateway may use an approved cached policy for a limited period. Select all statements that are TRUE about what can happen, and why. Negative marking applies.
-
-- A. A lost acknowledgement can cause an already accepted event to be resent.
-- B. A stable event ID supports recognising duplicate delivery.
-- C. The existence of a buffer guarantees survival through every outage duration.
-- D. A newly revoked central permission is necessarily known to the disconnected gateway immediately.
-- E. The design needs an explicit rule for full-buffer behaviour.
-- F. Keeping computation local automatically proves every privacy property.
-- G. Cached authority needs an explicit staleness rule and reconciliation where appropriate.
-- H. A timestamp alone eliminates every ordering and conflict problem.
-
-### Question 11 — 5 marks
+### Question 9 — 5 marks
 
 A four-person team is building a departmental booking application with moderate, predictable traffic. It has several related capabilities, one release cadence, and no requirement to deploy or scale those capabilities independently. The team needs clear boundaries and maintainable code but has little capacity for distributed operations.
 
@@ -217,38 +171,25 @@ Part 3 (2 marks): None of the above: this is a targeted security/object-authoris
 - 1: none of the above.
 - 1: explains permission enforcement as the property under test.
 
-### Question 5 — 5 marks
-
-Part 1 (2 marks): The API continues accepting 50 orders/s while the worker has no completions. Responses identify payment as pending rather than confirmed. Together they show accepted work can wait for later processing.
-
-- 1: continued acceptance despite stopped completions, citing rates.
-- 1: pending response or durable queued work tied to later completion.
-
-Part 2 (3 marks): Backlog increases by (50 − 0) × 120 = 6,000 orders. Reuse a stable business-operation identity with provider/application idempotency or deduplication; record and reconcile uncertain outcomes so redelivery after lost acknowledgement does not repeat a charge.
-
-- 1: 6,000 orders with calculation.
-- 1: stable identity plus idempotency/deduplication.
-- 1: durable outcome/acknowledgement or reconciliation reasoning.
-
-### Question 6 — 4 marks
+### Question 5 — 4 marks
 
 1. **A named reusable design decision consumed by interface implementations** — Design token: A named reusable design decision consumed by interface implementations.
 2. **Records decision context, alternatives and consequences** — Architectural decision record: Records decision context, alternatives and consequences.
 3. **Defines agreed operations, data and behaviour at an interface** — API service contract: Defines agreed operations, data and behaviour at an interface.
 4. **Checks agreed conditions on submitted changes before progression** — CI quality gate: Checks agreed conditions on submitted changes before progression.
 
-### Question 7 — 5 marks
+### Question 6 — 5 marks
 
 Correct: A, C, E, F, G.
 
 Contracts, implemented design decisions, explicit topology, honest presentation scope and maintained workflows supply bounded evidence. Schemas do not prove permissions, coverage does not prove meaningful assertions, and automated scanning does not reproduce the scope of an authorised adversary exercise.
 
-### Question 8 — 2 marks
+### Question 7 — 2 marks
 
 1. **non-functional regression testing / performance regression testing / regression testing / regression** — The purpose is checking for an unintended quality regression after change.
 2. **volume testing / volume** — The changed dimension is dataset size rather than arrival-rate overload.
 
-### Question 9 — 5 marks
+### Question 8 — 5 marks
 
 1. **A static defect that can cause incorrect runtime behaviour** — Fault: A static defect that can cause incorrect runtime behaviour.
 2. **Observed incorrect or unexpected runtime behaviour** — Failure: Observed incorrect or unexpected runtime behaviour.
@@ -256,13 +197,7 @@ Contracts, implemented design decisions, explicit topology, honest presentation 
 4. **Target maximum acceptable service-restoration time** — RTO: Target maximum acceptable service-restoration time.
 5. **Only the permissions needed for the relevant task** — Least privilege: Only the permissions needed for the relevant task.
 
-### Question 10 — 4 marks
-
-Correct: A, B, E, G.
-
-Uncertain acknowledgement, finite storage and stale local knowledge are normal distributed-system concerns. IDs, overflow policies and defined offline authority address different aspects. Locality and timestamps do not establish universal privacy or consistency.
-
-### Question 11 — 5 marks
+### Question 9 — 5 marks
 
 Part 1 (2 marks): A modular monolith: one deployable application with intentionally separated internal modules and interfaces.
 

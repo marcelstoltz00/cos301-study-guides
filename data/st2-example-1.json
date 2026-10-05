@@ -1,9 +1,9 @@
 {
   "id": "st2-example-1",
   "title": "ST2 Example 1",
-  "scope": "L17–L35, including SOA and Microservices",
+  "scope": "L17–L33 and L35, including SOA and Microservices",
   "reference": "ST1.html",
-  "totalMarks": 60,
+  "totalMarks": 51,
   "questions": [
     {
       "type": "essay",
@@ -172,40 +172,6 @@
       "number": 4
     },
     {
-      "type": "essay",
-      "marks": 5,
-      "prompt": "You are reviewing the CampusCart incident evidence below. Infer behaviour from the stated rates and delivery rules; do not assume the word “queue” provides unlimited capacity or exactly-once business effects.",
-      "parts": [
-        {
-          "prompt": "1. Identify two observations showing that API acceptance is decoupled from immediate payment completion. Cite the evidence for each. (2 marks)",
-          "marks": 2,
-          "answer": "The API continues accepting 50 orders/s while the worker has no completions. Responses identify payment as pending rather than confirmed. Together they show accepted work can wait for later processing.",
-          "rubric": [
-            "1: continued acceptance despite stopped completions, citing rates.",
-            "1: pending response or durable queued work tied to later completion."
-          ]
-        },
-        {
-          "prompt": "2. Calculate the additional backlog after 120 seconds, then explain two controls needed to process the backlog without duplicate charges after restart. (3 marks)",
-          "marks": 3,
-          "answer": "Backlog increases by (50 − 0) × 120 = 6,000 orders. Reuse a stable business-operation identity with provider/application idempotency or deduplication; record and reconcile uncertain outcomes so redelivery after lost acknowledgement does not repeat a charge.",
-          "rubric": [
-            "1: 6,000 orders with calculation.",
-            "1: stable identity plus idempotency/deduplication.",
-            "1: durable outcome/acknowledgement or reconciliation reasoning."
-          ]
-        }
-      ],
-      "topics": [
-        "L28",
-        "L34",
-        "MS"
-      ],
-      "diagram": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 390\" role=\"img\" aria-label=\"CampusCart production — evidence from a worker outage\"><title>CampusCart production — evidence from a worker outage</title><rect width=\"760\" height=\"390\" rx=\"12\" fill=\"#101923\"/><g font-family=\"system-ui,sans-serif\"><text x=\"24\" y=\"30\" fill=\"#e8ecf1\" font-size=\"17\">CampusCart production — evidence from a worker outage</text><rect x=\"24\" y=\"60\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"38\" y=\"86\" fill=\"#c4ddff\" font-size=\"15\">API / Zone A</text><text x=\"38\" y=\"111\" fill=\"#e8ecf1\" font-size=\"13\">Accepts orders into durable Queue Q</text><text x=\"38\" y=\"132\" fill=\"#e8ecf1\" font-size=\"13\">Responds: payment pending</text><text x=\"38\" y=\"153\" fill=\"#e8ecf1\" font-size=\"13\">Calls use a stable order operation ID</text><rect x=\"410\" y=\"60\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"424\" y=\"86\" fill=\"#c4ddff\" font-size=\"15\">Payment worker / Zone B</text><text x=\"424\" y=\"111\" fill=\"#e8ecf1\" font-size=\"13\">At-least-once delivery from Q</text><text x=\"424\" y=\"132\" fill=\"#e8ecf1\" font-size=\"13\">Calls external provider with that ID</text><text x=\"424\" y=\"153\" fill=\"#e8ecf1\" font-size=\"13\">Acknowledges after recording outcome</text><rect x=\"24\" y=\"205\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"38\" y=\"231\" fill=\"#c4ddff\" font-size=\"15\">Observation before outage</text><text x=\"38\" y=\"256\" fill=\"#e8ecf1\" font-size=\"13\">Queue depth: 0</text><text x=\"38\" y=\"277\" fill=\"#e8ecf1\" font-size=\"13\">API acceptance rate: 50 orders/s</text><text x=\"38\" y=\"298\" fill=\"#e8ecf1\" font-size=\"13\">Worker completion rate: 50 orders/s</text><rect x=\"410\" y=\"205\" width=\"326\" height=\"110\" rx=\"8\" fill=\"#192c40\" stroke=\"#7192b7\"/><text x=\"424\" y=\"231\" fill=\"#c4ddff\" font-size=\"15\">Observation during outage</text><text x=\"424\" y=\"256\" fill=\"#e8ecf1\" font-size=\"13\">Worker unavailable for 120 seconds</text><text x=\"424\" y=\"277\" fill=\"#e8ecf1\" font-size=\"13\">API still accepts 50 orders/s</text><text x=\"424\" y=\"298\" fill=\"#e8ecf1\" font-size=\"13\">No worker completions during outage</text><path d=\"M350 110 L410 110\" stroke=\"#a6cbff\" stroke-width=\"2\"/><circle cx=\"410\" cy=\"110\" r=\"3\" fill=\"#a6cbff\"/><text x=\"380.0\" y=\"102.0\" fill=\"#b9d4f8\" text-anchor=\"middle\" font-size=\"12\">via Q</text><text x=\"24\" y=\"344\" fill=\"#c9d3e1\" font-size=\"12\">Assume constant rates, no expiry, no other consumers and enough queue capacity for 120 seconds.</text><text x=\"24\" y=\"364\" fill=\"#c9d3e1\" font-size=\"12\">After restart, a lost acknowledgement may cause redelivery of an already processed order.</text></g></svg>",
-      "id": "q5",
-      "number": 5
-    },
-    {
       "type": "matching",
       "marks": 4,
       "prompt": "Match each quality/delivery artifact to its purpose.",
@@ -244,7 +210,7 @@
         "L25"
       ],
       "id": "q6",
-      "number": 6
+      "number": 5
     },
     {
       "type": "multi",
@@ -280,7 +246,7 @@
         "L31"
       ],
       "id": "q7",
-      "number": 7
+      "number": 6
     },
     {
       "type": "short",
@@ -311,7 +277,7 @@
         "L32"
       ],
       "id": "q8",
-      "number": 8
+      "number": 7
     },
     {
       "type": "matching",
@@ -357,35 +323,7 @@
         "L30"
       ],
       "id": "q9",
-      "number": 9
-    },
-    {
-      "type": "multi",
-      "marks": 4,
-      "prompt": "A field gateway records events while disconnected. Its durable buffer is bounded, retry uses stable event IDs, and the server deduplicates received events. The gateway may use an approved cached policy for a limited period. Select all statements that are TRUE about what can happen, and why. Negative marking applies.",
-      "options": [
-        "A lost acknowledgement can cause an already accepted event to be resent.",
-        "A stable event ID supports recognising duplicate delivery.",
-        "The existence of a buffer guarantees survival through every outage duration.",
-        "A newly revoked central permission is necessarily known to the disconnected gateway immediately.",
-        "The design needs an explicit rule for full-buffer behaviour.",
-        "Keeping computation local automatically proves every privacy property.",
-        "Cached authority needs an explicit staleness rule and reconciliation where appropriate.",
-        "A timestamp alone eliminates every ordering and conflict problem."
-      ],
-      "correct": [
-        0,
-        1,
-        4,
-        6
-      ],
-      "explanation": "Uncertain acknowledgement, finite storage and stale local knowledge are normal distributed-system concerns. IDs, overflow policies and defined offline authority address different aspects. Locality and timestamps do not establish universal privacy or consistency.",
-      "topics": [
-        "L28",
-        "L34"
-      ],
-      "id": "q10",
-      "number": 10
+      "number": 8
     },
     {
       "type": "essay",
@@ -418,7 +356,7 @@
         "MS"
       ],
       "id": "q11",
-      "number": 11
+      "number": 9
     }
   ],
   "storageKey": "cos301-st2-example-1-v1",

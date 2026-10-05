@@ -1,6 +1,6 @@
 # CT4 Example 1
 
-Scope: L28–L35 (L35 revises L28–L34 only). Total: 30 marks.
+Scope: L28–L33 plus L35 revision. Total: 25.5 marks.
 
 Original practice paper based on the reference assessment style. Not an official paper or prediction. No official duration was available in the supplied export.
 
@@ -137,14 +137,7 @@ Which of the following are necessary pieces of context for assessing a performan
 - D. Latency and failure criteria, including how errors are counted.
 - E. A screenshot of the login page alone.
 
-### Question 13 — 0.5 marks
-
-A disconnected edge device can be assumed to receive a central credential revocation immediately.
-
-- A. True
-- B. False
-
-### Question 14 — 4 marks
+### Question 13 — 4 marks
 
 Match each development choice or artifact to the misconception it most directly corrects.
 
@@ -155,7 +148,7 @@ Answer bank: Data export alone proves application portability · Hiding a field 
 3. Server-side object-permission checks
 4. A named owner and release/recovery procedure
 
-### Question 15 — 1 marks
+### Question 14 — 1 marks
 
 Match the security check to the question it answers.
 
@@ -163,17 +156,6 @@ Answer bank: May this caller perform this action on this resource? · Who is the
 
 1. Authentication
 2. Authorisation
-
-### Question 16 — 4 marks
-
-Relate each practice to its main engineering purpose.
-
-Answer bank: Preserve an honest, bounded explanation when the live path fails · Detect recurrence or loss of previously supported behaviour · Reduce the risk of relying on an outdated topology · Reduce the impact of one compromised device
-
-1. Per-device identities with limited privileges
-2. A labelled fallback recording for a live demo
-3. Regression coverage after a defect fix
-4. Owner and last-verification date on a deployment view
 
 ---
 
@@ -253,28 +235,15 @@ Correct: A, B, D.
 
 Performance claims need conditions, measurement scope and acceptance rules. A vendor label or screenshot supplies none of those by itself.
 
-### Question 13 — 0.5 marks
-
-Correct: B.
-
-Offline authority needs explicit staleness and reconciliation rules.
-
-### Question 14 — 4 marks
+### Question 13 — 4 marks
 
 1. **Generated tests can repeat the implementation’s mistaken assumptions** — Independent tests derived from actual requirements: Generated tests can repeat the implementation’s mistaken assumptions.
 2. **Data export alone proves application portability** — Export of executable workflows and permissions, not just records: Data export alone proves application portability.
 3. **Hiding a field is sufficient access control** — Server-side object-permission checks: Hiding a field is sufficient access control.
 4. **A working prototype is automatically maintainable in production** — A named owner and release/recovery procedure: A working prototype is automatically maintainable in production.
 
-### Question 15 — 1 marks
+### Question 14 — 1 marks
 
 1. **Who is the caller?** — Authentication: Who is the caller?.
 2. **May this caller perform this action on this resource?** — Authorisation: May this caller perform this action on this resource?.
-
-### Question 16 — 4 marks
-
-1. **Reduce the impact of one compromised device** — Per-device identities with limited privileges: Reduce the impact of one compromised device.
-2. **Preserve an honest, bounded explanation when the live path fails** — A labelled fallback recording for a live demo: Preserve an honest, bounded explanation when the live path fails.
-3. **Detect recurrence or loss of previously supported behaviour** — Regression coverage after a defect fix: Detect recurrence or loss of previously supported behaviour.
-4. **Reduce the risk of relying on an outdated topology** — Owner and last-verification date on a deployment view: Reduce the risk of relying on an outdated topology.
 

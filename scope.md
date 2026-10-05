@@ -8,4 +8,3 @@ L30 Quality Assurance (Coding Standards) (does have md with content at markdown/
 L31 Presentation Skills
 L32 Non-Functional Testing Recap
 L33 Low Code, No Code, Vibe Code
-L34 Cloud and Edge Engineering

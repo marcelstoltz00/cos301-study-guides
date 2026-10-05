@@ -24,7 +24,7 @@ CT3 contains **16 numbered questions totalling 30 marks**:
 
 The export renders Q9 as completed text; it does not preserve enough of the original controls to reconstruct its exact interaction. The new examples use a four-blank sentence with a word bank, preserving the terminology-completion purpose without claiming an exact UI replica.
 
-Both CT4 examples preserve this 16-question, 30-mark distribution and question order. Their content is **L28–L35**, with L35 treated as integration/revision of L28–L34. Diagram-based questions replace the older UI image with a relevant deployment or cloud-edge diagram. The new distractors test plausible confusions, rather than relying on ambiguous wording or the exported student's answers.
+Both CT4 examples follow the observed question style with content from **L28–L33 plus L35 revision**. Diagram-based questions replace the older UI image with relevant deployment or quality-evidence diagrams. The new distractors test plausible confusions, rather than relying on ambiguous wording or the exported student's answers.
 
 ## ST1 → ST2 examples
 
@@ -54,11 +54,11 @@ The new papers reuse this assessment structure and command style, not ST1's old 
 - ST1's word-limit instruction included a penalty. The new papers instead use a clearly labelled suggested maximum and a live word count, with no hidden or automatic word-count penalty.
 - No official duration was visible, so the new papers do not invent one.
 - All four papers support saved local responses, blank-paper printing and separate marking-guide printing. Blank printing suppresses saved responses and model answers. Printing a guide includes the questions and memorandum, without private written drafts.
-- The papers retain source limitations: L28/L30 follow supplied notes; L29/L31–L34 use the existing general topic guides. No unavailable lecture-specific detail is presented as established exam coverage.
+- The papers retain source limitations: L28/L30 follow supplied notes; L29/L31–L33 use the existing general topic guides. No unavailable lecture-specific detail is presented as established exam coverage.
 
 ## New papers
 
-- [CT4 Example 1](ct4-example-1.html): ParcelDesk deployment, failure domains, security, testing, QA, presentation and cloud-edge principles.
-- [CT4 Example 2](ct4-example-2.html): FieldSense buffering and retries, secure-development techniques, measurement and development approaches.
+- [CT4 Example 1](ct4-example-1.html): ParcelDesk deployment, failure domains, security, testing, QA and presentation principles.
+- [CT4 Example 2](ct4-example-2.html): secure-development techniques, measurement and development approaches.
 - [ST2 Example 1](st2-example-1.html): CampusCart quality/access requirements, domain modelling, test selection, queue evidence, contracts and architecture choice.
-- [ST2 Example 2](st2-example-2.html): LabTrack offline/permission requirements, identity/value modelling, recovery controls, topology evidence and generated-workflow review.
+- [ST2 Example 2](st2-example-2.html): identity/value modelling, recovery controls, topology evidence and generated-workflow review.

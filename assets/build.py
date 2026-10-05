@@ -33,7 +33,6 @@ LECTURES = [
     {"id": "L31", "nav": "L31 · Presentation Skills"},
     {"id": "L32", "nav": "L32 · Non-Functional Testing"},
     {"id": "L33", "nav": "L33 · Low Code, No Code & Vibe Code"},
-    {"id": "L34", "nav": "L34 · Cloud & Edge Engineering"},
     {"id": "L35", "nav": "L35 · ST2 Revision"},
 ]
 
@@ -198,7 +197,7 @@ INDEX_TEMPLATE = """<!doctype html>
     <div class="hero-eyebrow">COS301 &middot; Software Engineering</div>
     <h1>ST2 Study Guides — L17 to L35</h1>
     <p>Content summaries, flashcards, 20 shuffled MCQs, and 12 in-depth technical questions per lecture. Progress is saved locally in your browser.</p>
-    <p>SOA and Microservices cover the existing L26–L27 material. L28 and L30 follow supplied lecture notes; L29 and L31–L34 are general topic guides. L35 brings the material together for revision.</p>
+    <p>SOA and Microservices cover the existing L26–L27 material. L28 and L30 follow supplied lecture notes; L29 and L31–L33 are general topic guides. L35 brings the material together for revision.</p>
   </header>
 
   <div class="overall-progress">
@@ -321,10 +320,10 @@ def build_index():
         )
     special_cards = [
       '<a class="special-card" href="ct4-practice-test.html">'
-      '<div class="id">Class Test 4 · L28–L35</div>'
-      '<div class="tag">48 questions</div>'
+      '<div class="id">Class Test 4 · L28–L33 + L35</div>'
+      '<div class="tag">42 questions</div>'
       '<h3>CT4 Comprehensive Practice Test</h3>'
-      '<p>Six questions per lecture, including calculations, scenarios and multi-select. L35 revises L28–L34 only. Separate saved progress and explained answers.</p>'
+      '<p>Six questions per lecture, including calculations, scenarios and multi-select. L35 revises L28–L33 only. Separate saved progress and explained answers.</p>'
       '</a>',
       '<a class="special-card" href="comprehensive-test.html">'
       '<div class="id">Practice</div>'

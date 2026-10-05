@@ -94,7 +94,7 @@
  addText(instructions,paper.multiRule);
  addText(instructions,'Matching rows and short-answer subparts share their question’s marks equally. Short answers ignore case, extra spaces and a final full stop; accepted alternatives are shown in the marking guide. Equivalent written reasoning may earn credit under the rubric. Use the rubric to review a defensible alternative the exact-match marker does not recognise.');
  addText(instructions,'Written responses are not automatically graded. Enter optional self-assessed marks after consulting the model answer. Any word maximum is practice guidance, not an automatically applied penalty. Blank printing omits your saved answers and all marking guides. Marking-guide printing includes the paper and model answers, without your private drafts.');
- addText(instructions,'Some topic guides are general coverage because lecture notes were unavailable. CT4 is limited to L28–L35; its revision items use L28–L34. ST2 samples L17–L35, including existing SOA and Microservices material.');
+ addText(instructions,'Some topic guides are general coverage because lecture notes were unavailable. CT4 is limited to L28–L33 plus L35 revision. ST2 samples L17–L33 and L35, including existing SOA and Microservices material.');
  paper.questions.forEach(renderQuestion);updateScore();status.textContent='Drafts, selections and self-assessment save locally for this paper.';
  document.getElementById('mark-all').addEventListener('click',()=>{paper.questions.filter(q=>q.type!=='essay').forEach(q=>{current(q).marked=true;markViews.get(q.id)();});save();updateScore();});
  document.getElementById('show-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=true));

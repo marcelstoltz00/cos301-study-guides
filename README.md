@@ -1,17 +1,17 @@
-# COS301 ST2 Study Guides — L17 to L35
+# COS301 ST2 Study Guides — L17 to L33 and L35
 
 Interactive study guides for the Software Engineering (COS301) semester test: content summaries, flashcards, 20 shuffled multiple-choice questions per guide with instant feedback, and 12 technical questions with hidden model answers. Progress is saved locally in your browser (localStorage) — nothing is sent to a server.
 
-L17–L25 and the existing SOA/Microservices guides cover the earlier material (the latter cover L26–L27). L28–L34 add the remaining topics; L35 is a synthesised revision guide with integrated practice. Existing SOA/MS filenames and browser progress keys are preserved.
+L17–L25 and the existing SOA/Microservices guides cover the earlier material (the latter cover L26–L27). L28–L33 add the remaining topics in scope; L35 is a synthesised revision guide with integrated practice. Existing SOA/MS filenames and browser progress keys are preserved.
 
-**Class Test 4 covers L28–L35.** Open [the CT4 comprehensive practice test](ct4-practice-test.html) for 48 questions: six per lecture, split evenly between single-answer and multi-select. It includes worked explanations, local progress, per-question retry and show/hide controls. Multi-select scoring requires the exact correct set. Its L35 section revises only L28–L34; the wider L35 study guide also includes earlier ST2 material.
+**Class Test 4 covers L28–L33 plus L35 revision.** Open [the CT4 comprehensive practice test](ct4-practice-test.html) for 42 questions: six per lecture, split evenly between single-answer and multi-select. It includes worked explanations, local progress, per-question retry and show/hide controls. Multi-select scoring requires the exact correct set. Its L35 section revises only L28–L33; the wider L35 study guide also includes earlier ST2 material.
 
 ## Example assessment papers
 
 The supplied CT3 and ST1 exports informed four original practice papers. See [the assessment-style review](assessment-style-review.md) for the observed formats and the assumptions used. Saved reference responses are not treated as a memorandum.
 
-- [CT4 Example 1](ct4-example-1.html) and [CT4 Example 2](ct4-example-2.html): each has 16 questions and 30 marks, matching CT3's type/mark distribution, using L28–L35 content.
-- [ST2 Example 1](st2-example-1.html) and [ST2 Example 2](st2-example-2.html): each has 11 questions and 60 practice marks, following ST1's scenario/subpart/justification style using L17–L35 content. The 60-mark allocation is authored because not all ST1 marks were visible.
+- [CT4 Example 1](ct4-example-1.html) and [CT4 Example 2](ct4-example-2.html): original practice papers using L28–L33 plus L35 revision content.
+- [ST2 Example 1](st2-example-1.html) and [ST2 Example 2](st2-example-2.html): original practice papers following ST1's scenario/subpart/justification style using L17–L33 and L35 content.
 
 Each paper has original diagrams, automatic objective marking, model answers, saved responses, blank-paper printing and marking-guide printing. Written responses have explicit rubrics and optional self-assessed marks. Multi-select uses a stated negative-marking rule, distinct from the older comprehensive quiz's exact-set rule. Word limits are guidance with no automatic penalty; no official duration is inferred. Each paper has its own local-storage key.
 
@@ -19,12 +19,12 @@ Each paper has original diagrams, automatic objective marking, model answers, sa
 
 - **L28:** based on `markdown/L28 - Deployment Diagrams.md`.
 - **L30:** based on `markdown/L29 - Software Quality Assurance.md`, mapped to L30 by the updated `scope.md`. The source filename is intentional.
-- **L29 and L31–L34:** general topic guides because lecture slides were not supplied. They are labelled accordingly and are not claims about exact lecture or exam coverage.
+- **L29 and L31–L33:** general topic guides because lecture slides were not supplied. They are labelled accordingly and are not claims about exact lecture or exam coverage.
 - **L35:** newly authored revision across the available material; L35 was a revision session.
 
 New guides include original practice questions and worked examples. Relevant external references and supplied source files are linked from the study-content panel. Study content and interactions work offline; external reference pages require internet access.
 
-L28–L35 also include a selectable four-stage diagram, an interactive experiment, and two reasoning checks beside the relevant study material. Use the “Explore this topic” link to jump there. The experiments cover failure-domain placement, object access, availability, presentation timing, latency distributions, implementation choices, offline buffering, and evidence selection. They state their assumptions and do not change quiz progress. Each diagram also has a “Read the whole walkthrough” option.
+L28–L33 and L35 also include a selectable four-stage diagram, an interactive experiment, and two reasoning checks beside the relevant study material. Use the “Explore this topic” link to jump there. The experiments cover failure-domain placement, object access, availability, presentation timing, latency distributions, implementation choices, and evidence selection. They state their assumptions and do not change quiz progress. Each diagram also has a “Read the whole walkthrough” option.
 
 The existing L18 UI-pattern appendix is preserved in `assets/L18-extra.html` and included by the builder. Its original Mermaid diagrams use an external renderer, with readable diagram source when offline. L22's canonical JSON now matches its previously published study content, so rebuilding preserves that version.
 
@@ -34,13 +34,13 @@ The existing L18 UI-pattern appendix is preserved in `assets/L18-extra.html` and
 
 - `index.html` — landing page linking every lecture guide
 - `comprehensive-test.html` — standalone cumulative practice test covering L17 to SOA with interactive single-answer and multi-select questions
-- `ct4-practice-test.html` — generated Class Test 4 practice test, restricted to L28–L35
+- `ct4-practice-test.html` — generated Class Test 4 practice test, restricted to L28–L33 plus L35 revision
 - `ct4-example-1.html`, `ct4-example-2.html`, `st2-example-1.html`, `st2-example-2.html` — generated example assessment papers with matching Markdown paper/memorandum versions
 - `data/*-example-*.json`, `assets/mock-exam.html`, `assets/mock-exam.css`, `assets/mock-exam.js` — canonical question banks and shared example-paper renderer; HTML and Markdown outputs regenerate with the main builder
 - `CT3.html`, `ST1.html` — user-supplied reference exports, preserved unchanged
 - `data/CT4.json`, `assets/practice-test.html`, `assets/practice-test.js` — CT4 question bank, page template and interaction code; regenerated by `python3 assets/build.py`
-- `L17.html` – `L25.html`, `SOA.html`, `MS.html`, `L28.html` – `L35.html` — self-contained guides embedding the same shared theme/CSS/JS
-- `markdown/` — existing source notes and study summaries; `L28.md`–`L35.md` mirror the new guides' study content, with references
+- `L17.html` – `L25.html`, `SOA.html`, `MS.html`, `L28.html` – `L33.html`, `L35.html` — self-contained guides embedding the same shared theme/CSS/JS
+- `markdown/` — existing source notes and study summaries; `L28.md`–`L33.md` and `L35.md` mirror the new guides' study content, with references
 - `data/*.json` — the actual content: page title, markdown body, MCQs, and technical questions per lecture
 - `assets/theme.css`, `assets/app.js` — the shared dark-academic theme and interactive engine (markdown renderer, MCQ quiz engine, technical-question reveal engine), identical across every generated page
 - `assets/learning.css`, `assets/learning.js` — guided diagrams and topic-specific experiments, embedded only for guides with a `learning` entry in their JSON

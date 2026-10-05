@@ -1,9 +1,9 @@
 {
   "id": "ct4-example-1",
   "title": "CT4 Example 1",
-  "scope": "L28–L35 (L35 revises L28–L34 only)",
+  "scope": "L28–L33 plus L35 revision",
   "reference": "CT3.html",
-  "totalMarks": 30,
+  "totalMarks": 25.5,
   "questions": [
     {
       "type": "single",
@@ -294,24 +294,6 @@
       "number": 12
     },
     {
-      "type": "single",
-      "marks": 0.5,
-      "prompt": "A disconnected edge device can be assumed to receive a central credential revocation immediately.",
-      "options": [
-        "True",
-        "False"
-      ],
-      "correct": [
-        1
-      ],
-      "explanation": "Offline authority needs explicit staleness and reconciliation rules.",
-      "topics": [
-        "L34"
-      ],
-      "id": "q13",
-      "number": 13
-    },
-    {
       "type": "matching",
       "marks": 4,
       "prompt": "Match each development choice or artifact to the misconception it most directly corrects.",
@@ -348,7 +330,7 @@
         "L33"
       ],
       "id": "q14",
-      "number": 14
+      "number": 13
     },
     {
       "type": "matching",
@@ -374,48 +356,7 @@
         "L29"
       ],
       "id": "q15",
-      "number": 15
-    },
-    {
-      "type": "matching",
-      "marks": 4,
-      "prompt": "Relate each practice to its main engineering purpose.",
-      "options": [
-        "Preserve an honest, bounded explanation when the live path fails",
-        "Detect recurrence or loss of previously supported behaviour",
-        "Reduce the risk of relying on an outdated topology",
-        "Reduce the impact of one compromised device"
-      ],
-      "items": [
-        {
-          "prompt": "Per-device identities with limited privileges",
-          "answer": "Reduce the impact of one compromised device",
-          "explanation": "Per-device identities with limited privileges: Reduce the impact of one compromised device."
-        },
-        {
-          "prompt": "A labelled fallback recording for a live demo",
-          "answer": "Preserve an honest, bounded explanation when the live path fails",
-          "explanation": "A labelled fallback recording for a live demo: Preserve an honest, bounded explanation when the live path fails."
-        },
-        {
-          "prompt": "Regression coverage after a defect fix",
-          "answer": "Detect recurrence or loss of previously supported behaviour",
-          "explanation": "Regression coverage after a defect fix: Detect recurrence or loss of previously supported behaviour."
-        },
-        {
-          "prompt": "Owner and last-verification date on a deployment view",
-          "answer": "Reduce the risk of relying on an outdated topology",
-          "explanation": "Owner and last-verification date on a deployment view: Reduce the risk of relying on an outdated topology."
-        }
-      ],
-      "topics": [
-        "L28",
-        "L30",
-        "L31",
-        "L34"
-      ],
-      "id": "q16",
-      "number": 16
+      "number": 14
     }
   ],
   "storageKey": "cos301-ct4-example-1-v1",
