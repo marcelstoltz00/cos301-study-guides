@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ST2 Example 3 — Scenario Questions · COS301 Mock Paper</title>
+<style>
+/* ============================================================
+   CT3 Study Guides — shared dark academic theme
+   Identical across every lecture file. Edit here, regenerate all.
+   ============================================================ */
+
+:root {
+  --bg: #0b0e11;
+  --surface: #12161b;
+  --card: #1a1f26;
+  --card-border: #262d37;
+  --text: #e8ecf1;
+  --text-dim: #9aa4b2;
+  --text-faint: #626d7a;
+  --accent: #4a90f8;
+  --accent-dim: #2c5aa8;
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --warning: #f59e0b;
+  --error: #f56363;
+  --error-bg: rgba(245, 99, 99, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Nav ---------- */
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 14, 17, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.topnav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.topnav-brand {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topnav-brand span { color: var(--accent); }
+
+.topnav-links {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+}
+
+.topnav-links::-webkit-scrollbar { height: 4px; }
+.topnav-links::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 2px; }
+
+.topnav-links a {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--easing), color var(--duration-fast) var(--easing);
+}
+
+.topnav-links a:hover { background: var(--card); color: var(--text); }
+.topnav-links a.active { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Layout ---------- */
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) 120px;
+}
+
+.hero {
+  margin-bottom: var(--space-8);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.hero h1 {
+  font-size: 30px;
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.hero p {
+  color: var(--text-dim);
+  font-size: 16px;
+  margin: 0;
+}
+
+.section-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 53px;
+  background: var(--bg);
+  z-index: 50;
+  padding-top: var(--space-2);
+}
+
+.section-tab {
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--duration-fast) var(--easing);
+}
+
+.section-tab:hover { color: var(--text); }
+.section-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.section-panel { display: none; }
+.section-panel.active { display: block; animation: fadein var(--duration-normal) var(--easing); }
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Content (rendered markdown) ---------- */
+
+.content h2 {
+  font-size: 22px;
+  margin: var(--space-8) 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--card-border);
+  letter-spacing: -0.005em;
+}
+.content h2:first-child { margin-top: 0; }
+
+.content h3 {
+  font-size: 17px;
+  color: var(--accent);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.content p { color: var(--text); margin: 0 0 var(--space-4); }
+.content strong { color: #fff; font-weight: 600; }
+.content ul, .content ol { margin: 0 0 var(--space-4); padding-left: 22px; color: var(--text); }
+.content li { margin-bottom: var(--space-1); }
+.content li strong { color: var(--text); }
+
+.content code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.content pre {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin: 0 0 var(--space-4);
+}
+
+.content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #d8dee9;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-4);
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+}
+
+.content th, .content td {
+  border: 1px solid var(--card-border);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.content th {
+  background: var(--card);
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.content tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+.content hr {
+  border: none;
+  border-top: 1px solid var(--card-border);
+  margin: var(--space-8) 0;
+}
+
+.content blockquote {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--warning);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+.content blockquote p:last-child { margin-bottom: 0; }
+.content blockquote strong { color: var(--text); }
+
+/* ---------- Diagrams ---------- */
+
+.diagram {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  text-align: center;
+}
+.diagram svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.diagram-caption {
+  margin-top: var(--space-3);
+  font-size: 12.5px;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* ---------- TL;DR box ---------- */
+
+.tldr-box {
+  background: linear-gradient(135deg, rgba(74,144,248,0.10), rgba(74,144,248,0.03));
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+.tldr-box-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.tldr-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: var(--accent);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.tldr-box-header span.label { font-size: 13px; color: var(--text-dim); font-weight: 600; }
+.tldr-box ul { margin: 0; padding-left: 20px; }
+.tldr-box li { margin-bottom: 6px; color: var(--text); font-size: 14.5px; }
+.tldr-box li:last-child { margin-bottom: 0; }
+.tldr-box li strong { color: #fff; }
+.tldr-box code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+/* ---------- Flashcards ---------- */
+
+.flash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.flash-card {
+  perspective: 1200px;
+  height: 160px;
+  cursor: pointer;
+}
+
+.flash-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 400ms;
+  transform-style: preserve-3d;
+}
+.flash-card.flipped .flash-card-inner { transform: rotateY(180deg); }
+
+.flash-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.flash-front {
+  background: var(--surface);
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+.flash-front .flash-term { font-size: 16px; font-weight: 700; color: var(--text); }
+.flash-front .flash-hint { margin-top: auto; font-size: 11px; color: var(--text-faint); }
+.flash-back {
+  background: var(--card);
+  border-color: var(--accent-dim);
+  transform: rotateY(180deg);
+  justify-content: center;
+}
+.flash-back .flash-def { font-size: 13.5px; color: var(--text-dim); line-height: 1.5; }
+.flash-back .flash-def code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.flash-card.known .flash-front { border-color: var(--success); }
+.flash-card.known .flash-front::after {
+  content: "✓ known";
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 11px;
+  color: var(--success);
+  font-family: var(--font-mono);
+}
+
+.flash-know-btn {
+  margin-top: var(--space-2);
+  align-self: flex-start;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+/* ---------- Quiz (MCQ) ---------- */
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.quiz-score {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.quiz-score b { color: var(--text); }
+
+.progress-bar {
+  height: 6px;
+  background: var(--card);
+  border-radius: 999px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 120px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width var(--duration-normal) var(--easing);
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing);
+}
+.btn:hover { background: #232a33; border-color: #38414d; }
+.btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-accent:hover { background: #3a7de0; }
+
+.mcq-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.mcq-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.mcq-q .mcq-index {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  flex: none;
+}
+
+.mcq-options { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.mcq-option {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing);
+}
+
+.mcq-option:hover:not(:disabled) { border-color: var(--accent); }
+.mcq-option:disabled { cursor: default; }
+
+.mcq-option.correct { background: var(--success-bg); border-color: var(--success); color: #baf7cf; }
+.mcq-option.incorrect { background: var(--error-bg); border-color: var(--error); color: #ffc9c9; }
+.mcq-option.reveal-correct { border-color: var(--success); color: #baf7cf; }
+
+.mcq-explanation {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  display: none;
+}
+.mcq-explanation.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.mcq-explanation b { color: var(--text); }
+
+/* ---------- Tech questions ---------- */
+
+.tech-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.tech-q-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.tech-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  gap: var(--space-2);
+}
+.tech-q .mcq-index { color: var(--accent); font-family: var(--font-mono); flex: none; }
+
+.tech-reviewed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+  flex: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.tech-reviewed-label input { accent-color: var(--accent); }
+
+.tech-answer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--card-border);
+  display: none;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.tech-answer.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.tech-answer p { margin: 0 0 var(--space-3); color: var(--text-dim); }
+.tech-answer ul { margin: 0 0 var(--space-3); padding-left: 20px; }
+.tech-answer strong { color: var(--text); }
+.tech-answer code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.reveal-btn {
+  margin-top: var(--space-4);
+}
+
+/* ---------- Footer ---------- */
+
+.page-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.page-footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.page-footer a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .page { padding: var(--space-6) var(--space-4) 100px; }
+  .hero h1 { font-size: 24px; }
+  .section-tabs { top: 49px; flex-wrap: wrap; }
+  .section-tab { flex: 1 1 calc(50% - var(--space-2)); }
+}
+
+.mock-page { max-width: 1000px; }
+.mock-hero { border: 1px solid #35547c; border-radius: 14px; padding: 24px; background: linear-gradient(145deg, #142132, #12161b); }
+.mock-kicker { color: #a4caff; font: 12px var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
+.mock-hero h1 { margin: 12px 0; font-size: clamp(28px, 5vw, 42px); }
+.mock-hero p { color: #c1cedf; }
+.mock-toolbar, .mock-jumps { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.mock-jumps a { padding: 6px 10px; border-radius: 7px; background: #182b42; color: #cce0ff; text-decoration: none; font-size: 13px; }
+.mock-score { padding: 16px; background: #0e1826; border-radius: 10px; display: grid; gap: 8px; }
+.mock-instructions summary, .mock-memo summary { cursor: pointer; padding: 10px 0; color: #b8d5ff; font-weight: 600; }
+.mock-instructions a { color: #b8d5ff; }
+.mock-note { font-size: 13px; color: #b4c1d3; }
+.mock-question { margin: 24px 0; padding: 24px; background: #121a25; border: 1px solid #33465f; border-radius: 12px; scroll-margin-top: 80px; overflow-wrap: anywhere; }
+.mock-qhead { display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap; align-items: baseline; }
+.mock-qhead h2 { margin: 0; font-size: 22px; }
+.mock-marks { color: #acd0ff; font: 13px var(--font-mono); }
+.mock-type { color: #b4c1d3; font-size: 13px; }
+.mock-prompt { white-space: pre-line; }
+.mock-diagram { margin: 20px 0; overflow-x: auto; border: 1px solid #52657e; border-radius: 10px; }
+.mock-diagram svg { display: block; width: 100%; min-width: 680px; height: auto; }
+.mock-question fieldset { border: 0; padding: 0; margin: 18px 0; min-width: 0; }
+.mock-question legend { font-weight: 600; margin-bottom: 12px; }
+.mock-option { display: flex; gap: 12px; align-items: flex-start; padding: 12px; margin-bottom: 8px; background: #192535; border: 1px solid #415b7c; border-radius: 8px; cursor: pointer; }
+.mock-option input { margin-top: 5px; flex: none; accent-color: #75afff; }
+.mock-row, .mock-part { margin: 20px 0; }
+.mock-row label, .mock-part label { display: block; margin-bottom: 10px; font-weight: 500; }
+.mock-row select, .mock-row input, .mock-part textarea, .mock-self input { font: inherit; color: #e8ecf1; background: #0b1421; border: 1px solid #526c8f; border-radius: 7px; padding: 10px; max-width: 100%; }
+.mock-row select, .mock-row input { width: 100%; }
+.mock-part textarea { display: block; width: 100%; min-height: 140px; resize: vertical; line-height: 1.6; }
+.mock-result { margin: 16px 0; padding: 14px; background: #142942; border-left: 3px solid #83b5ff; border-radius: 7px; }
+.mock-memo { border-top: 1px solid #33465f; margin-top: 18px; padding-top: 8px; }
+.mock-memo h3 { font-size: 17px; }
+.mock-memo li { margin-bottom: 6px; }
+.mock-self { margin: 12px 0; padding: 14px; border: 1px dashed #5e7ca2; border-radius: 7px; }
+.mock-self label { display: block; margin-bottom: 8px; }
+.mock-self input { width: 110px; }
+.mock-invalid { color: #ffbec3; }
+.mock-word-count { color: #b4c1d3; font: 12px var(--font-mono); }
+.mock-print-space { display: none; }
+.mock-question :focus-visible, .mock-hero :focus-visible { outline: 3px solid #edc878; outline-offset: 3px; }
+@media (max-width: 640px) {
+ .mock-hero, .mock-question { padding: 16px; }
+ .mock-diagram svg { min-width: 680px; }
+ .mock-toolbar .btn { flex: 1 1 140px; }
+}
+@media print {
+ @page { margin: 16mm; }
+ html, body { background: white !important; color: black !important; font-size: 11pt; }
+ .page { max-width: none; margin: 0; padding: 0; }
+ .topnav, .mock-toolbar, .mock-jumps, .mock-score, #storage-status, .page-footer, .mock-self, .mock-word-count, .mock-result, .mock-question > .btn, .mock-instructions { display: none !important; }
+ .mock-hero, .mock-question { background: white !important; border: 0; box-shadow: none; padding: 0; border-radius: 0; }
+ .mock-hero { border-bottom: 2px solid black; padding-bottom: 12px; }
+ .mock-hero p, .mock-question *, .mock-marks { color: black; }
+ .mock-question { break-inside: auto; }
+ .mock-qhead, .mock-question h3, .mock-row label, .mock-part label { break-after: avoid; }
+ .mock-row, .mock-option, .mock-diagram { break-inside: avoid; }
+ .mock-option { background: white; border: 1px solid #aaa; padding: 6px; }
+ .mock-option input { display: none; }
+ .mock-option::before { content: '□'; }
+ .mock-row input, .mock-row select, .mock-part textarea { display: none; }
+ .mock-print-space { display: block; min-height: 25px; border-bottom: 1px solid #888; margin: 8px 0 18px; }
+ .mock-part .mock-print-space { min-height: 90px; }
+ .mock-diagram { overflow: visible; }
+ .mock-diagram svg { min-width: 0; width: 100%; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+ .mock-diagram svg text { fill: #f2f6ff; }
+ body:not(.print-memo) .mock-memo { display: none !important; }
+ .print-memo .mock-memo { display: block; border-top: 1px solid #888; }
+ .print-memo .mock-memo summary { color: black; }
+ .print-memo .mock-print-space { display: none; }
+ .print-memo .mock-memo li { break-inside: avoid; }
+ .mock-print-bank { display: block !important; font-size: 10pt; }
+}
+.mock-print-bank { display: none; }
+
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="topnav-inner"><a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a><div class="topnav-links"><a href="index.html">Home</a><a href="ct4-example-1.html">CT4 EXAMPLE 1</a>
+<a href="ct4-example-2.html">CT4 EXAMPLE 2</a>
+<a href="st2-example-1.html">ST2 EXAMPLE 1</a>
+<a href="st2-example-2.html">ST2 EXAMPLE 2</a>
+<a href="st2-example-3.html" class="active" aria-current="page">ST2 EXAMPLE 3</a>
+<a href="st2-example-4.html">ST2 EXAMPLE 4</a></div></div></nav>
+<main class="page mock-page">
+<header class="mock-hero">
+<p class="mock-kicker">Original practice assessment · COS301</p>
+<h1>ST2 Example 3 — Scenario Questions</h1>
+<p id="paper-scope"></p>
+<p id="paper-meta"></p>
+<details class="mock-instructions"><summary>Instructions, marking and reference style</summary><div id="instructions"></div></details>
+<div class="mock-toolbar">
+<button type="button" class="btn" id="mark-all">Mark objective answers</button>
+<button type="button" class="btn" id="show-memos">Show marking guides</button>
+<button type="button" class="btn" id="hide-memos">Hide marking guides</button>
+<button type="button" class="btn" id="print-paper">Print blank paper</button>
+<button type="button" class="btn" id="print-memo">Print marking guide</button>
+<button type="button" class="btn" id="reset-paper">Reset this paper</button>
+</div>
+<p id="storage-status" role="status" class="mock-note"></p>
+<div class="mock-score" id="paper-score" role="status" aria-live="polite"></div>
+<nav class="mock-jumps" id="question-links" aria-label="Jump to question"></nav>
+</header>
+<div id="paper-questions"></div>
+<noscript><p>Enable JavaScript for this interactive paper. A readable paper and memorandum are also available in the <a href="markdown/st2-example-3.md">Markdown version</a>.</p></noscript>
+<footer class="page-footer"><a href="index.html">All study guides and papers</a><a href="assessment-style-review.md">How these examples follow CT3 and ST1</a></footer>
+</main>
+<script type="application/json" id="mock-data">{"id": "st2-example-3", "title": "ST2 Example 3 \u2014 Scenario Questions", "scope": "L17\u2013L33 and L35 revision, including SOA (L26) and Microservices (L27)", "reference": "User-supplied presentation and architecture scenarios", "totalMarks": 110, "questions": [{"type": "essay", "title": "A demonstration that proves very little", "prompt": "A demonstration that proves very little\n\nNaledi is demonstrating LabLink, an equipment-loan application, to an evaluator who has never worked in a laboratory. She spends six of her twelve minutes describing why her team deserves the highest mark, then opens the database tables and reads column names aloud. She starts borrowing equipment without explaining who may borrow it, how approval works, or when an item becomes overdue. She clicks rapidly through a successful loan using her own familiar account. When asked what happens if two students request the last microscope, she says the code handles it but has no prepared accounts or data to show this. With two minutes left, she skips the return workflow and spends the remaining time generating a decorative AI dashboard. She calls the application \u201cfully accessible and production-ready\u201d without presenting supporting evidence.", "topics": ["L31", "L35"], "marks": 15, "parts": [{"prompt": "1. Identify five poor demonstration practices. For each, explain its effect on assessment and how Naledi should change her next demonstration. (15 marks)", "marks": 15, "answer": "1. Self-promotion and an overlong introduction consume evidence time: briefly state the problem, audience and demo objective. 2. Starting with database internals obscures user value: begin with a representative borrowing task and show technical detail only to support a relevant claim. 3. Assuming domain knowledge prevents the evaluator from judging correctness: explain roles, approval, loan states and success criteria before acting. 4. Rapid, happy-path-only clicking with no prepared contested-item data hides transitions and edge cases: rehearse a paced sequence with seeded accounts, a last-item conflict and expected results. 5. Poor prioritisation leaves core returns unshown and unsupported quality claims untested: time-box core workflows first, reserve optional features and questions, and qualify accessibility/readiness claims with evidence and limits.", "rubric": ["3 each for five distinct practices: 1 identification, 1 scenario-specific assessment effect, 1 practical correction. Accept other distinct supported practices, including unsupported claims or lack of contingency planning. Do not count the same timing failure twice."]}], "id": "q1", "number": 1}, {"type": "essay", "title": "The last microscope is promised twice", "prompt": "The last microscope is promised twice\n\nAt 08:00, 9,000 students request scarce equipment. LabLink keeps each web worker occupied while it synchronously calls a university eligibility service. The service slows from 100 ms to 90 seconds; all 120 workers become occupied and even the return page stops responding. An item reservation expires after 45 seconds. A second student reserves an expired item. The first eligibility response then arrives and the application creates a confirmed loan without checking the current reservation owner. The team proposes \u201cadding more servers\u201d as the entire solution.", "topics": ["L22", "L23", "MS", "L35"], "marks": 15, "parts": [{"prompt": "1. Explain both failures and explicitly name the compromised NFRs. Explain why adding servers alone is insufficient. (5 marks)", "marks": 5, "answer": "Workers remain held by slow outbound calls, exhausting concurrency and causing queued or rejected requests: response-time performance, availability and resilience suffer. Expiry makes the item eligible again; a late completion is trusted without an atomic ownership/state check, violating functional booking correctness and data integrity/consistency and undermining reliability. More servers can postpone exhaustion but cannot bound downstream latency or repair the reservation race.", "rubric": ["2: worker exhaustion and linked quality attributes. 2: expiry/late-completion race and integrity or reliability. 1: limit of scaling alone. Treat single-loan correctness as a functional invariant as well as its quality impact."]}, {"prompt": "2. Propose a design that remains responsive and prevents duplicate confirmed loans. Name specific tactics or patterns. (7 marks)", "marks": 7, "answer": "Accept a durable pending request and process eligibility asynchronously through a bounded queue. Commit pending state and an outbox record together so a crash cannot lose accepted work between the database and queue. Bound dependency time with timeouts, isolate outbound concurrency with a bulkhead, and open a circuit breaker on repeated failures. Apply backpressure/admission limits rather than accepting unlimited work. Confirm in a database transaction only if the reservation token/version still belongs to that request and is unexpired; enforce at most one active loan per item. A late result must fail confirmation or initiate a new safe attempt, never override a new owner. Use operation IDs for idempotent retries and display pending/failed/confirmed status honestly.", "rubric": ["2: durable asynchronous acceptance with atomic publication/outbox or an equally sound alternative. 2: bounded dependency work, isolation and overload control. 2: atomic reservation validation and active-loan invariant. 1: duplicate-safe processing and truthful status."]}, {"prompt": "3. Identify one new cost or risk in your solution and explain a concrete mitigation. (3 marks)", "marks": 3, "answer": "At-least-once delivery can repeat eligibility processing or confirmation after a lost acknowledgement. Store a unique operation ID and completion state, enforce the business constraint transactionally, and acknowledge after durable completion. Alternatively discuss stale pending states, queue backlog or operational complexity with monitoring, reconciliation and bounded admission.", "rubric": ["1: risk introduced by proposed design. 1: explains its mechanism. 1: matching mitigation."]}], "id": "q2", "number": 2}, {"type": "essay", "title": "A model confused with its implementation", "prompt": "A model confused with its implementation\n\nLabLink tracks Students, EquipmentItems and Loans. Each item has an asset number that persists when its location changes. Each loan belongs to one student and one item; students and items can have many historical loans, but an item may have only one active loan. A loan owns a return checklist whose entries have no meaning outside that loan. A replaceable accessory can exist in stock without belonging to an item. A quoted deposit consists of amount and currency. A developer instead draws DatabaseConnection and BorrowButton as the main domain classes and says that three code folders prove the application runs on three tiers.", "topics": ["L18"], "marks": 10, "parts": [{"prompt": "1. Identify five suitable domain concepts, distinguish an entity from a value object, and correct the domain-modelling mistake. (4 marks)", "marks": 4, "answer": "Student, EquipmentItem, Loan, ReturnChecklist and Deposit are suitable; Accessory is another valid concept. EquipmentItem is an entity identified by its persistent asset number despite location changes. Deposit/Money is a value object compared by amount and currency. Database connections and buttons are infrastructure/UI concerns, not the core business model.", "rubric": ["1: five grounded concepts. 1: entity identity. 1: value equality. 1: business versus implementation distinction."]}, {"prompt": "2. State two associations with multiplicities, explain the active-loan constraint, and justify composition versus ordinary association for the checklist and accessory. (4 marks)", "marks": 4, "answer": "Student 1\u2014Loan 0..* and EquipmentItem 1\u2014Loan 0..*: every loan has exactly one of each. Historical multiplicity does not enforce active exclusivity; separately require at most one active loan per item. The loan-owned checklist can be composition under its stated dependent lifetime. Accessories have independent existence, so ordinary association or justified shared aggregation fits; mandatory composition does not.", "rubric": ["1: both historical multiplicities in both directions. 1: separate active invariant. 1: checklist composition grounded in lifetime. 1: independent accessory relationship."]}, {"prompt": "3. Distinguish logical layers from deployment tiers and explain why folders do not establish tier separation. (2 marks)", "marks": 2, "answer": "Layers separate responsibilities and dependencies within software; tiers describe separately deployed runtime parts. Three folders may implement layers in one process. Deployment nodes/processes and communication boundaries are needed to establish three tiers.", "rubric": ["1: layers versus tiers. 1: applies distinction to folders."]}], "id": "q3", "number": 3}, {"type": "essay", "title": "One product, three different interfaces", "prompt": "One product, three different interfaces\n\nThe student, technician and administrator screens use different colours and button styles. A clickable red label sometimes means \u201cdelete\u201d and sometimes \u201cavailable\u201d. Loan errors appear only as colour changes. A screen-reader user cannot identify icon-only controls, and keyboard focus disappears inside a modal. A borrowing form displays twenty equally prominent actions, uses inconsistent spacing, and gives no feedback after submission. The team has a PDF logo guide and believes this is a complete design system.", "topics": ["L17", "L20"], "marks": 8, "parts": [{"prompt": "1. Explain how a brand style guide differs from an implemented design system. Propose tokens and components that would address this scenario. (4 marks)", "marks": 4, "answer": "A brand guide defines identity and visual rules; a design system also supplies reusable implemented components, states, behaviour and accessibility guidance. Use semantic colour/spacing/typography tokens and consistent action buttons, status badges and form/modal components. Atomic design can build these from simple controls into composed forms and page structures. A colour name alone must not decide conflicting business meanings.", "rubric": ["1: distinction. 1: semantic tokens tied to inconsistency. 1: reusable components and states. 1: coherent component composition/atomic design."]}, {"prompt": "2. Identify four distinct usability or accessibility problems and give a specific correction for each. (4 marks)", "marks": 4, "answer": "Colour-only errors need text and programmatic error associations. Icon-only controls need accessible names. The modal needs a visible keyboard focus and deliberate focus management/return. Excess competing actions and unclear grouping need a primary-action hierarchy, meaningful proximity/spacing and a pending/success/error response after submission. Accept inconsistent semantic colour as a separate problem when corrected explicitly.", "rubric": ["1 each: four distinct problem\u2013correction pairs grounded in the scenario."]}], "id": "q4", "number": 4}, {"type": "essay", "title": "Green badges, unsafe releases", "prompt": "Green badges, unsafe releases\n\nLabLink\u2019s CI script runs tests but converts every failing exit code to success. Pull requests can merge without checks. The only \u201cintegration tests\u201d replace the database with a mock and assert merely that a response exists. Production is rebuilt separately from staging using floating image tags. The container runs as root, embeds a database password, and has no resource limits or health checks. Developers stop monitoring after deployment because \u201coperations is another team\u2019s job\u201d.", "topics": ["L17", "L19", "L21", "L29"], "marks": 10, "parts": [{"prompt": "1. Explain four pipeline or deployment weaknesses and give a matching correction for each. (4 marks)", "marks": 4, "answer": "Propagate failed test exit status and enforce required protected-branch checks; test real database integration with meaningful assertions; build an immutable pinned artifact once and promote the tested artifact; remove embedded secrets and use controlled runtime injection/rotation. Other valid pairs are a non-root minimal runtime, enforced limits/health probes, dependency pinning and artifact scanning/signing.", "rubric": ["1 each: four distinct weakness\u2013correction pairs; each correction must address the stated weakness."]}, {"prompt": "2. Describe a DevSecOps delivery loop with appropriate security checks and operational feedback. Distinguish continuous delivery from continuous deployment. (4 marks)", "marks": 4, "answer": "Plan with threats and quality targets; code/review with standards and secret scanning; build with dependency/SAST and artifact checks; test integrations and a running app with DAST; release/promote the same verified artifact; deploy with controlled rollback; operate and monitor latency, errors, vulnerabilities and incidents to feed planning. Continuous delivery keeps verified changes releasable with a release decision; continuous deployment automatically releases changes passing the defined gates.", "rubric": ["2: relevant checks across development and running-system stages. 1: operational feedback into planning. 1: delivery/deployment distinction."]}, {"prompt": "3. Why do the mock tests not prove database integration, and how could the team check whether an assertion can detect a defect? (2 marks)", "marks": 2, "answer": "Mocks cannot expose real schema, transaction or driver mismatches. Exercise a representative real database boundary and deliberately introduce a controlled wrong result or mutation to confirm that the relevant assertion fails.", "rubric": ["1: real integration limitation. 1: deliberate defect/mutation validates assertion sensitivity."]}], "id": "q5", "number": 5}, {"type": "essay", "title": "The average looks excellent", "prompt": "The average looks excellent\n\nA LabLink report claims that all quality targets passed because average response time was 180 ms. The requirement is p95 below 500 ms at 150 requests/s for 30 minutes with errors below 1%. Of 10,000 requests, 100 failed and the slowest 5% took over two seconds. The test excluded eligibility calls and used an almost empty database. A 15-minute run found no leak, but technicians report increasing memory over a full day. The team also claims 100% line coverage proves correctness and postpones coding standards until after acceptance testing.", "topics": ["L19", "L30", "L32", "L35"], "marks": 10, "parts": [{"prompt": "1. Assess the performance claim and propose four distinct test activities with their purposes. (5 marks)", "marks": 5, "answer": "Exactly 100/10,000 = 1% errors fails a strict below-1% threshold, and the mean cannot establish the p95 target. Saying that the slowest 5% exceed two seconds does not by itself locate the 95th-percentile boundary; inspect the actual percentile measurement rather than assuming p95 fails or passes. The arrival rate, duration, dataset and dependency conditions must match the acceptance scenario; the supplied report does not establish compliance. Run representative load testing for the peak target, stress testing beyond capacity for overload/recovery, soak testing for day-long accumulation, and volume testing for increased database size. Spike testing is another distinct valid choice for sudden bursts.", "rubric": ["1: correct error calculation/threshold and rejects mean-only evidence. 1 each: four correctly distinguished activities tied to risks."]}, {"prompt": "2. Distinguish SQA from quality control, and faults from failures. Recommend one useful coding standard and explain the limitation of coverage. (3 marks)", "marks": 3, "answer": "SQA improves development processes through standards, reviews and enforced checks; quality control inspects/tests outputs. A fault is a defect in an artifact; a failure is observed incorrect behaviour when conditions activate it. Require explicit error handling rather than swallowing exceptions. Line coverage shows execution, not meaningful assertions or correctness on untested conditions.", "rubric": ["1: QA/QC distinction. 1: fault/failure distinction. 1: justified standard and coverage limitation."]}, {"prompt": "3. Explain how TDD and regression testing could help after the leak is fixed. (2 marks)", "marks": 2, "answer": "First write a focused failing test demonstrating the leak/incorrect cleanup, implement the smallest fix to pass, then refactor while preserving the tests. Add the reproducer and relevant long-running/resource checks to regression testing so future changes reveal recurrence.", "rubric": ["1: red\u2013green\u2013refactor linked to defect. 1: regression evidence for recurrence."]}], "id": "q6", "number": 6}, {"type": "essay", "title": "A valid login exposes private records", "prompt": "A valid login exposes private records\n\nA student changes /loans/42 to /loans/43 and reads another student\u2019s personal details using a valid session. The search endpoint concatenates input into SQL. Passwords are stored using reversible encryption and the decryption key is in the repository. An authorised security exercise finds these weaknesses; operations sees unusual requests but has no alert or response procedure. The manager proposes a penetration test only on the final day and says encrypted HTTPS means stored passwords are safe.", "topics": ["L24", "L29"], "marks": 10, "parts": [{"prompt": "1. Distinguish asset, threat, vulnerability and risk using this scenario; explain authentication versus authorisation. (4 marks)", "marks": 4, "answer": "Loan personal data is an asset; an unauthorised student seeking it is a threat; missing object-level access checks is a vulnerability; likely disclosure and its impact constitute the risk. Authentication proves who the session represents, while authorisation checks that identity\u2019s permission for the specific loan on every protected request.", "rubric": ["2: all four risk terms mapped coherently. 2: identity versus per-object permission and scenario application."]}, {"prompt": "2. Propose three implementation controls and explain why HTTPS alone does not resolve them. (3 marks)", "marks": 3, "answer": "Enforce server-side ownership/role checks; use parameterised SQL and appropriate validation; use salted adaptive password hashing rather than reversible password storage, with secrets removed from source and exposed keys rotated. HTTPS protects data in transit; it does not fix access logic, query construction or stored-credential handling.", "rubric": ["1 each: three appropriate controls with a coherent transport-versus-application/storage distinction."]}, {"prompt": "3. Explain red, blue and purple team responsibilities and propose security verification earlier in development. (3 marks)", "marks": 3, "answer": "The red team exercises authorised attack paths; the blue team monitors, detects and responds; purple-team collaboration shares evidence to improve prevention and detection. Threat-model the object boundary early, review code, use SAST/dependency/secret checks and targeted dynamic/manual access and injection tests; retest fixes within the agreed scope.", "rubric": ["1: red and blue roles. 1: purple collaboration and scope. 1: earlier verification matched to weaknesses."]}], "id": "q7", "number": 7}, {"type": "essay", "title": "Three systems, three interpretations of approved", "prompt": "Three systems, three interpretations of approved\n\nLabLink integrates with a legacy finance system, a university identity service and an email provider. Finance exposes SOAP operations described by WSDL. LabLink publishes a JSON API, but frontend developers use screenshots as its specification. A provider changes approved from a Boolean to a string without notice. A finance adapter is imported throughout the loan domain. The team wants to coordinate reserve-item, collect-deposit and confirm-loan steps, even though each system owns its own data and no shared database transaction exists.", "topics": ["L25", "SOA", "MS", "L22"], "marks": 8, "parts": [{"prompt": "1. Specify what an API contract must describe, distinguish OpenAPI from Swagger tooling and SOAP/WSDL, and explain how contract-first mocks and tests help. (4 marks)", "marks": 4, "answer": "The contract defines methods/paths, request and response schemas, types, statuses/errors, authentication and behavioural semantics such as state and idempotency. OpenAPI is a description specification commonly used for HTTP APIs; Swagger denotes associated tools. SOAP is a message protocol commonly using XML; WSDL describes service operations/messages/bindings. Agree the contract first, use mocks for parallel client work and provider/consumer checks for conformance; mocks still do not prove real integration.", "rubric": ["1: contract substance. 1: OpenAPI/tooling versus SOAP/WSDL. 1: contract-first parallel workflow. 1: tests and mock limitation."]}, {"prompt": "2. Propose a compatible change strategy and isolate finance-specific code. Explain one benefit and one cost of SOA/ESB integration here. (2 marks)", "marks": 2, "answer": "Keep the old field/version during migration, document the new representation and test consumers before retiring it. Place finance translation behind an adapter and stable domain-facing interface. SOA/ESB mediation can bridge legacy protocols and centralise routing/transformation; a central bus also adds coupling, an operational bottleneck or a concentrated failure point.", "rubric": ["1: compatibility migration and adapter boundary. 1: scenario-linked SOA/ESB benefit and cost."]}, {"prompt": "3. Distinguish orchestration from choreography and explain how a saga handles a failed final confirmation. (2 marks)", "marks": 2, "answer": "Orchestration uses a coordinator to command steps; choreography lets participants react to events. A saga uses local transactions and compensating business actions, such as refunding a collected deposit and releasing a still-owned reservation after failed confirmation. Compensation is not an automatic ACID rollback and needs idempotency, retry/reconciliation and possibly manual recovery.", "rubric": ["1: coordination distinction. 1: meaningful compensation and its limits."]}], "id": "q8", "number": 8}, {"type": "essay", "title": "Two containers, one power failure", "prompt": "Two containers, one power failure\n\nLabLink runs two web containers, a queue and its only database on one physical host. Its deployment sketch shows four unlabelled boxes and is called \u201cthe whole system\u201d, although it excludes the eligibility provider and the student browser. Every arrow is labelled \u201cAPI\u201d. A live replica on the same host is described as a backup. A power failure takes everything down. The required RTO is 20 minutes and RPO is 5 minutes; a restore drill takes 40 minutes and the last recoverable backup is 30 minutes older than the failure.", "topics": ["L28", "L23", "L30", "L35"], "marks": 8, "parts": [{"prompt": "1. Explain the shared failure domain and describe the deployment-diagram information needed to assess this architecture. (3 marks)", "marks": 3, "answer": "Containers isolate processes but all depend on one host/power boundary, so host failure removes both replicas and all state. Declare environment and scope; show browser, external provider, nodes/execution environments and deployed artifacts; label protocol, direction, sync/async nature and trust boundaries. Show state ownership and failure-domain placement rather than relying on product box names.", "rubric": ["1: common host failure. 1: scope/nodes/artifacts/external actors. 1: useful links/trust/state/failure-domain annotations."]}, {"prompt": "2. Calculate whether the recovery drill meets RTO and RPO, and explain why a live replica is not a historical backup. (3 marks)", "marks": 3, "answer": "Actual restoration is 40 minutes versus a maximum 20, so RTO fails. The recoverable data-loss window is 30 minutes versus 5, so RPO fails. A live replica can copy deletion/corruption and shares this host failure; an independently retained historical backup preserves earlier recoverable states.", "rubric": ["1: RTO comparison. 1: RPO comparison. 1: replication/backup distinction."]}, {"prompt": "3. Recommend a deployment/recovery improvement and an evidence-producing drill, with one cost. (2 marks)", "marks": 2, "answer": "Place redundant stateless instances and durable state protection across independent failure domains, retain off-host historical backups or point-in-time logs, and test failover/restore with measured recovery and missing-record windows. The added infrastructure, replication management and drills cost money and operational effort; monitor replication lag and verify backup recovery rather than assuming redundancy meets targets.", "rubric": ["1: placement and recovery changes matched to failure. 1: measured drill and explicit cost."]}], "id": "q9", "number": 9}, {"type": "essay", "title": "The one-click replacement", "prompt": "The one-click replacement\n\nA manager wants to replace LabLink with a no-code workflow because a prototype took one afternoon. Another developer suggests generating the entire application by prompting an AI until it \u201clooks right\u201d. The prototype requires a platform-only connector, has no export plan, and gives every workflow editor access to all loan records. The production system needs reliable item exclusivity, approval audit history and maintained integrations. Only four developers support it, traffic is moderate, and all capabilities currently share one release schedule.", "topics": ["L33", "MS", "L18", "L35"], "marks": 6, "parts": [{"prompt": "1. Compare no-code, low-code and vibe coding for this project, identifying a suitable bounded use and one platform risk. (3 marks)", "marks": 3, "answer": "No-code uses visual configuration with little/no handwritten code; low-code combines visual tooling with custom extensions; vibe coding relies heavily on prompted generation and feedback, often without systematic understanding. AI-assisted engineering can instead retain review and verification. A bounded internal notification prototype is a plausible visual-tool use, while critical exclusivity must be proven before adoption. The proprietary connector creates lock-in; assess export/migration, permissions, costs and ownership.", "rubric": ["1: three approaches distinguished. 1: justified bounded use. 1: platform risk and relevant mitigation."]}, {"prompt": "2. Recommend an architectural starting point and a responsible validation/ownership plan, including one trade-off. (3 marks)", "marks": 3, "answer": "A modular monolith fits the small team, shared release cadence and moderate traffic while preserving loan/payment boundaries without distributed operations. Review generated logic and dependencies, enforce object permissions, test concurrent claims and failure/retry paths, maintain audit records, name an owner and document rollback/export. This sacrifices independent deployment/scaling; revisit extraction when real requirements justify it.", "rubric": ["1: architecture justified by team/workload. 1: concrete verification and accountable ownership. 1: explicit architectural trade-off."]}], "id": "q10", "number": 10}, {"type": "essay", "title": "A decision without a reason", "prompt": "A decision without a reason\n\nLabLink must add a new eligibility provider without changes outside its integration module and must acknowledge requests within 500 ms at p95 during a 30-minute, 150-request/s peak. The lead draws technology logos and writes \u201cmicroservices are scalable\u201d as the design rationale. A four-person team would have to support twelve services, and the old application would be replaced in a single weekend. No alternative, accepted cost or automated architectural check is recorded.", "topics": ["L22", "L23", "L18", "MS", "L35"], "marks": 10, "parts": [{"prompt": "1. Write one complete quality-attribute scenario from the requirements, using source, stimulus, environment, artifact, response and response measure. (3 marks)", "marks": 3, "answer": "Source: student clients. Stimulus: checkout/loan requests arriving at 150 requests/s. Environment: defined peak configuration for 30 minutes with representative data and dependency behaviour. Artifact: LabLink request-acceptance path. Response: durably accept valid requests into pending state. Measure: acknowledgement latency p95 at or below 500 ms in that window. Record error/admission and backlog outcomes separately so fast rejection cannot masquerade as successful acceptance. The provider-change requirement can also form a modifiability scenario with a defined integration-team change stimulus, adapter artifact and zero outside-module changes.", "rubric": ["1: source/stimulus/environment. 1: artifact/response. 1: measurable response and meaningful measurement boundary."]}, {"prompt": "2. Distinguish a tactic from a pattern. Outline an ADR with a justified alternative, trade-off and an automated fitness check for provider replacement. (4 marks)", "marks": 4, "answer": "A tactic targets a quality response, such as isolating volatility; a pattern organises collaborating structures, such as Adapter/Strategy around an eligibility interface. The ADR records context and constraints, a decision to isolate provider SDKs behind adapters, an alternative of direct imports and the consequence of added indirection/interface maintenance. Enforce a static rule forbidding provider-SDK imports outside adapters and add contract tests. A modular monolith is a defensible broader alternative to twelve services given this team.", "rubric": ["1: tactic/pattern distinction. 1: context and decision. 1: real alternative and accepted cost. 1: enforceable fitness check tied to boundary."]}, {"prompt": "3. Explain a safer legacy migration, one sensitivity/trade-off point and the influence of team structure on architecture. (3 marks)", "marks": 3, "answer": "Use a strangler fa\u00e7ade to replace one capability at a time with reversible routing and reconciled data instead of a big-bang cutover. Queue/concurrency or timeout settings are sensitivity points; increased isolation can trade latency/cost/complexity against resilience. Team communication and ownership tend to shape system boundaries (Conway\u2019s law); choose boundaries this small team can operate, rather than inventing twelve independently owned services.", "rubric": ["1: incremental strangler migration and data/routing concern. 1: explained sensitivity or trade-off point. 1: Conway/team capacity linked to boundary choice."]}], "id": "q11", "number": 11}], "storageKey": "cos301-st2-example-3-v1", "notes": "Original authored 110-mark practice paper in the style of the supplied extended scenarios: diagnose, explain, propose and evaluate trade-offs. Every lecture in the available ST2 scope is assessed in each paper. L35 integrates earlier topics; no separate L34 topic is listed in the supplied scope. L29 and L31\u2013L33 follow the existing general-topic guides, not unavailable lecture slides. Marks are practice allocations; no official duration is inferred. Defensible alternatives earn credit when justified against the scenario.", "multiRule": "This paper contains written scenario questions only. Use the model answers and rubrics for self-assessment; no automatic written-answer grading or negative marking applies.", "description": "Extended written scenarios with model answers, trade-offs, self-assessment and blank-paper printing; every lecture in the ST2 scope appears in this paper."}</script>
+<script>
+(function () {
+ 'use strict';
+ const paper = JSON.parse(document.getElementById('mock-data').textContent);
+ const hasObjective = paper.questions.some(q=>q.type!=='essay');
+ document.getElementById('mark-all').hidden = !hasObjective;
+ const node = (tag, cls, text) => {const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
+ const normal = s => String(s ?? '').trim().toLowerCase().replace(/\s+/g,' ').replace(/\.$/,'');
+ const fmt = n => Number(n.toFixed(2)).toString();
+ let state = {};
+ try {const saved=JSON.parse(localStorage.getItem(paper.storageKey));if(saved && typeof saved==='object'&&!Array.isArray(saved))state=saved;}catch{}
+ const status=document.getElementById('storage-status');
+ const markViews=new Map();const memoElements=[];const wordViews=[];
+ function save(){try{localStorage.setItem(paper.storageKey,JSON.stringify(state));status.textContent='Drafts, selections and self-assessment save locally for this paper.';}catch{status.textContent='Browser storage is unavailable. You can still practise, but this session’s work may not survive a reload.';}}
+ function current(q){
+  if(!state[q.id]||typeof state[q.id]!=='object'||Array.isArray(state[q.id]))state[q.id]={};
+  const s=state[q.id];
+  for(const key of ['answers','drafts','selfMarks'])if(!Array.isArray(s[key]))s[key]=[];
+  if(q.options&&['single','multi'].includes(q.type)){
+   s.answers=[...new Set(s.answers.filter(x=>Number.isInteger(x)&&x>=0&&x<q.options.length))];
+   if(q.type==='single')s.answers=s.answers.slice(0,1);
+  }
+  return s;
+ }
+ function score(q){
+  const s=current(q);
+  if(q.type==='single')return s.answers.length===1&&s.answers[0]===q.correct[0]?q.marks:0;
+  if(q.type==='multi'){
+   const hits=s.answers.filter(i=>q.correct.includes(i)).length;
+   return Math.max(0,(hits-(s.answers.length-hits))*q.marks/q.correct.length);
+  }
+  return q.items.reduce((sum,item,i)=>sum+(q.type==='matching'?s.answers[i]===item.answer:item.answers.some(a=>normal(a)===normal(s.answers[i]))) * q.marks/q.items.length,0);
+ }
+ function updateScore(){
+  const objective=paper.questions.filter(q=>q.type!=='essay'),written=paper.questions.filter(q=>q.type==='essay');
+  const objectiveMax=objective.reduce((s,q)=>s+q.marks,0);const writtenMax=written.reduce((s,q)=>s+q.marks,0);
+  const graded=objective.filter(q=>current(q).marked===true);const obj=graded.reduce((s,q)=>s+score(q),0);
+  let self=0, assessed=0,partCount=0;
+  written.forEach(q=>q.parts.forEach((p,i)=>{partCount++;const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=p.marks&&Number.isInteger(value*2)){self+=value;assessed++;}}));
+  const target=document.getElementById('paper-score');target.replaceChildren(node('div','',`Objective: ${fmt(obj)} / ${fmt(objectiveMax)} marks · ${graded.length} / ${objective.length} questions marked`));
+  if(!hasObjective)target.replaceChildren();
+  if(written.length){target.append(node('div','',`Written answers (self-assessed): ${fmt(self)} / ${fmt(writtenMax)} marks · ${assessed} / ${partCount} parts assessed`),node('strong','',`Combined practice total: ${fmt(obj+self)} / ${paper.totalMarks}`),node('div','mock-note','Unmarked work contributes zero to this running total. Written-answer marks are your assessment, not an automated judgement.'));}
+ }
+ function mark(q){current(q).marked=true;save();markViews.get(q.id)?.();updateScore();}
+ function change(q){current(q).marked=false;save();markViews.get(q.id)?.();updateScore();}
+ function addText(parent,text){parent.append(node('p','',text));}
+ function addMemo(card,q){
+  const memo=node('details','mock-memo');memo.append(node('summary','','Model answer and marking guide'));
+  if(q.type==='essay')q.parts.forEach((part,i)=>{
+   memo.append(node('h3','',`Part ${i+1} · ${part.marks} marks`));addText(memo,part.answer);
+   const list=node('ul');part.rubric.forEach(text=>list.append(node('li','',text)));memo.append(list);
+   const self=node('div','mock-self');const label=node('label','',`Your self-assessed mark for part ${i+1} (0–${part.marks})`);const input=node('input');Object.assign(input,{type:'number',min:'0',max:String(part.marks),step:'0.5',id:`${q.id}-mark-${i}`});label.htmlFor=input.id;
+   const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=part.marks&&Number.isInteger(value*2))input.value=String(value);
+   const msg=node('p','mock-note');msg.setAttribute('role','status');
+   input.addEventListener('input',()=>{const valid=input.value!==''&&input.validity.valid&&Number.isFinite(input.valueAsNumber);current(q).selfMarks[i]=valid?input.valueAsNumber:null;input.setAttribute('aria-invalid',String(input.value!==''&&!valid));msg.textContent=input.value!==''&&!valid?`Enter 0 to ${part.marks} in half-mark steps. Invalid marks are not counted.`:'';save();updateScore();});
+   self.append(label,input,msg);memo.append(self);
+  });
+  else if(q.type==='single'||q.type==='multi'){
+   addText(memo,`Correct option${q.correct.length>1?'s':''}: ${q.correct.map(i=>String.fromCharCode(65+i)).join(', ')}.`);q.correct.forEach(i=>addText(memo,`${String.fromCharCode(65+i)}. ${q.options[i]}`));addText(memo,q.explanation);
+   if(q.type==='multi')addText(memo,`Scoring: +${fmt(q.marks/q.correct.length)} per correct selection, −${fmt(q.marks/q.correct.length)} per incorrect selection; minimum 0, maximum ${q.marks}.`);
+  }else q.items.forEach((item,i)=>{memo.append(node('h3','',`${i+1}. ${q.type==='matching'?item.answer:item.answers.join(' / ')} · ${fmt(q.marks/q.items.length)} marks`));addText(memo,item.explanation);});
+  card.append(memo);memoElements.push(memo);
+ }
+ function renderQuestion(q){
+  const s=current(q),card=node('section','mock-question');card.id=q.id;
+  const head=node('div','mock-qhead');head.append(node('h2','',`Question ${q.number}`),node('span','mock-marks',`${fmt(q.marks)} mark${q.marks===1?'':'s'}`));card.append(head);
+  const names={single:q.options?.length===2?'True / False':'Single answer',multi:'Select all that apply · negative marking',matching:'Matching',cloze:'Sentence completion',short:'Short answer / letter',essay:'Structured written response'};
+  card.append(node('p','mock-type',names[q.type]),node('p','mock-prompt',q.prompt));
+  if(q.diagram){const figure=node('div','mock-diagram');figure.innerHTML=q.diagram;card.append(figure);addText(card,'Diagram is part of the question. On a narrow screen, scroll it horizontally to read all labels.');}
+  if(['single','multi'].includes(q.type)){
+   const fieldset=node('fieldset');fieldset.append(node('legend','',q.type==='multi'?'Select all correct options':'Select one option'));
+   q.options.forEach((text,i)=>{const label=node('label','mock-option');const input=node('input');input.type=q.type==='single'?'radio':'checkbox';input.name=q.id;input.checked=s.answers.includes(i);input.addEventListener('change',()=>{s.answers=q.type==='single'?[i]:input.checked?[...new Set([...s.answers,i])]:s.answers.filter(x=>x!==i);change(q);});label.append(input,node('span','',`${String.fromCharCode(65+i)}. ${text}`));fieldset.append(label);});card.append(fieldset);
+  }else if(q.type==='essay'){
+   q.parts.forEach((part,i)=>{const block=node('div','mock-part'),label=node('label','',part.prompt),textarea=node('textarea');textarea.id=`${q.id}-draft-${i}`;label.htmlFor=textarea.id;textarea.value=typeof s.drafts[i]==='string'?s.drafts[i]:'';textarea.addEventListener('input',()=>{s.drafts[i]=textarea.value;save();wordViews.forEach(fn=>fn());});block.append(label,textarea,node('div','mock-print-space'));card.append(block);});
+   const word=node('p','mock-word-count');const update=()=>{const count=s.drafts.join(' ').trim().split(/\s+/).filter(Boolean).length;word.textContent=`${count} words${q.wordLimit?` · suggested maximum ${q.wordLimit}; no automatic penalty`:''}`;word.classList.toggle('mock-invalid',Boolean(q.wordLimit&&count>q.wordLimit));};wordViews.push(update);update();card.append(word);
+  }else{
+   if(q.type==='matching'){
+    addText(card,'Choose the most precise match for each prompt. Each answer is intended to be used once; each row is marked independently.');
+    card.append(node('p','mock-print-bank',`Answer bank: ${q.options.map((x,i)=>`${String.fromCharCode(65+i)}. ${x}`).join(' · ')}`));
+   }
+   q.items.forEach((item,i)=>{const row=node('div','mock-row'),label=node('label','',item.prompt);let input;
+    if(q.type==='matching'){input=node('select');const blank=node('option','','Choose an answer');blank.value='';input.append(blank);q.options.forEach(text=>{const option=node('option','',text);option.value=text;input.append(option);});}
+    else {input=node('input');input.type='text';input.autocomplete='off';}
+    input.id=`${q.id}-answer-${i}`;label.htmlFor=input.id;input.value=typeof s.answers[i]==='string'?s.answers[i]:'';input.addEventListener(q.type==='matching'?'change':'input',()=>{s.answers[i]=input.value;change(q);});row.append(label,input,node('div','mock-print-space'));card.append(row);
+   });
+  }
+  if(q.type!=='essay'){
+   const check=node('button','btn','Mark this question');check.type='button';check.addEventListener('click',()=>mark(q));const feedback=node('div','mock-result');feedback.setAttribute('role','status');
+   const update=()=>{feedback.hidden=s.marked!==true;feedback.textContent=s.marked===true?`${fmt(score(q))} / ${fmt(q.marks)} marks. Open the marking guide for the answer and reasoning. Changing a response clears this marking result.`:'';};markViews.set(q.id,update);update();card.append(check,feedback);
+  }
+  addMemo(card,q);document.getElementById('paper-questions').append(card);
+  const jump=node('a','',`Q${q.number} · ${fmt(q.marks)}`);jump.href='#'+q.id;document.getElementById('question-links').append(jump);
+ }
+ document.getElementById('paper-scope').textContent=`Scope: ${paper.scope}`;
+ document.getElementById('paper-meta').textContent=`${paper.questions.length} questions · ${paper.totalMarks} marks · attempt all questions. ${paper.notes}`;
+ const instructions=document.getElementById('instructions');
+ addText(instructions,`Style reference: ${paper.reference}. The questions and diagrams in this paper are newly authored. Saved responses in the reference export were not treated as an authoritative memorandum.`);
+ addText(instructions,paper.multiRule);
+ if(hasObjective)addText(instructions,'Matching rows and short-answer subparts share their question’s marks equally. Short answers ignore case, extra spaces and a final full stop; accepted alternatives are shown in the marking guide. Equivalent written reasoning may earn credit under the rubric. Use the rubric to review a defensible alternative the exact-match marker does not recognise.');
+ addText(instructions,'Written responses are not automatically graded. Enter optional self-assessed marks after consulting the model answer. Any word maximum is practice guidance, not an automatically applied penalty. Blank printing omits your saved answers and all marking guides. Marking-guide printing includes the paper and model answers, without your private drafts.');
+ addText(instructions,'Some topic guides are general coverage because lecture notes were unavailable. CT4 is limited to L28–L33 plus L35 revision. ST2 samples L17–L33 and L35, including existing SOA and Microservices material.');
+ paper.questions.forEach(renderQuestion);updateScore();status.textContent='Drafts, selections and self-assessment save locally for this paper.';
+ document.getElementById('mark-all').addEventListener('click',()=>{paper.questions.filter(q=>q.type!=='essay').forEach(q=>{current(q).marked=true;markViews.get(q.id)();});save();updateScore();});
+ document.getElementById('show-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=true));
+ document.getElementById('hide-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=false));
+ document.getElementById('reset-paper').addEventListener('click',()=>{if(window.confirm('Clear only this paper’s answers, drafts and self-assessed marks?')){state={};save();location.reload();}});
+ let printState=null;
+ function restorePrint(){if(!printState)return;memoElements.forEach((m,i)=>m.open=printState[i]);document.body.classList.remove('print-memo');printState=null;}
+ function printPaper(withMemo){printState=memoElements.map(m=>m.open);document.body.classList.toggle('print-memo',withMemo);memoElements.forEach(m=>m.open=withMemo);window.print();}
+ addEventListener('afterprint',restorePrint);
+ document.getElementById('print-paper').addEventListener('click',()=>printPaper(false));
+ document.getElementById('print-memo').addEventListener('click',()=>printPaper(true));
+})();
+
+</script>
+</body>
+</html>

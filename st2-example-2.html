@@ -693,7 +693,9 @@ body {
 <nav class="topnav"><div class="topnav-inner"><a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a><div class="topnav-links"><a href="index.html">Home</a><a href="ct4-example-1.html">CT4 EXAMPLE 1</a>
 <a href="ct4-example-2.html">CT4 EXAMPLE 2</a>
 <a href="st2-example-1.html">ST2 EXAMPLE 1</a>
-<a href="st2-example-2.html" class="active" aria-current="page">ST2 EXAMPLE 2</a></div></div></nav>
+<a href="st2-example-2.html" class="active" aria-current="page">ST2 EXAMPLE 2</a>
+<a href="st2-example-3.html">ST2 EXAMPLE 3</a>
+<a href="st2-example-4.html">ST2 EXAMPLE 4</a></div></div></nav>
 <main class="page mock-page">
 <header class="mock-hero">
 <p class="mock-kicker">Original practice assessment · COS301</p>
@@ -722,6 +724,8 @@ body {
 (function () {
  'use strict';
  const paper = JSON.parse(document.getElementById('mock-data').textContent);
+ const hasObjective = paper.questions.some(q=>q.type!=='essay');
+ document.getElementById('mark-all').hidden = !hasObjective;
  const node = (tag, cls, text) => {const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  const normal = s => String(s ?? '').trim().toLowerCase().replace(/\s+/g,' ').replace(/\.$/,'');
  const fmt = n => Number(n.toFixed(2)).toString();
@@ -756,6 +760,7 @@ body {
   let self=0, assessed=0,partCount=0;
   written.forEach(q=>q.parts.forEach((p,i)=>{partCount++;const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=p.marks&&Number.isInteger(value*2)){self+=value;assessed++;}}));
   const target=document.getElementById('paper-score');target.replaceChildren(node('div','',`Objective: ${fmt(obj)} / ${fmt(objectiveMax)} marks · ${graded.length} / ${objective.length} questions marked`));
+  if(!hasObjective)target.replaceChildren();
   if(written.length){target.append(node('div','',`Written answers (self-assessed): ${fmt(self)} / ${fmt(writtenMax)} marks · ${assessed} / ${partCount} parts assessed`),node('strong','',`Combined practice total: ${fmt(obj+self)} / ${paper.totalMarks}`),node('div','mock-note','Unmarked work contributes zero to this running total. Written-answer marks are your assessment, not an automated judgement.'));}
  }
  function mark(q){current(q).marked=true;save();markViews.get(q.id)?.();updateScore();}
@@ -813,7 +818,7 @@ body {
  const instructions=document.getElementById('instructions');
  addText(instructions,`Style reference: ${paper.reference}. The questions and diagrams in this paper are newly authored. Saved responses in the reference export were not treated as an authoritative memorandum.`);
  addText(instructions,paper.multiRule);
- addText(instructions,'Matching rows and short-answer subparts share their question’s marks equally. Short answers ignore case, extra spaces and a final full stop; accepted alternatives are shown in the marking guide. Equivalent written reasoning may earn credit under the rubric. Use the rubric to review a defensible alternative the exact-match marker does not recognise.');
+ if(hasObjective)addText(instructions,'Matching rows and short-answer subparts share their question’s marks equally. Short answers ignore case, extra spaces and a final full stop; accepted alternatives are shown in the marking guide. Equivalent written reasoning may earn credit under the rubric. Use the rubric to review a defensible alternative the exact-match marker does not recognise.');
  addText(instructions,'Written responses are not automatically graded. Enter optional self-assessed marks after consulting the model answer. Any word maximum is practice guidance, not an automatically applied penalty. Blank printing omits your saved answers and all marking guides. Marking-guide printing includes the paper and model answers, without your private drafts.');
  addText(instructions,'Some topic guides are general coverage because lecture notes were unavailable. CT4 is limited to L28–L33 plus L35 revision. ST2 samples L17–L33 and L35, including existing SOA and Microservices material.');
  paper.questions.forEach(renderQuestion);updateScore();status.textContent='Drafts, selections and self-assessment save locally for this paper.';

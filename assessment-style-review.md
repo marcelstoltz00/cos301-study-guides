@@ -62,3 +62,12 @@ The new papers reuse this assessment structure and command style, not ST1's old 
 - [CT4 Example 2](ct4-example-2.html): secure-development techniques, measurement and development approaches.
 - [ST2 Example 1](st2-example-1.html): CampusCart quality/access requirements, domain modelling, test selection, queue evidence, contracts and architecture choice.
 - [ST2 Example 2](st2-example-2.html): identity/value modelling, recovery controls, topology evidence and generated-workflow review.
+
+## User-supplied extended scenarios → ST2 Examples 3 and 4
+
+The later supplied examples use a flawed demonstration narrative and an architectural failure narrative. Their prompts require specific mistakes with effects/corrections, causal explanations with named NFRs, proposed tactics/patterns and an introduced-cost mitigation. Examples 3 and 4 follow that written reasoning style throughout rather than the earlier ST1 mixed-question format.
+
+Each is an authored 110-mark paper with 11 extended scenarios. Both independently assess every lecture in the available ST2 scope. [The coverage map](st2-scenario-coverage.md) identifies questions, assessed concepts and source limitations. Marks are practice allocations. Answers allow scenario-justified alternatives; written work uses explicit self-assessment rubrics.
+
+- [ST2 Example 3](st2-example-3.html): LabLink — equipment lending, contention, eligibility outages and engineering evidence.
+- [ST2 Example 4](st2-example-4.html): RouteReady — dispatch uncertainty, delivery workflows, legacy integration and engineering evidence.

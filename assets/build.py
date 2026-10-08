@@ -13,7 +13,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "assets"
 DATA_DIR = ROOT / "data"
 OUT_DIR = ROOT
-MOCK_PAPERS = ["ct4-example-1", "ct4-example-2", "st2-example-1", "st2-example-2"]
+MOCK_PAPERS = ["ct4-example-1", "ct4-example-2", "st2-example-1", "st2-example-2", "st2-example-3", "st2-example-4"]
 
 LECTURES = [
     {"id": "L17", "nav": "L17 · Design Systems & CI"},
@@ -43,6 +43,7 @@ JS = (ASSETS / "app.js").read_text()
 def nav_html(current_id):
     links = ['<a href="index.html" class="%s">Home</a>' % ("active" if current_id is None else "")]
     links.append('<a href="ct4-practice-test.html">CT4 Practice Test</a>')
+    links.append('<a href="slide-explainer.html">Slides Explained</a>')
     links.append('<a href="index.html#practice-papers">Example Papers</a>')
     for lec in LECTURES:
         cls = "active" if lec["id"] == current_id else ""
@@ -319,6 +320,12 @@ def build_index():
             f"</a>"
         )
     special_cards = [
+      '<a class="special-card" href="slide-explainer.html">'
+      '<div class="id">Every root PDF · Original slides + easy explanations</div>'
+      '<div class="tag">358 slides · 12 PDFs</div>'
+      '<h3>Every Slide, Explained</h3>'
+      '<p>See each original slide beside its plain-language point, explanation and example. Search all lectures, enlarge diagrams and save understood markers.</p>'
+      '</a>',
       '<a class="special-card" href="ct4-practice-test.html">'
       '<div class="id">Class Test 4 · L28–L33 + L35</div>'
       '<div class="tag">42 questions</div>'
@@ -340,8 +347,7 @@ def build_index():
             f'<div class="id">{html.escape(paper["scope"])}</div>'
             f'<div class="tag">{len(paper["questions"])} questions · {paper["totalMarks"]} marks</div>'
             f'<h3>{html.escape(paper["title"])}</h3>'
-            '<p>Original paper in the reference assessment style, with diagrams, matching, '
-            'marking guides and blank-paper printing.</p></a>'
+            f'<p>{html.escape(paper.get("description", "Original paper in the reference assessment style, with diagrams, matching, marking guides and blank-paper printing."))}</p></a>'
         )
     special_cards = mock_cards + special_cards
     out = INDEX_TEMPLATE.format(css=CSS, nav=nav_html(None), cards="\n".join(cards), special_cards="\n".join(special_cards))
@@ -444,3 +450,6 @@ if __name__ == "__main__":
     build_ct4_test()
     build_mock_papers()
     build_index()
+    if (ROOT / 'slide-explainer' / 'extracted.json').exists():
+        from build_slide_explainer import build as build_slides
+        build_slides()

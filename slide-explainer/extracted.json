@@ -1,0 +1,2592 @@
+[
+  {
+    "file": "L17 - Design Systems and CI.pdf",
+    "id": "L17",
+    "pages": [
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/001.png",
+        "number": 1,
+        "text": "design.systems COS301 · LECTURE 17\n// the golden thread\nBrand Style Guides\n& Design Systems\nHow great teams turn pixels and code into a coherent product story.\nCOS301 L17",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/002.png",
+        "number": 2,
+        "text": "design.systems 01 · INTRODUCTION\n// the problem\nSoftware products are built by many hands.\nWITHOUT A SYSTEM\nWITH A DESIGN SYSTEM\nThree blues. Five button styles. Two date\npickers.\nOne source of truth. One voice. One product.\nEvery team reinvents the wheel.\nDesigners and engineers speak different languages.\nUsers feel the seams, the product feels stitched, not built.\nDecisions are made once, then reused everywhere.\nDesigners ship the canvas, engineers consume it.\nThe product feels deliberate, every screen part of the same story.\n02 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/003.png",
+        "number": 3,
+        "text": "design.systems 01 · INTRODUCTION\n// the central idea\nThe Golden Thread\nA great product feels like one author wrote every word, drew every pixel, and shipped\nevery line of code.\nThat illusion is engineered. The mechanism behind it is the golden thread, a continuous chain of decisions running from values, through\nidentity, through design, into code.\nVALUES\nVOICE\nVISUAL\nPATTERNS\nCODE\nwhat we believe\nhow we speak\nhow we look\nhow we behave\nhow we ship\nBreak the thread anywhere and the user feels it everywhere.\n03 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/004.png",
+        "number": 4,
+        "text": "design.systems 02 · DEFINITIONS\n// terminology\nBrand Style Guide vs. Design System\nBRAND STYLE GUIDE\nDESIGN SYSTEM\nStrategic\nOperational\nThe story of who we are.\nThe toolkit that builds the product.\nStrategic. Human-readable. Lives in a PDF or a microsite.\nOperational. Executable. Lives in code, Figma, and Storybook.\n• Mission, values, voice, tone\n• Logo usage rules and clear-space\n• Colour palette and typography hierarchy\n• Photography direction, illustration style\n• Examples of right and wrong usage\n• Design tokens (colour, spacing, type, motion)\n• Reusable components with documented APIs\n• Patterns, layouts, and accessibility rules\n• Versioning, contribution model, governance\n• Same source of truth for design AND engineering\nAudience\nAudience\nMarketers, writers, agencies, designers\nDesigners, engineers, PMs\n04 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/005.png",
+        "number": 5,
+        "text": "design.systems // before any pixel exists\nThe brand foundation.\nPURPOSE\nWhy we exist\nThe reason beyond profit. The change you want in the world. Stripe: 'increase the\nGDP of the internet.' Patagonia: 'we're in business to save our home planet.'\nVOICE\nHow we sound, always\nThe constant personality. Are you a calm expert? A witty friend? A direct\ntechnician? Voice doesn't change between a marketing email and a 500 error\nmessage.\n03 · BRAND FOUNDATION\nVALUES\nWhat we believe\nNon-negotiable principles that filter every decision. They show up in hiring, in\nroadmap trade-offs, in how you treat users when nobody's watching.\nTONE\nHow we sound, situationally\nVoice's adjustable cousin. A celebration message is warm; a security alert is sober;\nan error is honest and helpful. Same person, different room.\n05 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/006.png",
+        "number": 6,
+        "text": "design.systems 04 · TYPOGRAPHY\n// the invisible voice\nA typeface speaks before a single word is read.\nType carries:\nTHE WORD IS THE SAME.\nERA\nThe feeling is not.\nA serif feels older than a geometric sans. You're locating\nyourself in time.\nTRUSTCambria — institutional, calm\nCLASS\nDisplay fonts read as luxury or as shouting; a humanist sans\nfeels like a person.\nTRUSTImpact — loud, populist\nTRUST\nBanks and governments lean on familiar serifs. Subverting\nthat has a cost.\nTRUSTConsolas — technical, precise\nINFORMATION\nLong-form needs a font with a hard-working body weight\nand proper italic.\nTRUSTGeorgia — editorial, considered\nDENSITY\nx-height, tracking, and weight decide how 'busy' your\ninterface feels.\n06 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/007.png",
+        "number": 7,
+        "text": "design.systems 04 · TYPOGRAPHY\n// type as system\nA type scale is not a list of fonts.\nIt's a relationship between sizes, weights, and line-heights, a hierarchy your eye can navigate without thinking.\nONE SCALE FOR THE WHOLE PRODUCT\nMODULAR SCALE — 1.250 ratio\ndisplay 48 / 56 Display\nMarketing pages and admin panels share the scale. Hierarchy stops being\na per-screen guess.\nLINE-HEIGHT IS PART OF THE TOKEN\nheading-1 32 / 40 Heading 1\nSize without line-height is a half-decision. Pair them; ship them together.\nheading-2 24 / 32 Heading 2\nWEIGHTS ARE A LADDER, NOT A BUFFET\nbody-lg 18 / 28 Body large\nPick 2–3 weights (e.g. 400 / 600 / 700) and use them with intent.\nbody 16 / 24 Body\nREADING WIDTH MATTERS\ncaption 12 / 16 Caption · meta\nBody text wants 50–75 characters per line. Wider columns kill\ncomprehension.\n07 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/008.png",
+        "number": 8,
+        "text": "design.systems // from swatches to semantics\nColour is meaning, not decoration.\nprimary\nsurface\ncard\naccent\nsuccess\n#0B0E11\n#12161B\n#1A1F26\n#4A90F8\n#22C55E\nbackground\nsecondary bg\ntertiary bg\nbrand · action\npositive state\nROLE OVER NAME\n60 / 30 / 10\nName colours by job, not by hue.\nOne dominant. One supporting. One\naccent.\n'color.action' beats 'color.blue'. When you\nrebrand, action stays action, the hex underneath\nchanges once.\nThe dominant carries the surface. The supporting\nstructures content. The accent does the work ,\nactions, focus, identity.\n05 · COLOUR\nwarning\nerror\n#F59E0B\n#F56363\ncaution state\nnegative state\nCONTRAST IS A REQUIREMENT\nWCAG 4.5:1 for body, 3:1 for large.\nIf your brand colour fails contrast, it isn't a brand\ncolour for text. Pair it with a tested neutral.\n08 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/009.png",
+        "number": 9,
+        "text": "design.systems 06 · TOKENS\n// the bridge\nDesign tokens: the contract between design and code.\nA token is a name for a decision. Once named, it can be referenced by Figma, by CSS, by Swift, by Kotlin, every surface speaks the same language.\ntokens.json\nWhat tokens get you\n{\nONE CHANGE, EVERYWHERE\n\"color\": {\n\"action\": { \"value\": \"#4A90F8\" },\nUpdate the action token; every button, link, and focus ring follows. No\nfind-and-replace across 40 components.\n\"surface\": { \"value\": \"#12161B\" },\nTHEMING FOR FREE\n\"text\": { \"value\": \"#E8ECF1\" }\n},\nLight/dark, brand variants, white-label all become token swaps, not parallel\ncodebases.\n\"space\": [0, 4, 8, 12, 16, 24, 32, 48],\n\"radius\": { \"sm\": 4, \"md\": 8, \"lg\": 12 },\nPLATFORM AGNOSTIC\n\"motion\": {\n\"duration\": { \"fast\": 150, \"normal\": 250 },\nTools like Style Dictionary export the same JSON to CSS, iOS, Android, Flutter.\nOne source, many targets.\n\"easing\": { \"standard\": \"cubic-bezier(.2,0,0,1)\" }\n}\n}\n09 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/010.png",
+        "number": 10,
+        "text": "design.systems 07 · COMPONENTS\n// composition\nAtomic Design: small things compose into big things.\nBrad Frost's mental model, a useful map for thinking about reuse.\n01\n02\n03\n04\n05\nATOMS\nMOLECULES\nORGANISMS\nTEMPLATES\nPAGES\nIndivisible primitives\nSmall functional units\nComposed sections\nPage-level structure\nReal content, real\ndata\nExamples\nExamples\nExamples\nExamples\nExamples\nButton, Input, Icon, Label,\nToken\nSearch field, Form row,\nAvatar+Name\nHeader, Card, Comment\nthread\nDashboard layout, Settings\npage\nStripe Dashboard › Payments\nsimple complex\nThe point isn't the labels. The point is: build small, well-tested pieces, then compose. Same as good software engineering.\n10 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/011.png",
+        "number": 11,
+        "text": "design.systems 07 · COMPONENTS\n// anatomy lesson\nA component is a contract, not just a sticker.\nThe button's contract\nButton — eight states. All documented.\nWhat every team member can rely on without asking.\nAction default rest state\nAPI <Button variant intent size leadingIcon disabled loading onClick>\nAction hover +brightness\nSTATES default · hover · active · focus · disabled · loading + variant overrides\nAction active pressed\nAction focused ring · keyboard\nVARIANTS primary · secondary · ghost · danger\nAction disabled no-op, low contrast\nACCESSIBILITY Real <button>, focus visible, keyboard activates, aria-busy when\nloading, label always present (icon-only ⇒ aria-label)\nAction loading spinner · async\nDO / DON'T Action danger destructive variant\nDon't stack two primaries. Don't use disabled in place of permission\nerrors, say why.\nAction ghost transparent fill\n11 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/012.png",
+        "number": 12,
+        "text": "design.systems 08 · STRUCTURE & MOTION\n// rhythm and pace\nThe systems most students forget.\nSPACING\nLAYOUT\nMOTION\nRhythm of the interface\nThe grid that holds it together\nTime is a design dimension\nPick a base unit (commonly 4 or 8px) and use only\nmultiples. The eye reads consistent spacing as\n'designed'; arbitrary spacing as 'rushed'.\nColumns, gutters, breakpoints. Same content\nreflows across mobile, tablet, desktop without\nredesign, because the rules are explicit, not vibes.\nDurations (fast / normal / slow) and easings\n(entrance / standard / exit) are tokens too.\nMotion communicates state changes the user\nwould otherwise miss.\n12-column grid\nduration · easing\nbase × n\nfast 150ms\nnormal 250ms\n4 8 12 16 24 32\nslow 400ms\nEach of these gets a token system. Each one feeds the same golden thread.\n12 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/013.png",
+        "number": 13,
+        "text": "design.systems 09 · ACCESSIBILITY\n// the floor, not the ceiling\nAccessibility is a system property.\nIt can't be bolted on at the end. It has to be baked into every token, every component, every guideline.\nPERCEIVABLE\nOPERABLE\nCan users sense the content?\nCan users drive the interface?\nSufficient colour contrast (WCAG 2.2 AA = 4.5:1 body, 3:1 large). Alt text on\nmeaningful images. Don't rely on colour alone to convey state.\nEvery interactive element reachable by keyboard. Visible focus rings, the focused\nelement should be unambiguous. No keyboard traps.\nUNDERSTANDABLE\nROBUST\nCan users predict behaviour?\nWill it work everywhere?\nConsistent navigation. Plain-language errors that explain what to do. Form fields\nwith proper labels, placeholder is not a label.\nTest with a real screen reader.\nPOUR — perceivable, operable, understandable, robust. The four pillars of WCAG.\n13 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/014.png",
+        "number": 14,
+        "text": "design.systems // systems you can read tonight\nExamples\nEvery one of these is public. Read the docs, read the source, see how a system is actually structured.\nGOOGLE\nSHOPIFY\nIBM\nMaterial 3\nPolaris\nCarbon\nThe reference for token-driven\ntheming and motion.\nStrong content guidelines, voice baked\nin, not bolted on.\nEnterprise scale; multiple frameworks;\nrigorous accessibility.\nSALESFORCE\nGITHUB\nADOBE\nLightning\nPrimer\nSpectrum\nToken architecture across web, iOS,\nAndroid, with theming.\nPragmatic, opinionated, ships with the\nproduct daily.\nCross-platform, math-driven type\nramp, deep accessibility lib.\n12 · IN THE WILD\nATLASSIAN\nAtlassian Design\nExcellent component documentation\nand 'do/don't' patterns.\nUBER\nBase Web\nThemeable React primitives, good\ncode-level reading.\n16 / 18",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/015.png",
+        "number": 15,
+        "text": "design.systems // closing\nIf you remember one thing:\nA design system isn't UI. It's how a team agrees, in\nwriting and in code, what 'good' looks like.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/016.png",
+        "number": 16,
+        "text": "CI/CD Industry\nBest Practices\nWhat we saw in your mini-projects, what production looks like, and the\ngap between the two.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/017.png",
+        "number": 17,
+        "text": "COS301 · CI/CD Industry Best Practices 1\nWhat we saw\n■ CI pipelines that always go green, even when tests fail.\n■ “Integration” tests that mock the database, so nothing integrates.\n■ “E2E” tests that intercept every network call and assert on the mock.\n■ Real test suites excluded from CI by configuration, not by intent.\n■ Production Dockerfiles running dev-mode servers as the root user.\n■ Hardcoded secrets, including factory-default credentials, in compose YAML.\n■ Build artefacts that never leave CI. No CD pipeline at all.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/018.png",
+        "number": 18,
+        "text": "COS301 · CI/CD Industry Best Practices 2\nCI is a contract, not a decoration\n■ A green build means the code is mergeable. If it doesn't, CI is pointless.\n■ Three patterns we saw that quietly break that contract:\n# 1. Suffix on the test command — every failure becomes exit 0\n- run: yarn test || true\n# 2. Workflow-level bypass — failures don't fail the job\n- name: Run tests\nrun: yarn test\ncontinue-on-error: true\n# 3. Empty suite is a passing suite\n- run: jest --passWithNoTests",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/019.png",
+        "number": 19,
+        "text": "COS301 · CI/CD Industry Best Practices 3\nBranch protection is where CI gets its teeth\n■ A passing build with no required checks is just a notification.\n■ On GitHub: Settings → Branches → require status checks to pass before merging.\n■ Require: build, lint, type-check, unit, integration. Make them all blocking.\n■ Require linear history and a review. No force-pushes to main.\n■ Industry rule of thumb: if a check isn't required, assume it will eventually be ignored.\nEXAMPLE\n# .github/branch-protection (or via API / Terraform)\nrequired_status_checks:\nstrict: true # branch must be up-to-date before merge\ncontexts:\n- build\n- lint\n- test-unit\n- test-integration\nrequired_pull_request_reviews:\nrequired_approving_review_count: 1",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/020.png",
+        "number": 20,
+        "text": "COS301 · CI/CD Industry Best Practices 4\nIf you mock the database, you are not integration testing\n■ We saw folders called integration_tests/ where every test mocked Prisma, Supabase, or the DB client.\n■ That's a controller-routing test. Useful, but it does not exercise SQL, migrations, transactions, RLS, or unique constraints.\n■ An integration test boots the real components, end to end inside the process boundary.\n■ Industry standard: spin up a real, ephemeral Postgres as the test db, and seed with test data\nPATTERN — TESTCONTAINERS (NODE)\nimport { PostgreSqlContainer } from \"@testcontainers/postgresql\";\nlet container, pool;\nbeforeAll(async () => {\ncontainer = await new PostgreSqlContainer(\"postgres:16\").start();\npool = new Pool({ connectionString: container.getConnectionUri() });\nawait runMigrations(pool);\n});\nafterAll(async () => { await pool.end(); await container.stop(); });\ntest(\"creates and reads a fault\", async () => {\nconst id = await faultsRepo.create(pool, { ref: \"F-001\" });\nexpect((await faultsRepo.byId(pool, id)).ref).toBe(\"F-001\");\n});",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/021.png",
+        "number": 21,
+        "text": "COS301 · CI/CD Industry Best Practices 5\nEnd-to-end means end to end\n■ We saw Cypress and Playwright suites where every API call was intercepted and replaced with a hardcoded response.\n■ That tests your UI against your imagination of the backend, not the backend.\n■ The contract you actually need to verify, auth, status codes, error shapes, is exactly the part you mocked away.\n■ Real E2E: a deployed-or-local stack with real services, real DB, real auth. Then drive it from the browser.\nUSE cy.intercept FOR THIRD-PARTY SERVICES ONLY\n// ANTI-PATTERN — every response is invented\ncy.intercept('POST', '/api/login', { statusCode: 200, body: { token: 'abc' } });\n// CORRECT — only stub the third-party you can't control in CI\ncy.intercept('POST', 'https://api.stripe.com/**', { fixture: 'stripe-ok.json' });\ncy.visit('/login');\ncy.get('[data-test=email]').type('test@uni.ac.za');\ncy.get('[data-test=password]').type(Cypress.env('TEST_PW'));\ncy.get('[data-test=submit]').click();\ncy.url().should('include', '/dashboard'); // your real backend signed it",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/022.png",
+        "number": 22,
+        "text": "COS301 · CI/CD Industry Best Practices 6\nA test that cannot fail is not a test\n■ We saw expect(true).toBe(true), tests with no expect() at all, and assertions on Tailwind class names.\n■ We also saw expect(...).not.toThrow without the parentheses, that's a property reference, not a call. It always passes.\n■ Assert behaviour, not the implementation. Test what the user sees or what the API returns — never the CSS class soup in\nbetween.\n// VACUOUS — passes no matter what\nexpect(true).toBe(true);\nexpect(thing).not.toThrow; // missing () — never executes\n// BRITTLE — restyle the page, suite goes red\nexpect(container.querySelector('.shadow-xl')).toBeInTheDocument();\n// BEHAVIOURAL — survives a redesign\nawait user.click(screen.getByRole('button', { name: /submit fault/i }));\nexpect(await screen.findByText(/reference: F-\\d+/)).toBeVisible();",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/023.png",
+        "number": 23,
+        "text": "COS301 · CI/CD Industry Best Practices 7\nThe shape of a healthy suite\nMany fast unit tests, fewer integration tests, a small number of true E2E tests.\nWhy this shape?\nE2E few · slow · highest fidelity\n■ Unit tests catch the most bugs per second of CI\nIntegration real DB, real services, in-process\nUnit many · ms-fast · isolated logic\ntime.\n■ Integration tests catch the wiring problems\nunits miss.\n■ E2E tests prove the system works for a real\nuser, slow and flaky, so keep them few and\nmeaningful.\n■ If your suite is shaped like an ice-cream cone\n(lots of E2E, no units), CI gets slow and\nunreliable.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/024.png",
+        "number": 24,
+        "text": "COS301 · CI/CD Industry Best Practices 8\nMulti-stage builds: ship the binary, not the toolchain\n■ A single-stage image carries the compiler, build tools, source code, and devDependencies into production.\n■ That's 2–3× the size and a much larger attack surface, every extra binary is something an attacker can pivot through.\n■ Multi-stage: compile in a builder image, copy only the runtime artefacts into a slim final image.\n# ---- builder ----\nFROM node:20-alpine AS builder\nWORKDIR /app\nCOPY package.json yarn.lock ./\nRUN yarn install --frozen-lockfile COPY . .\nRUN yarn build # ---- runner ----\nFROM node:20-alpine AS runner\nWORKDIR /app\nENV NODE_ENV=production\nCOPY package.json yarn.lock ./\nRUN yarn install --frozen-lockfile --production COPY --from=builder /app/dist ./dist\nUSER node\nCMD [\"node\", \"dist/main.js\"]\n# full deps, including dev\n# emits ./dist\n# prod deps only",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/025.png",
+        "number": 25,
+        "text": "COS301 · CI/CD Industry Best Practices 9\nContainers should not run as root\n■ Default behaviour: every process in a container runs as UID 0, root inside the namespace.\n■ If anything breaks the isolation, the process is already root on the host. Worst-case scenario, given for free.\n■ node:20-alpine ships a non-root node user (UID 1000) already. Adding USER node is one line.\n■ Kubernetes restricted PodSecurity rejects root containers outright. CIS Docker Benchmark 4.1 too.\nWHAT IS A CONTAINER ESCAPE?\nContainers share a kernel with the host. A container escape is a vulnerability, in the runtime (runc, containerd), the kernel, or a misconfigured mount, that lets a\nprocess inside the container reach the host. Real examples: CVE-2019-5736 (runc), CVE-2022-0185 (kernel fsconfig), CVE-2024-21626 (runc leaked file descriptors). If\nthe container ran as root, the escaped process is root on the host. If it ran as UID 1000, the escaped process is an unprivileged user, much less interesting to an\nattacker.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/026.png",
+        "number": 26,
+        "text": "COS301 · CI/CD Industry Best Practices 10\nSecrets do not belong in your repo\n■ We saw plaintext DB passwords in compose files, JWT secrets like supersecret, and the canonical minioadmin:minioadmin\ndefaults exposed on host ports.\n■ Default credentials are scanned for continuously, by Shodan, by GitHub, by every script kiddie.\n■ Inject secrets at runtime from a real secret store: GitHub Actions secrets for CI, Vault / AWS Secrets Manager / Doppler for prod.\n■ Fail closed. If a required secret is missing, crash the process. Never fall back to a default.\n# ANTI-PATTERN — functional weak default; app starts on 'postgres' if env is missing\nDB_PASSWORD: ${DB_PASSWORD:-postgres}\n# CORRECT — no fallback. Compose interpolation fails the boot.\nDB_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD must be set}\n# In application code:\nconst jwtSecret = process.env.JWT_SECRET;\nif (!jwtSecret || jwtSecret.length < 32) {\nthrow new Error(\"JWT_SECRET missing or too short — refusing to start\");\n}",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/027.png",
+        "number": 27,
+        "text": "COS301 · CI/CD Industry Best Practices Pin everything you depend on\n■ node:20-alpine is a moving target. The minor version, patch level, and Alpine release all float.\n■ :latest is wors, the same Dockerfile builds a different image every week.\n■ Reproducible builds need a digest pin: image@sha256:....\n■ Renovate or Dependabot can keep pinned digests up to date with a PR per bump.\n■ Same goes for GitHub Actions: pin actions/checkout@<sha>, not @v4.\n# floating — different image every week\nFROM node:20-alpine\n# better — patch-pin, but Alpine still floats\nFROM node:20.11.1-alpine3.19\n# best — content-addressed digest, byte-for-byte reproducible\nFROM node:20.11.1-alpine3.19@sha256:f4c96a28c0b2d8b4f1f4f2b3d5a...\n# Same pattern in CI:\n- uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1\n11",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/028.png",
+        "number": 28,
+        "text": "COS301 · CI/CD Industry Best Practices 12\nLimits and health checks: how the platform knows you're alive\n■ No memory limit means one leaking container can OOM the entire host and take down every sibling service.\n■ No health check means depends_on waits for the container to start, not for it to be ready to serve traffic.\n■ A health check is an HTTP endpoint that returns 200 only when the app is actually serving, DB connected, migrations applied,\nqueues subscribed.\n■ Industry: liveness (am I alive?) and readiness (am I ready to take traffic?) are separate concerns. Kubernetes treats them\ndifferently.\nservices:\napi:\nimage: my-api@sha256:...\ndeploy:\nresources:\nlimits: { cpus: \"1.0\", memory: \"512M\" }\nreservations: { cpus: \"0.25\", memory: \"128M\" }\nhealthcheck:\ntest: [\"CMD\", \"wget\", \"-qO-\", \"http://localhost:3000/health\"]\ninterval: 10s\ntimeout: 3s\nretries: 5\ni d i d d i b",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/029.png",
+        "number": 29,
+        "text": "COS301 · CI/CD Industry Best Practices 13\nBuild the artefact once. Promote it through environments.\n■ Anti-pattern: rebuild the image for staging, rebuild it again for production. The thing you tested is not the thing you shipped.\n■ Industry pattern: one immutable artefact tagged by commit SHA, promoted by changing where it's deployes, not by rebuilding.\n■ Tag images with the git SHA. Optionally also a semver tag. Never just :latest.\n■ Sign the image (cosign). Generate an SBOM (syft). Scan for CVEs (trivy, grype) before promotion.\n# build & push once, in CI on merge to main\ndocker buildx build \\\n--platform linux/amd64,linux/arm64 \\\n-t ghcr.io/org/api:${GITHUB_SHA} \\\n-t ghcr.io/org/api:main \\\n--push .\n# scan and sign\ntrivy image --exit-code 1 --severity HIGH,CRITICAL ghcr.io/org/api:${GITHUB_SHA}\ncosign sign --yes ghcr.io/org/api:${GITHUB_SHA}\n# deploy: change the tag in staging, then prod — never rebuild\nkubectl set image deploy/api api=ghcr.io/org/api:${GITHUB SHA} -n staging",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/030.png",
+        "number": 30,
+        "text": "COS301 · CI/CD Industry Best Practices 14\nSupply chain security\nWhere industry has spent the last five years catching up to attackers.\n■ SBOM: Software Bill of Materials. A machine-readable inventory of every dependency in your image. Required by US Executive Order\n14028 for federal vendors. Generate with syft.\n■ Image signing: sign images with cosign and verify signatures at deploy time. Stops registry tampering.\n■ Dependency scanning: Dependabot or Renovate for source deps, Trivy or Grype for OCI images. Run on every PR; block on Critical CVEs.\n■ Lockfiles: commit them. yarn.lock, package-lock.json, poetry.lock. Without them, two builds an hour apart can pull different code.\n■ Real-world reminders: SolarWinds (2020), event-stream npm (2018), xz-utils backdoor (2024). The dependency you don't audit is someone\nelse's attack vector.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/031.png",
+        "number": 31,
+        "text": "COS301 · CI/CD Industry Best Practices What a real pipeline looks like end to end\nLint\n+ Type-check\nUnit\nIntegration\n+ Build\nScan\n+ Sign\nseconds, never skipped\nfast feedback, blocks PR\nreal DB, build the image once\ntrivy, cosign, SBOM\n■ Every stage runs on every PR. Every stage is a required check.\n■ Build the image once, in the integration stage. Scan and sign it. Promote that exact digest to staging, then to prod.\n■ The slowest stage drives merge velocity — keep unit tests under 2 minutes, integration under 10.\n■ If a stage flakes, you fix the test or quarantine it. You do not add continue-on-error.\n16\nDeploy\n→ staging → prod\npromote, don't rebuild",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L17/032.png",
+        "number": 32,
+        "text": "COS301 · CI/CD Industry Best Practices\nQuestions.\nCOS301 · CI/CD Industry Best Practices",
+        "width": 960
+      }
+    ],
+    "sourceSha256": "f521132b903295fc29554630783ec189c05d8335e0fddfb1bd0f4c59a411dfb8"
+  },
+  {
+    "file": "L18 - Domain Modelling and Architectures(1).pdf",
+    "id": "L18",
+    "pages": [
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/001.png",
+        "number": 1,
+        "text": "DOMAIN MODELLING RECAP\n+\nARCHITECTURE RECAP\nCOS301\nAVINASH SINGH\nDEPARTMENT OF COMPUTER SCIENCE\nUNIVERSITY OF PRETORIA",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/002.png",
+        "number": 2,
+        "text": "DOMAIN MODELLING\n• Class – a class is a type\n• An abstraction\n• Groups objects\n• Attribute – define class properties\n• Operation – define behaviour of objects\n• Object – instance of a class\n• Encapsulation – defining / store properties and behaviour of a class / object\n• Polymorphism – can assume more than one form",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/003.png",
+        "number": 3,
+        "text": "DOMAIN MODELLING\n• UML class diagram is a structural\ndiagram.\n• It shows the classes, their attributes and\noperations, and relationships between\nthe classes.\n• Domain model is represented by a class\ndiagram without showing the\noperations.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/004.png",
+        "number": 4,
+        "text": "RELATIONSHIPS SUMMARY\nNotion Notation\nInheritance\n(between classes)\nIS-A relationship\nAggregation\n(between classes)\npart-of relationship\nComposition\n(between classes)\naggregate exclusively\nowns the part\npointing from\nsubclass to super-\nclass\npointing from\npart to aggregate\n(diamond at\naggregate side)\npointing from\npart to composite\nExample\nEmployee\nManager\nCar\nEngine\nBuilding\nRoom",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/005.png",
+        "number": 5,
+        "text": "DOMAIN MODELLING PROCESS STEPS\n1) Collecting application\ndomain information\nfocus on the functional requirements\nalso consider other requirements and\ndocuments\nalso consider business descriptions\n2) Brainstorming\nlist important application domain concepts\nlist their properties/attributes\nlist their relationships",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/006.png",
+        "number": 6,
+        "text": "DOMAIN MODELLING PROCESS STEPS\n3) Classifying the domain\nconcepts into:\nclasses\nattributes / attribute values\nrelationships\n• association, inheritance, aggregation\n4) Visualizing the result\nusing a UML class diagram",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/007.png",
+        "number": 7,
+        "text": "PITFALLS\nGet the model wrong and every layer above it inherits the confusion. Get it right and the architecture writes itself.\nW H A T Y O U S E E\nSymptoms of a bad domain model.\nW H A T ' S A C T U A L L Y W R O N G\nThe model doesn't match the business.\n• Every feature requires touching ten files.\n• Two devs use the same word to mean different things.\n• Business says 'ship quickly'; the codebase says no.\n• Bugs cluster around the same area for months.\n• Rewrites get pitched. Often.\n• Boundaries drawn around tables, not around concepts.\n• Vocabulary is technical, not what users actually say.\n• Rules scattered across services and helpers.\n• Data flow modelled, behaviour ignored.\n• Architecture chosen before the domain was understood.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/008.png",
+        "number": 8,
+        "text": "ENTITY VS VALUE OBJECT: IDENTITY IS THE TEST.\nAsk: 'if I changed every field, would it still be the same thing?' Yes → entity. No → value object.\nE N T I T Y\nCustomer\nV A L U E O B J E C T\nMoney\nHas an ID. Two customers with the same name are still different people. Can change email\nand remain the same customer.\nNo ID. R100 ZAR is R100 ZAR — interchangeable. Can't 'change'; you replace it. Equality\ncompares fields.\nclass Customer {\nreadonly id: CustomerId;\nemail: Email;\nstatus: CustomerStatus;\nclass Money {\nconstructor(\nreadonly amount: Decimal,\nreadonly currency: Currency,\n) {}\nchangeEmail(e: Email) {\nthis.email = e;\nthis.emit(EmailChanged);\n}\n}\nadd(other: Money): Money {\nreturn new Money(\nthis.amount.plus(other.amount),\nthis.currency);\n} }",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/009.png",
+        "number": 9,
+        "text": "ARCHITECTURE\nSoftware architecture is the fundamental organization of a software system. It serves as\na high-level \"blueprint\" that defines the structures, components, and relationships\nbetween different parts of the system to ensure it meets both technical and business\nrequirements\nAn architecture is technology neutral (NO Technologies!!!)",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/010.png",
+        "number": 10,
+        "text": "ARCHITECTURE\nStructural Elements: Defining the major modules, subsystems, and\ndatabases.\nCommunication: Determining how these components interact via APIs,\nmessaging, or data buses.\nQuality Attributes: Prioritizing \"ilities\" such as scalability,\nmaintainability, security, and reliability.\nTrade-offs: Balancing conflicting needs, such as choosing between\nspeed of development and high performance.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/011.png",
+        "number": 11,
+        "text": "HOW TO CHOOSE?\n01 How well do you actually understand the domain?\n02 How many teams will work on it concurrently?\nDon't know yet → monolith. Stable model → start splitting.\n1–2 → one deployable. 5+ → microservices may pay off.\n03 Where's the read/write asymmetry?\n04 Does history matter as much as current state?\nEqual → same model. Reads >> writes → consider CQRS.\nAudit, finance, healthcare → event sourcing earns its place.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/012.png",
+        "number": 12,
+        "text": "N-LAYER ARCHITECTURE\nHorizontal Decomposition Organizes concerns into logical layers. Each\nlayer has a specific responsibility\n(Presentation, Business, Data).\nSeparation of Concerns\nLayers only communicate with adjacent\nlayers. This enhances modifiability and\nallows layers to be developed\nindependently.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/013.png",
+        "number": 13,
+        "text": "N-LAYER ARCHITECTURE",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/014.png",
+        "number": 14,
+        "text": "4-LAYER ARCHITECTURE",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/015.png",
+        "number": 15,
+        "text": "N-TIER ARCHITECTURE\nVertical Decomposition\nOrganizes concerns into physical tiers.\nEach tier has a specific responsibility\nand is physically seperated.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/016.png",
+        "number": 16,
+        "text": "3-TIER ARCHITECTURE",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/017.png",
+        "number": 17,
+        "text": "MICROSERVICES ARCHITECTURE\nDecentralized Control\nApplications are split into small,\nautonomous services that communicate\nover lightweight protocols (REST/gRPC).\nIndependent Deployment\nEach service has its own lifecycle, allowing\nteams to deploy updates without affecting\nthe entire system.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/018.png",
+        "number": 18,
+        "text": "MICROSERVICES",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/019.png",
+        "number": 19,
+        "text": "No Technologies!!",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/020.png",
+        "number": 20,
+        "text": "EVENT-DRIVEN ARCHITECTURE\nAsynchronous Nature: Systems respond to \"events\" (state\nchanges) rather than direct commands.\nPublish/Subscribe: Producers send events to a broker;\nconsumers listen for specific events.\nExtreme Scalability: Ideal for systems requiring high\nthroughput and low coupling between modules.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/021.png",
+        "number": 21,
+        "text": "EVENT-DRIVEN ARCHITECTURE\nP R O S\nC O N S\nU S E W H E N\n• Eventual consistency by default — no 'after this,\n• Producers don't know who's listening — true\ndecoupling.\n• Add a new consumer without touching the\nproducer.\n• Buffers absorb spikes; system stays responsive.\nthat'.\n• Debugging crosses async boundaries — needs\ntracing.\n• Schema evolution is hard once N consumers\ndepend on event v1.\n• High-throughput pipelines (orders, telemetry, IoT).\n• Multiple consumers care about the same fact.\n• You want to add capabilities later without\nredeploying.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/022.png",
+        "number": 22,
+        "text": "EVENT-DRIVEN ARCHITECTURE",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/023.png",
+        "number": 23,
+        "text": "SERVICE-ORIENTED ARCHITECTURE (SOA)\nInteroperability: Diverse systems communicate via an\nEnterprise Service Bus (ESB).\nGranularity: Coarse-grained services compared to\nmicroservices.\nSOAP/WSDL: Often relies on formal contracts and heavy\nprotocols.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/024.png",
+        "number": 24,
+        "text": "SOA",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/025.png",
+        "number": 25,
+        "text": "COMMAND QUERY RESPONSIBILITY\nSEGREGATION (CQRS)\nSeparates read operations (Queries) from write operations\n(Commands).\nAllows independent scaling of read and write workloads and\nenables the use of different data models for reading and writing.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/026.png",
+        "number": 26,
+        "text": "CQRS\nW H E N I T F I T S\nW H E N I T D O E S N ' T\n• Read patterns wildly different from write patterns.\n• Reports / dashboards that crush the OLTP DB.\n• Audit + history matter (pairs naturally with event sourcing).\n• CRUD app where 'show me the record I just edited' is the norm.\n• Team uncomfortable with eventual consistency between models.\n• You haven't proven a single read-model bottleneck yet.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/027.png",
+        "number": 27,
+        "text": "",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/028.png",
+        "number": 28,
+        "text": "MODEL-VIEW-CONTROLLER (MVC)\nModel\nRepresents the data structure\nand business logic. It notifies\nthe view of state changes.\nController\nThe \"Brain.\" Receives input,\nupdates the model, and selects\nthe appropriate view.\nView\nThe Presentation. Renders data\nfrom the model into a user-\nfriendly interface.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/029.png",
+        "number": 29,
+        "text": "PATTERN EVOLUTION: MVVM VS. MVT\nFeature MVVM (Model-View-\nViewModel) MVT (Model-View-Template)\nIntermediary ViewModel (Data-binding\nfocus) View (Controller-like logic)\nUI Rendering Client-side (Angular, Vue,\nReact) Server-side (Django)\nCore Strength Complex UI interaction/state Rapid content-heavy dev\nDependency Loosely coupled via events Django handles the \"Control\"\nflow",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/030.png",
+        "number": 30,
+        "text": "",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/031.png",
+        "number": 31,
+        "text": "",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/032.png",
+        "number": 32,
+        "text": "",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/033.png",
+        "number": 33,
+        "text": "",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L18/034.png",
+        "number": 34,
+        "text": "",
+        "width": 960
+      }
+    ],
+    "sourceSha256": "a9b17ddea43ceac34b9a810169e7024d81dace58769dc1bac39af5689d435d70"
+  },
+  {
+    "file": "L19 - Software testing in Practice.pdf",
+    "id": "L19",
+    "pages": [
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/001.png",
+        "number": 1,
+        "text": "Software testing\nin Practice\nInventors + Innovators\nCreating digital technology that empower organisations to be leaders in their field.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/002.png",
+        "number": 2,
+        "text": "Your guides for today…\nNEIL KOTZ É\nCTO\n17 Years’ Experience\nBEng (Electronic Engineering)\nJACO VENTER\nICT Partner\n14 Years’ Experience\nMSCA\nPIETER MOUTON\nChief Talent Officer\n24 Years’ Experience\nBEng (Electronic Engineering)",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/003.png",
+        "number": 3,
+        "text": "Welcome to a world of\nInventors + Innovators\nGet results – the proven team and method to create your software, apps and electronics.\nBe unmatched. We create,\nand you own your technology.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/004.png",
+        "number": 4,
+        "text": "What we build\nAdvanced Electronics\nFirmware, hardware-software products, connected\ndevices, and systems where the digital layer must meet\nthe physical world.\nCustom Software\nOperational systems, portals, workflow tooling, customer\nplatforms, and internal applications built around specific\nbusiness processes.\nMobile Apps\nApps for distributed teams, delivery operations,\ninspections, service workflows, and real-world\ndecision-making at the edge.\nSystem Integrations & Data\nAPI integrations, orchestration, visibility layers,\nand systems that connect teams, tools, devices,\nand business data.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/005.png",
+        "number": 5,
+        "text": "M e e t t h e t e a m\n1 : 350",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/006.png",
+        "number": 6,
+        "text": "B y t h e n u m b e r s\n500+\n40 000 000+\nSuccessfully completed\nprojects over the past\n25+ years.\nLives touched daily by\nthe tech we build.\n90+\nEngineers, computer\nscientists and UX/UI\nspecialists in our team.\n500+\nYears of combined\nproduct and solution\ndevelopment experience.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/007.png",
+        "number": 7,
+        "text": "Inventors + InnovatorsCreating digital technology that empower organisations to be leaders in their field.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/008.png",
+        "number": 8,
+        "text": "Why bother?\nA horror story, and some learnings…",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/009.png",
+        "number": 9,
+        "text": "HR Portal\n• Developed to run on SharePoint\n• Customisable data structure and\nworkflows\n• No local development environment and\nextremely slow deployment\n• Painful release cycles\n• Users were very unhappy\n[*Example customisable HR portal]",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/010.png",
+        "number": 10,
+        "text": "Reasons this got so bad\n• Only caught issues in production.\n• Business logic was heavily coupled to the platform.\n• Development environment was extremely inefficient.\n• It was hard to work as a team.\n• There was a negative compounding effect.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/011.png",
+        "number": 11,
+        "text": "Some learnings…\n• Your reputation is affected by the quality of the software you\nrelease.\n• The hard part of software engineering is ensuring software keeps\nworking with changes over time.\n• We should have had more automated tests…",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/012.png",
+        "number": 12,
+        "text": "Question time!\n• How would automated tests have helped prevent the challenges?\n• We would’ve caught issues early on in development process.\n• Writing tests forces you to abstract out external dependencies and isolate\nlogic.\n• Testing changes in the development environment would’ve been much\nfaster.\n• Tests would catch when team member’s changes interfered and broke\nother code.\n• Testing has a positive compounding effect as well.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/013.png",
+        "number": 13,
+        "text": "How to get started",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/014.png",
+        "number": 14,
+        "text": "Testing Attitude\n• Your attitude towards testing determines the value.\n• Good tests lead to acceleration instead of overhead.\n• A test suite is a fast feedback mechanism.\n• It helps you refactor and abstract dependencies in your code correctly.\n• It makes sure that a growing code base remains maintainable.\n• Tests should not be an afterthought. It is development.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/015.png",
+        "number": 15,
+        "text": "Testing concepts\n• Unit → Does this one piece of logic do what it\nclaims?\n• Integration → Do these pieces work together?\n• Functional → Does this feature behave as\nintended?\n• E2E → Does the whole journey work, from the\nuser's perspective?\n• Load → Does it hold up when the users show\nup?",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/016.png",
+        "number": 16,
+        "text": "Implementing tests\n• Design code to be testable.\n• Name tests appropriately\n• The names should immediately tell you what failed.\n• Tests can serve as self-documentation of the behaviour of a system.\nVS.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/017.png",
+        "number": 17,
+        "text": "Code Coverage\n• Is a metric to show how much of your\ncode is being tested.\n• Tools can show which lines of code is\nexecuted, and which branches are\ntraversed.\n• What percentage of code must be\ncovered?",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/018.png",
+        "number": 18,
+        "text": "Test-Driven Development [Red-Green-Refactor]\n• Write the tests first, which\nwill fail.\n• Implement the code to\nmake the tests pass.\n• Refactor the code to clean\nit up.\n• It eliminates premature\noptimisation.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/019.png",
+        "number": 19,
+        "text": "Testing strategy\n• Continuous Integration\n• Tests should run on every code change.\n• Pull Requests cannot succeed unless tests have passed.\n• This ensures that teams can collaborate and deliver quality together.\n• User Acceptance Testing\n• Not all testing can be automated. Some features does require human\nverification.\n• Humans can break things in unexpected ways. A really good tester is an\nextremely valuable person in the team.\n• It’s better to catch the unexpected end-user action in testing than in\nproduction.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/020.png",
+        "number": 20,
+        "text": "Testing strategy - advanced\n• Smoke tests → can be used to verify limited critical paths to verify\na deployment.\n• Feature switches / dark features → ship code without exposing it.\nDecouples deployment from release.\n• Canary releases → used to reduce risk or test user reaction.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/021.png",
+        "number": 21,
+        "text": "Automated tests\nhave a\ncompounding\neffect.\nKey take aways\nPlan for testing.\nDesign for\ntestability.\nImplement\nagainst tests.\nHave a testing\nstrategy.\nExecute tests\nconsistently.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L19/022.png",
+        "number": 22,
+        "text": "Questions?\nLet’s keep in touch\ncareers@gendac.co.za\nInventors + Innovators\nCreating digital technology that empower organisations to be leaders in their field.",
+        "width": 960
+      }
+    ],
+    "sourceSha256": "495974a62e14d4ab9ca0af2266bf7c6ce306d9e10be7ce801dc6e4bbc00fb005"
+  },
+  {
+    "file": "L20 - Designed for Humans.pdf",
+    "id": "L20",
+    "pages": [
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/001.png",
+        "number": 1,
+        "text": "Designed for Humans\nThe UI/UX Sur vival Guide for Developers",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/002.png",
+        "number": 2,
+        "text": "Who are we?\nIan Richter\nSoftware Engineer\nEPI-USE Labs\nSaskia Steyn\nAssociate Software Engineer\nEPI-USE Labs",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/003.png",
+        "number": 3,
+        "text": "Why design matters for developers\nDevelopers tend to focus on functionality\nDoes it work?\nIs it fast?\nAre all t he features t here?\nUsers experience software different ly\nWhen done right, good design is invisible\nWhen done wrong, bad design is frustrating\nIf a product frustrates us enough, we stop using it\nIt ’s wor t h caring about t he user experience of your software",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/004.png",
+        "number": 4,
+        "text": "Proper ties of a good product\nDesirable\nGreat user experience\nUseful Usable",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/005.png",
+        "number": 5,
+        "text": "How to design usable products\nDon’t Make Me Think",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/006.png",
+        "number": 6,
+        "text": "User-centred\nBiggest mindset shift in UX\nStop t hinking about how t he system works\nStar t t hinking about what goal t he user wants to achieve\nMove from an implementation model to a user mental model\nImplementation model → How t he code works\nUser mental model → How t he user t hinks it works\nYour product is not t he goal",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/007.png",
+        "number": 7,
+        "text": "Constraints\nPrevents users from per forming cer tain actions\nGood design prevents mistakes before t hey happen\nInstead of showing errors after mistakes\nGuide users towards valid actions\nBenefits of constraints\nReduce confusion and decision-making effor t\nMake inter faces feel safer and more predictable",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/008.png",
+        "number": 8,
+        "text": "Constraints\nDate of bir th\n16 Apr 2003\nDate of bir th\n2003/04/16\nHa! Wrong format.\nTr y again.\nMay 2003\nS M T W T F S\n29 30 31 1 2 3 4\n5 6\n8 9 10 11\n7\n12 13 14 15 16 17 18\n19 20 21 22 23 24 25\n26 27 28 29 30 1 2",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/009.png",
+        "number": 9,
+        "text": "Discoverability\nMake t he possible actions obvious\nUsers should not have to stop and t hink about your inter face\nGood discoverability means users can:\nEasily see t he available actions\nPredict what will happen before clicking\nExplore t he inter face wit hout fear of breaking somet hing\nGood inter faces communicate how t hey work",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/010.png",
+        "number": 10,
+        "text": "Discoverability\nWhat do t hese do?\nAdd Edit Delete\nMore actions",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/011.png",
+        "number": 11,
+        "text": "Feedback\nUsers should always know what is going on\nEver y action should have a visible response\nLoading page? → Show skeleton screen\nButton clicked? → Show spinner\nShow t he current state of t he system\nUser should not need to remember what happened\nInter face should give t he answer\nGood feedback → App feels responsive and predictable",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/012.png",
+        "number": 12,
+        "text": "Create task\nCreate task\nFeedback\n5 seconds later...\nCreate task\nDid it work?\nCreate task\nClick\nCreate task\nClick\nImmediately show\nbusy state\nTask created\nShow aler t when done",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/013.png",
+        "number": 13,
+        "text": "The Paradox of Choice\nCommon misconception\nMore options → More freedom → More power to user\nThe paradox\nMore options → Fewer actions taken → Less power to user\nGood design reduces number of decisions a user has to make at once\nProgressive disclosure\nShow only t he most relevant choices\nReveal more options when t he user looks for it",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/014.png",
+        "number": 14,
+        "text": "The Paradox of Choice\nCreate Create list Impor t Discover Create Create\nCreate list\nImpor t\nDiscover",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/015.png",
+        "number": 15,
+        "text": "How to design desirable products\nMake It Easy on the Eyes",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/016.png",
+        "number": 16,
+        "text": "Hierarchy\nVisual hierarchy is about creating structure in an inter face\nCommon mistakes\nBright colours ever ywhere\nLarge or bold text ever ywhere\nIf ever yt hing is emphasized, not hing is emphasized\nCreate hierarchy using:\nSpacing\nSize\nWeight\nColour",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/017.png",
+        "number": 17,
+        "text": "Whitespace\nUse plenty of whitespace to let your inter face breat he\nSetup two-factor authentication\nEver y time you sign in to your account, you will\nneed your password and ver tification code.\nStep 1 of 3\nSetup your phone\nEnter t he phone number you would like to use.\nCountr y Phone number\nSout h Africa +27 80 123 4567 Next step\nSetup two-factor authentication\nEver y time you sign in to your account, you will\nneed your password and ver tification code.\nStep 1 of 3\nSetup your phone\nEnter t he phone number you would like to use.\nCountr y Phone number\nSout h Africa +27 80 123 4567 Next step",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/018.png",
+        "number": 18,
+        "text": "Ambiguous spacing\nRelated items should have less space between t hem t han unrelated items\nContact details\nFirst name\nJohn\nLast name\nDoe\nEmail\njohn@example.com\nContact details\nFirst name\nJohn\nLast name\nDoe\nEmail\njohn@example.com",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/019.png",
+        "number": 19,
+        "text": "Font pairings\nChoose one or two fonts t hat work well toget her and use weights for variation\nSetup two-factor authentication\nEvery time you sign in to your account,\nyou will need your password and\nvertification code.\nStep 1 of 3 Setup two-factor authentication\nEver y time you sign in to your account, you will\nneed your password and ver tification code.\nStep 1 of 3\nSetup your phone\nEnter the phone number you would like to use.\nCountry Phone number\nSout h Africa +27 80 123 4567 Next step\nSetup your phone\nEnter t he phone number you would like to use.\nCountr y Sout h A frica Phon e nu mber\n+27 80 123 4567 Ne xt step",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/020.png",
+        "number": 20,
+        "text": "Font pairing ideas\nPair a serif font for headings wit h a sans-serif font for body text, or vice versa\nInter & Roboto\nHeading\nLorem ipsum dolor sit amet, consectetur\nadipiscing elit. Quisque a nibh eu diam\ncondimentum molestie. Fusce tincidunt\nmauris metus, vel imperdiet tellus\nconsequat sed. Morbi nec ante ut mauris\niaculis facilisis.\nDM Serif & Inter\nHeading\nLorem ipsum dolor sit amet,\nconsectetur adipiscing elit. Quisque a\nnibh eu diam condimentum molestie.\nFusce tincidunt mauris metus, vel\nimperdiet tellus consequat sed. Morbi\nnec ante ut mauris iaculis facilisis.\nRoboto Mono & IBM Plex Serif\nHeading\nLorem ipsum dolor sit amet ,\nconsectetur adipiscing elit . Quisque a\nnibh eu diam condimentum molestie.\nFusce tincidunt mauris metus, vel\nimp erdiet tellus conse quat se d . Morbi\nnec ante ut mauris iaculis facilisis.\nCheck out websites like Font Pair for inspiration",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/021.png",
+        "number": 21,
+        "text": "Line heights\nParagraphs needs larger line heights t han headings or buttons\n0.8x\nHeading text with multiple lines\nLorem ipsum dolor sit amet,\nconsectetur adipiscing elit. Integer\net elit semper, tempor nibh at,\ntincidunt ipsum. Nulla vitae luctus\nante. Nunc fringilla rhoncus placerat.\nDonec quis elementum leo, eget\ntincidunt arcu. Praesent sed dolor\nvitae magna laoreet hendrerit. Duis\nquis eros laoreet, facilisis felis non,\naliquet ante.\n1.0x\n1.0x\nHeading text with\nmultiple lines\nLorem ipsum dolor sit amet,\nconsectetur adipiscing elit. Quisque\na nibh eu diam condimentum\nmolestie. Fusce tincidunt mauris\nmetus, vel imperdiet tellus\nconsequat sed. Morbi nec ante ut\nmauris iaculis facilisis.\n1.5x\n1.3x\nHeading text with\nmultiple lines\nLorem ipsum dolor sit amet,\nconsectetur adipiscing elit. Quisque\na nibh eu diam condimentum\nmolestie. Fusce tincidunt mauris\nmetus, vel imperdiet tellus.\n2.0x\nToo tight Just right Too loose",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/022.png",
+        "number": 22,
+        "text": "Line lengths\nAvoid long lines of unbroken text longer t han roughly 80 character per line.\n~120 characters\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a nibh eu diam condimentum molestie. Fusce tincidunt mauris metus,\nvel imperdiet tellus consequat sed. Morbi nec ante ut mauris iaculis facilisis. Morbi hendrerit lorem quis eros interdum semper. Aenean\nornare, quam id sodales finibus, lectus magna mattis risus, quis por ta orci diam vitae ligula. Vivamus ultricies tellus quis velit tincidunt\ndictum. Praesent ac rhoncus leo. Cras congue ultricies erat.\n~80 characters\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque a nibh eu diam\ncondimentum molestie. Fusce tincidunt mauris metus, vel imperdiet tellus\nconsequat sed. Morbi nec ante ut mauris iaculis facilisis. Morbi hendrerit lorem\nquis eros interdum semper. Aenean ornare, quam id sodales finibus, lectus\nmagna mattis risus, quis por ta orci diam vitae ligula. Vivamus ultricies tellus quis\nvelit tincidunt dictum. Praesent ac rhoncus leo. Cras congue ultricies erat.",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/023.png",
+        "number": 23,
+        "text": "Inbox\nStarred\nChannels\nDesign\nEngineering\nMarketing\nSuppor t\nSales\nColour\nUse colour sparingly and prefer a limited palette wit h shades\nDesign\nDesign\nInbox\nStarred\nOops!\nSorr y, t here seems to be a problem wit h your connection\nOops!\nSorr y, t here seems to be a problem wit h your connection\nSarah Por ter\nNo problem! I’ll upload t hem once I’ ve polished t hem a bit\nmore.\nSamant ha Ramos\nDid anyone take a photo of t he drawing we made on t he\nwhiteboard?\nTiffany Mayers\nYep! I put a few photos in t he shared folder :)\nChannels\nDesign\nEngineering\nMarketing\nSuppor t\nSales\nSarah Por ter\nNo problem! I’ll upload t hem once I’ ve polished t hem a bit\nmore.\nSamant ha Ramos\nDid anyone take a photo of t he drawing we made on t he\nwhiteboard?\nTiffany Mayers\nYep! I put a few photos in t he shared folder :)\nType your message\nType your message",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/024.png",
+        "number": 24,
+        "text": "Colour palettes\nUse existing colour palettes to easily produce beautiful designs\nCheck out websites like Coolors for inspiration",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/025.png",
+        "number": 25,
+        "text": "Colour contrast\nEnsure text has sufficient contrast wit h t he background it ’s placed on\nYour 30 day free trial has been star ted Your 30 day free trial has been star ted\nYour 30 day free trial has been star ted Your 30 day free trial has been star ted\nYour 30 day free trial has been star ted Your 30 day free trial has been star ted\nYour 30 day free trial has been star ted Your 30 day free trial has been star ted",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/026.png",
+        "number": 26,
+        "text": "Contrast checkers\nUse colour contrast checkers to remove t he guesswork\nText Text Text\nRatio\n2:1\nRatio\n6:1\nNormal text Large text\nAA — 4.5:1 AAA — 7:1 AA — 3:1\nAAA — 4.5:1\nNormal text Large text\nAA — 4.5:1 AAA — 7:1 AA — 3:1\nAAA — 4.5:1\nRatio\n4.5:1\nNormal text Large text\nAA — 4.5:1 AA — 3:1\nAAA — 7:1 AAA — 4.5:1\nCheck out t he WebAIM colour contrast checker",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/027.png",
+        "number": 27,
+        "text": "Style guides\nProvides rules and guidelines for creating consistent designs\nLimits choices → Easier decisions → Faster development\nCovers:\nColours\nTypography\nSpacing\nIcons\nIllustrations",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/028.png",
+        "number": 28,
+        "text": "Learn more about design\nThe Design of\nEver yday Things\nDon Norman\nDon’ t Make Me Think\nSteve Krug\nThinking wit h Type\nEllen Lupton",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/029.png",
+        "number": 29,
+        "text": "EPI-USE Labs Graduate Program\nApplications open 1 June 2026\nQualifying Criteria\nMust be in your final year, graduating early 2027\nNo existing bursar y work-back commitments\nWe require a minimum 70% weighted average across all\nyears of study for t he following degrees:\nBSc Computer Science\nBIS Multimedia\nBSc IKS",
+        "width": 1920
+      },
+      {
+        "height": 1080,
+        "image": "slide-explainer/images/L20/030.png",
+        "number": 30,
+        "text": "Questions?\nIan Richter\nianr@labs.epiuse.com\nSaskia Steyn\nsaskia.steyn@labs.epiuse.com",
+        "width": 1920
+      }
+    ],
+    "sourceSha256": "609a4d1038b617147404ae920a0cc8e6673d90fbe9c8e5e7b73bea9e57d9e8b8"
+  },
+  {
+    "file": "L21 - DevOps and DevSecOps.pdf",
+    "id": "L21",
+    "pages": [
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/001.png",
+        "number": 1,
+        "text": "DEVOPS & DEVSECOPS\nIT, Development and Security combined",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/002.png",
+        "number": 2,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/003.png",
+        "number": 3,
+        "text": "DevOps and DevSecOpsIntroduction to\nDevOps",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/004.png",
+        "number": 4,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/005.png",
+        "number": 5,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/006.png",
+        "number": 6,
+        "text": "CI/CD",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/007.png",
+        "number": 7,
+        "text": "Step 1. Plan.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/008.png",
+        "number": 8,
+        "text": "Step 2. Code.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/009.png",
+        "number": 9,
+        "text": "Step 3. Build.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/010.png",
+        "number": 10,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/011.png",
+        "number": 11,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/012.png",
+        "number": 12,
+        "text": "Step 4. Test.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/013.png",
+        "number": 13,
+        "text": "Step 5. Release.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/014.png",
+        "number": 14,
+        "text": "Step 6. DEPLOY.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/015.png",
+        "number": 15,
+        "text": "Step 7. Operate.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/016.png",
+        "number": 16,
+        "text": "Step 8. Monitor.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/017.png",
+        "number": 17,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/018.png",
+        "number": 18,
+        "text": "DevOps and DevSecOpsIntroduction to\nDevSecOps",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/019.png",
+        "number": 19,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/020.png",
+        "number": 20,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/021.png",
+        "number": 21,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/022.png",
+        "number": 22,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/023.png",
+        "number": 23,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/024.png",
+        "number": 24,
+        "text": "",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/025.png",
+        "number": 25,
+        "text": "Tooling\nVS",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/026.png",
+        "number": 26,
+        "text": "Tooling",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/027.png",
+        "number": 27,
+        "text": "Agile BridgeABOUT OUR VALUES:\ndeep business insight, we craft powerful software\nsolutions for global enterprises.\nWith unmatched experience, top accreditations, and\nWe view ourselves as craftsmen, not just programmers or coders.\nBy deeply engaging with our clients, we ensure a complete\nunderstanding of their business needs, allowing us to deliver\ntailored, high-quality solutions.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/028.png",
+        "number": 28,
+        "text": "• Fun Fact Thursdays\nAgile BridgeABOUT GROWTH & LEARNING:\n• Hackathons\n• Training Days\n• BA Sandbox\nAt Agile Bridge, our culture blends work and play,\noffering cool clubs for every interest.\nWe’re all about growth, with a focus on enhancing your\ncraftsmanship through workshops, mentorships, and\nprojects.\n• Think Tanks:\no Solution Architecture\no Coding Standards\no UI/UX\no Testing\no Front End\no Back End\nOUR CLUBS:\n• Gaming\n• Investment\n• Chess\n• Action Hockey/Cricket/Netball\n• Golf\n• Running/Cycling\n• Climbing\n• Whiskey\n• Gin & Cocktail\n• Pew-Pew\n• Gaming Development\n• Dance\n• And many more!",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L21/029.png",
+        "number": 29,
+        "text": "THANK\nYOU\nAny Questions?",
+        "width": 1440
+      }
+    ],
+    "sourceSha256": "49c790106e2f75172dd467d45b9418c3ac07c4e9d09fc73901defc2d2059b72a"
+  },
+  {
+    "file": "L22_Practical_Architectural_Design.pdf",
+    "id": "L22",
+    "pages": [
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/001.png",
+        "number": 1,
+        "text": "LECTURE 13\nPractical Architectural Design\nHow architecture actually gets done\nQUANTIFY DECIDE COMMUNICATE ENFORCE",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/002.png",
+        "number": 2,
+        "text": "Same rules as last time\n1 Exercise answers require participation. No volunteers means I pick someone at random.\n2 You will practise two skills today that industry will pay you for: writing a quality attribute scenario, and writing an ADR.\n3 This will be in your semester test. The walkthrough at the end is the exact format of the 15-mark question.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/003.png",
+        "number": 3,
+        "text": "Why this lecture exists\nL11 gave you structure (styles). L12 gave you behaviour (tactics). This lecture combines the 2\nFIRST LAW\nSECOND LAW\nEverything in software architecture is a\ntrade-off.\nThe why is more important than the how.\nRichards & Ford, Fundamentals of Software Architecture\nThe job: turn fuzzy requirements into testable targets, make and record defensible decisions, communicate them to different\naudiences, keep them alive against drift, and evolve systems you didn't design.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/004.png",
+        "number": 4,
+        "text": "The whole lecture is one mapping\nPractical architectural design is a chain you can walk in both directions, and every step has to justify the one before it.\n1 NFR What must be true, as a number? L13 ·\n2 Quality attribute Which -ility is it? That decides which tactics are even candidates. L12 · ISO 25010\n3 Tactic What is the design move? Still technology-free. L12\n4 Pattern What named structure implements that move? L11 · GoF\n5 ADR What did you decide, what did you reject, and what trade-off did you accept? L13\n6 Architectural design The diagram, for whoever has to act on it. L11\n7 NFR test What check keeps it true after you stop looking? L13\nRows 1 and 7 are a pair: the test is just the NFR turned back into a question. If you cannot write row 7, row 1 was never a requirement.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/005.png",
+        "number": 5,
+        "text": "PART 1 · QUANTIFY\n“Scalable” is not a requirement\nYou cannot design against “the system must be scalable.” And QA\ncannot test it.\n200 ms → 5 s\nRecall L12: the flash-sale investigation only became actionable when it\nproduced a number.\ncheckout latency during a flash sale\n(L12, performance problem slide)\nIf you can't measure it, you can't architect for it, or prove you achieved it.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/006.png",
+        "number": 6,
+        "text": "PART 1 · QUANTIFY\nThe six-part quality attribute scenario\nPart Booking platform example\nSource of stimulus 50 000 concurrent users\nStimulus Requests for seat availability\nEnvironment During a flash-sale promotion (overload)\nArtifact Availability query service\nResponse Serve availability data\nResponse measure p99 latency ≤ 800 ms, error rate < 0.1%\nThe response measure is what makes it testable and it is how you derive an SLO.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/007.png",
+        "number": 7,
+        "text": "PART 1 · QUANTIFY\nStep 2: which -ility is it?\nThe characteristic you pick decides which family of tactics is even a candidate.\nFunctional suitability\nPerformance efficiency\nCompatibility\ncompleteness, correctness, appropriateness\ntime behaviour · resource utilisation · capacity\nco-existence, interoperability\nInteraction capability\nReliability\nSecurity\nwas usability in 2011\nfaultlessness, availability, fault tolerance,\nrecoverability\nconfidentiality, integrity, accountability, authenticity,\nresistance\nMaintainability\nFlexibility\nSafety\nmodularity, reusability, analysability, modifiability,\ntestability\nadaptability, scalability, installability, replaceability\nnew in 2023: fail safe, hazard warning, risk\nidentification\nTwo traps. “Scalable” is not performance: since 2023 scalability sits under flexibility. And “fast” and “fits in 1 GB” are two different sub-characteristics, time\nbehaviour and resource utilisation, so they are two requirements with two tests, not one.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/008.png",
+        "number": 8,
+        "text": "PART 1 · QUANTIFY\nFrom a business driver to an NFR: the utility tree\nStart from what the business says, refine until you hit something measurable. Each leaf is tagged (importance, difficulty), because you cannot afford all of them.\nPerformance\nefficiency time behaviour (H, M) Event page p99 ≤ 800 ms during a flash sale\nresource utilisation (M, L) Cache working set stays ≤ 1 GB\nUtility\nReliability fault tolerance (H, H) Gateway slow: checkout still completes, no lost booking\nMaintainability modifiability (M, L) Add a payment provider in ≤ 3 person-days\nSecurity confidentiality (H, M) Card data never stored on the platform\nWhy the pair matters: about to spend the year on something the business does not need.\n(H, H) is where your design effort goes and where the interesting trade-offs live. (H, L) you just do. (L, H) you push back on, because you are",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/009.png",
+        "number": 9,
+        "text": "PART 1 · QUANTIFY\nExercise 1\nRewrite as a six-part scenario: “The booking platform must stay up even if things fail.”\nDecide for yourself:\n• Which failure is the stimulus? One crashed app server? The database? A whole zone?\n• What environment makes it hard: idle Tuesday, or peak of the flash sale?\n• What is the measure? Failed-request %, seconds to full capacity, duplicate bookings allowed?\nYour measure decides the tactics: it is what forces replication, load balancing, and idempotency onto the table.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/010.png",
+        "number": 10,
+        "text": "PART 1 · QUANTIFY\nExercise 1: one defensible answer\nAs given: “The booking platform must stay up even if things fail.”\nPart Answer Why this and not something else\nSource of stimulus One application server instance Pick the smallest failure worth designing for. A whole-region outage is a different\nscenario with a different budget.\nStimulus The instance crashes or stops responding to health checks “Stops responding” matters: a hung process passes a naive check and keeps\ntaking traffic.\nEnvironment Peak of a flash sale, at full concurrent load The same failure on an idle Tuesday is not a design problem. The environment is\nwhat makes it hard.\nArtifact The booking API tier behind the load balancer Name the thing that must survive, not “the system”.\nResponse The balancer detects the unhealthy instance and routes only to\nhealthy replicas; in-flight requests are retried\nDetection is part of the response. A system that recovers but takes four minutes\nto notice has not met this.\nResponse measure < 0.1% of requests fail, full capacity restored within 30 s, zero\nduplicate bookings\nThree numbers, because “stays up” hides three separate promises: failure rate,\nrecovery time, and correctness.\nWhat the measure just bought you: “< 0.1% failures” forces replication and a load balancer. “Within 30 s” forces health checks and fast startup, which rules out a\nservice that takes two minutes to warm up. “Zero duplicates” forces idempotency on the retry path. Y",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/011.png",
+        "number": 11,
+        "text": "PART 2 · DECIDE\nSix months later, nobody remembers why\nJAN\nMAR\nJUN\nTeam debates Postgres vs DynamoDB.\nPostgres wins, for reasons.\nTwo engineers leave.\nThe reasons leave with them.\nNew hire: “Why are we\non Postgres?”\nA decision that lives only in a meeting has zero durability, and zero enforcement.\nSecond Law: the why is more important than the how. The why is the part you write down.\nJUL\nThe whole debate\nhappens again.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/012.png",
+        "number": 12,
+        "text": "PART 2 · DECIDE\nThe Architecture Decision Record (Nygard, 2011)\nTitle + status Proposed → accepted → superseded-by-ADR-023. The log stays honest.\nContext The problem, the forces, the alternatives considered. Not a project history; only what materially\ninfluenced the decision.\nDecision Crisp enough that someone could check whether the system complies.\nConsequences The trade-offs, including the negative ones and the debt you are taking on. An ADR with no downsides is\nmarketing, not engineering.\nLives in the repo, next to the code. Version-controlled like everything else.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/013.png",
+        "number": 13,
+        "text": "PART 2 · DECIDE\nADR-007: Cache event & venue reads: Redis, 60 s TTL\nCONTEXT\nFlash sales: 25× read amplification on event/venue data (QAS-3). Data\nchanges ~daily. DB saturates at ~8 000 QPS.\nAlternatives: read replicas (lag on all reads, cost) · CDN (per-event\ninvalidation too slow) · do nothing (violates QAS-3).\nDECISION\nCache-aside in Redis for GET /events/* and /venues/*. 60 s TTL + explicit\ninvalidation on staff edit.\nSeat availability is explicitly excluded: correctness-sensitive (L12 Exercise\n1).\nCONSEQUENCES\n+ DB read load −90% under promotion; QAS-3 met at current scale.\n− Users may see details up to 60 s stale; staff must be told edits aren't\ninstant.\n− Redis is now on the critical path → needs its own availability scenario\nand a fallback (serve from DB, accept degraded latency).\n− Cold-start stampede on hot keys at TTL expiry → mitigate with request\ncoalescing.\nThe consequences column is L12's “hidden difficulty of caching” slide, made concrete and owned.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/014.png",
+        "number": 14,
+        "text": "PART 2 · DECIDE\nWhat a bad ADR looks like\n“Decision: we will use Kafka. Consequences: better scalability.”\nNothing checkable\nNo negative consequences\nNo alternatives\nNo scope, no boundaries, no forces. Could you\ntell whether the system complies? No.\nEvery real decision costs something (First\nLaw). Where are the L12 queue trade-offs:\nlatency, duplicates, ordering, poison\nmessages?\nYou cannot defend a choice you never\ncompared. What lost to Kafka, and why?",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/015.png",
+        "number": 15,
+        "text": "PART 2 · DECIDE\nHow industry wraps ADRs: the design review\nNearly every digital-native organisation reviews designs as written docs (RFCs / design docs): Amazon, Airbnb, LinkedIn, Spotify, Uber,\nMonzo, GitLab…\nDraft the doc Seniors comment Revise Ratify → ADR\nthe loop between ① and ③ is where the value is\nGoogle's framing: surface issues early, build consensus, force the trade-off discussion; “detailed but short enough to actually be\nread by busy people.”\nIn your first job you will write one of these, and senior engineers will comment on it. Your grade is how well you anticipated\ntheir objections.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/016.png",
+        "number": 16,
+        "text": "PART 3 · WHY TACTICS EXIST\nThe Eight Fallacies of Distributed Computing\nDeutsch et al., Sun Microsystems, 1994. Every assumption below is false, and still causes 02:00 outages.\n1\n2\n3\nThe network is reliable\nLatency is zero\nBandwidth is infinite\n5\n6\n7\nTopology doesn't change\nThere is one administrator\nTransport cost is zero\nL12 gave you the tactics. This is the failure model underneath all of them.\n4\nThe network is secure\n8\nThe network is homogeneous",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/017.png",
+        "number": 17,
+        "text": "PART 3 · WHY TACTICS EXIST\nMap the fallacy to the tactic:\nFallacy L12 tactic that answers it\n1 · The network is reliable Retries + idempotency · circuit breakers · dead-letter queues\n2 · Latency is zero Caching · merge chatty services · coarse-grained requests (L12 diagram)\n4 · The network is secure Zero trust: authenticate service-to-service; don't trust the VPC\n6 · One administrator Version internal APIs · contract tests; renaming userId must not crash Team B\nStop happy-path engineering. Assume the network drops packets and the partner API is down. Design for when, not if.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/018.png",
+        "number": 18,
+        "text": "PART 3 · WHY TACTICS EXIST\nWhat ignoring them produces\nThe distributed monolith\nPremature distribution\nThe operational tax\nSeparately deployed, tightly coupled:\nnothing can change or fail independently. All\nthe cost of microservices, none of the\nbenefit. The most common modern design\nerror.\nFowler, monolith-first: you cannot distribute\nwhat you haven't modularised. Splitting\nearly just spreads your existing problems\nacross a network.\nOne day-one-microservices startup: ~40% of\nengineering time on infrastructure, not\nfeatures. The tax scales with service count,\nnot user count, heaviest when the team is\nsmallest.\nPragmatic default: the modular monolith with clean internal boundaries, one deployable, until scale (or Conway) forces otherwise. In a\nmonolith a call is a function; in microservices it's a network request subject to all eight fallacies.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/019.png",
+        "number": 19,
+        "text": "PART 4 · MAP IT\nSteps 3 and 4: a tactic is not a pattern\nTACTIC (L12)\nA design decision that influences how the system responds for one\nquality attribute. Technology-free, and usually one sentence.\nPATTERN (L11 · GoF)\nA named, reusable structure that implements one or more tactics. Bass\nputs it plainly: patterns are bundles of tactics.\nTactic (the move) Patterns that implement it (the structure)\nCache the read path Cache-aside · read-through · write-through · refresh-ahead, with Proxy or Decorator to intercept the call\nTolerate a failing dependency Circuit Breaker · Bulkhead · Retry with backoff · Fallback\nDecouple producer from consumer Queue · Publish-Subscribe · Observer\nIsolate the volatile part Adapter · Strategy · dependency inversion\nRestrict what may call what Layers · package boundary with a public API · Facade\nWhy the distinction earns its keep: the tactic follows from the quality attribute, so it is nearly forced. The pattern follows from your context, so it is a genuine choice, and\nit is therefore the thing you argue about and record in the ADR. One tactic, several patterns, one decision to justify.\nCommon mis-map: the State pattern varies behaviour as an object's internal state changes. It is not a cache-consistency pattern. Cache consistency is cache-aside or\nwrite-through, plus an invalidation mechanism.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/020.png",
+        "number": 20,
+        "text": "PART 4 · MAP IT\nStep 5: where the trade-off actually lives\nSensitivity point\nTrade-off point\nRisk\nNon-risk\nA property critical for achieving one\nquality attribute response. A yellow\nflag: use caution when changing this.\nA property that is a sensitivity point\nfor more than one attribute. Turning it\nup helps one and hurts another.\nA potentially problematic decision, or\none you have not made yet.\nA good decision that rests on an\nassumption. It stays a non-risk only\nwhile the assumption holds.\nTurn this up… …this improves…and this degrades\nCache TTL time behaviour, load on the database consistency: users see stale data for longer\nCache size hit rate, so time behaviour again resource utilisation, and the monthly bill\nEncryption strength or scope confidentiality time behaviour, and operational complexity\nNumber of replicas availability, read throughput consistency, cost, debugging difficulty\nRetry count fault tolerance on a flaky call latency, duplicate risk, load on something already failing\nLayers of abstraction modifiability, testability simplicity, and sometimes performance\nNot one of these has a correct setting. Your ADR's consequences section is the record of which side you chose, and what you accepted in exchange.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/021.png",
+        "number": 21,
+        "text": "PART 4 · MAP IT\nWorked example:\nAs handed to you: “The system should load pages fast, and cache data when needed, up to 1 GB.”\nStep The mapping, filled in\n1 · NFR Not testable, and it is two requirements in one sentence. Quantified: (a) event page server response p99 ≤ 50 ms with the cache warm; (b) cache\nworking set ≤ 1 GB, evicting least-recently-used.\n2 · Quality attribute Performance efficiency. (a) is time behaviour, (b) is resource utilisation. Different sub-characteristics, so two separate tests.\n3 · Tactic Cache the read path in memory. Note this says nothing about Redis yet.\n4 · Pattern Cache-aside on read, with explicit invalidation on staff edit. Not the State pattern: State varies behaviour with internal state, it does not manage cache\nconsistency.\n5 · ADR ADR-007: Redis, 60 s TTL, maxmemory 1 GB, allkeys-lru. Rejected: read replicas (lag on every read), CDN (per-event invalidation too slow). Accepted\ncost: up to 60 s stale, and Redis is now on the critical path.\n6 · Architectural design Redis appears as its own box on the read path, with the fallback to the database drawn explicitly, because it will be used.\n7 · NFR test (a) CI performance test asserts p99 ≤ 50 ms with the cache warm. (b) A monitor asserts used_memory ≤ 1 GB and alerts when the eviction rate spikes.\nTrade-off point: TTL is a sensitivity point for time behaviour and for consistency at the same time, which is exactly what makes it a trade-off point rather than a\ntuning knob. 60 s is a business decision about staleness, not a technical one.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/022.png",
+        "number": 22,
+        "text": "PART 4 · MAP IT\nWorked example, step 6: the architectural design\nCache-aside drawn properly. The application talks to both stores, because that is what makes it cache-aside rather than read-through.\nNot cached\nSeat availability reads go\nstraight to the database.\nCorrectness beats latency on\nthat path.\n1 check · 3 populate\nCache\n[Redis] 60 s TTL · 1 GB · allkeys-lru\nCustomer\n[Person]\nBooking API\n[Container: Node.js]\n2 on miss only\nDatabase\n[PostgreSQL] the source of truth\nBox-office staff\n[Person]\nedit an event: invalidate the key immediately, do not wait for the TTL",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/023.png",
+        "number": 23,
+        "text": "PART 4 · MAP IT\nExercise A:\nThe NFR, as the business said it: “The booking platform must not lose bookings when the payment gateway goes down.”\nStep Fill these in. Individually, five minutes.\n1 · NFR Quantify it. What does “not lose” mean, and by when must a booking reach a final state?\n2 · Quality attribute Which characteristic, and which sub-characteristic? Careful: the platform is up, its dependency is not.\n3 · Tactic What is the design move? Two are needed here, not one.\n4 · Pattern Name the structures. You met all of them in L12.\n5 · ADR State the decision and the one consequence you are least comfortable with.\n6 · Architectural design What appears on the diagram that was not there before?\n7 · NFR test How would you prove this works, without waiting for the gateway to fail in production?",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/024.png",
+        "number": 24,
+        "text": "PART 4 · MAP IT\nExercise A: worked answer\nStep Reliability\n1 · NFR Zero accepted bookings are lost while the gateway is unavailable, and every accepted booking reaches a terminal state (paid or cancelled) within 24\nhours. Checkout p99 stays ≤ 2 s while the gateway is degraded.\n2 · Quality attribute Reliability: fault tolerance and recoverability. Not availability, because your system is up. The failure is in a dependency you do not own.\n3 · Tactic Isolate the failing dependency so it cannot consume your threads, and defer the work rather than dropping it.\n4 · Pattern Circuit Breaker and Bulkhead for the isolation; a queue with an idempotency key for the deferral; retry with exponential backoff behind the breaker.\n5 · ADR On breaker trip, accept the booking as payment-pending and reconcile asynchronously. Accepted cost: the customer holds a confirmation that is not yet\na payment, so finance needs a reconciliation report and a cancellation path.\n6 · Architectural design A breaker at the caller's boundary, a queue and worker, a reconciliation job, and a new pending state in the booking model. Three of those four are\noperational work, not code.\n7 · NFR test Stub the gateway as down and as slow, then assert zero lost bookings and a terminal state within the window. Run it in CI, and kill the gateway in\nstaging on a schedule.\nTrade-off point: the retry count and the breaker threshold. Turning them up improves fault tolerance and degrades latency, duplicate risk, and the load you put on\nsomething that is already failing. There is no setting that is simply correct.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/025.png",
+        "number": 25,
+        "text": "PART 4 · MAP IT\nExercise A, step 6: the architectural design\nThe breaker sits on the caller's side of the boundary. Everything below the top row exists only because the gateway can fail.\nCustomer\n[Person]\nCheckout API\n[Container]\nCircuit breaker\n2 s timeout\nevery call\non trip: accept as payment-pending retry with backoff, behind the breaker\nBooking queue\n[Container] idempotency key\nWorker\n[Container]\nsettle: paid or cancelled\nDatabase\n[PostgreSQL] booking state Reconciliation job\nruns on a schedule\nThree of these seven boxes are here purely to survive a dependency you do not own.\nPayment gateway\n[External] p95 = 2 s\nThe uncomfortable box\n“Payment-pending” is a state the business\nhas to understand, staff have to explain,\nand finance has to clear. That is the real\ncost of this design.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/026.png",
+        "number": 26,
+        "text": "PART 4 · MAP IT\nExercise B:\nThe NFR, as the client said it: “User payment data must be protected.” (POPIA applies.)\nStep Fill these in. Individually, five minutes.\n1 · NFR “Protected” is not testable. What is the measurable claim?\n2 · Quality attribute Security, but which sub-characteristics? L12 warned there is more than one.\n3 · Tactic L12's line was that encryption is necessary but not sufficient. So what else?\n4 · Pattern What structure keeps the sensitive thing out of your system entirely?\n5 · ADR What is the decision, and what does it cost you later?\n6 · Architectural design Where does the boundary fall on the diagram?\n7 · NFR test What check fails the build if someone reintroduces the problem next semester?\nHint: the strongest answer to “how do we protect this data?” is usually “we do not hold it.”",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/027.png",
+        "number": 27,
+        "text": "PART 4 · MAP IT\nExercise B: worked answer\nStep Security\n1 · NFR No card number is ever persisted or logged by the platform. Every access to stored personal data is authenticated, authorised and written to an audit\nlog retained for the POPIA-required period.\n2 · Quality attribute Security: confidentiality, integrity and accountability. Accountability is the one students drop, and it is the one POPIA actually enforces.\n3 · Tactic Reduce the attack surface by not holding the data; authenticate and authorise every access; audit everything; encrypt in transit and at rest for what\nremains.\n4 · Pattern Tokenisation with a vault: the gateway holds the card, you hold a token. An Adapter keeps all crypto and token handling in one component. Role-based\naccess control on the rest.\n5 · ADR Store a gateway token, never a card number. Accepted cost: refunds and recurring billing now depend on that gateway's token lifetime, so switching\nproviders becomes genuinely expensive. You have traded portability for confidentiality.\n6 · Architectural design Card data never crosses the platform boundary at all. The payments adapter holds the token; key management sits outside the application.\n7 · NFR test A build-failing scan for card-shaped data in the database and in logs, plus a rule that a new column on the payments table fails review until it is\nclassified.\nTrade-off point: the scope of encryption and the key-rotation frequency. Both are sensitivity points for confidentiality and for time behaviour and operability. Note\nthe second trade-off hiding in row 5: tokenisation buys confidentiality and sells replaceability.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/028.png",
+        "number": 28,
+        "text": "PART 4 · MAP IT\nExercise B, step 6: the architectural design\nThe whole design is one line: where the trust boundary falls, and what is never allowed to cross it.\ncard data, straight to the vault: it never enters the platform at all\nGateway vault\n[External] holds the card\nBooking platform · trust boundary\ntoken only Booking API\n[Container]\nCustomer browser\n[Person]\nOutside the picture, deliberately\nKey management and the audit store sit outside\nthe application. If the app can read its own keys,\nan attacker inside the app can too.\nAccountability is structural: every access to\nstored personal data is authenticated and logged,\nor POPIA is not met.\nPayments adapter\nthe only crypto-aware code Database\ntoken only, never a PAN\nRead the diagram for what is missing: there is no arrow carrying a card number into any box you own. That absence is the security design, and it is also why swapping\ngateway is now expensive.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/029.png",
+        "number": 29,
+        "text": "PART 4 · MAP IT\nExercise C:\nThe NFR, as your tech lead said it: “We must be able to add a new payment provider quickly.”\nStep Fill these in. Individually, five minutes.\n1 · NFR A measure that is not a time in milliseconds. What else can you count?\n2 · Quality attribute Two characteristics are candidates here, and the 2023 revision separated them. Which do you want?\n3 · Tactic Straight from L12's modifiability tactics.\n4 · Pattern Straight from L11's design principles, made concrete.\n5 · ADR What are you buying, and what does the extra indirection cost you?\n6 · Architectural design Which L11 artifact shows this, and what must not appear on it?\n7 · NFR test This is the one you can genuinely automate. How?\nHint: a modifiability measure is usually a count or a blast radius, not a duration. “No change outside this module” is a measurable claim.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/030.png",
+        "number": 30,
+        "text": "PART 4 · MAP IT\nExercise C: worked answer\nStep Maintainability\n1 · NFR Adding a provider requires no change outside the payments package, introduces no new cross-package dependency, and takes ≤ 3 person-days\nmeasured on a stub provider.\n2 · Quality attribute Maintainability: modifiability. Flexibility: replaceability is the neighbouring one, and the 2023 revision separates them. Say which you mean and the\nmeasure follows.\n3 · Tactic Isolate the volatile part, depend on an abstraction rather than a concrete provider, and put an explicit contract at the boundary.\n4 · Pattern One PaymentProvider interface; an Adapter per provider; Strategy to select at runtime; dependency inversion so the domain never imports a provider\nSDK.\n5 · ADR The domain depends only on the interface. Accepted cost: one more layer of indirection, and a real leaky-abstraction risk when providers differ on 3-D\nSecure or partial refunds. The interface will need to change, and that is the expensive day.\n6 · Architectural design A package diagram from L11. What must not appear: any arrow from the domain package to a provider package. The absence is the design.\n7 · NFR test A static rule that fails the build when anything outside payments.adapters imports a provider SDK. This is exactly what Shopify's Packwerk does, two\nslides from now.\nTrade-off point: the number of layers of abstraction. It buys modifiability and sells simplicity, and sometimes performance. An interface built for one provider is a\nguess; an interface built for three is a design. This is why premature abstraction is as costly as none.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/031.png",
+        "number": 31,
+        "text": "PART 4 · MAP IT\nExercise C, step 6: the architectural design\ndepends on\nBooking domain\n[package] knows nothing about providers\nPaymentProvider\n«interface» the contract\nStripeAdapter\n[package]\nimplements\nPayFastAdapter\n[package]\nPeachAdapter\n[package]\n✗\nthis arrow must never exist\nStripe SDK\n[External]\nPayFast SDK\n[External]\nPeach SDK\n[External]",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/032.png",
+        "number": 32,
+        "text": "PART 5 · ORGANIZATIONAL REALITY\nConway's Law is not optional\nTeam A Team B Team C Team D\n1968: a system copies the org's\ncommunication structure\nService A Service B Service C Service D\nteam boundaries become service boundaries, like it or not\n“Team assignments are the first draft of the architecture.”\n(Michael Nygard)\nInverse Conway maneuver\n(Team Topologies): reshape the teams first to get the architecture\nyou want.\nCognitive load\nDraw service boundaries a single team can hold in its head.\nOverloaded teams slow down and make mistakes.\nPunchline\nMicroservices are an organizational pattern. “Should we use them?”\nstarts with “how many teams do you have?”",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/033.png",
+        "number": 33,
+        "text": "PART 5 · ORGANIZATIONAL REALITY\nThe constraints the textbook might not tell you\nCost Every L12 tactic is a monthly bill: a replica, a cache, a queue. Cost is a quality attribute.\nTime Defer what's cheap to reverse. Decide early only what's expensive to reverse: data ownership, sync vs async boundaries.\nTeam skill Technology your team can't operate at 02:00 is an availability decision\nCompliance POPIA constrains how the platform handles user & payment data. Encryption is necessary, not sufficient (L12): keys,\nauditing, access control.\nLegacy Most of you will never see greenfield. You will inherit, which is the next slide.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/034.png",
+        "number": 34,
+        "text": "PART 5 · ORGANIZATIONAL REALITY\nEvolving what you inherit: the strangler fig\nFowler, 2004: you don't stop a system to replace it; you build around it while it runs.\n1\n2\n3\nFront it with a façade\nReplace slice by slice\nDecommission\nAll traffic routes through an indirection layer;\nbehaviour unchanged.\nBuild new components; redirect one\ncapability at a time. Each cycle is\nself-contained and reversible.\nWhen nothing routes to the legacy any more,\nswitch it off.\nIn the wild: Shopify (monolith → services while revenue grew $100M → $1B+) · Netflix (datacenter → AWS). The opposite of the big-bang rewrite.\nThe catch: data migration is the hardest part of every slice: shared databases, batch jobs, reporting parity.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/035.png",
+        "number": 35,
+        "text": "PART 6 · ENFORCE\nDocumentation does not stop drift. Running checks do.\nA decision can be correct and have zero enforcement once it leaves the meeting. any automated check of an architectural constraint: architecture tests, in CI, next to your unit tests.\nA fitness function (Building Evolutionary Architectures) is\nArchUnit\nContract tests\nLatency budget\n“No class in web.* may depend on\npersistence.*”\nA breaking API change without a version\nbump fails the build (fallacy 6).\nCI performance test asserts QAS-3's p99 ≤ 800\nms before merge.\nLitmus test for any ADR: “Can I describe what a violation looks like?” If yes, write the check.\nNFR sets the target → tactic and pattern shape the design → ADR records the trade-off → the NFR test\nkeeps it true",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/036.png",
+        "number": 36,
+        "text": "SYNTHESIS · CASE 1\nNetflix runs this chain for availability\n1 Quality attribute Availability. One home page is assembled from a large number of independent services.\n2 NFR as a scenario A failure or a latency spike in any single downstream service must not take down playback or the home page. Measure: the\npage still renders, degraded, and the failure does not cascade.\n3 Tactic (L12) Circuit breaker, bulkhead isolation, and a defined fallback for every remote call.\n4 Pattern Circuit Breaker, from Nygard's Release It!, implemented as Hystrix around every cross-service call.\n5 The decision, and its cost Every caller must define a degraded response. Consequence: thread-pool isolation costs memory and context switching, and\nsomebody has to decide what “degraded” means for every single feature.\n6 Architectural design The breaker sits at the caller's boundary, not inside the callee, so it wraps every outbound call on the diagram.\n7 Fitness function Chaos Monkey terminates production instances at random. If resilience has regressed, you find out on a Tuesday afternoon\nrather than during a launch.\nPostscript worth one sentence: Hystrix is now in maintenance mode and Netflix points new work at resilience4j. The pattern outlived the implementation, which is the First\nLaw in miniature: they traded a mature library for a better fit and accepted the migration cost.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/037.png",
+        "number": 37,
+        "text": "SYNTHESIS · CASE 2\nShopify runs the same chain for modifiability\n1 Quality attribute Modifiability, inside a Rails monolith of millions of lines worked on by hundreds of developers.\n2 NFR as a scenario A change inside one business domain must not require touching, or even understanding, another. Measure: no new\ncross-package dependency, and no reach past another package's public API.\n3 Tactic (L12) Isolate responsibilities, depend on abstractions, and put explicit contracts at the boundaries.\n4 Pattern (L11) The modular monolith: packages with a declared public API. This is L11's information hiding and low coupling, applied at\npackage scale.\n5 The decision, and its cost Stay one deployable and enforce boundaries statically, rather than splitting into microservices. Consequence: no\nindependent deploys or scaling, plus a tool to run and a backlog of existing violations to burn down.\n6 Architectural design A package diagram, straight out of L11, because there is still only one deployable unit.\n7 Fitness function Packwerk, a static analyser in CI. It reports two violation types: dependency and privacy. Roughly 48 packages with 30\nenforcements in the core monolith.\nRead rows 4 and 7 together: Shopify's fitness function checks exactly the two design principles L11 taught you. Low coupling is the dependency check.\nInformation hiding is the privacy check.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/038.png",
+        "number": 38,
+        "text": "POSTSCRIPT\nAI: two points\n1 · AI components are a new architectural element\nAn LLM in the loop makes a deterministic system\nnon-deterministic: output varies, edge cases arrive faster and at\nscale.\nThat is a quality-attribute problem, and you already own the\nvocabulary: timeouts, fallbacks, validation layers, circuit breakers\naround model calls, and a QAS for accuracy and latency.\n2 · AI accelerates the how. The why is still your job.\nArchitecture is long-horizon trade-off analysis across code,\ninfrastructure, people, regulation, cost and failure. Studies of\nLLM-generated architectures still show weak design rationale.\nThe why is precisely what an ADR captures. The Second Law is\nyour job security.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/039.png",
+        "number": 39,
+        "text": "Final takeaway\nL11: styles organise systems. L12: tactics shape behaviour under load, failure, attack and change.\nL13: the practice. Quantify → decide & record → communicate → respect the organisation → enforce → evolve.\nEverything is a trade-off. The why matters more than the how.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L22/040.png",
+        "number": 40,
+        "text": "Questions?",
+        "width": 960
+      }
+    ],
+    "sourceSha256": "9f12633492fcc63ec189568e4d663ac3b5158ef26316b1349741478db7f7a12d"
+  },
+  {
+    "file": "L23 - Architecture in Practice.pdf",
+    "id": "L23",
+    "pages": [
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/001.png",
+        "number": 1,
+        "text": "Welcome to a world of\nInventors + Innovators\nBuild and own your own distinct technology advantage.\nBecause a real advantage is one you own.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/002.png",
+        "number": 2,
+        "text": "COS 301\nBuilt to last: Architecture in practice\n2026/07/21",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/003.png",
+        "number": 3,
+        "text": "INTRODUCTIONS\nMeet the team\nKajal Bhoola\nSOFTWARE ENGINEER\nJaco Venter\nICT PARTNER\nSthabiso Jaffar\nOPERATIONS EXEC\nNeil Kotzé\nCHIEF TECHNICAL OFFICER\nPieter Mouton\nCHIEF TALENT OFFICER",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/004.png",
+        "number": 4,
+        "text": "AGENDA\nArchitecture In Practice\n• Considerations\n• Best practices\nCase Studies\n• Performance and scalability\n• Maintainability, availability, and resilience\nTools and Techniques\n• Purpose and approach\n• Examples",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/005.png",
+        "number": 5,
+        "text": "ARCHITECTURE IN PRACTICE\nDesign considerations:\n• Security\n• Maintainability\n• Scalability\n• Reliability & Availability\n• Extensibility\n• Teams and collaboration\nBest practices:\n• Determine the non-functional requirements early\n• Architecture design first, tech choices later\n• Avoid over-engineering\n• Consider implementation teams’ structure",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/006.png",
+        "number": 6,
+        "text": "CASE STUDIES\n1. Road Security\nSuccess factors: Performance and scalability\n2. Financial services\nSuccess factors: Maintainability, availability, and resilience",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/007.png",
+        "number": 7,
+        "text": "CASE STUDY 1\nProblem Domain\n• Road security with the goal of making South Africa safer\n• Perform license plate lookups to identify warnings on vehicle and/or driver\n• SAPS can subscribe for notifications of vehicle sightings\nDesign Challenges\n• Sub-second response times and asynchronous responses\n• Scalability for increased request volumes\n• Compatibility with various client environments\nDesign\n• High performance, scalable, event-driven architecture",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/008.png",
+        "number": 8,
+        "text": "CASE STUDY 1\nSlide 11 Slide 12\nRequest Processing\nLicense Queries\nSlide 9\nSlide 10\nEnterprise Message Bus\nClients\nCommunications\nSlide 14\nSlide 13\nNotifications\nResponse Processing",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/009.png",
+        "number": 9,
+        "text": "Clients\nKey considerations:\n• Varying technologies\n• Sub-second response times\nDesign decisions:\n• Use web sockets for communication protocol\n• Clients can decide which tech stack to implement this with",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/010.png",
+        "number": 10,
+        "text": "Communications\nKey considerations:\n• Thousands of simultaneous connections\n• Authentication and Authorization\n• Two-way communication\n• Scaling stateful services\nDesign decisions:\n• Web sockets for communication\n• Authentication through issued certificates\n• Redis cache for state between instances of communications services",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/011.png",
+        "number": 11,
+        "text": "Request Processing\nKey considerations :\n• Determine sources to query\n• Specify if responses should be combined or separated\nDesign decisions:\n• Receive one request, create messages for each operation that needs to happen in parallel\n• Create unique identifier to ensure responses can be combined if configured",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/012.png",
+        "number": 12,
+        "text": "License Queries\nKey considerations :\n• Most significant impact to response times\n• Need to be extensible\nDesign decisions:\n• Query sources in parallel\n• Add query sources as new services without impacting existing sources",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/013.png",
+        "number": 13,
+        "text": "Response Processing\nKey considerations :\n• Separated or combined responses\n• Very high load\n• Scaling stateful services\nDesign decisions:\n• Responses should already contain information about combining responses\n• Redis cache for building up combined responses state",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/014.png",
+        "number": 14,
+        "text": "Notifications\nKey considerations :\n• Clients can subscribe to license plate hits\n• Extensible to support more notification methods\nDesign decisions:\n• Parallel to sending notifications to not impact response times\n• Add notification methods as new services without impacting existing services",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/015.png",
+        "number": 15,
+        "text": "CASE STUDY 2\nProblem Domain\n• In financial services, a large group organisation with subsidiaries requiring a unified user experience\n• large organization with multiple sub businesses (subsystems/data/security architecture)\nDesign Considerations\n• Security & data protection\n• Maintainability\n• Resilience\n• Availability (Deployment/DevOps)\nDesign\n• Highly-available, resilient, and modular service-oriented architecture",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/016.png",
+        "number": 16,
+        "text": "Slide 18\nSlide 19 Slide 20\nAPI Gateway\nSlide 17\nIdentity\nDomain\nService - 1\nModule 1 Module 2\nModule 3 Module 4\nMobile\nApp\nDomain\nService - 2…\nDomain\nService - n\nCache\nDomain specific policy\nengine\nDomain\nspecific back\nend service",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/017.png",
+        "number": 17,
+        "text": "Security & Data protection\nKey considerations :\n• Highly sensitive user data\n• Authorization/Authentication\nDesign decisions:\n• Identity management\n• Single Sign On",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/018.png",
+        "number": 18,
+        "text": "Maintainability\nKey considerations :\n• Multiple dev teams\n• Multiple sub systems\nDesign decisions:\n• Modularisation/ Micro-front ends",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/019.png",
+        "number": 19,
+        "text": "Resilience\nKey considerations :\n• Susceptibility to existing integration challenges\nDesign decisions:\n• Caching\n• Time outs / Retries / Back off strategies",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/020.png",
+        "number": 20,
+        "text": "Availability\nKey considerations :\n• The app is a 24/7 service portal and therefore cannot be down/unavailable at any time\nDesign decisions:\n• Employed the blue/green deployment strategy",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/021.png",
+        "number": 21,
+        "text": "TOOLS & TECHNIQUES\nDesign and Modelling:\n• UML\n• Sequence diagrams\n• C4 Model\n• Infrastructure diagrams\nUseful for:\n• Communicating structure, data, infrastructure, technology choice, scope, abstraction\n• Visualizing system structure\n• Identifying risks early\n• Ensuring consistency across the solution",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L23/022.png",
+        "number": 22,
+        "text": "Let’s keep in touch\ncareers@gendac.co.za",
+        "width": 960
+      }
+    ],
+    "sourceSha256": "67fa8e02bfe0cc9bc23cd54dab6eb6caee1159d0a45923692ab4e3a551014f37"
+  },
+  {
+    "file": "L24 - Security Testing.pdf",
+    "id": "L24",
+    "pages": [
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L24/001.png",
+        "number": 1,
+        "text": "1",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L24/002.png",
+        "number": 2,
+        "text": "Overview\n• About Integrity360\n• Core Services and Products\n• Our Team\n• Live Demo\n• Joining Our Team\n• Q&A\n2",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L24/003.png",
+        "number": 3,
+        "text": "About Integrity360\nKey Insights\n• Integrity360 is one of Europe’s leading independent cyber\nsecurity services providers, delivering end-to-end protection,\n585+\n6\n200+\nassurance, and resilience to organisations across all major\nDedicated cyber security experts\nindustries.\nSOCs across Europe & Africa providing 365 24/7 protection\nSecurity specialists in our SOCs\n• At our core, we help organisations operate, innovate, and\ngrow securely. By embedding ourselves as long-term partners,\nwe work side-by-side with our clients to reduce cyber risk,\nimprove resilience, and stay ahead of rapidly evolving threats\nLocations:\n• Headquarters - Dublin, Ireland\n• London, United Kingdom\n• Stockholm, Sweden\n• Sofia, Bulgaria\n• Ludwigsburg, Germany\n• Madrid, Spain\n• Cape Town, South Africa\n• Johannesburg, South Africa\n• Kyiv, Ukraine\n• Rome, Italy\n• Vilnius, Luthiania\n3",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L24/004.png",
+        "number": 4,
+        "text": "4",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L24/005.png",
+        "number": 5,
+        "text": "Our Core Services and Products\n• Integrity360 offers a full suite of managed\nsecurity services. These services cover\nevery aspect of cyber risk management,\nfrom identification and prevention to\ndetection, response, and recovery.\n• Whether working independently or\nalongside an organisation's internal\nteams, we enhance the security posture\nof businesses across the world.\nAll Services\n5",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L24/006.png",
+        "number": 6,
+        "text": "Our Team\n• With over 775+ employees and an expert team of over\n585 dedicated cyber security professionals, Integrity360\noffers a full suite of managed security services.\n• These services cover every aspect of cyber risk\nmanagement, from identification and prevention to\ndetection, response, and recovery.\nWorking for I360 -\n• Unlimited R&D contributing to professional\nand personal growth\n• Hacker nuggets\n• Company meeting day challenges\n• Unlimited certification budget\n• Bug bounty programs\n• Employee benefits\n• Work related international travel\nopportunities\n• Work opportunities in international I360\nbranches\n6",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L24/007.png",
+        "number": 7,
+        "text": "Live Demo\nRed Team Blue Team\nPresented by Kyle Todd and Latasha Friend\n7",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L24/008.png",
+        "number": 8,
+        "text": "Join Us!\nINTERNSHIP 2026\n• Timeline: End of November, Beginning December 2026\n• 2 week paid internship\n• Closing Date To Apply: 30 August 2026\n• Applications:\njohan.taute@integrity360.com\ncara.grobler@integrity360.com\nkyle.todd@integrity360.com\n8",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L24/009.png",
+        "number": 9,
+        "text": "Who are good candidates?\n• Anyone with an interest in cyber security and a thirst for knowledge!\n• Related degree would be advantageous.\n• Integrity360 provides full training for new joiners about everything cyber security.\n• We also offer on the job and soft skills training to all employees.\n9",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L24/010.png",
+        "number": 10,
+        "text": "Thank you\n10",
+        "width": 960
+      }
+    ],
+    "sourceSha256": "0f66c9e4ab82ebd5ea75ae8e686fe76fd88d7ce4ac0264780681bd72ebbdd961"
+  },
+  {
+    "file": "L25 - Service Contracts.pdf",
+    "id": "L25",
+    "pages": [
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/001.png",
+        "number": 1,
+        "text": "API Service Contracts\nLecture 25 - COS 301",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/002.png",
+        "number": 2,
+        "text": "Integration Nightmare\n● Your have all probably experienced something like this by now:\nThe frontend team builds one component. The backend team builds the other. The night before\na demo, you attempt to connect them, and absolutely nothing works.\n● A lack of upfront agreement leads to integration chaos and massive code blockers\n● Without a standard, you rely on assumptions and \"he said, she said\" arguments about how the\napplication should communicate.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/003.png",
+        "number": 3,
+        "text": "An API service contract in software\nengineering is a formal agreement that\ndefines the rules, inputs, outputs, and\nbehaviors in a machine-readable format for\ncommunication between different software\nsystems or components.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/004.png",
+        "number": 4,
+        "text": "What is an API Service Contract?\nThe Blueprint\nThe Agreement\nIt formally defines endpoints URLs, allowed\nHTTP methods GET, POST, required request\npayloads, and the exact shape of the response\ndata. It completely eliminates guesswork from the\ndevelopment process by documenting\nexpectations clearly.\nIt acts as a strict agreement between the backend\nprovider and the frontend consumer. If both\nteams commit to and strictly adhere to the\ncontract, system integration is virtually\nguaranteed to work flawlessly on the first try.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/005.png",
+        "number": 5,
+        "text": "Why Use Contracts in Capstone?\nParallel Dev\nSingle Truth\nBackend and frontend can\nwork simultaneously. The\nfrontend uses mock data\ngenerated from the contract\nwhile the backend builds actual\ndatabase logic.\nEliminates confusion and\narguments about how an\nendpoint should behave. The\nwritten contract is the absolute\nauthority on data structures.\nReliable Testing\nEnables automated contract\ntesting to ensure neither the\nfrontend nor the backend\ninadvertently breaks the\nagreement during subsequent\ncode updates.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/006.png",
+        "number": 6,
+        "text": "OpenAPI vs. Swagger\nClearing up a common terminology confusion.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/007.png",
+        "number": 7,
+        "text": "The Blueprint vs. The Tools\n● OpenAPI The official, vendor-neutral specification. It dictates the rules for writing\nyour API document (in JSON or YAML. It is the blueprint itself.\n● Swagger: A suite of tools Swagger UI, Editor, Codegen) that process the OpenAPI\nspecification to generate documentation and interactive interfaces.\n● Analogy: Think of OpenAPI as the universal standard for a USBC port. Swagger\nrepresents a specific brand of tools that utilise and build upon that standard.\n● You write an OpenAPI file, and you view it using Swagger tools.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/008.png",
+        "number": 8,
+        "text": "Anatomy of an OpenAPI Document\nPaths & Operations\nComponents & Schemas\nThis section defines the specific endpoints of\nyour application (e.g., `/users` or `/orders`). It\nspecifies the appropriate HTTP method GET,\nPOST, PUT, DELETE) and details the required\nquery parameters, path variables, and necessary\nsecurity headers.\nThis section defines reusable data models. For\nexample, a `User` object must contain an integer\n`id` and a string `email`. Defining these schemas\nguarantees data integrity and prevents malformed\ndata exchanges between your components.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/009.png",
+        "number": 9,
+        "text": "openapi: 3.0.4\ninfo:\ntitle: Sample API\nHTML.\nversion: 0.1.9\ndescription: Optional multiline or single-line description in CommonMark](http://commonmark.org/help/) or\nservers:\n- url: http://api.example.com/v1\ndescription: Optional server description, e.g. Main (production) server\n- url: http://staging-api.example.com\ndescription: Optional server description, e.g. Internal staging server for testing\npaths:\n/users:\nget:\nsummary: Returns a list of users.\ndescription: Optional extended description in CommonMark or HTML.\nresponses:\n\"200\": # status code\ndescription: A JSON array of user names\ncontent:\napplication/json:\nschema:\ntype: array\nitems:\ntype: string",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/010.png",
+        "number": 10,
+        "text": "Mock Servers\nA mock server is a simulated backend service that is automatically generated from an API\nservice contract, such as an OpenAPI specification. Rather than communicating with a real\nbackend, the frontend sends requests to the mock server, which returns predefined example\nresponses that conform to the agreed contract.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/011.png",
+        "number": 11,
+        "text": "Contract First vs Code First\nContract First Code First\nDesign API first Write backend first\nFrontend can start immediately Frontend waits\nBetter collaboration Easier for small projects\nPreferred for teams Common for prototypes",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/012.png",
+        "number": 12,
+        "text": "Integration Workflow\nStep 2: Mocking\nFrontend uses tools like\nSwagger to mock\nbackend responses and\nbegins building the UI\nimmediately.\nStep 1: Design\nThe team agrees on the\nAPI contract before\nwriting any code. Write\nthe OpenAPI YAML file\ntogether.\nStep 4: Integration\nBecause both teams\nstrictly followed the\nblueprint, connecting\nfrontend to backend is\nseamless.\nStep 3: Development\nSimultaneously, the\nbackend builds the actual\nserver logic to fulfill the\nagreed-upon API\ncontract.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/013.png",
+        "number": 13,
+        "text": "Breaking the Contract\nChanging the contract means everyone depending on it must update. To prevent this,\nuse versioning when updating services.\n// GET /v1/users\n{\n}\n\"name\": \"Alice\"\n// GET /v2/users\n{\n}\n\"fullName\": \"Alice\"",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L25/014.png",
+        "number": 14,
+        "text": "Capstone Best Practices\nDesign-First Approach: Never write the backend code and then generate the\ncontract as an afterthought. Design the API first, agree on it, and then implement.\nVersion Control: Store your `openapi.yaml` file in your main Git repository. Treat it\nas critical production code that the whole team relies on.\nDescriptive Errors: Define standard error formats (e.g., 400 Bad Request, 404 Not\nFound) in your contract so the frontend can catch them and display helpful UI\nmessages.\nCommunicate Changes: If backend developers must alter the contract, the\nfrontend team must be consulted and agree to the update beforehand.",
+        "width": 960
+      }
+    ],
+    "sourceSha256": "2238d5eba72c243d60e085d9c8b1580d455aa0165664e6cc62b555a2a24798e5"
+  },
+  {
+    "file": "L27 - Microservices.pdf",
+    "id": "L27",
+    "pages": [
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/001.png",
+        "number": 1,
+        "text": "TYTO Microservices\nPresented by Vincent Feistel",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/002.png",
+        "number": 2,
+        "text": "TYTQ Agenda\nAgenda\n* Story Time\n* Why Microservices?\n* Practical Exercise\n* Why NOT Microservices?\n» Example: Brand Watch",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/003.png",
+        "number": 3,
+        "text": "TYTS",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/004.png",
+        "number": 4,
+        "text": "TYTQ Story Time: Alice & Bob\n...S0 they moved.\nALICE BOB\n» Moved to the city * Has her own infinity pool * Local Checkers Hyper! » Moved to the countryside\n* Has his own lake\n* No malls/shopping centers...",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/005.png",
+        "number": 5,
+        "text": "TYTQ Story Time: Grocery Shopping\nAlice's Shopping Experience\n@ @",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/006.png",
+        "number": 6,
+        "text": "TYTQ Story Time: Grocery Shopping\nAlice's Shopping Experience\nSo convenient!\nD l4—/—| &",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/007.png",
+        "number": 7,
+        "text": "TYTQ Story Time: Grocery Shopping\nAlice's Shopping Experience\n@ — e Checkout is broken :(",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/008.png",
+        "number": 8,
+        "text": "TYTQ Story Time: Grocery Shopping\nBob's Shopping Experience\n&\n@ &",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/009.png",
+        "number": 9,
+        "text": "TYTQ Story Time: Grocery Shopping\nBob's Shopping Experience\n|\n&\nI'm tired boss...\n@\n/&\n&",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/010.png",
+        "number": 10,
+        "text": "TYTQ Story Time: Grocery Shopping\nBob's Shopping Experience\n/ @\n@\nYoco is broken :(\n&",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/011.png",
+        "number": 11,
+        "text": "TYTQ Story Time: Grocery Shopping\nBob's Shopping Experience\nAt least | still have dinne/ @\n@ B en\nS",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/012.png",
+        "number": 12,
+        "text": "TYTQ Story Time: It's all a ruse\nWhat does this have to do with Microservices?\nWhat's my blud wafÒing about ® ® @ @",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/013.png",
+        "number": 13,
+        "text": "TYTO\nAlice",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/014.png",
+        "number": 14,
+        "text": "TYTQ Story Time: It's all a ruse\nMonolith Microservices\n/N\n00 (00| oo",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/015.png",
+        "number": 15,
+        "text": "TYTQ Pop Quiz\nPop Quiz!\n* What can we learn from Alice's shopping experience?\nPro:\nCon:\n* What can we learn from Bob's shopping experience?\nPro:\nCon:",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/016.png",
+        "number": 16,
+        "text": "TYTQ Pop Quiz\nPop Quiz!\n* What can we learn from Alice's shopping experience?\nPro: Centralised management\nCon: Single point of failure\n* What can we learn from Bob's shopping experience?\nPro:\nCon:",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/017.png",
+        "number": 17,
+        "text": "TYTQ Pop Quiz\nPop Quiz!\n* What can we learn from Alice's shopping experience?\nPro: Centralised management\nCon: Single point of failure\n* What can we learn from Bob's shopping experience?\nPro: Resilient to failure\nCon: Increased overhead",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/018.png",
+        "number": 18,
+        "text": "TYT& Deep dive: what microservices are\nWhat is the microservices architecture?\n* Splits a monolithic system into many small services.\n* Services communicate over the network using APIs.\n» Heavily emphasizes modular design.\nTrivia: Microservices started gaining traction alongside Al in 2011.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/019.png",
+        "number": 19,
+        "text": "TYTQ Deep Dive: The Why\nWhy Microservices?\n* Scalability\n* Maintainability\n* Independent Deployability",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/020.png",
+        "number": 20,
+        "text": "TYTQ Deep dive: scalability\nScalability\n* A monolith usually scales as one big unit.\nMicroservices let you scale only the bottleneck.\n* You can spin up extra instances for busy services.\n» Example: the order flow gets heavy during peak trafÏc.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/021.png",
+        "number": 21,
+        "text": "TYTQ Deep dive: maintainability\nMaintainability\n* Services exposes tightly controlled interfaces\n» Services should assume other services can fail - More resilient\n» Each service can use a different programming language",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/022.png",
+        "number": 22,
+        "text": "TYTQ Deep dive: modules\nWhy not just modules?\n» Modularity is possible without microservices...\n» ... if you're a perfect programmer\n* Real codebases often bypass module boundaries.\nMicroservices make those boundaries much harder to break.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/023.png",
+        "number": 23,
+        "text": "TYT& Deep Dive: Independent Deployment\nIndependent deployment\n» Small changes should not force a full redeploy.\n» Redeploy just the service you touched.\n« This is what enables zero-downtime style releases.\n» Examples: auth, recommendations, and products.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/024.png",
+        "number": 24,
+        "text": "TYTQ Exercise: Initial Monolith\nMonolith to Microservices\nUser\nl\nMonolith\nCustomers Products Orders Payment\n|\n_",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/025.png",
+        "number": 25,
+        "text": "TYTg Exercise: First Attempts\nMonolith to Microservices\nUser\nLT,\nCustomers Products Orders Payment\n\\\\W//",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/026.png",
+        "number": 26,
+        "text": "TYTg Exercise: First Attempts\nMonolith to Microservices\nUser\nMaintainability achieved!\nCustomers Products Orders Payment",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/027.png",
+        "number": 27,
+        "text": "TYTQ Exercise: First Attempts\nMonolith to Microservices\nUser\nmabmty achieved!\nCustomers Products Orders Payment\n\\\\“ .MW]ing is off though.\n- A single point of failure!",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/028.png",
+        "number": 28,
+        "text": "TYTQ Exercise: Distributed Monolith\nMonolith to Microservices\nUser\nT\nCustomers Products Orders Payment\n(SR A\ne",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/029.png",
+        "number": 29,
+        "text": "TYTQ Exercise: Distributed Monolith\nMonolith to Microservices\nScalability Achieved! User\nCustomers Products Orders Payment\nSR i S\ne oo e",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/030.png",
+        "number": 30,
+        "text": "TYTg Exercise: Distributed Monolith\nMonolith to Microservices\nScalability Achieved! User\nWe're missing someth%\nCustomers Products Orders Payment\nSR i S\ne oo e",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/031.png",
+        "number": 31,
+        "text": "TYTQ Exercise: Distributed Monolith\nMonolith to Microservices\nScalability Achieved! User\nWe're missing something... Orders is not independent\nCustomers Products Orders Payment\nSR i S\ne oo e",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/032.png",
+        "number": 32,
+        "text": "TYTQ Exercise: Distributed Monolith\nMonolith to Microservices\nWhat if we keep a local copy?\nCustomers Products Orders Payment\n(SR A\ne",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/033.png",
+        "number": 33,
+        "text": "TYTQ Exercise: Distributed Monolith\nMonolith to Microservices\nWhat if we keep a local copy?\nNotified of changes...\nCustomers Products Orders Payment\n(SR A\ne",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/034.png",
+        "number": 34,
+        "text": "TYTQ Exercise: Distributed Monolith\nMonolith to Microservices\nWhat if we keep a local copy?\nNotified of changes... Design pattern?\nCustomers Products Orders Payment\n(SR A\ne",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/035.png",
+        "number": 35,
+        "text": "TYTQ Exercise: Distributed Monolith\nMonolith to Microservices\nObserver! A.K.A. Pub-Sub\nCustomers Products Orders Payment\n(SR A\ne",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/036.png",
+        "number": 36,
+        "text": "TYTQ Exercise: Event Queue\nMonolith to Microservices\nEvent Queue\nCustomers Products Orders Payment\n(SR A\ne",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/037.png",
+        "number": 37,
+        "text": "TYTQ Exercise: Event Queue\nMonolith to Microservices\nEvent Queue\nEar\nCustomers Products Orders Payment\n(SR A\ne",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/038.png",
+        "number": 38,
+        "text": "TYTQ Exercise: Event Queue\nMonolith to Microservices\nEvent Queue\n.,\nCustomers Products Orders Payment\n(SR A\ne",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/039.png",
+        "number": 39,
+        "text": "TYTQ Exercise: Event Queue\nMonolith to Microservices\nEvent Queue\n/‘/‘ N‘pendent Deployability!\nCustomers Products Orders Payment\n(SR A\ne",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/040.png",
+        "number": 40,
+        "text": "TYTQ Deep Dive: The Why not\nDevOps after hearing \"Microservices\"",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/041.png",
+        "number": 41,
+        "text": "TYTQ Deep Dive: The Why not\nWhy NOT Microservices?\n* Microservices is hard!\n* It adds a lot of setup/maintenance work.\n* Think carefully before using it.\n* Other designs are fine 90% of the time\nTrivia: Netflix had to build custom tooling to manage their 100+ microservices.",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/042.png",
+        "number": 42,
+        "text": "TYTQ Conclusion\nConclusion\n» Microservices split a system into many services.\n* You can turn a monolith into microservices.\n* But be careful! Here be dragons.\n* Always ask: \"Will it improve the user experience?\"",
+        "width": 1440
+      },
+      {
+        "height": 810,
+        "image": "slide-explainer/images/L27/043.png",
+        "number": 43,
+        "text": "TYTO Microservices\nPresented by Vincent Feistel\nQuestions?",
+        "width": 1440
+      }
+    ],
+    "sourceSha256": "48c1ad3cb5fc840bff7010ee37dc0b638e441781d3f1949f5c0aac0d755b459e"
+  },
+  {
+    "file": "L28 - Deployment.pdf",
+    "id": "L28",
+    "pages": [
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/001.png",
+        "number": 1,
+        "text": "Lecture 28\nDEPLOYMENT DIAGRAMS",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/002.png",
+        "number": 2,
+        "text": "It’s been down for 4 hrs. This is what was in the manual\nINCIDENT REPORT #2481\nDuration: 4 h 12 min\nImpact: all checkout traffic failed\nCause: the primary database host was lost. There was no standby in\nanother failure domain, and the last usable backup was 19 hours old.\nReview finding: \"the deployment topology was never documented at a\nlevel that would have exposed this.\"\nThe diagram they had\nDatabase\nWhat would have had to be on that diagram for someone to catch this in a\nreview?",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/003.png",
+        "number": 3,
+        "text": "What a deployment diagram is for\nWhere does the code actually run, and how do the pieces talk to each other?\nTreat it as a view, chosen to answer a question.\nYou choose what goes on it based on the question a reader brings to it. Kruchten's 4+1 model calls this the\nphysical view. ISO/IEC/IEEE 42010:2022 gives the formal vocabulary for this: viewpoint, view, model kind.\nDifferent reader, different diagram. An SRE at 03:00, a security reviewer, someone estimating next year's cloud\nspend and a new joiner all want different things from it.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/004.png",
+        "number": 4,
+        "text": "Eight questions a deployment diagram must answer\n1 What system is this, and which environment? 2 What are the failure domains, and how are they nested?\n3 What runs in each place, and how many copies? 4 What isolates them, and how strong is that isolation?\n5 How does every pair of boxes talk? 6 Where does trust change, and where is identity established?\n7 Where does state live, and what happens when a domain\ndies? 8 Who owns this diagram, and when was it last true?",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/005.png",
+        "number": 5,
+        "text": "NAMING THINGS WITHOUT\nNAMING VENDORS\nQuestion 1.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/006.png",
+        "number": 6,
+        "text": "The rule:\nName the concept. Put the product in brackets.\nInstead of:\n\"the security group allows 5432 from the EKS nodes\"\nWrite:\n\"workload packet filter (AWS: security group) allows PostgreSQL :5432 from the\napp tier\"\nWhy this matters:\n● A diagram full of product names cannot be reviewed by anyone who has not used that product.\n● The concept survives a cloud migration.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/007.png",
+        "number": 7,
+        "text": "Concept to product: network and compute\nConcept AWS Azure GCP Kubernetes Isolated private network VPC VNet VPC cluster network (CNI) Failure-isolated site Availability Zone Availability Zone Zone topology zone label Packet filter at workload security group NSG firewall rule by tag NetworkPolicy Subnet-level filter network ACL NSG on subnet firewall rule (none) L7 entry point ALB App Gateway HTTPS LB Ingress / Gateway API L4 entry point NLB Load Balancer TCP/UDP LB Service LoadBalancer Unit of running service EC2 / ECS / Lambda VM / Container App GCE / Cloud Run Pod Blast-radius container account / OU subscription project / folder namespace (weak) On-prem\nVLAN / subnet\ndata hall\nhost firewall\nrouter ACL\nnginx, F5\nLVS, F5\nprocess on a host\nseparate estate",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/008.png",
+        "number": 8,
+        "text": "Concept to product: data, identity, edge\nConcept AWS Azure GCP Managed relational store RDS / Aurora Azure SQL Cloud SQL Object store S3 Blob Storage Cloud Storage Secret store Secrets Manager Key Vault Secret Manager Workload identity IAM role (IRSA) Managed Identity service account Queue SQS Service Bus Pub/Sub Log-structured stream Kinesis / MSK Event Hubs Pub/Sub Lite Edge cache CloudFront Front Door Cloud CDN Scheduled work EventBridge Logic Apps Cloud Scheduler not every concept exists at every layer.\nKubernetes operator + StatefulSet (none) Secret + CSI driver ServiceAccount (none) (none) (none) CronJob On-prem\nDB on a server\nMinIO / Ceph\nVault\nmachine cert\nRabbitMQ\nKafka\nVarnish\ncron",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/009.png",
+        "number": 9,
+        "text": "Term duality\nThe word Sense A Sense B\nContainer a deployable / runnable thing (app, service, database) an OCI image running under a container runtime\nNode any deployment target, including a JVM or a DB engine a worker machine in a Kubernetes cluster\nService a long-running application that owns some capability a virtual IP plus load-balancing rule inside a cluster\nInstance one running copy of a deployable thing a virtual machine you rented\nCluster a set of machines under one scheduler a primary plus its replicas in a database\nIf a diagram uses one of these words, it must be obvious in which sense. Usually that\nmeans a legend.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/010.png",
+        "number": 10,
+        "text": "WHAT SEPARATES THE BOXES\nQuestion 4.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/011.png",
+        "number": 11,
+        "text": "The isolation stack\nPhysical host\nHypervisor\nVirtual machine + guest OS\nContainer runtime\nContainer: namespaces + cgroups + seccomp\nProcess\nThread\nThe question\n● Which of these would stop an attacker\nwho already has code execution one\nlevel in?",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/012.png",
+        "number": 12,
+        "text": "How strong is the wall?\nSeparate account / subscription strongest practical blast-radius boundary; separate credentials, quotas and audit\ntrail\nSeparate physical network no shared path to attack\nHypervisor (VM to VM) strong, decades of hardening, still the default assumption behind multi-tenant\ncloud\nSandboxed runtime gVisor, Kata, Firecracker: built to be a security boundary under a container\nOCI container on a shared kernel isolation only. A kernel escape crosses it.\nKubernetes namespace RBAC and naming scope. No network or kernel isolation by default.\nApplication-enforced tenant check as strong as the least reviewed query in your codebase\nSame process, different thread no boundary at all\nStronger at the top.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/013.png",
+        "number": 13,
+        "text": "WHAT MUST BE ON THE PAGE\nQuestions 1, 2, 3, 7 and 8",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/014.png",
+        "number": 14,
+        "text": "First the scope, then failure domains\nQ1 What system is this, and which environment?\nOne software system, one environment, named on the diagram. Production and staging differ in exactly the ways that\ncause incidents: replica counts, instance sizes, whether the standby exists at all.\nFails as: a diagram that is secretly 60% staging, and nobody can tell which 60%.\nQ2 What are the failure domains, and how are they nested?\nNest boxes so the nesting mirrors what fails together: region contains zone contains host contains runtime contains\nprocess. Two boxes inside one parent share that parent's failure.\nFails as: slide 2. Flat boxes hide the shared failure domain, so nobody sees the single point of failure.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/015.png",
+        "number": 15,
+        "text": "What runs where. What happens to state.\nQ3 What runs in each place, and how many copies?\nName the deployable thing, its version, and its replica count. api-service v2.3 x3 tells a reader more than API ever will.\nFails as: you cannot tell whether a deploy is rolling or all-at-once, and you cannot estimate cost.\nQ7 Where does state live, and what happens when a domain dies?\nFor every data store: engine and version, replication mode, and the recovery numbers.\n● Synchronous replica: no data loss on failover, write latency paid on every commit.\n● Asynchronous replica: fast writes, bounded data loss on failover. That bound is your RPO.\n● A replica copies your DELETE as faithfully as your INSERT. Backups are a separate control.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/016.png",
+        "number": 16,
+        "text": "Who owns it. What to leave off.\nQ8 Who owns this diagram, and when was it last true?\nFooter on every diagram: owner, source of truth, date last verified, commit hash if it is generated.\nLeave off, unless the diagram is specifically about it:\n● every config file and environment variable\n● metrics exporters, log shippers and agents on every host\n● the CI/CD pipeline, which belongs on a delivery diagram\n● the internal component structure of a deployable unit, which sits one level below this",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/017.png",
+        "number": 17,
+        "text": "HOW THE BOXES TALK\nQuestion 5.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/018.png",
+        "number": 18,
+        "text": "The problem with an unlabeled arrow\nWhat students draw\nAPI Database\nFive things the top arrow hides\n● Which side opens the connection?\n● Which protocol, on which port?\n● Encrypted? Is the caller authenticated,\nor just on the network?\n● Blocking or queued?\n● On failure, is a retry safe?\nWhat a reviewer can use\nPostgreSQL wire :5432\norder-api v4.1\nx3 replicas\nPostgreSQL 16\nprimary, sync standby\nTLS 1.3, mTLS, sync, pool 20",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/019.png",
+        "number": 19,
+        "text": "Edge label anatomy\nUse a fixed shape so a reader always knows where to look:\n<protocol>/<version> :<port> [TLS version] [auth] [sync | async]\nHTTPS/2 :443, TLS 1.3, mTLS, sync\nPostgreSQL :5432, TLS 1.3, cert auth, sync, pool 20\nKafka :9093, TLS, SASL/SCRAM, async, 12 partitions\nAMQP 0-9-1 :5671, TLS, async, durable queue\nDirection records which side opens the connection. Data crosses both ways regardless. Say which convention\nyou use in the legend.\nThe edge is also where the filter lives: every arrow you draw implies a rule in a packet filter. Annotate the arrows and\nyou have written most of your firewall configuration.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/020.png",
+        "number": 20,
+        "text": "Protocol version changes the topology\nHTTP/1.1 through an L4 balancer\ngRPC over HTTP/2, same balancer\nclient\nclient\none long-lived conn\nL4 balancer\nL4 balancer\nreplica 1 replica 2 replica 3\nreplica 1 replica 2 replica 3\nNew connection per request wave, so the balancer\nre-decides. Load spreads.\nThe balancer decides once, at connect time. Every stream\nthen pins to replica 1. Two replicas idle.\nWhy the version belongs on the\nedge\n● Fix: an L7 balancer that understands\nHTTP/2 streams.\n● Or client-side load balancing.\n● Or a mesh sidecar doing the balancing\nper request.\n● Write the protocol version on the edge\nand this is visible in review,",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/021.png",
+        "number": 21,
+        "text": "Synchronous and asynchronous edges fail differently\nSynchronous: coupled availability\nHTTPS/1.1 :443, sync\ncheckout payments\npayments down = checkout down\nWhat async buys and costs\n● Async adds a queue, so it adds queue\ndepth, consumer lag, redelivery and a\ndead-letter path.\n● At-least-once delivery means consumers\nmust be idempotent.\n● You pay for all of that, but the outage\nstops propagating.\n● Draw solid for sync, dashed for async,\nand write the wordanyway.\nAsynchronous: decoupled availability\ncheckout order queue\ndurable payments\nAMQP :5671, async, at-least-once",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/022.png",
+        "number": 22,
+        "text": "What actually goes on the wire\nJDBC and ODBC are client APIs. The wire underneath is the database's own protocol.\nAn edge labelled JDBC tells a reviewer nothing about what is on the network, or which port a firewall would have to\nopen.\nPostgreSQL wire protocol :5432\nMySQL client/server protocol :3306\nTDS (SQL Server) :1433\nOracle TNS :1521\nMongoDB wire protocol :27017\nRESP (Redis) :6379, TLS on :6380\nSame discipline for the rest of the infrastructure: DNS :53 UDP and TCP, DoT :853, LDAPS :636, SMTP submission :587,\nKafka :9092 plaintext and :9093 TLS, MQTT :1883 and :8883.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/023.png",
+        "number": 23,
+        "text": "Exercise 3: label six edges\nIn pairs, four minutes. Give protocol, port, encryption, auth and sync/async for every arrow.\n1 2\nbrowser web app order API worker\n3 4 5\nPostgreSQL Redis queue\n6\nexternal\npayment provider\nSix unlabelled arrows. One of them will tempt you to write JDBC.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/024.png",
+        "number": 24,
+        "text": "WHERE TRUST CHANGES\nQuestion 6.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/025.png",
+        "number": 25,
+        "text": "What a trust boundary is\nA boundary between components that operate under different security policies, privilege\nlevels, or assumptions about who is calling.\nThe working rule:\nData crossing a trust boundary must be validated. The caller crossing it must be authenticated.\nWhere it comes from\nThe idea comes from threat modelling. STRIDE was developed at Microsoft by Praerit Garg and Loren Kohnfelder, and\nboth STRIDE and OWASP threat modelling draw boundaries on a data flow diagram as dotted lines marking where data\nchanges its level of trust.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/026.png",
+        "number": 26,
+        "text": "Pick a notaation and legend it.\nDashed enclosure\nDashed dividing line\nStereotyped group\nuntrusted\n<<trust boundary>>\ninternet CDN\nclient edge\napi db\ntrust boundary\ningress api\nA dashed red rectangle around everything at one trust\nlevel. Reads well when boundaries nest.\nA dashed line across the diagram with a label on each\nside. Reads well for tiers, and it can cut through other\nboxes.\nA labelled group or package with a stereotype. Reads\nwell in a modelling tool that will not let you draw\nfreehand.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/027.png",
+        "number": 27,
+        "text": "Boundaries worth naming\nNetwork perimeter internet to DMZ to private subnet to data tier\nProcess and OS user different uid, different capabilities\nContainer to host shared kernel; isolation only, no security guarantee\nVM and hypervisor the boundary multi-tenant cloud is built on\nTenant multi-tenant SaaS; usually enforced in application code\nAccount / subscription / project blast radius, credentials, audit\nJurisdiction data residency under GDPR and POPIA; a legal constraint\nSupply chain registry to cluster; pulling an image is an act of trust\nHuman / operator bastion, break-glass, the path nobody draws",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/028.png",
+        "number": 28,
+        "text": "Identity: established, or merely asserted?\nbrowser edge / ingress order API pricing API\nThe only question\n● Ask of each hop: verified, or just\nreachable?\n● Flat internal networks answer \"just\nreachable\".\n● One compromised workload then\nbecomes a breach.\n● mTLS turns every asserted hop into an\nestablished one.\nESTABLISHED\nsession token validated against the\nidentity provider\nASSERTED\na JWT is forwarded; is the signature\nchecked here?\nNOTHING\nreachable on the network is treated\nas authorised",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/029.png",
+        "number": 29,
+        "text": "Exercise 4: STRIDE\nPick the browser-to-edge crossing. Answer all six. Five minutes.\nS Spoofing Can I pretend to be a legitimate caller?\nT Tampering Can I alter the request in flight or the data at rest?\nR Repudiation Can we prove afterwards who did it?\nI Information disclosure What leaks? Payloads, errors, logs.\nD Denial of service Can I exhaust something from outside?\nE Elevation of privilege Can a low-privilege caller gain more?",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/030.png",
+        "number": 30,
+        "text": "ONE SYSTEM, SEVEN DIAGRAMS",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/031.png",
+        "number": 31,
+        "text": "UniMarket\nweb app\nReact SPA\norder API\nJava 21\nsearch API\nGo\nworker\nJava 21\nPostgreSQL\norders, users\nRedis\nsessions, cache\nexternal\npayment provider\nThis diagram is true in every environment.\nIt says nothing about how many copies run, what they run on, what is between them, or what happens when\nsomething dies. Every remaining diagram answers those questions, and every one of them is specific to one\nenvironment.\nRunnable unit Deployment node Data store Outside our control Trust boundary",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/032.png",
+        "number": 32,
+        "text": "Example 1: everything on one host\nHost: unimarket-prod-01 (4 vCPU, 16 GB) [AWS: EC2 t3.xlarge | on-prem: 1U server]\nUbuntu 24.04 LTS\nJVM 21\nartifact\nunimarket.jar\nv1.4.0, single process\nPostgreSQL 16\nsame host, unix socket\nHTTP/1.1 :8080\nnginx 1.26\nTLS termination\nbrowser\nHTTPS/1.1 :443, TLS 1.3",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/033.png",
+        "number": 33,
+        "text": "Example 2: three tiers, on-premises, with a DMZ\nbrowser HTTPS/1.1 :443, TLS 1.3\nTRUST BOUNDARY internet / DMZ\nDMZ (VLAN 40): no state kept here\nnginx reverse proxy\nx2, keepalived VIP\nRead the diagram\n● Two boundaries,\n● Nothing in the DMZ holds state, which is\nwhy a DMZ exists.\n● Two app servers means you must now\nsay how traffic is spread, and whether\nsessions are sticky.\n● Still a single point of failure. Same one\nas the incident on slide 2. Where is it?\nHTTP/1.1 :8080\nApplication tier (VLAN 41)\nunimarket.jar v1.4\napp-01, JVM 21\nunimarket.jar v1.4\napp-02, JVM 21\nTRUST BOUNDARY app tier / data tier\nData tier (VLAN 42): no route to internet\nPostgreSQL :5432, TLS\nPostgreSQL 16\nsingle host, nightly dump",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/034.png",
+        "number": 34,
+        "text": "Example 3: containerised, one cloud region, two zones\nbrowser\nCDN\nedge cache\nHTTPS/2 :443, TLS 1.3, sync TRUST BOUNDARY internet / private network\nCloud region [AWS: eu-west-1 | Azure: West Europe]\ninfrastructure node\nL7 load balancer\nRead the diagram\n● Two failure domains, and the nesting\nsays which things die together.\n● Replica counts and versions on every\nunit.\n● Sync standby: no data loss, cross-zone\nlatency on every commit.\n● Async cache replica: fast, loses\nwhatever had not shipped.\nFailure domain A [zone eu-west-1a] Failure domain B [zone eu-west-1b]\norder-api v2.3\nx2\nworker v2.3\nx1\norder-api v2.3\nx2\nworker v2.3\nx1\nTRUST BOUNDARY app / data tier\nRedis 7\nprimary\nPostgreSQL 16\nprimary\nPostgreSQL 16\nstandby, sync\nRedis 7\nreplica, async\nsync replication: no data loss on failover\nunimarket / production | owner: platform team | verified 2026-08-14 | source: infra/prod.tf",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/035.png",
+        "number": 35,
+        "text": "Example 3b: the same architecture, on-premises\nbrowser\nreverse cache\nVarnish cache\nTRUST BOUNDARY internet / private network\nHTTPS/2 :443, TLS 1.3, sync\nCampus data centre, Hatfield\ninfrastructure node\nF5 BIG-IP\nFailure domain A [hall 1: own power + switch] Failure domain B [hall 2: own power + switch]\norder-api v2.3\nx2 (Podman)\nworker v2.3\nx1 (Podman)\norder-api v2.3\nx2 (Podman)\nworker v2.3\nx1 (Podman)\nTRUST BOUNDARY app / data tier\nRedis 7\nprimary\nPostgreSQL 16\nprimary\nPostgreSQL 16\nstandby, sync\nRedis 7\nreplica, async\nsync replication: no data loss on failover\nunimarket / production | owner: platform team | verified 2026-08-14 | source: ansible/prod",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/036.png",
+        "number": 36,
+        "text": "Example 4: adding an asynchronous edge\nCloud region, production (zones omitted on purpose, and the diagram says so)\norder-api v2.6\nx4\nlog-structured stream\norder-events\n6 partitions, 3 replicas\nsettlement worker\nx2, consumer group\nPostgreSQL :5432 outbox relay publishes\nKafka :9093, TLS, SASL/SCRAM, async, at-least-once\nPostgreSQL 16\n+ outbox table\norder-events.DLQ\nafter 5 attempts\nnothing consumes the DLQ automatically; that is a decision,\nso write it down",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/037.png",
+        "number": 37,
+        "text": "Example 5: devices, third parties, and traffic coming back in\nDevices we do not control\ndevice\nAndroid app\nv3.1, and v2.8 still live\ndevice\niOS app\nv3.1\ndevice\nbrowser\nTRUST BOUNDARY public internet / our estate HTTPS/2 :443, TLS 1.3, OAuth 2.0 + PKCE\nCloud region, production\nAPI gateway\nrate limit, token validation\nexternal\npayment provider\nHTTPS :443, OAuth 2.0 INBOUND webhook, signed\norder-api v2.6\nx4\nPostgreSQL 16\nprimary + sync standby\nwebhook receiver\nx2, signature check",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/038.png",
+        "number": 38,
+        "text": "Example 6: two regions, one legal boundary\nglobal DNS\n60 s TTL, health checked\nJURISDICTION BOUNDARY\nRegion: EU [active]\nRegion: ZA [warm standby]\nL7 load balancer\nL7 load balancer\norder-api v2.6 x6\norder-api v2.6 x2\nPostgreSQL 16 primary\nEU personal data only\nPostgreSQL 16 replica\nZA personal data only\nasync replication: 400 ms lag, which is your RPO",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/039.png",
+        "number": 39,
+        "text": "KEEPING THE DIAGRAM TRUE\nQuestion 8. The only reason any of this survives a real project.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L28/040.png",
+        "number": 40,
+        "text": "Diagram rot has two cures\nThe failure mode is always the same: someone drew a picture, exported an image, and pasted it into a wiki. Six\nmonths later it was wrong, nobody owned the source, and the next person started again.\nCure 1: diagrams as code\nKeep the diagram as text next to the code it describes, render it in CI, review it in pull requests. PlantUML, Structurizr\nDSL, Mermaid, D2.\nOne line of Structurizr DSL carries a replica count that a drawing tool would make you letter by hand:\ndeploymentNode \"api pod\" \"\" \"Docker\" 3 { containerInstance api }\nCure 2: model, then views\nBuild one model and generate many diagrams from it. Rename a service once and every view updates, which removes\nthe bug where the same thing is called three things on three slides.",
+        "width": 960
+      }
+    ],
+    "sourceSha256": "76dc98b01784b3ab46e787bf4b59924db356a3f1efd21b54a9d1e0b6d4823da8"
+  },
+  {
+    "file": "L30 - Software Quality Assurance.pdf",
+    "id": "L30",
+    "pages": [
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/001.png",
+        "number": 1,
+        "text": "SOFTWARE QUALITY\nASSURANCE\nCOS301\nAVINASH SINGH\nDEPARTMENT OF COMPUTER SCIENCE\nUNIVERSITY OF PRETORIA",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/002.png",
+        "number": 2,
+        "text": "WHAT IS SOFTWARE QUALITY?\nSimplistically, quality is an attribute of software that implies the software\nmeets its specification\nThis definition is too simple for\nensuring quality in software\nsystems\nSoftware specifications are often incomplete or ambiguous\nSome quality attributes are difficult to specify\nTension exists between some quality attributes, e.g.\nefficiency vs. reliability",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/003.png",
+        "number": 3,
+        "text": "SOFTWARE QUALITY ATTRIBUTES\n• Safety\n• Security\n• Reliability\n• Resilience\n• Robustness\n• Understandability\n• Testability\n• Adaptability\n• Modularity\n• Complexity\n• Portability\n• Usability\n• Reusability\n• Efficiency\n• Learnability",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/004.png",
+        "number": 4,
+        "text": "SOFTWARE QUALITY\n• Conformance to explicitly stated functional and performance requirements, explicitly\ndocumented development standards, and implicit characteristics that are expected of\nall professionally developed software.\n• Software requirements are the foundation from which quality is measured.\n• Lack of conformance to requirements is lack of quality.\n• Specified standards define a set of development criteria that guide the manner in which\nsoftware is engineered.\n• If the criteria are not met, lack of quality will almost surely result.\n• There is a set of implicit requirements that often goes unmentioned.\n• If software conforms to its explicit requirements but fails to meet its implicit requirements,\nsoftware quality is suspect.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/005.png",
+        "number": 5,
+        "text": "SOFTWARE QUALITY ASSURANCE\n• To ensure quality in a software product, an organization must have a three-prong approach to quality\nmanagement:\n• Organization-wide policies, procedures and standards must be established.\n• Project-specific policies, procedures and standards must be tailored from the organization-wide templates.\n• Quality must be controlled; that is, the organization must ensure that the appropriate procedures are\nfollowed for each project.\n• Standards exist to help an organization draft an appropriate software quality assurance plan.\n• ISO 9000-3\n• ANSI/IEEE standards\n• External entities can be contracted to verify that an organization is standard-compliant.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/006.png",
+        "number": 6,
+        "text": "SQA ACTIVITIES\nApplying technical\nmethods\nConducting formal\ntechnical reviews\nTesting Software\nEnforcing standards\nControlling change\nMeasurement\nRecord keeping\nand reporting\n•To help the analyst\nachieve a high\nquality\nspecification and a\nhigh quality design\n•A stylized meeting\nconducted by\ntechnical staff with\nthe sole purpose of\nuncovering quality\nproblems\n•A series of test\ncase design\nmethods that help\nensure effective\nerror detection\n•Coding Standards\n•Code Reviews\n•Applied during\nsoftware\ndevelopment and\nmaintenance\n•Track software\nquality and asses\nthe ability of\nmethodological\nand procedural\nchanges to\nimprove software\nquality\n•Provide\nprocedures for the\ncollection and\ndissemination of\nSQA information",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/007.png",
+        "number": 7,
+        "text": "ADVANTAGES OF SQA\nSoftware will have fewer\nlatent defects, resulting\nin reduced effort and\ntime spent during\ntesting and\nmaintenance\nHigher reliability will\nresult in greater\ncustomer satisfaction\nMaintenance costs can\nbe reduced\nOverall life cycle cost of\nsoftware is reduced",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/008.png",
+        "number": 8,
+        "text": "DISADVANTAGES OF SQA\nIt is difficult to institute in small organizations, where\navailable resources to perform necessary activities are not\navailable\nIt represents cultural change - and change is never easy\nIt requires the expenditure of money that would not\notherwise be explicitly budgeted to software engineering\nor QA",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/009.png",
+        "number": 9,
+        "text": "Requirements\nAnalysis\nQUALITY REVIEWS\nSpecification\nReview\nDesign\nDesign\nReview\nCode\nCode\nReview\nTest\nReview\nTesting\nCustomer\nFeedback\nMaintenance",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/010.png",
+        "number": 10,
+        "text": "SOFTWARE DEVELOPMENT LIFECYCLE",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/011.png",
+        "number": 11,
+        "text": "SOFTWARE FAULTS AND FAILURES\nA failure corresponds to erroneous/unexpected runtime\nbehavior observed by a user.\nA fault is a static software characteristic that can cause a\nfailure to occur.\nThe presence of a fault doesn’t necessarily imply the\noccurrence of a failure.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/012.png",
+        "number": 12,
+        "text": "Incomplete or\nerroneous\nspecifications (IES).\nInconsistent\ncomponent interface\n(ICI).\nCAUSES\nOF SOFTWARE DEFECTS\nMisinterpretation of\ncustomer\ncommunication\n(MCC).\nIntentional deviation\nfrom specifications\n(IDS).\nViolation of\nprogramming\nstandards (VPS).\nError in design logic\n(EDL).\nIncomplete or\nerroneous testing\n(IET).\nInaccurate or\nincomplete\ndocumentation (IID).\nAmbiguous or\ninconsistent\nhuman/computer\ninterface (HCI).\nError in data\nrepresentation\n(EDR).\nError in\nprogramming\nlanguage translation\nof design (PLT).",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/013.png",
+        "number": 13,
+        "text": "SOFTWARE RELIABILITY\nProbability of failure-free operation for a specified time in a specified environment.\nThis could mean very different things for different systems and different users.\nInformally, reliability is a measure of the\nusers’ perception of how well the software\nprovides the services they need.\nNot an objective measure\nMust be based on an operational profile\nMust consider that there are widely varying consequences\nfor different errors",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/014.png",
+        "number": 14,
+        "text": "SOFTWARE RELIABILITY\n• A simple measure of reliability is mean-time-between-failure (MTBF):\nMTBF = MTTF + MTTR\n• MTTF is mean-time-to-failure\n• MTTR is mean-time-to-repair\n• Software availability is the probability that a program is operating according to requirements at a given point in time and is\ndefined as\n𝑀𝑇𝑇𝐹\n𝐴𝑣𝑎𝑖𝑙𝑎𝑏𝑖𝑙𝑖𝑡𝑦 =\n𝑀𝑇𝑇𝐹 + 𝑀𝑇𝑇𝑅\n∗ 100%",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/015.png",
+        "number": 15,
+        "text": "SOFTWARE RELIABILITY\nScenario: Server Uptime and Maintenance in a Data Center\nIn a corporate data center, a team manages a set of servers that run critical applications for\nthe company. One particular server is monitored over time to assess its reliability.\nOver a 6-month period, the server experienced three breakdowns. Here’s what was\nobserved:\n• 1st failure: The server ran for 180 hours, then failed. It was repaired and operational\nagain after 3 hours.\n• 2nd failure: It then ran for another 220 hours before failing again, taking 5 hours to fix.\n• 3rd failure: Later, it ran 200 hours and needed 4 hours of repair.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/016.png",
+        "number": 16,
+        "text": "SOFTWARE RELIABILITY\n• Mean Time To Failure (MTTF):\n180+220+200\n600\nMTTF =\n=\n= 200 Hours\n3\n3\n• Mean Time To Repair (MTTR):\n3+5+4\n12\nMTTR =\n=\n= 4 Hours\n3\n3\n• Mean Time Between Failures (MTBF):\nMTBF = 𝑀𝑇𝑇𝐹 + 𝑀𝑇𝑇𝑅 = 204 Hours",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/017.png",
+        "number": 17,
+        "text": "SOFTWARE METRICS\n• A software metric is any type of measurement that relates to a software system, process or\nrelated artifact.\n• Two types:\n• Control metrics - used to plan, manage and control the development process\n(e.g., effort expended, elapsed time, disk usage, etc.)\n• Predictor metrics - used to predict an associated product quality (e.g., cyclomatic complexity\ncan predict ease of maintenance)\n• external attribute: something we can only discover after the software has been put into use (e.g.,ease\nof maintenance)\n• internal attribute: something we can measure directly from the software itself (e.g., cyclomatic\ncomplexity)",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/018.png",
+        "number": 18,
+        "text": "SOFTWARE METRICS",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/019.png",
+        "number": 19,
+        "text": "DESIGN QUALITY METRICS\nFor design components maintainability is related to:\n– cohesion - how closely related is the functionality of the component?\n– coupling - how independent is the component?\n– understandability - how easy is it to understand what the component does?\n– adaptability - how easy is it to change the component?",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/020.png",
+        "number": 20,
+        "text": "DESIGN QUALITY METRICS\na) Structural fan-in/fan-out\nfan-in – number of calls to a component by other components\nfan-out – number of components called by a component\nhigh fan-in => high coupling\nhigh fan-out => calling component has high complexity",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/021.png",
+        "number": 21,
+        "text": "DESIGN QUALITY METRICS\nb) Informational fan-in/fan-out\n– consider also the number of parameters passed plus access to shared data structures\ncomplexity = component-length x (fan-in x fan-out)2\nIt has been validated using the Unix system\nIt is a useful predictor of effort required for implementation",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/022.png",
+        "number": 22,
+        "text": "DESIGN QUALITY METRICS\nc) IEEE Standard 982.1-1988\n• looks at: subsystem properties (number of subsystems and degree of coupling)\ndatabase properties (number of attributes and classes)",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/023.png",
+        "number": 23,
+        "text": "QUALITY CONTROL\nUnit Testing Integration\nTesting\nRegression\nTesting\nTest Data\nGeneration\nAcceptance\nTesting\nConfiguration\nTesting\nNon-\nfunctional\nTesting\nAdapter\nTesting",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/024.png",
+        "number": 24,
+        "text": "UNIT TESTING\n• Test functionality of unit.\n• Test unit assuming environment behaves according to contracts.\n• Test units across levels of granularity.\n• Unit is a:\n• class or function/service,\n• component or service contract.\n• Test against:\n• service provided (no exception or error thrown)\n• all post-conditions hold true after service provided.\n• may have to formulate intermediate activities as observations of these as post-conditions.\n• Mock-out any lower-level service providers or components.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/025.png",
+        "number": 25,
+        "text": "INTEGRATION TESTING\n• Test component in its environment.\n• Do not use mocking.\n• Test across levels of granularity.\n• Test that various units can work together and achieve the correct results\n• Interactions\n• Data-flow",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/026.png",
+        "number": 26,
+        "text": "REGRESSION TESTING\n• This is used to determine backwards compatibility and non-breaking changes.\n• After a change is made to the system, re-run all tests before to ensure that they run successfully.\n• Unit Tests\n• Integration Tests\n• Non-functional Tests (why?)",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/027.png",
+        "number": 27,
+        "text": "NON-FUNCTIONAL TESTING\nPerformance – How\nlong does it take to\nperform a task?\nScalability – How\nmany concurrent\nusers? How many\nrequests can be\nprocesses? Load\ntesting?\nReliability – impact on\nsingle point of failure,\nimpact on single\nprocess failure\nSecurity – Access\ncontrol? Information\nsecurely stored and\ntransmitted?\nMany more …",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/028.png",
+        "number": 28,
+        "text": "TEST DATA GENERATION\nEquivalence partitions\n(black box)\nPartition input/environment/output\nspace into partitions for which\nbehaviour is equivalent.\nBoundary value analysis\n(black box)\nFind extreme/boundary points in\ninput/environment space.\nPath analysis\n(white box) Analyze logic to determine all paths.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/029.png",
+        "number": 29,
+        "text": "ACCEPTANCE TESTING\nIs a user happy to\naccept system?\nDoes the system meet\nthe user requirements?\nFeeback loop",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/030.png",
+        "number": 30,
+        "text": "CONFIGURATION TESTING\nSOMETIMES SYSTEM RELEASED\nIN DIFFERENT CONFIGURATIONS\nEACH CONFIGURATION NEEDS\nTO BE TESTED.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/031.png",
+        "number": 31,
+        "text": "ADAPTER TESTING\n• Test that adapter to external party functions correctly\n• System adapters\n• Protocol marshalling / serialization (JSON Parser vs XML Parser)\n• Quality Requirements\n• Human adapters\n• User testing (GUI) / Usability",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/032.png",
+        "number": 32,
+        "text": "CODING STANDARDS\n•\n•\n•\n•\nReadability First: Code is read up to 10x more often than it is written.\nStandards ensure fast mental parsing.\nTechnical Debt Mitigation: Unstructured code contributes to over $2.4\nTrillion in global software maintenance costs.\nAccelerated Onboarding: Consistent style guides allow new developers\nto start contributing within days instead of weeks.\nBug Reduction: Clear naming and predictable structure directly prevent\nlogical and edge-case errors.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/033.png",
+        "number": 33,
+        "text": "CLEAN CODE PRINCIPLES\n1. Expressive Naming\nUse domain-meaningful, pronounceable names. Variable and\nfunction names should clearly reveal intent without needing\nexplanatory comments.\n2. Single Responsibility\nFunctions and classes should do one thing, do it well, and do it\nonly. Keep functions short (preferably under 20 lines of code).",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/034.png",
+        "number": 34,
+        "text": "CLEAN CODE PRINCIPLES\nNaming Conventions\nEstablish strict casing (camelCase, PascalCase,\nsnake_case) across variables, methods, and files\nfor instant type recognition.\nFormatting & Layout\nStandardize indentation spaces, maximum line\nlength (80–120 chars), bracket placement, and\nstructural grouping.\nDefensive Handling\nEnforce explicit exception handling, input\nvalidation, null checking, and fail-safe default\nreturn values.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/035.png",
+        "number": 35,
+        "text": "DOCUMENTATION AND COMMENTS\nExplain \"Why\", Not \"What\"\nGood code is self-documenting for 'what' it does. Use comments exclusively\nto explain business rationale, architectural trade-offs, or non-obvious\nalgorithms.\nAvoid comment clutter that duplicates obvious code statements. Keep API\ndocstrings up-to-date alongside code edits.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/036.png",
+        "number": 36,
+        "text": "DOCUMENTATION AND COMMENTS\nExplain \"Why\", Not \"What\"\nGood code is self-documenting for 'what' it does. Use comments exclusively\nto explain business rationale, architectural trade-offs, or non-obvious\nalgorithms.\nAvoid comment clutter that duplicates obvious code statements. Keep API\ndocstrings up-to-date alongside code edits.\n70%\nReduction in Debugging Effort\nMeasurable Team Efficiency\nTeams adhering to strict, automated coding standards\nreport up to 70% less time spent hunting trivial\nsyntactic bugs and formatting discrepancies during\ncode reviews.\nStandardization eliminates unnecessary cognitive load, allowing software engineers to\nfocus on architectural problem-solving.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/037.png",
+        "number": 37,
+        "text": "AUTOMATING STANDARD CHECKS\n1. Static Linters\nTools like ESLint, Pylint, and SonarQube highlight syntax and\nstyle errors in real time within IDEs.\n2. CI/CD Gateways\nGit pre-commit hooks and CI pipelines automatically reject\ncode that violates project style guides.\n3. Peer Code Reviews\nHuman reviews focus on high-level architecture and logic\nonce automated tools pass.",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/038.png",
+        "number": 38,
+        "text": "POPULAR LANGUAGE STYLE GUIDES\nLanguage Standard Style Guide Formatter Tool Linter / Analyzer\nPython PEP 8 Guidelines Black / Ruff Flake8 / Pylint\nJavaScript / TS Airbnb / Google JS Guide Prettier ESLint\nJava Google Java Style spotless Checkstyle\nC++ C++ Core Guidelines clang-format clang-tidy",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/039.png",
+        "number": 39,
+        "text": "\"\nWIS-DOM\nAny fool can write code that a computer can understand.\nGood programmers write code that humans can\nunderstand.\n— Martin Fowler (Author & Refactoring Pioneer)",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/040.png",
+        "number": 40,
+        "text": "CODING STANDARDS FEEDBACK\n• Purpose – Explain the purpose of the coding standards, and what the goals are….\n• Tooling – Mention the tools used, and what it is used for, what purpose it serves.\n• Code complexity – How loops should be done, what factors are considered, some standards defined by the team, that\ntranslate to code. Yes we spot check code to see your teams commitment to the coding standards policy.\n• Exception handing – catching all without some predefined exceptions is bad practice.\n• Provide code samples – good vs bad.\n• VCS and commit conventions.\n• Each framework/lang has some standards as well, syntax, best practices.\n• Testing standards, Security hygiene, code comments, and boundaries.\n• Compliance!",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/041.png",
+        "number": 41,
+        "text": "CLEAN CODE",
+        "width": 960
+      },
+      {
+        "height": 540,
+        "image": "slide-explainer/images/L30/042.png",
+        "number": 42,
+        "text": "",
+        "width": 960
+      }
+    ],
+    "sourceSha256": "c6e54ff0a5cef6cc5cdc6d1b1c1c4e188d6628b3c1af9ae89ddfe7b0857f0d05"
+  }
+]

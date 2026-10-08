@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ST2 Example 4 — Scenario Questions · COS301 Mock Paper</title>
+<style>
+/* ============================================================
+   CT3 Study Guides — shared dark academic theme
+   Identical across every lecture file. Edit here, regenerate all.
+   ============================================================ */
+
+:root {
+  --bg: #0b0e11;
+  --surface: #12161b;
+  --card: #1a1f26;
+  --card-border: #262d37;
+  --text: #e8ecf1;
+  --text-dim: #9aa4b2;
+  --text-faint: #626d7a;
+  --accent: #4a90f8;
+  --accent-dim: #2c5aa8;
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --warning: #f59e0b;
+  --error: #f56363;
+  --error-bg: rgba(245, 99, 99, 0.12);
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --easing: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Nav ---------- */
+
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 14, 17, 0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--card-border);
+}
+
+.topnav-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.topnav-brand {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topnav-brand span { color: var(--accent); }
+
+.topnav-links {
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  flex: 1;
+}
+
+.topnav-links::-webkit-scrollbar { height: 4px; }
+.topnav-links::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 2px; }
+
+.topnav-links a {
+  flex: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--easing), color var(--duration-fast) var(--easing);
+}
+
+.topnav-links a:hover { background: var(--card); color: var(--text); }
+.topnav-links a.active { background: var(--accent-dim); color: #fff; }
+
+/* ---------- Layout ---------- */
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-6) 120px;
+}
+
+.hero {
+  margin-bottom: var(--space-8);
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: var(--space-2);
+}
+
+.hero h1 {
+  font-size: 30px;
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
+  letter-spacing: -0.01em;
+}
+
+.hero p {
+  color: var(--text-dim);
+  font-size: 16px;
+  margin: 0;
+}
+
+.section-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 53px;
+  background: var(--bg);
+  z-index: 50;
+  padding-top: var(--space-2);
+}
+
+.section-tab {
+  padding: var(--space-2) var(--space-4);
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--duration-fast) var(--easing);
+}
+
+.section-tab:hover { color: var(--text); }
+.section-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.section-panel { display: none; }
+.section-panel.active { display: block; animation: fadein var(--duration-normal) var(--easing); }
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Content (rendered markdown) ---------- */
+
+.content h2 {
+  font-size: 22px;
+  margin: var(--space-8) 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--card-border);
+  letter-spacing: -0.005em;
+}
+.content h2:first-child { margin-top: 0; }
+
+.content h3 {
+  font-size: 17px;
+  color: var(--accent);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.content p { color: var(--text); margin: 0 0 var(--space-4); }
+.content strong { color: #fff; font-weight: 600; }
+.content ul, .content ol { margin: 0 0 var(--space-4); padding-left: 22px; color: var(--text); }
+.content li { margin-bottom: var(--space-1); }
+.content li strong { color: var(--text); }
+
+.content code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.content pre {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  overflow-x: auto;
+  margin: 0 0 var(--space-4);
+}
+
+.content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #d8dee9;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-4);
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+}
+
+.content th, .content td {
+  border: 1px solid var(--card-border);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.content th {
+  background: var(--card);
+  color: var(--accent);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.content tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+
+.content hr {
+  border: none;
+  border-top: 1px solid var(--card-border);
+  margin: var(--space-8) 0;
+}
+
+.content blockquote {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--warning);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text-dim);
+  font-size: 14px;
+}
+.content blockquote p:last-child { margin-bottom: 0; }
+.content blockquote strong { color: var(--text); }
+
+/* ---------- Diagrams ---------- */
+
+.diagram {
+  margin: 0 0 var(--space-6);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+  text-align: center;
+}
+.diagram svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.diagram-caption {
+  margin-top: var(--space-3);
+  font-size: 12.5px;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/* ---------- TL;DR box ---------- */
+
+.tldr-box {
+  background: linear-gradient(135deg, rgba(74,144,248,0.10), rgba(74,144,248,0.03));
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+.tldr-box-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.tldr-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: var(--accent);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.tldr-box-header span.label { font-size: 13px; color: var(--text-dim); font-weight: 600; }
+.tldr-box ul { margin: 0; padding-left: 20px; }
+.tldr-box li { margin-bottom: 6px; color: var(--text); font-size: 14.5px; }
+.tldr-box li:last-child { margin-bottom: 0; }
+.tldr-box li strong { color: #fff; }
+.tldr-box code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+/* ---------- Flashcards ---------- */
+
+.flash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.flash-card {
+  perspective: 1200px;
+  height: 160px;
+  cursor: pointer;
+}
+
+.flash-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 400ms;
+  transform-style: preserve-3d;
+}
+.flash-card.flipped .flash-card-inner { transform: rotateY(180deg); }
+
+.flash-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--card-border);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.flash-front {
+  background: var(--surface);
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+.flash-front .flash-term { font-size: 16px; font-weight: 700; color: var(--text); }
+.flash-front .flash-hint { margin-top: auto; font-size: 11px; color: var(--text-faint); }
+.flash-back {
+  background: var(--card);
+  border-color: var(--accent-dim);
+  transform: rotateY(180deg);
+  justify-content: center;
+}
+.flash-back .flash-def { font-size: 13.5px; color: var(--text-dim); line-height: 1.5; }
+.flash-back .flash-def code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.flash-card.known .flash-front { border-color: var(--success); }
+.flash-card.known .flash-front::after {
+  content: "✓ known";
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 11px;
+  color: var(--success);
+  font-family: var(--font-mono);
+}
+
+.flash-know-btn {
+  margin-top: var(--space-2);
+  align-self: flex-start;
+  font-size: 12px;
+  padding: 4px 10px;
+}
+
+/* ---------- Quiz (MCQ) ---------- */
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.quiz-score {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.quiz-score b { color: var(--text); }
+
+.progress-bar {
+  height: 6px;
+  background: var(--card);
+  border-radius: 999px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 120px;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width var(--duration-normal) var(--easing);
+}
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing);
+}
+.btn:hover { background: #232a33; border-color: #38414d; }
+.btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-accent:hover { background: #3a7de0; }
+
+.mcq-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.mcq-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.mcq-q .mcq-index {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  flex: none;
+}
+
+.mcq-options { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.mcq-option {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--card-border);
+  background: var(--card);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--easing), background var(--duration-fast) var(--easing);
+}
+
+.mcq-option:hover:not(:disabled) { border-color: var(--accent); }
+.mcq-option:disabled { cursor: default; }
+
+.mcq-option.correct { background: var(--success-bg); border-color: var(--success); color: #baf7cf; }
+.mcq-option.incorrect { background: var(--error-bg); border-color: var(--error); color: #ffc9c9; }
+.mcq-option.reveal-correct { border-color: var(--success); color: #baf7cf; }
+
+.mcq-explanation {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--card);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13.5px;
+  color: var(--text-dim);
+  display: none;
+}
+.mcq-explanation.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.mcq-explanation b { color: var(--text); }
+
+/* ---------- Tech questions ---------- */
+
+.tech-card {
+  background: var(--surface);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  margin-bottom: var(--space-4);
+}
+
+.tech-q-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.tech-q {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  gap: var(--space-2);
+}
+.tech-q .mcq-index { color: var(--accent); font-family: var(--font-mono); flex: none; }
+
+.tech-reviewed-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-faint);
+  flex: none;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.tech-reviewed-label input { accent-color: var(--accent); }
+
+.tech-answer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--card-border);
+  display: none;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+.tech-answer.show { display: block; animation: fadein var(--duration-normal) var(--easing); }
+.tech-answer p { margin: 0 0 var(--space-3); color: var(--text-dim); }
+.tech-answer ul { margin: 0 0 var(--space-3); padding-left: 20px; }
+.tech-answer strong { color: var(--text); }
+.tech-answer code {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  color: #ffd479;
+}
+
+.reveal-btn {
+  margin-top: var(--space-4);
+}
+
+/* ---------- Footer ---------- */
+
+.page-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--card-border);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.page-footer a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+.page-footer a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .page { padding: var(--space-6) var(--space-4) 100px; }
+  .hero h1 { font-size: 24px; }
+  .section-tabs { top: 49px; flex-wrap: wrap; }
+  .section-tab { flex: 1 1 calc(50% - var(--space-2)); }
+}
+
+.mock-page { max-width: 1000px; }
+.mock-hero { border: 1px solid #35547c; border-radius: 14px; padding: 24px; background: linear-gradient(145deg, #142132, #12161b); }
+.mock-kicker { color: #a4caff; font: 12px var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
+.mock-hero h1 { margin: 12px 0; font-size: clamp(28px, 5vw, 42px); }
+.mock-hero p { color: #c1cedf; }
+.mock-toolbar, .mock-jumps { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.mock-jumps a { padding: 6px 10px; border-radius: 7px; background: #182b42; color: #cce0ff; text-decoration: none; font-size: 13px; }
+.mock-score { padding: 16px; background: #0e1826; border-radius: 10px; display: grid; gap: 8px; }
+.mock-instructions summary, .mock-memo summary { cursor: pointer; padding: 10px 0; color: #b8d5ff; font-weight: 600; }
+.mock-instructions a { color: #b8d5ff; }
+.mock-note { font-size: 13px; color: #b4c1d3; }
+.mock-question { margin: 24px 0; padding: 24px; background: #121a25; border: 1px solid #33465f; border-radius: 12px; scroll-margin-top: 80px; overflow-wrap: anywhere; }
+.mock-qhead { display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap; align-items: baseline; }
+.mock-qhead h2 { margin: 0; font-size: 22px; }
+.mock-marks { color: #acd0ff; font: 13px var(--font-mono); }
+.mock-type { color: #b4c1d3; font-size: 13px; }
+.mock-prompt { white-space: pre-line; }
+.mock-diagram { margin: 20px 0; overflow-x: auto; border: 1px solid #52657e; border-radius: 10px; }
+.mock-diagram svg { display: block; width: 100%; min-width: 680px; height: auto; }
+.mock-question fieldset { border: 0; padding: 0; margin: 18px 0; min-width: 0; }
+.mock-question legend { font-weight: 600; margin-bottom: 12px; }
+.mock-option { display: flex; gap: 12px; align-items: flex-start; padding: 12px; margin-bottom: 8px; background: #192535; border: 1px solid #415b7c; border-radius: 8px; cursor: pointer; }
+.mock-option input { margin-top: 5px; flex: none; accent-color: #75afff; }
+.mock-row, .mock-part { margin: 20px 0; }
+.mock-row label, .mock-part label { display: block; margin-bottom: 10px; font-weight: 500; }
+.mock-row select, .mock-row input, .mock-part textarea, .mock-self input { font: inherit; color: #e8ecf1; background: #0b1421; border: 1px solid #526c8f; border-radius: 7px; padding: 10px; max-width: 100%; }
+.mock-row select, .mock-row input { width: 100%; }
+.mock-part textarea { display: block; width: 100%; min-height: 140px; resize: vertical; line-height: 1.6; }
+.mock-result { margin: 16px 0; padding: 14px; background: #142942; border-left: 3px solid #83b5ff; border-radius: 7px; }
+.mock-memo { border-top: 1px solid #33465f; margin-top: 18px; padding-top: 8px; }
+.mock-memo h3 { font-size: 17px; }
+.mock-memo li { margin-bottom: 6px; }
+.mock-self { margin: 12px 0; padding: 14px; border: 1px dashed #5e7ca2; border-radius: 7px; }
+.mock-self label { display: block; margin-bottom: 8px; }
+.mock-self input { width: 110px; }
+.mock-invalid { color: #ffbec3; }
+.mock-word-count { color: #b4c1d3; font: 12px var(--font-mono); }
+.mock-print-space { display: none; }
+.mock-question :focus-visible, .mock-hero :focus-visible { outline: 3px solid #edc878; outline-offset: 3px; }
+@media (max-width: 640px) {
+ .mock-hero, .mock-question { padding: 16px; }
+ .mock-diagram svg { min-width: 680px; }
+ .mock-toolbar .btn { flex: 1 1 140px; }
+}
+@media print {
+ @page { margin: 16mm; }
+ html, body { background: white !important; color: black !important; font-size: 11pt; }
+ .page { max-width: none; margin: 0; padding: 0; }
+ .topnav, .mock-toolbar, .mock-jumps, .mock-score, #storage-status, .page-footer, .mock-self, .mock-word-count, .mock-result, .mock-question > .btn, .mock-instructions { display: none !important; }
+ .mock-hero, .mock-question { background: white !important; border: 0; box-shadow: none; padding: 0; border-radius: 0; }
+ .mock-hero { border-bottom: 2px solid black; padding-bottom: 12px; }
+ .mock-hero p, .mock-question *, .mock-marks { color: black; }
+ .mock-question { break-inside: auto; }
+ .mock-qhead, .mock-question h3, .mock-row label, .mock-part label { break-after: avoid; }
+ .mock-row, .mock-option, .mock-diagram { break-inside: avoid; }
+ .mock-option { background: white; border: 1px solid #aaa; padding: 6px; }
+ .mock-option input { display: none; }
+ .mock-option::before { content: '□'; }
+ .mock-row input, .mock-row select, .mock-part textarea { display: none; }
+ .mock-print-space { display: block; min-height: 25px; border-bottom: 1px solid #888; margin: 8px 0 18px; }
+ .mock-part .mock-print-space { min-height: 90px; }
+ .mock-diagram { overflow: visible; }
+ .mock-diagram svg { min-width: 0; width: 100%; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+ .mock-diagram svg text { fill: #f2f6ff; }
+ body:not(.print-memo) .mock-memo { display: none !important; }
+ .print-memo .mock-memo { display: block; border-top: 1px solid #888; }
+ .print-memo .mock-memo summary { color: black; }
+ .print-memo .mock-print-space { display: none; }
+ .print-memo .mock-memo li { break-inside: avoid; }
+ .mock-print-bank { display: block !important; font-size: 10pt; }
+}
+.mock-print-bank { display: none; }
+
+</style>
+</head>
+<body>
+<nav class="topnav"><div class="topnav-inner"><a href="index.html" class="topnav-brand">COS301 <span>Study Guides</span></a><div class="topnav-links"><a href="index.html">Home</a><a href="ct4-example-1.html">CT4 EXAMPLE 1</a>
+<a href="ct4-example-2.html">CT4 EXAMPLE 2</a>
+<a href="st2-example-1.html">ST2 EXAMPLE 1</a>
+<a href="st2-example-2.html">ST2 EXAMPLE 2</a>
+<a href="st2-example-3.html">ST2 EXAMPLE 3</a>
+<a href="st2-example-4.html" class="active" aria-current="page">ST2 EXAMPLE 4</a></div></div></nav>
+<main class="page mock-page">
+<header class="mock-hero">
+<p class="mock-kicker">Original practice assessment · COS301</p>
+<h1>ST2 Example 4 — Scenario Questions</h1>
+<p id="paper-scope"></p>
+<p id="paper-meta"></p>
+<details class="mock-instructions"><summary>Instructions, marking and reference style</summary><div id="instructions"></div></details>
+<div class="mock-toolbar">
+<button type="button" class="btn" id="mark-all">Mark objective answers</button>
+<button type="button" class="btn" id="show-memos">Show marking guides</button>
+<button type="button" class="btn" id="hide-memos">Hide marking guides</button>
+<button type="button" class="btn" id="print-paper">Print blank paper</button>
+<button type="button" class="btn" id="print-memo">Print marking guide</button>
+<button type="button" class="btn" id="reset-paper">Reset this paper</button>
+</div>
+<p id="storage-status" role="status" class="mock-note"></p>
+<div class="mock-score" id="paper-score" role="status" aria-live="polite"></div>
+<nav class="mock-jumps" id="question-links" aria-label="Jump to question"></nav>
+</header>
+<div id="paper-questions"></div>
+<noscript><p>Enable JavaScript for this interactive paper. A readable paper and memorandum are also available in the <a href="markdown/st2-example-4.md">Markdown version</a>.</p></noscript>
+<footer class="page-footer"><a href="index.html">All study guides and papers</a><a href="assessment-style-review.md">How these examples follow CT3 and ST1</a></footer>
+</main>
+<script type="application/json" id="mock-data">{"id": "st2-example-4", "title": "ST2 Example 4 \u2014 Scenario Questions", "scope": "L17\u2013L33 and L35 revision, including SOA (L26) and Microservices (L27)", "reference": "User-supplied presentation and architecture scenarios", "totalMarks": 110, "questions": [{"type": "essay", "title": "A polished demonstration with missing evidence", "prompt": "A polished demonstration with missing evidence\n\nRavi has fifteen minutes to present RouteReady, a delivery-management system, to an evaluator unfamiliar with courier work. He starts with eight minutes of slides containing tiny UML diagrams and paragraphs he reads aloud. His teammate then repeats the project introduction. Ravi opens a map already populated with successful deliveries and declares that the route optimiser is \u201cthe fastest on the market\u201d. He never explains dispatch, driver acceptance or failed delivery states. He demonstrates only his administrator account. The evaluator asks to see an offline driver reconnect; Ravi has not prepared this and repeatedly retries a failing public mapping service. With one minute left, he rushes past proof of delivery and omits his conclusion and questions.", "topics": ["L31", "L35"], "marks": 15, "parts": [{"prompt": "1. Identify five poor presentation or demonstration practices. For each, explain why it limits assessment and how the team could avoid it in a re-demo. (15 marks)", "marks": 15, "answer": "1. Dense unreadable slides and reading aloud hide the main reasoning: use legible visuals with one purpose and speak to their meaning. 2. Overlong/repeated introductions waste the fixed slot: coordinate speaker roles and rehearse a timed agenda. 3. Unexplained domain states prevent judgement of correctness: introduce dispatch, acceptance, failure and completion with a concrete task. 4. Prepopulated administrator-only success and unsupported speed claims omit representative evidence: prepare driver/dispatcher accounts, live task transitions and a stated benchmark with conditions. 5. No offline/dependency contingency leads to repeated retries and rushed core evidence: seed an offline/reconnect scenario, use a disclosed controlled service or labelled recording when necessary, time-box recovery and reserve time for core proof, conclusion and questions.", "rubric": ["3 each for five distinct practice/effect/correction triples. Accept other distinct scenario-supported answers; do not award duplicate timing complaints separately."]}], "id": "q1", "number": 1}, {"type": "essay", "title": "Retry until the parcel arrives twice", "prompt": "Retry until the parcel arrives twice\n\nA nationwide sale causes 60,000 RouteReady dispatch requests. Each request synchronously waits for a carrier API, which now takes three minutes. The web pool fills and login stops responding. A timeout means the application cannot tell whether the carrier created a shipment, so it retries with a fresh request ID. Some parcels now have two shipments and customers are billed twice. Managers suggest changing all calls to fire-and-forget messages and reporting \u201cshipment confirmed\u201d as soon as a message is sent.", "topics": ["L22", "L23", "MS", "L35"], "marks": 15, "parts": [{"prompt": "1. Explain the outage and duplicate shipments, name the affected NFRs, and evaluate the proposed immediate confirmation. (5 marks)", "marks": 5, "answer": "Slow synchronous calls hold finite worker resources, harming availability, performance and resilience. A timeout is an uncertain outcome, not proof of failure; a fresh ID defeats deduplication and can repeat business effects, compromising correctness, integrity and reliability. Sending a message neither proves durable acceptance nor carrier completion; immediate confirmation misrepresents state and can conceal lost work.", "rubric": ["2: resource exhaustion with quality attributes. 2: uncertain timeout/fresh-ID duplication with integrity or reliability. 1: truthful acknowledgement versus completion."]}, {"prompt": "2. Propose specific architectural tactics/patterns for responsive dispatch and duplicate-safe recovery. (7 marks)", "marks": 7, "answer": "Commit a pending dispatch plus outbox atomically, then deliver durable queued work. Return accepted/pending with a tracking ID. Limit queues/in-flight work, use dependency timeouts, bulkheads and circuit breakers, and back off bounded retries with jitter. Preserve one idempotency key across retries and obtain provider support for deduplication/status queries; local deduplication alone cannot guarantee a remote effect occurred only once. If the provider cannot support this, reconcile ambiguous results before repeating the shipment. Record state transitions and expose final success/failure through polling/events, with correlation IDs and queue-age/error monitoring.", "rubric": ["2: durable asynchronous acceptance and atomic publication. 2: bounded failure/overload tactics. 2: stable identity plus remote uncertainty/reconciliation. 1: state and observability."]}, {"prompt": "3. Identify one introduced trade-off and mitigate it. Explain why a distributed-system assumption was unsafe. (3 marks)", "marks": 3, "answer": "Queued processing creates eventual completion and possible backlog: show honest status, alert on oldest-message age and apply admission limits. Assuming the network is reliable or latency negligible made blocking/unbounded retry unsafe; design explicitly for partial failure and uncertain outcomes. Other introduced risks with matching mitigations are acceptable.", "rubric": ["1: introduced cost. 1: mitigation. 1: applicable distributed-computing fallacy explained."]}], "id": "q2", "number": 2}, {"type": "essay", "title": "A parcel changes address without becoming another parcel", "prompt": "A parcel changes address without becoming another parcel\n\nRouteReady tracks Customers, Parcels, DeliveryAttempts and Drivers. A parcel has a persistent tracking number. Each delivery attempt concerns exactly one parcel and one driver; a parcel can have many historical attempts. A parcel owns proof-of-delivery entries that are meaningful only within its delivery record. A depot can store parcels that later move elsewhere. A destination address consists of street, city and postcode. The mobile UI directly performs SQL updates, and an engineer claims that moving those statements into a \u201cController\u201d automatically creates MVC, MVVM and CQRS simultaneously.", "topics": ["L18"], "marks": 10, "parts": [{"prompt": "1. Identify five domain concepts, give an entity/value-object distinction, and explain two associations with multiplicities. (4 marks)", "marks": 4, "answer": "Customer, Parcel, DeliveryAttempt, Driver and Address are suitable; Depot and ProofOfDelivery are also valid. Parcel identity is its tracking number despite changed details; Address equality depends on its fields under a defined normalisation policy. Parcel 1\u2014DeliveryAttempt 0..* and Driver 1\u2014DeliveryAttempt 0..*, each attempt referring to exactly one of each.", "rubric": ["1: five concepts. 1: identity/value distinction. 1 each: two correct bidirectional multiplicities."]}, {"prompt": "2. Justify relationships for proof-of-delivery and depot storage, and propose logical layer responsibilities separately from deployment tiers. (3 marks)", "marks": 3, "answer": "Parcel-owned proof entries can use composition under the stated dependent lifetime; depot\u2013parcel storage is an association because parcels survive moves. Put presentation/input at the UI boundary, delivery rules in the domain/application layer and SQL behind persistence interfaces. Those logical responsibilities can share a runtime deployment; tiers concern deployed runtime separation.", "rubric": ["1: composition versus independent association. 1: appropriate responsibilities/dependencies. 1: layer/tier distinction."]}, {"prompt": "3. Distinguish MVC, MVVM and CQRS, and explain why renaming a folder does not establish these patterns. (3 marks)", "marks": 3, "answer": "MVC separates model, view and input coordination by a controller. MVVM exposes presentation state/commands through a view model for view binding. CQRS separates command/write responsibilities from query/read responsibilities and need not use separate databases. Actual responsibilities, data flows and dependencies establish a pattern; a Controller folder name does not.", "rubric": ["1 each: three pattern distinctions with a coherent rejection of name-only evidence."]}], "id": "q3", "number": 3}, {"type": "essay", "title": "Drivers cannot tell whether a delivery was saved", "prompt": "Drivers cannot tell whether a delivery was saved\n\nRouteReady drivers work outdoors on small phones. The completion screen uses tiny pale-grey text, tightly packed controls and a subtle green dot as the only success signal. \u201cCancel\u201d, \u201cComplete\u201d and \u201cDelete\u201d look identical. An accidental tap immediately deletes a delivery record. Dispatchers use a different font, spacing scale and status vocabulary. The team copies logo colours into each stylesheet and says that consistent branding is enough to make the system usable.", "topics": ["L17", "L20"], "marks": 8, "parts": [{"prompt": "1. Propose four usability/accessibility changes linked to the observed problems. (4 marks)", "marks": 4, "answer": "Use legible size/contrast for outdoor use; increase touch target spacing and apply a clear visual hierarchy; label success/pending/error with meaningful text and accessible feedback; constrain destructive actions through confirmation or an appropriate reversible action and distinguish them from completion. Accept consistent status language and clear grouping as additional grounded changes.", "rubric": ["1 each: four distinct problem\u2013correction pairs, with user context."]}, {"prompt": "2. Explain how brand foundations, semantic design tokens and component states can create a consistent design system, and name a suitable validation activity. (4 marks)", "marks": 4, "answer": "Brand foundations express audience, tone and identity; semantic tokens map these decisions to reusable typography, spacing and status/action roles rather than arbitrary copied swatches. Shared buttons/forms/status components define enabled, pending, disabled, success, error and focus behaviour. Validate with representative drivers and keyboard/screen-reader/contrast checks; a logo palette alone cannot establish usability.", "rubric": ["1: brand intent. 1: tokens. 1: implemented states/components. 1: representative usability/accessibility evidence."]}], "id": "q4", "number": 4}, {"type": "essay", "title": "The security scanner approves an untested image", "prompt": "The security scanner approves an untested image\n\nRouteReady developers commit a mapping API key. CI scans source code and reports a vulnerable dependency, but the warning is ignored because the application works. Tests are allowed to pass with no discovered cases. A staging image is tested, then production is rebuilt with newer dependencies. The production image includes compilers and runs as root. No deployment health signal or rollback plan exists. A week later an error spike is noticed only when customers complain.", "topics": ["L17", "L19", "L21", "L29"], "marks": 10, "parts": [{"prompt": "1. Identify five delivery weaknesses and provide a specific correction for each. (5 marks)", "marks": 5, "answer": "Remove/revoke/rotate the committed key and prevent recurrence with secret scanning; triage and remediate vulnerable dependencies with enforced gates; fail unexpected zero-test discovery and test failures; pin dependencies and promote one immutable tested image; use a minimal multi-stage non-root runtime. Other valid pairs include monitored readiness/liveness appropriate to their purpose or rehearsed rollback.", "rubric": ["1 each: five distinct supported weakness\u2013correction pairs."]}, {"prompt": "2. Explain where SAST, DAST and dependency scanning fit, and how monitoring should feed back into DevSecOps. (3 marks)", "marks": 3, "answer": "SAST analyses source/build artifacts without exercising the deployed app; DAST probes a running application; dependency scanning checks third-party components against known issues. Plan checks across code/build/test and release, then use latency/error and security alerts, incident learning and remediation verification to update the backlog and controls.", "rubric": ["1: SAST/DAST distinction. 1: dependency check. 1: monitored operational feedback."]}, {"prompt": "3. Distinguish unit, integration and end-to-end evidence for dispatch, and explain why a green empty suite supplies no evidence. (2 marks)", "marks": 2, "answer": "Unit tests isolate dispatch rules; integration tests exercise real relevant boundaries such as persistence or a controlled carrier adapter; end-to-end tests exercise the deployed user-to-result flow across the included boundaries. An empty suite has executed no assertions, so success means only that the command did not fail.", "rubric": ["1: levels and boundaries. 1: zero-test limitation."]}], "id": "q5", "number": 5}, {"type": "essay", "title": "Reliable, unavailable, or both?", "prompt": "Reliable, unavailable, or both?\n\nIn a simplified repeated repairable-service model, RouteReady has mean up-time between repairs of 99 hours and mean repair time of 1 hour. A proposed runbook reduces mean repair time to 15 minutes without changing failures. A dashboard says \u201c99% available means every parcel is delivered correctly\u201d. The team measures latency using only successful requests and quotes an average instead of a p99 target. Engineers suppress exceptions to satisfy a formatting checker and claim that final acceptance testing is the whole quality-assurance process.", "topics": ["L19", "L30", "L32", "L35"], "marks": 10, "parts": [{"prompt": "1. Calculate availability before and after the runbook change using the stated model, and distinguish availability from reliability and delivery correctness. (4 marks)", "marks": 4, "answer": "Availability = mean up-time/(mean up-time + mean repair time). Before: 99/100 = 99%. After: 99/99.25 \u2248 99.748%. Faster repair improves availability without reducing the underlying failure frequency. Reliability concerns failure-free operation under stated conditions over time; delivery correctness is a functional outcome that the uptime percentage cannot establish.", "rubric": ["1: correct baseline. 1: correct revised calculation with hours converted. 1: availability/reliability distinction. 1: rejects correctness inference."]}, {"prompt": "2. Design three different non-functional tests for abrupt bursts, prolonged resource growth and recovery, specifying useful measurements and conditions. (3 marks)", "marks": 3, "answer": "Use spike testing for abrupt arrival-rate changes and measure latency/error/in-flight response; soak testing under representative sustained load for memory/resource growth; recovery/failover testing with a controlled dependency/node interruption and measured restoration, backlog completion and duplicate/lost effects. Record environment, data mix, duration, dependency configuration and latency percentiles, timeouts and all error outcomes rather than successful-only averages.", "rubric": ["1 each: correct test, scenario purpose and useful measure/condition for three activities."]}, {"prompt": "3. Explain the QA/QC distinction, recommend a coding standard and contextual metric, and connect a regression check to the exception problem. (3 marks)", "marks": 3, "answer": "QA is process assurance through review/standards/gates; QC evaluates artifacts through inspections/tests. Require explicit typed error handling and observable failure paths rather than silent catch-all success. Track escaped defects or meaningful test coverage with context, not as proof of quality. Add a regression case where the carrier fails and assert the correct pending/failed state and observability; a static fault may remain unobserved until that path executes.", "rubric": ["1: QA/QC distinction. 1: justified standard and contextual metric. 1: regression check tied to hidden fault/failure."]}], "id": "q6", "number": 6}, {"type": "essay", "title": "A dashboard built on trust", "prompt": "A dashboard built on trust\n\nA dispatcher signs into RouteReady and changes a depotId query parameter to view another depot\u2019s customer addresses. A generated HTML report renders driver-supplied notes without safe output handling. A webhook is accepted without validating its sender or guarding against replay. The team stores both webhook secrets and logs containing full credentials in the same broadly accessible bucket. A scoped security exercise probes these paths, but operations cannot correlate an alert to a delivery and dismisses red-team reports as \u201csomeone else\u2019s problem\u201d.", "topics": ["L24", "L29"], "marks": 10, "parts": [{"prompt": "1. Identify three attack paths, the endangered assets and matching implementation controls. Distinguish authentication from object authorisation. (4 marks)", "marks": 4, "answer": "Depot-ID manipulation can disclose address data: enforce server-side depot/object scope on every access; a login alone establishes identity, not resource permission. Untrusted notes can create stored script injection: apply context-appropriate output encoding and sanitise deliberately allowed markup. Forged/replayed webhooks can corrupt delivery status: verify sender signatures over the required payload, validate freshness and deduplicate event IDs. These protect confidentiality and state integrity.", "rubric": ["1 each: three grounded attack\u2013asset\u2013control chains. 1: identity versus resource permission."]}, {"prompt": "2. Propose three secure-development practices covering secrets/logging, early design and verification. (3 marks)", "marks": 3, "answer": "Use narrowly scoped secret storage and rotation, redact credentials and restrict audit/log access. Threat-model trust boundaries and webhook/depot assets before implementation. Combine code/SAST/dependency review with dynamic/manual tenant-scope, encoding and replay tests, then verify remediation. Use least privilege and layered controls rather than trusting one bucket or one scan.", "rubric": ["1 each: three practices matched to the specified concerns."]}, {"prompt": "3. Explain how red, blue and purple collaboration can improve detection and response while respecting exercise scope. (3 marks)", "marks": 3, "answer": "Red tests authorised attack paths and reports evidence; blue correlates delivery/request IDs, monitors suspicious access and executes containment/recovery; purple collaboration replays agreed cases to refine alerts, controls and response procedures. Agree systems, permitted techniques and stop conditions, then retest the improvements within scope.", "rubric": ["1: red role/scope. 1: blue detection and response. 1: collaborative feedback/retest."]}], "id": "q7", "number": 7}, {"type": "essay", "title": "A shared database masquerading as services", "prompt": "A shared database masquerading as services\n\nRouteReady connects three regional carriers and a legacy billing system through an integration bus. Shipment, Billing and Tracking are now separate deployments, but all read and write each other\u2019s tables and must release together. A carrier changes an error response from 409 to a successful 200 with an embedded error field, breaking retry logic. A new workflow charges a customer, requests collection and publishes tracking updates. A developer wants a separate read projection for fast tracking queries and says it can never be stale.", "topics": ["SOA", "MS", "L25", "L18", "L22"], "marks": 8, "parts": [{"prompt": "1. Assess the SOA/bus choice and the alleged microservices. Include a suitable boundary improvement and one trade-off. (3 marks)", "marks": 3, "answer": "SOA and a bus can mediate heterogeneous carrier/billing protocols and orchestrate enterprise integration, but central routing/transformation adds operational concentration and coupling. Separate deployments sharing writable tables and a coordinated release resemble a distributed monolith. Establish capability-owned data and versioned interfaces/events; this enables independence but introduces remote-call/consistency/operational costs, which may favour a modular monolith for a smaller team.", "rubric": ["1: SOA/bus benefit and cost. 1: distributed-monolith diagnosis. 1: ownership/boundary improvement and cost."]}, {"prompt": "2. Explain contract-first development and a safe migration of the carrier error behaviour, including relevant contract contents/tooling. (3 marks)", "marks": 3, "answer": "Define paths/operations, schemas, status/error meanings, authentication and retry/idempotency rules before client/provider work. OpenAPI describes HTTP contracts and Swagger tools can produce documentation/mocks; SOAP services commonly use WSDL. Preserve old semantics/version or introduce a translating adapter, run consumer/provider contract and real integration tests, and coordinate a documented transition instead of silently reinterpreting 200.", "rubric": ["1: substantive agreed contract. 1: tooling distinctions and mocks/parallel work. 1: compatible migration with verification."]}, {"prompt": "3. Describe a saga with compensation, contrast orchestration/choreography, and explain the read-projection consistency trade-off. (2 marks)", "marks": 2, "answer": "A coordinator can command charge/collect/update steps (or services can react through choreography events). If collection fails after charging, compensate through a refund and appropriate cancellation with idempotent recovery; compensation is not global transaction rollback. A CQRS read projection updated from events can lag the authoritative write state, so expose pending status/version and monitor lag rather than promising immediate freshness.", "rubric": ["1: saga and coordination distinction with sensible compensation. 1: CQRS eventual consistency and user/monitoring response."]}], "id": "q8", "number": 8}, {"type": "essay", "title": "A beautiful deployment diagram that hides the outage", "prompt": "A beautiful deployment diagram that hides the outage\n\nRouteReady\u2019s diagram shows an API gateway, discovery service, three service boxes, a broker and a database, all without node boundaries or protocols. In production, the gateway and discovery service are single instances on one host; service replicas span two zones but the broker and database remain in one zone. Engineers say a service mesh guarantees availability and that database replication replaces backups. A zone outage loses broker access and dispatch stalls. No one has measured whether the 10-minute RTO and 1-minute RPO can be achieved.", "topics": ["L28", "L23", "MS", "L35"], "marks": 8, "parts": [{"prompt": "1. Describe four diagram corrections and identify two concentrated failure dependencies. (4 marks)", "marks": 4, "answer": "Declare environment/scope and include relevant clients/providers; nest artifacts within nodes/runtime environments and zones; label protocols, directions and sync/async links; mark trust boundaries, state ownership, replication/backup paths and common failure domains. The single-host gateway/discovery and single-zone broker/database are concentrated dependencies despite service replicas.", "rubric": ["2: four useful diagram corrections (0.5 each). 2: two grounded concentrated dependency groups."]}, {"prompt": "2. Distinguish gateway, discovery and mesh responsibilities; propose resilience and observable recovery verification with a cost. (4 marks)", "marks": 4, "answer": "A gateway mediates external entry/routing and cross-cutting policies; discovery resolves service instances; a mesh provides service-to-service traffic/security/telemetry mechanisms. None alone removes failure domains or guarantees business recovery. Redundantly place critical dependencies, retain independent historical backups and verify recovery by controlled zone failure and actual restores. Measure service-restoration time against RTO and recoverable data loss against RPO, queue age and completion/duplicates with correlated logs/traces/metrics. Extra nodes, replication, mesh and failover drills add cost and operational complexity.", "rubric": ["1: three role distinctions. 1: failure-domain/state/backup improvement. 1: measured RTO/RPO and workflow recovery evidence. 1: cost and rejects automatic guarantee."]}], "id": "q9", "number": 9}, {"type": "essay", "title": "Prototype speed becomes a production promise", "prompt": "Prototype speed becomes a production promise\n\nA regional office builds a no-code parcel-exception tracker in two days. A low-code extension connects it to billing; an AI-generated script exports customer data. The script is accepted because it runs once, and nobody understands its permission checks. Platform editors can change production flows without review. Per-user licence costs rise as drivers are added, and workflow export loses proprietary connectors. The office wants to replace the maintained RouteReady workflow immediately without measuring concurrency, access control or failure handling.", "topics": ["L33", "L35"], "marks": 6, "parts": [{"prompt": "1. Distinguish the three development approaches in this scenario and recommend a bounded adoption decision with two risks. (3 marks)", "marks": 3, "answer": "The visual tracker is no-code; the connector extension uses low-code/custom code; accepting generated code by trial alone reflects vibe coding rather than reviewed AI-assisted engineering. Retain a bounded low-risk exception triage pilot until production requirements are verified. Risks include data exposure from generated permissions, uncontrolled changes, licensing growth and connector lock-in; relate two to the rollout decision.", "rubric": ["1: approach distinctions. 1: bounded decision justified by missing evidence. 1: two scenario-specific risks."]}, {"prompt": "2. Give a requirement-to-evidence plan with ownership and a migration/rollback strategy. (3 marks)", "marks": 3, "answer": "Name an accountable maintainer, version/review workflow changes and minimise roles/data. Turn access isolation, exception correctness and recovery into explicit scenarios; inspect generated code/dependencies and test cross-user access, concurrent changes and connector failure/retry. Measure acceptance criteria and preserve audit history. Pilot alongside the current system, reconcile records and test export/restore before phased migration, with a rehearsed rollback path and licence/capacity budget.", "rubric": ["1: governance/ownership and review. 1: requirements linked to meaningful evidence. 1: phased migration/export/rollback with operational constraints."]}], "id": "q10", "number": 10}, {"type": "essay", "title": "The architecture changes every time the slide changes", "prompt": "The architecture changes every time the slide changes\n\nRouteReady must allow a new carrier adapter in no more than three developer-days with no edits to the delivery domain. Its architect alternates between a modular monolith and twenty services according to which diagram looks more impressive. Regional teams have different release needs, but nobody has mapped ownership. The migration plan removes the legacy integration bus overnight. The ADR says only \u201cmodern and flexible\u201d. The frontend team separately claims that a Presenter and a Django Template perform the same job because both \u201cdisplay data\u201d.", "topics": ["L22", "L23", "L18", "MS", "SOA", "L35"], "marks": 10, "parts": [{"prompt": "1. Turn the carrier-change target into a complete quality-attribute scenario and link it to a tactic, pattern and automated evidence. (4 marks)", "marks": 4, "answer": "Source: integration developer/team; stimulus: adding a defined new carrier; environment: normal development against a representative stub/contract; artifact: carrier integration boundary; response: implement/register an adapter without changing the delivery domain; measure: at most three developer-days and zero domain edits. Isolate volatile details via an abstraction (tactic), implement Adapter/Strategy (pattern), and enforce dependency/import checks plus carrier contract tests. Time estimates need a defined provider scope, not an arbitrary API.", "rubric": ["2: six scenario elements with stated measurable conditions. 1: tactic/pattern chain. 1: evidence that enforces the target."]}, {"prompt": "2. What should the ADR record? Recommend an ownership-aware architectural choice and an incremental migration, with one trade-off/sensitivity point. (4 marks)", "marks": 4, "answer": "Record context, quality targets/constraints, alternatives, decision, status and consequences. Map region/capability ownership and actual independent release/scaling needs before choosing services; use a modular monolith where one team shares operations and release, or justified independently deployable services where teams can own them. Conway\u2019s law warns that communication boundaries influence architecture. Use a strangler fa\u00e7ade/adapter to migrate bus integrations slice by slice, reconcile data and retain rollback. The degree of separation trades release independence against remote latency, consistency and operational cost; timeout/concurrency values are sensitivity points.", "rubric": ["1: substantive ADR. 1: scenario-linked team/boundary choice with Conway reasoning. 1: incremental migration and reconciliation. 1: real trade-off or sensitivity point."]}, {"prompt": "3. Distinguish an MVP Presenter from a Django-style MVT Template and explain why responsibility matters more than names. (2 marks)", "marks": 2, "answer": "An MVP Presenter coordinates presentation logic and updates the View through its interface. An MVT Template renders the presentation from supplied data; the Django View commonly handles request logic and supplies that context. Both influence what is displayed, but that broad statement does not make their responsibilities equivalent. Assess actual collaboration and dependencies rather than labels.", "rubric": ["1: Presenter coordination. 1: Template rendering and distinction."]}], "id": "q11", "number": 11}], "storageKey": "cos301-st2-example-4-v1", "notes": "Original authored 110-mark practice paper in the style of the supplied extended scenarios: diagnose, explain, propose and evaluate trade-offs. Every lecture in the available ST2 scope is assessed in each paper. L35 integrates earlier topics; no separate L34 topic is listed in the supplied scope. L29 and L31\u2013L33 follow the existing general-topic guides, not unavailable lecture slides. Marks are practice allocations; no official duration is inferred. Defensible alternatives earn credit when justified against the scenario.", "multiRule": "This paper contains written scenario questions only. Use the model answers and rubrics for self-assessment; no automatic written-answer grading or negative marking applies.", "description": "Extended written scenarios with model answers, trade-offs, self-assessment and blank-paper printing; every lecture in the ST2 scope appears in this paper."}</script>
+<script>
+(function () {
+ 'use strict';
+ const paper = JSON.parse(document.getElementById('mock-data').textContent);
+ const hasObjective = paper.questions.some(q=>q.type!=='essay');
+ document.getElementById('mark-all').hidden = !hasObjective;
+ const node = (tag, cls, text) => {const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
+ const normal = s => String(s ?? '').trim().toLowerCase().replace(/\s+/g,' ').replace(/\.$/,'');
+ const fmt = n => Number(n.toFixed(2)).toString();
+ let state = {};
+ try {const saved=JSON.parse(localStorage.getItem(paper.storageKey));if(saved && typeof saved==='object'&&!Array.isArray(saved))state=saved;}catch{}
+ const status=document.getElementById('storage-status');
+ const markViews=new Map();const memoElements=[];const wordViews=[];
+ function save(){try{localStorage.setItem(paper.storageKey,JSON.stringify(state));status.textContent='Drafts, selections and self-assessment save locally for this paper.';}catch{status.textContent='Browser storage is unavailable. You can still practise, but this session’s work may not survive a reload.';}}
+ function current(q){
+  if(!state[q.id]||typeof state[q.id]!=='object'||Array.isArray(state[q.id]))state[q.id]={};
+  const s=state[q.id];
+  for(const key of ['answers','drafts','selfMarks'])if(!Array.isArray(s[key]))s[key]=[];
+  if(q.options&&['single','multi'].includes(q.type)){
+   s.answers=[...new Set(s.answers.filter(x=>Number.isInteger(x)&&x>=0&&x<q.options.length))];
+   if(q.type==='single')s.answers=s.answers.slice(0,1);
+  }
+  return s;
+ }
+ function score(q){
+  const s=current(q);
+  if(q.type==='single')return s.answers.length===1&&s.answers[0]===q.correct[0]?q.marks:0;
+  if(q.type==='multi'){
+   const hits=s.answers.filter(i=>q.correct.includes(i)).length;
+   return Math.max(0,(hits-(s.answers.length-hits))*q.marks/q.correct.length);
+  }
+  return q.items.reduce((sum,item,i)=>sum+(q.type==='matching'?s.answers[i]===item.answer:item.answers.some(a=>normal(a)===normal(s.answers[i]))) * q.marks/q.items.length,0);
+ }
+ function updateScore(){
+  const objective=paper.questions.filter(q=>q.type!=='essay'),written=paper.questions.filter(q=>q.type==='essay');
+  const objectiveMax=objective.reduce((s,q)=>s+q.marks,0);const writtenMax=written.reduce((s,q)=>s+q.marks,0);
+  const graded=objective.filter(q=>current(q).marked===true);const obj=graded.reduce((s,q)=>s+score(q),0);
+  let self=0, assessed=0,partCount=0;
+  written.forEach(q=>q.parts.forEach((p,i)=>{partCount++;const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=p.marks&&Number.isInteger(value*2)){self+=value;assessed++;}}));
+  const target=document.getElementById('paper-score');target.replaceChildren(node('div','',`Objective: ${fmt(obj)} / ${fmt(objectiveMax)} marks · ${graded.length} / ${objective.length} questions marked`));
+  if(!hasObjective)target.replaceChildren();
+  if(written.length){target.append(node('div','',`Written answers (self-assessed): ${fmt(self)} / ${fmt(writtenMax)} marks · ${assessed} / ${partCount} parts assessed`),node('strong','',`Combined practice total: ${fmt(obj+self)} / ${paper.totalMarks}`),node('div','mock-note','Unmarked work contributes zero to this running total. Written-answer marks are your assessment, not an automated judgement.'));}
+ }
+ function mark(q){current(q).marked=true;save();markViews.get(q.id)?.();updateScore();}
+ function change(q){current(q).marked=false;save();markViews.get(q.id)?.();updateScore();}
+ function addText(parent,text){parent.append(node('p','',text));}
+ function addMemo(card,q){
+  const memo=node('details','mock-memo');memo.append(node('summary','','Model answer and marking guide'));
+  if(q.type==='essay')q.parts.forEach((part,i)=>{
+   memo.append(node('h3','',`Part ${i+1} · ${part.marks} marks`));addText(memo,part.answer);
+   const list=node('ul');part.rubric.forEach(text=>list.append(node('li','',text)));memo.append(list);
+   const self=node('div','mock-self');const label=node('label','',`Your self-assessed mark for part ${i+1} (0–${part.marks})`);const input=node('input');Object.assign(input,{type:'number',min:'0',max:String(part.marks),step:'0.5',id:`${q.id}-mark-${i}`});label.htmlFor=input.id;
+   const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=part.marks&&Number.isInteger(value*2))input.value=String(value);
+   const msg=node('p','mock-note');msg.setAttribute('role','status');
+   input.addEventListener('input',()=>{const valid=input.value!==''&&input.validity.valid&&Number.isFinite(input.valueAsNumber);current(q).selfMarks[i]=valid?input.valueAsNumber:null;input.setAttribute('aria-invalid',String(input.value!==''&&!valid));msg.textContent=input.value!==''&&!valid?`Enter 0 to ${part.marks} in half-mark steps. Invalid marks are not counted.`:'';save();updateScore();});
+   self.append(label,input,msg);memo.append(self);
+  });
+  else if(q.type==='single'||q.type==='multi'){
+   addText(memo,`Correct option${q.correct.length>1?'s':''}: ${q.correct.map(i=>String.fromCharCode(65+i)).join(', ')}.`);q.correct.forEach(i=>addText(memo,`${String.fromCharCode(65+i)}. ${q.options[i]}`));addText(memo,q.explanation);
+   if(q.type==='multi')addText(memo,`Scoring: +${fmt(q.marks/q.correct.length)} per correct selection, −${fmt(q.marks/q.correct.length)} per incorrect selection; minimum 0, maximum ${q.marks}.`);
+  }else q.items.forEach((item,i)=>{memo.append(node('h3','',`${i+1}. ${q.type==='matching'?item.answer:item.answers.join(' / ')} · ${fmt(q.marks/q.items.length)} marks`));addText(memo,item.explanation);});
+  card.append(memo);memoElements.push(memo);
+ }
+ function renderQuestion(q){
+  const s=current(q),card=node('section','mock-question');card.id=q.id;
+  const head=node('div','mock-qhead');head.append(node('h2','',`Question ${q.number}`),node('span','mock-marks',`${fmt(q.marks)} mark${q.marks===1?'':'s'}`));card.append(head);
+  const names={single:q.options?.length===2?'True / False':'Single answer',multi:'Select all that apply · negative marking',matching:'Matching',cloze:'Sentence completion',short:'Short answer / letter',essay:'Structured written response'};
+  card.append(node('p','mock-type',names[q.type]),node('p','mock-prompt',q.prompt));
+  if(q.diagram){const figure=node('div','mock-diagram');figure.innerHTML=q.diagram;card.append(figure);addText(card,'Diagram is part of the question. On a narrow screen, scroll it horizontally to read all labels.');}
+  if(['single','multi'].includes(q.type)){
+   const fieldset=node('fieldset');fieldset.append(node('legend','',q.type==='multi'?'Select all correct options':'Select one option'));
+   q.options.forEach((text,i)=>{const label=node('label','mock-option');const input=node('input');input.type=q.type==='single'?'radio':'checkbox';input.name=q.id;input.checked=s.answers.includes(i);input.addEventListener('change',()=>{s.answers=q.type==='single'?[i]:input.checked?[...new Set([...s.answers,i])]:s.answers.filter(x=>x!==i);change(q);});label.append(input,node('span','',`${String.fromCharCode(65+i)}. ${text}`));fieldset.append(label);});card.append(fieldset);
+  }else if(q.type==='essay'){
+   q.parts.forEach((part,i)=>{const block=node('div','mock-part'),label=node('label','',part.prompt),textarea=node('textarea');textarea.id=`${q.id}-draft-${i}`;label.htmlFor=textarea.id;textarea.value=typeof s.drafts[i]==='string'?s.drafts[i]:'';textarea.addEventListener('input',()=>{s.drafts[i]=textarea.value;save();wordViews.forEach(fn=>fn());});block.append(label,textarea,node('div','mock-print-space'));card.append(block);});
+   const word=node('p','mock-word-count');const update=()=>{const count=s.drafts.join(' ').trim().split(/\s+/).filter(Boolean).length;word.textContent=`${count} words${q.wordLimit?` · suggested maximum ${q.wordLimit}; no automatic penalty`:''}`;word.classList.toggle('mock-invalid',Boolean(q.wordLimit&&count>q.wordLimit));};wordViews.push(update);update();card.append(word);
+  }else{
+   if(q.type==='matching'){
+    addText(card,'Choose the most precise match for each prompt. Each answer is intended to be used once; each row is marked independently.');
+    card.append(node('p','mock-print-bank',`Answer bank: ${q.options.map((x,i)=>`${String.fromCharCode(65+i)}. ${x}`).join(' · ')}`));
+   }
+   q.items.forEach((item,i)=>{const row=node('div','mock-row'),label=node('label','',item.prompt);let input;
+    if(q.type==='matching'){input=node('select');const blank=node('option','','Choose an answer');blank.value='';input.append(blank);q.options.forEach(text=>{const option=node('option','',text);option.value=text;input.append(option);});}
+    else {input=node('input');input.type='text';input.autocomplete='off';}
+    input.id=`${q.id}-answer-${i}`;label.htmlFor=input.id;input.value=typeof s.answers[i]==='string'?s.answers[i]:'';input.addEventListener(q.type==='matching'?'change':'input',()=>{s.answers[i]=input.value;change(q);});row.append(label,input,node('div','mock-print-space'));card.append(row);
+   });
+  }
+  if(q.type!=='essay'){
+   const check=node('button','btn','Mark this question');check.type='button';check.addEventListener('click',()=>mark(q));const feedback=node('div','mock-result');feedback.setAttribute('role','status');
+   const update=()=>{feedback.hidden=s.marked!==true;feedback.textContent=s.marked===true?`${fmt(score(q))} / ${fmt(q.marks)} marks. Open the marking guide for the answer and reasoning. Changing a response clears this marking result.`:'';};markViews.set(q.id,update);update();card.append(check,feedback);
+  }
+  addMemo(card,q);document.getElementById('paper-questions').append(card);
+  const jump=node('a','',`Q${q.number} · ${fmt(q.marks)}`);jump.href='#'+q.id;document.getElementById('question-links').append(jump);
+ }
+ document.getElementById('paper-scope').textContent=`Scope: ${paper.scope}`;
+ document.getElementById('paper-meta').textContent=`${paper.questions.length} questions · ${paper.totalMarks} marks · attempt all questions. ${paper.notes}`;
+ const instructions=document.getElementById('instructions');
+ addText(instructions,`Style reference: ${paper.reference}. The questions and diagrams in this paper are newly authored. Saved responses in the reference export were not treated as an authoritative memorandum.`);
+ addText(instructions,paper.multiRule);
+ if(hasObjective)addText(instructions,'Matching rows and short-answer subparts share their question’s marks equally. Short answers ignore case, extra spaces and a final full stop; accepted alternatives are shown in the marking guide. Equivalent written reasoning may earn credit under the rubric. Use the rubric to review a defensible alternative the exact-match marker does not recognise.');
+ addText(instructions,'Written responses are not automatically graded. Enter optional self-assessed marks after consulting the model answer. Any word maximum is practice guidance, not an automatically applied penalty. Blank printing omits your saved answers and all marking guides. Marking-guide printing includes the paper and model answers, without your private drafts.');
+ addText(instructions,'Some topic guides are general coverage because lecture notes were unavailable. CT4 is limited to L28–L33 plus L35 revision. ST2 samples L17–L33 and L35, including existing SOA and Microservices material.');
+ paper.questions.forEach(renderQuestion);updateScore();status.textContent='Drafts, selections and self-assessment save locally for this paper.';
+ document.getElementById('mark-all').addEventListener('click',()=>{paper.questions.filter(q=>q.type!=='essay').forEach(q=>{current(q).marked=true;markViews.get(q.id)();});save();updateScore();});
+ document.getElementById('show-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=true));
+ document.getElementById('hide-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=false));
+ document.getElementById('reset-paper').addEventListener('click',()=>{if(window.confirm('Clear only this paper’s answers, drafts and self-assessed marks?')){state={};save();location.reload();}});
+ let printState=null;
+ function restorePrint(){if(!printState)return;memoElements.forEach((m,i)=>m.open=printState[i]);document.body.classList.remove('print-memo');printState=null;}
+ function printPaper(withMemo){printState=memoElements.map(m=>m.open);document.body.classList.toggle('print-memo',withMemo);memoElements.forEach(m=>m.open=withMemo);window.print();}
+ addEventListener('afterprint',restorePrint);
+ document.getElementById('print-paper').addEventListener('click',()=>printPaper(false));
+ document.getElementById('print-memo').addEventListener('click',()=>printPaper(true));
+})();
+
+</script>
+</body>
+</html>
