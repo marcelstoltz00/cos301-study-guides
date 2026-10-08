@@ -1,0 +1,129 @@
+L17.html
+  s_7a0856d91dc111::t_12c4d1f5e9d9c1 626
+L18.html
+  s_7a0856d91dc111::t_b576e94425da44 626
+L19.html
+  s_7a0856d91dc111::t_c08b814d8aefa6 626
+L20.html
+  s_7a0856d91dc111::t_2bdf5b02a4080a 626
+L21.html
+  s_7a0856d91dc111::t_ae68622eb16cfa 626
+L22.html
+  s_7a0856d91dc111::t_dc60474b0089f7 626
+L23.html
+  s_7a0856d91dc111::t_256519d3d43b33 626
+L24.html
+  s_7a0856d91dc111::t_0f460640876784 626
+L25.html
+  s_7a0856d91dc111::t_a01b09b0bc7635 626
+L28.html
+  s_7a0856d91dc111::t_e1ad6ced80e380 685
+L29.html
+  s_7a0856d91dc111::t_74e616d174046c 685
+L30.html
+  s_7a0856d91dc111::t_6d30cdb1ccc032 685
+L31.html
+  s_7a0856d91dc111::t_aca619c1dee27b 685
+L32.html
+  s_7a0856d91dc111::t_8d4d76218a51d0 685
+L33.html
+  s_7a0856d91dc111::t_111ed9b2e1e21e 685
+L35.html
+  s_7a0856d91dc111::t_a57850f446edaa 685
+MS.html
+  s_7a0856d91dc111::t_b8acdf9721d7b2 626
+README.md
+  s_7a0856d91dc111::t_131257ff724e21 9-12,20-27,49
+SOA.html
+  s_7a0856d91dc111::t_5c00b5f26030d1 626
+assessment-style-review.md
+  s_7a0856d91dc111::t_7d165e3c27e269 65-73
+assets/build.py
+  s_7a0856d91dc111::t_3c03db97b808c2 16,46,323-328,350,453-455
+assets/build_slide_explainer.py
+  s_7a0856d91dc111::t_a905ba0230d225 1-39
+assets/extract_slides.swift
+  s_7a0856d91dc111::t_1ef6d82aa9e4f2 1-32
+assets/mock-exam.js
+  s_7a0856d91dc111::t_0880db0d74f2d0 4-5,40,98
+assets/slide-explainer.css
+  s_7a0856d91dc111::t_78638a5c3221c1 1
+assets/slide-explainer.html
+  s_7a0856d91dc111::t_8849227eff597f 1-37
+assets/slide-explainer.js
+  s_7a0856d91dc111::t_840fef63c0e1c5 1-50
+ct4-example-1.html
+  s_7a0856d91dc111::t_a3a03abe079381 696-698,727-728,763,821
+ct4-example-2.html
+  s_7a0856d91dc111::t_38808ac530171d 696-698,727-728,763,821
+data/st2-example-3.json
+  s_7a0856d91dc111::t_44f587d90959d7 1-413
+data/st2-example-4.json
+  s_7a0856d91dc111::t_d066d9131e3b14 1-405
+index.html
+  s_7a0856d91dc111::t_41a325d9aae8c3 660,723-725
+markdown/st2-example-3.md
+  s_7a0856d91dc111::t_ec129d795b83cc 1-280
+markdown/st2-example-4.md
+  s_7a0856d91dc111::t_7e5e21326bb0a6 1-274
+slide-explainer.html
+  s_7a0856d91dc111::t_0ce12df74e01c7 1-88
+slide-explainer/README.md
+  s_7a0856d91dc111::t_8886776cd3cec6 1-58
+slide-explainer/all-explanations.md
+  s_7a0856d91dc111::t_0deab14072a7fc 1-2916
+slide-explainer/explanations.json
+  s_7a0856d91dc111::t_f2ecc805708a11 1-4755
+slide-explainer/extracted.json
+  s_7a0856d91dc111::t_5edb1cebf17be6 1-2592
+slide-explainer/notes/L17.txt
+  s_7a0856d91dc111::t_b54953992fbaf7 1-32
+slide-explainer/notes/L18.txt
+  s_7a0856d91dc111::t_85d6332b178f05 1-34
+slide-explainer/notes/L19.txt
+  s_7a0856d91dc111::t_508148cfc3b252 1-22
+slide-explainer/notes/L20.txt
+  s_7a0856d91dc111::t_e8fe672e353929 1-30
+slide-explainer/notes/L21.txt
+  s_7a0856d91dc111::t_0416570667ee17 1-29
+slide-explainer/notes/L22.txt
+  s_7a0856d91dc111::t_a47d9bb3cb74cd 1-40
+slide-explainer/notes/L23.txt
+  s_7a0856d91dc111::t_36b4acfa76b7f0 1-22
+slide-explainer/notes/L24.txt
+  s_7a0856d91dc111::t_d83c1405552d85 1-10
+slide-explainer/notes/L25.txt
+  s_7a0856d91dc111::t_92c5ea512cc45c 1-14
+slide-explainer/notes/L27.txt
+  s_7a0856d91dc111::t_b262194f9c28ce 1-43
+slide-explainer/notes/L28.txt
+  s_7a0856d91dc111::t_38e08305335952 1-40
+slide-explainer/notes/L30.txt
+  s_7a0856d91dc111::t_8aebc198c3b17b 1-42
+st2-example-1.html
+  s_7a0856d91dc111::t_5eebdacde6b574 696-698,727-728,763,821
+st2-example-2.html
+  s_7a0856d91dc111::t_01747ee67b3831 696-698,727-728,763,821
+st2-example-3.html
+  s_7a0856d91dc111::t_82d49dca50d0e7 1-839
+st2-example-4.html
+  s_7a0856d91dc111::t_a1805cc56d9906 1-839
+st2-scenario-coverage.md
+  s_7a0856d91dc111::t_75c9c94358d388 1-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fd3ec2021512572e24f24bbaa00992bf0e9340f6",
+  "prompts": {},
+  "sessions": {
+    "s_7a0856d91dc111": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11ab9-6aa4-7012-a344-15e708fd0fee",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "marcelstoltz00 <marcelstoltz00@gmail.com>"
+    }
+  }
+}
