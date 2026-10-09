@@ -1,0 +1,159 @@
+L17.html
+  s_7a0856d91dc111::t_2c914f151c4c8a 627
+L18.html
+  s_7a0856d91dc111::t_e641404cbaf045 627
+L19.html
+  s_7a0856d91dc111::t_49f0c1f6ab8ecd 627
+L20.html
+  s_7a0856d91dc111::t_7f57fbb6f12f6b 627
+L21.html
+  s_7a0856d91dc111::t_f3cc03371aed8b 627
+L22.html
+  s_7a0856d91dc111::t_064c9d11c97ec2 627
+L23.html
+  s_7a0856d91dc111::t_1565af19057a42 627
+L24.html
+  s_7a0856d91dc111::t_8ce34e64121f83 627
+L25.html
+  s_7a0856d91dc111::t_0ba304ba4acf96 627
+L28.html
+  s_7a0856d91dc111::t_0f8013f1d84ba5 686
+L29.html
+  s_7a0856d91dc111::t_6a88c72478e619 686
+L30.html
+  s_7a0856d91dc111::t_227053d5e3f65f 686
+L31.html
+  s_7a0856d91dc111::t_bb444f826e58ac 686
+L32.html
+  s_7a0856d91dc111::t_84a13a820efc01 686
+L33.html
+  s_7a0856d91dc111::t_445093fb93ef2d 686
+L35.html
+  s_7a0856d91dc111::t_634f418e6fb064 686
+MS.html
+  s_7a0856d91dc111::t_658610344b2cfc 627
+README.md
+  s_7a0856d91dc111::t_7b0b47069be69d 13-20
+SOA.html
+  s_7a0856d91dc111::t_26f84aba2df9cd 627
+architecture-atlas.html
+  s_7a0856d91dc111::t_374213a8e1cf5e 1-131
+architecture-diagrams/all-architectures.drawio
+  s_7a0856d91dc111::t_7c298d012e3020 1-2
+architecture-diagrams/blue-green.drawio
+  s_7a0856d91dc111::t_b2a4c83d9afabc 1-2
+architecture-diagrams/blue-green.svg
+  s_7a0856d91dc111::t_26d95c8f1f07b9 1
+architecture-diagrams/choreography.drawio
+  s_7a0856d91dc111::t_59e4914644b7f5 1-2
+architecture-diagrams/choreography.svg
+  s_7a0856d91dc111::t_f980deb67be0bc 1
+architecture-diagrams/client-server.drawio
+  s_7a0856d91dc111::t_efe0e69a10bc50 1-2
+architecture-diagrams/client-server.svg
+  s_7a0856d91dc111::t_7a3bb9a64e0573 1
+architecture-diagrams/cqrs.drawio
+  s_7a0856d91dc111::t_ca885bc27f9e54 1-2
+architecture-diagrams/cqrs.svg
+  s_7a0856d91dc111::t_c0179b8ed36d13 1
+architecture-diagrams/event-driven.drawio
+  s_7a0856d91dc111::t_e6fd67cb6f6694 1-2
+architecture-diagrams/event-driven.svg
+  s_7a0856d91dc111::t_4ec95161ffd6c9 1
+architecture-diagrams/event-sourcing.drawio
+  s_7a0856d91dc111::t_a615d9d5928360 1-2
+architecture-diagrams/event-sourcing.svg
+  s_7a0856d91dc111::t_ef474d92636b11 1
+architecture-diagrams/layered.drawio
+  s_7a0856d91dc111::t_618f842193a90f 1-2
+architecture-diagrams/layered.svg
+  s_7a0856d91dc111::t_4ded016e5550ec 1
+architecture-diagrams/master-worker.drawio
+  s_7a0856d91dc111::t_608f15bd14db17 1-2
+architecture-diagrams/master-worker.svg
+  s_7a0856d91dc111::t_b3f935c8c5fe62 1
+architecture-diagrams/microservices.drawio
+  s_7a0856d91dc111::t_a14907ae81e67a 1-2
+architecture-diagrams/microservices.svg
+  s_7a0856d91dc111::t_dce99a3198837c 1
+architecture-diagrams/modular-monolith.drawio
+  s_7a0856d91dc111::t_0d31092d55b40f 1-2
+architecture-diagrams/modular-monolith.svg
+  s_7a0856d91dc111::t_199e8bc0ba3ad4 1
+architecture-diagrams/monolith.drawio
+  s_7a0856d91dc111::t_93f9eee38f8526 1-2
+architecture-diagrams/monolith.svg
+  s_7a0856d91dc111::t_9b452ff96f0f03 1
+architecture-diagrams/mvc.drawio
+  s_7a0856d91dc111::t_b4f7bf1473dc9b 1-2
+architecture-diagrams/mvc.svg
+  s_7a0856d91dc111::t_92061bfbd4bc9f 1
+architecture-diagrams/mvp.drawio
+  s_7a0856d91dc111::t_b5c825db945f0b 1-2
+architecture-diagrams/mvp.svg
+  s_7a0856d91dc111::t_3eee3f7fcc74c7 1
+architecture-diagrams/mvt.drawio
+  s_7a0856d91dc111::t_9acd581b42871f 1-2
+architecture-diagrams/mvt.svg
+  s_7a0856d91dc111::t_61fc45cdca210c 1
+architecture-diagrams/mvvm.drawio
+  s_7a0856d91dc111::t_805f1e70454f55 1-2
+architecture-diagrams/mvvm.svg
+  s_7a0856d91dc111::t_4f4cd70a1d4e78 1
+architecture-diagrams/resilience.drawio
+  s_7a0856d91dc111::t_81eca7e6eadf15 1-2
+architecture-diagrams/resilience.svg
+  s_7a0856d91dc111::t_2139d6fb937d34 1
+architecture-diagrams/saga.drawio
+  s_7a0856d91dc111::t_7b38a19cec948e 1-2
+architecture-diagrams/saga.svg
+  s_7a0856d91dc111::t_dc528b4ce44abb 1
+architecture-diagrams/section.html
+  s_7a0856d91dc111::t_d5aa7f3a1bfa11 1-127
+architecture-diagrams/soa.drawio
+  s_7a0856d91dc111::t_e87b6d8274951d 1-2
+architecture-diagrams/soa.svg
+  s_7a0856d91dc111::t_35928af946edcb 1
+architecture-diagrams/tiers.drawio
+  s_7a0856d91dc111::t_92e0b8c612e010 1-2
+architecture-diagrams/tiers.svg
+  s_7a0856d91dc111::t_f6a8ad789a22f6 1
+architecture-diagrams/two-zones.drawio
+  s_7a0856d91dc111::t_9822d855ccd369 1-2
+architecture-diagrams/two-zones.svg
+  s_7a0856d91dc111::t_5c890b367859e4 1
+assets/architecture-atlas.css
+  s_7a0856d91dc111::t_58474673070cfa 1-3
+assets/architecture-atlas.js
+  s_7a0856d91dc111::t_1eab62e471e9ab 1
+assets/build.py
+  s_7a0856d91dc111::t_d94156cfb02308 47,324-329
+assets/build_architecture_atlas.py
+  s_7a0856d91dc111::t_96036ab5aabfe1 1-122
+assets/build_slide_explainer.py
+  s_7a0856d91dc111::t_e5aef56f2f0eea 34-35,37-38
+assets/slide-explainer.html
+  s_7a0856d91dc111::t_c34016062ae4c6 10,19,31
+data/architecture-atlas.json
+  s_7a0856d91dc111::t_223d0bebd45cfa 1-2017
+index.html
+  s_7a0856d91dc111::t_ffbb7132e672d6 661,726
+slide-explainer.html
+  s_7a0856d91dc111::t_cb2d7e76d39d2f 7-9,14,23,35-161,217
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1eea685cfd2161090f8af53d4c2589ad50582893",
+  "prompts": {},
+  "sessions": {
+    "s_7a0856d91dc111": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11ab9-6aa4-7012-a344-15e708fd0fee",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "marcelstoltz00 <marcelstoltz00@gmail.com>"
+    }
+  }
+}
