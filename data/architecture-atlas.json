@@ -1,0 +1,2017 @@
+{
+  "title": "Architecture drawing revision",
+  "items": [
+    {
+      "id": "monolith",
+      "title": "Monolithic architecture",
+      "memory": "One application, one deployment.",
+      "meaning": "The capabilities run together in one application. Internal modules are still possible; monolith does not mean unstructured code.",
+      "use": "Small teams or closely related capabilities with one release cycle.",
+      "cost": "Deployment and scaling generally move the whole application.",
+      "trap": "One deployable does not mean one physical server: replicas can improve availability.",
+      "steps": [
+        "Draw a client.",
+        "Draw one application boundary with the capabilities inside.",
+        "Connect that application to its database."
+      ],
+      "nodes": [
+        {
+          "id": "user",
+          "label": "Client",
+          "x": 30,
+          "y": 190,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "The screen or program the customer uses. It sends requests and displays the results."
+        },
+        {
+          "id": "app",
+          "label": "One application\nOrders + Products + Payments",
+          "x": 290,
+          "y": 150,
+          "w": 320,
+          "h": 140,
+          "kind": "app",
+          "responsibility": "Runs the order, product and payment rules together. Coordinates the work and decides which information to read or save."
+        },
+        {
+          "id": "db",
+          "label": "Application database",
+          "x": 740,
+          "y": 190,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Keeps information after the application stops, such as products, orders and payment records."
+        }
+      ],
+      "edges": [
+        {
+          "source": "user",
+          "target": "app",
+          "label": "request",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "app",
+          "target": "db",
+          "label": "read / write",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L27-24",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "Think of one shop with several departments under one roof. Orders, products and payments are all handled inside the same running application. The code can still be neatly organised, but a release normally replaces the application as a whole.",
+      "walkthrough": "A customer sends an order from the client. The application checks products, calculates the total and handles payment, then saves the result in its database. Calls between its internal parts do not need to cross a network."
+    },
+    {
+      "id": "modular-monolith",
+      "title": "Modular monolith",
+      "memory": "Many internal modules, one deployable.",
+      "meaning": "Strong internal interfaces separate business capabilities while the application is deployed as one unit.",
+      "use": "Maintainable boundaries without distributed operational overhead.",
+      "cost": "Modules cannot normally deploy or scale independently.",
+      "trap": "Separate folders do not enforce a boundary; callers must use public interfaces.",
+      "steps": [
+        "Draw one deployable application boundary.",
+        "Place business modules and their public interfaces inside.",
+        "Connect modules through interfaces; add persistence below."
+      ],
+      "nodes": [
+        {
+          "id": "user",
+          "label": "Client",
+          "x": 25,
+          "y": 100,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Sends the customer’s request and shows its result."
+        },
+        {
+          "id": "orders",
+          "label": "Orders module\nPublic interface",
+          "x": 260,
+          "y": 100,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Creates and manages orders. Its public interface is the set of operations other modules are allowed to call."
+        },
+        {
+          "id": "stock",
+          "label": "Inventory module\nPublic interface",
+          "x": 500,
+          "y": 100,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Checks, reserves and updates available stock through its public interface."
+        },
+        {
+          "id": "pay",
+          "label": "Payments module\nPublic interface",
+          "x": 740,
+          "y": 100,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Handles charging and refunding through its public interface."
+        },
+        {
+          "id": "db",
+          "label": "Saved information",
+          "x": 500,
+          "y": 330,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Keeps the modules’ saved information. Clear ownership rules should prevent modules from changing each other’s records directly."
+        }
+      ],
+      "edges": [
+        {
+          "source": "user",
+          "target": "orders",
+          "label": "request",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "orders",
+          "target": "stock",
+          "label": "internal call",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "stock",
+          "target": "pay",
+          "label": "internal call",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "stock",
+          "target": "db",
+          "label": "read / write",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L22-37",
+      "category": "Architecture",
+      "groups": [
+        {
+          "label": "ONE deployable application · internal module boundaries",
+          "x": 230,
+          "y": 45,
+          "w": 700,
+          "h": 380
+        }
+      ],
+      "explanation": "This is one application divided into clearly defined departments. Each module owns one business job and offers an agreed way for other modules to ask it for help. Everything is still released together, so you get clearer code without running many separate services.",
+      "walkthrough": "The client starts an order. The order module asks the inventory module about stock; the illustrated internal calls also reach the payment module. Saved information goes into storage. The storage arrow is an example connection, rather than a rule that only inventory may save data.",
+      "boundaryExplanation": "The large enclosure is one running application released as a unit. The separate boxes inside it are code modules, rather than independent network services."
+    },
+    {
+      "id": "layered",
+      "title": "Layered architecture — four layers",
+      "memory": "Stack responsibilities; stay inside the next layer.",
+      "meaning": "Layers are logical responsibilities: presentation, business, persistence and storage. Here closed layers call the adjacent layer.",
+      "use": "Clear separation of concerns in a conventional business application.",
+      "cost": "Strict layering adds indirection; rules can become coupled to storage if boundaries leak.",
+      "trap": "Layers describe code organisation, not separate machines.",
+      "steps": [
+        "Stack Presentation above Business.",
+        "Add Persistence and Database below.",
+        "Draw downward calls between adjacent layers; responses return through the call path."
+      ],
+      "nodes": [
+        {
+          "id": "ui",
+          "label": "Presentation layer",
+          "x": 320,
+          "y": 30,
+          "w": 320,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Displays information and collects user input. It should not decide business rules or issue database operations directly."
+        },
+        {
+          "id": "business",
+          "label": "Business / domain layer",
+          "x": 320,
+          "y": 145,
+          "w": 320,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Applies the rules of the business, such as whether stock is available or a discount is allowed."
+        },
+        {
+          "id": "persistence",
+          "label": "Persistence layer",
+          "x": 320,
+          "y": 260,
+          "w": 320,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Turns requests to save or retrieve business information into storage operations. Hides database details from business code."
+        },
+        {
+          "id": "db",
+          "label": "Database layer",
+          "x": 320,
+          "y": 375,
+          "w": 320,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Stores records and carries out the requested reads and writes."
+        }
+      ],
+      "edges": [
+        {
+          "source": "ui",
+          "target": "business",
+          "label": "input",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "business",
+          "target": "persistence",
+          "label": "store / retrieve",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "persistence",
+          "target": "db",
+          "label": "query",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-14",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "Think of a stack of helpers, each with a different job. The screen handles interaction, business code decides what is allowed, storage-access code translates requests into database operations, and the database keeps the information. These are divisions of responsibility in the code, even if they all run on one machine.",
+      "walkthrough": "A customer clicks Buy. The presentation layer passes the input down. The business layer checks the order rules. The persistence layer saves the order in the database. The result returns up the same path. In this strict example, a layer talks only to the layer immediately below it."
+    },
+    {
+      "id": "tiers",
+      "title": "Tiered architecture — three tiers",
+      "memory": "Split runtime placement: client → server → database.",
+      "meaning": "Tiers run in separate runtime/deployment locations and communicate across those boundaries. A tier may contain several logical layers.",
+      "use": "Separating presentation, application processing and data hosting.",
+      "cost": "Network latency, connection management and partial failures.",
+      "trap": "Three code folders do not prove three deployment tiers.",
+      "steps": [
+        "Draw separate Client, Application-server and Database-server enclosures.",
+        "Place the browser, application and database in their respective tiers.",
+        "Label the network links with protocol and timing."
+      ],
+      "nodes": [
+        {
+          "id": "browser",
+          "label": "Browser interface",
+          "x": 65,
+          "y": 185,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Shows the interface and collects input on the customer’s device."
+        },
+        {
+          "id": "app",
+          "label": "Application server\nBusiness logic\n+ persistence",
+          "x": 395,
+          "y": 185,
+          "w": 164,
+          "h": 94,
+          "kind": "app",
+          "responsibility": "Processes requests, applies business rules and accesses saved information on behalf of the browser."
+        },
+        {
+          "id": "db",
+          "label": "Database server",
+          "x": 725,
+          "y": 185,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Hosts and protects the saved records. Answers database requests from the application server."
+        }
+      ],
+      "edges": [
+        {
+          "source": "browser",
+          "target": "app",
+          "label": "secure web call",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "app",
+          "target": "db",
+          "label": "database call",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-16",
+      "category": "Architecture",
+      "groups": [
+        {
+          "label": "Presentation tier",
+          "x": 30,
+          "y": 120,
+          "w": 235,
+          "h": 170
+        },
+        {
+          "label": "Application tier",
+          "x": 360,
+          "y": 120,
+          "w": 235,
+          "h": 170
+        },
+        {
+          "label": "Data tier",
+          "x": 690,
+          "y": 120,
+          "w": 235,
+          "h": 170
+        }
+      ],
+      "explanation": "Think of three places where the system runs: the customer’s browser, an application server and a database server. Requests travel between these places over a network. Unlike layers, tiers describe where parts run, rather than just how code is organised.",
+      "walkthrough": "The browser sends a request to the application server and waits for a reply. The server checks the business rules, asks the database server to read or save information, then returns a result to the browser. Any network link can be slow or fail independently.",
+      "boundaryExplanation": "The three enclosures are separate places where parts run. A network request crosses from one tier to another; they are not simply folders in the code."
+    },
+    {
+      "id": "client-server",
+      "title": "Client–server",
+      "memory": "Client asks; server provides.",
+      "meaning": "Clients request a capability from a server. This interaction can appear inside several other architectural styles.",
+      "use": "Shared services accessed by multiple clients.",
+      "cost": "The server is a dependency; capacity and availability need an explicit design.",
+      "trap": "This shape does not tell you whether the server is internally layered or microservice-based.",
+      "steps": [
+        "Draw two clients on the left.",
+        "Draw a shared server on the right.",
+        "Draw labelled request arrows to the server; returned results use the same communication path."
+      ],
+      "nodes": [
+        {
+          "id": "web",
+          "label": "Web client",
+          "x": 100,
+          "y": 100,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Lets a person access the service through a browser. Sends requests and displays replies."
+        },
+        {
+          "id": "mobile",
+          "label": "Mobile client",
+          "x": 100,
+          "y": 300,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Lets a person access the same service through a mobile application."
+        },
+        {
+          "id": "server",
+          "label": "Shared server",
+          "x": 620,
+          "y": 200,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Provides the shared capability, processes requests and returns results. Its capacity must support the clients using it."
+        }
+      ],
+      "edges": [
+        {
+          "source": "web",
+          "target": "server",
+          "label": "request",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "mobile",
+          "target": "server",
+          "label": "request",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-16",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "Several clients ask one shared server for a service. A client is the program making a request; a server is the program answering it. This diagram describes their relationship, without specifying how the server’s code is organised inside.",
+      "walkthrough": "A browser or mobile application asks the server for information or an action. The server performs the work and sends back a result. Both clients can use the same service instead of maintaining separate copies of the business logic."
+    },
+    {
+      "id": "microservices",
+      "title": "Microservices",
+      "memory": "Capability → service → own data.",
+      "meaning": "Each service owns a business capability and exposes a contract. Deployment and data ownership support independent evolution.",
+      "use": "Independent teams, release needs or very different scaling demands, with distributed operating capacity.",
+      "cost": "Remote failures, eventual consistency, tracing, deployment and data-management overhead.",
+      "trap": "Separate processes sharing writable tables can form a distributed monolith.",
+      "steps": [
+        "Draw a client and a request gateway.",
+        "Draw capability services with separate owned stores.",
+        "Connect services through agreed requests or events; avoid direct access to another service’s tables."
+      ],
+      "nodes": [
+        {
+          "id": "client",
+          "label": "Client",
+          "x": 25,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Collects user input and sends requests to the system."
+        },
+        {
+          "id": "gateway",
+          "label": "Request gateway",
+          "x": 235,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Provides an entry point and forwards requests to the right service. It may also check access or limit excessive traffic."
+        },
+        {
+          "id": "orders",
+          "label": "Orders service",
+          "x": 475,
+          "y": 45,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Creates and manages orders. Owns the meaning and rules of order information."
+        },
+        {
+          "id": "products",
+          "label": "Products service",
+          "x": 475,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Manages product details and the rules for changing them."
+        },
+        {
+          "id": "payments",
+          "label": "Payments service",
+          "x": 475,
+          "y": 365,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Handles payment actions and payment results."
+        },
+        {
+          "id": "odb",
+          "label": "Orders database",
+          "x": 760,
+          "y": 45,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Stores order information. Other services request it through the order service instead of editing these records directly."
+        },
+        {
+          "id": "pdb",
+          "label": "Products database",
+          "x": 760,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Stores product information under the product service’s control."
+        },
+        {
+          "id": "paydb",
+          "label": "Payments database",
+          "x": 760,
+          "y": 365,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Stores payment information under the payment service’s control."
+        }
+      ],
+      "edges": [
+        {
+          "source": "client",
+          "target": "gateway",
+          "label": "secure web request",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "gateway",
+          "target": "orders",
+          "label": "route",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "gateway",
+          "target": "products",
+          "label": "route",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "gateway",
+          "target": "payments",
+          "label": "route",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "orders",
+          "target": "odb",
+          "label": "owns",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "products",
+          "target": "pdb",
+          "label": "owns",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "payments",
+          "target": "paydb",
+          "label": "owns",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-18",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "Think of separate specialist businesses cooperating. One service handles orders, another products and another payments. Each can be changed and released separately, and each controls its own saved information. They communicate through agreed messages or requests instead of freely changing one another’s database tables.",
+      "walkthrough": "The client sends a secure web request to the gateway, which forwards it to the appropriate service. The chosen service performs its own job and reads or writes its own database. Cooperation between services needs additional agreed interactions; the gateway does not replace those business rules."
+    },
+    {
+      "id": "event-driven",
+      "title": "Event-driven architecture",
+      "memory": "Publish a fact; interested consumers react.",
+      "meaning": "Producers emit facts to a broker. Independent subscribers react asynchronously; publication is not the same as business completion.",
+      "use": "Multiple reactions to one fact, extensible processing and temporary burst buffering.",
+      "cost": "Lag, duplicate delivery, ordering, schema compatibility and difficult cross-service debugging.",
+      "trap": "Events describe what happened; commands request an action. A queue alone does not make work durable.",
+      "steps": [
+        "Draw a producer, then a broker/topic.",
+        "Fan out dashed arrows to separate consumers.",
+        "Name the event and label asynchronous delivery."
+      ],
+      "nodes": [
+        {
+          "id": "order",
+          "label": "Order service",
+          "x": 35,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Creates the order and announces that it was placed."
+        },
+        {
+          "id": "broker",
+          "label": "Event broker / topic",
+          "x": 315,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Receives events and delivers them to interested consumers. A topic is a named channel grouping related events."
+        },
+        {
+          "id": "ship",
+          "label": "Shipping consumer",
+          "x": 730,
+          "y": 45,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Listens for order events and starts delivery-related work."
+        },
+        {
+          "id": "email",
+          "label": "Email consumer",
+          "x": 730,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Listens for order events and sends customer notifications."
+        },
+        {
+          "id": "report",
+          "label": "Analytics consumer",
+          "x": 730,
+          "y": 365,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Listens for order events and updates reporting information."
+        }
+      ],
+      "edges": [
+        {
+          "source": "order",
+          "target": "broker",
+          "label": "Order placed",
+          "points": [],
+          "asynchronous": true
+        },
+        {
+          "source": "broker",
+          "target": "ship",
+          "label": "event",
+          "points": [],
+          "asynchronous": true
+        },
+        {
+          "source": "broker",
+          "target": "email",
+          "label": "event",
+          "points": [],
+          "asynchronous": true
+        },
+        {
+          "source": "broker",
+          "target": "report",
+          "label": "event",
+          "points": [],
+          "asynchronous": true
+        }
+      ],
+      "source": "L18-22",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "An event is a message saying something has happened, such as “an order was placed”. The sender announces the fact, and interested parts react to it. The sender does not have to wait for every reaction to finish. Different reactions may finish at different times.",
+      "walkthrough": "The order service publishes an order-placed message. The broker delivers a copy to each interested consumer. Shipping prepares delivery, email sends a notification and analytics updates reports. Consumers need rules for handling duplicate messages safely."
+    },
+    {
+      "id": "soa",
+      "title": "Service-oriented architecture",
+      "memory": "Consumers → mediation → business services.",
+      "meaning": "Agreed service interfaces connect business capabilities and heterogeneous legacy systems. This example uses an enterprise service bus for routing/translation.",
+      "use": "Enterprise integration across existing systems and protocols.",
+      "cost": "A central bus can concentrate complexity, coupling and failure.",
+      "trap": "A central service bus and a formal web-service messaging protocol are common choices, but are not requirements of every service-oriented design.",
+      "steps": [
+        "Draw business consumers at the top.",
+        "Draw an enterprise service bus / mediation layer in the middle.",
+        "Draw business services underneath and label their contracts."
+      ],
+      "nodes": [
+        {
+          "id": "portal",
+          "label": "Portal consumer",
+          "x": 230,
+          "y": 35,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Provides a user-facing application that requests shared business services."
+        },
+        {
+          "id": "app",
+          "label": "Other application",
+          "x": 570,
+          "y": 35,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Another system that reuses the same services instead of implementing them again."
+        },
+        {
+          "id": "bus",
+          "label": "Enterprise service bus\nRouting and translation",
+          "x": 260,
+          "y": 200,
+          "w": 440,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Routes requests and translates message formats or communication methods. It connects systems; business responsibility remains with the services."
+        },
+        {
+          "id": "billing",
+          "label": "Billing service",
+          "x": 75,
+          "y": 365,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Calculates bills and manages billing operations."
+        },
+        {
+          "id": "identity",
+          "label": "Identity service",
+          "x": 395,
+          "y": 365,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Provides shared identity operations, such as checking who a user is."
+        },
+        {
+          "id": "legacy",
+          "label": "Legacy finance service",
+          "x": 715,
+          "y": 365,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Exposes finance operations from an older system through an agreed service interface."
+        }
+      ],
+      "edges": [
+        {
+          "source": "portal",
+          "target": "bus",
+          "label": "service request",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "app",
+          "target": "bus",
+          "label": "service request",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "bus",
+          "target": "billing",
+          "label": "contract",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "bus",
+          "target": "identity",
+          "label": "contract",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "bus",
+          "target": "legacy",
+          "label": "formal service contract",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-24",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "Existing business systems expose useful operations as services so other applications can reuse them. In this example a central enterprise service bus helps systems communicate by routing requests and translating formats. It is useful when old and new systems need to work together.",
+      "walkthrough": "The portal or another application requests a business operation. The service bus sends the request to billing, identity or the older finance system, translating messages when necessary. Each service does its own business work and returns a result through the agreed interface."
+    },
+    {
+      "id": "cqrs",
+      "title": "Command and query responsibility segregation",
+      "memory": "Write one way; read another.",
+      "meaning": "Commands change authoritative state; queries read an appropriate representation. This example uses an asynchronously maintained read projection.",
+      "use": "Read-heavy dashboards or very different read and write models.",
+      "cost": "Projection lag and duplicated modelling/maintenance.",
+      "trap": "command and query responsibility segregation does not require two databases or event sourcing. Here two stores are an explicit example choice.",
+      "steps": [
+        "Draw a user interface splitting into Command and Query paths.",
+        "Connect commands to the write model and queries to the read model.",
+        "Show the write-side event/update feeding the read projection; label its delay."
+      ],
+      "nodes": [
+        {
+          "id": "ui",
+          "label": "user interface / client",
+          "x": 40,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Sends change requests or asks to display information."
+        },
+        {
+          "id": "command",
+          "label": "Command handler",
+          "x": 300,
+          "y": 65,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Checks whether a requested change is allowed and applies it to the write model."
+        },
+        {
+          "id": "query",
+          "label": "Query handler",
+          "x": 300,
+          "y": 345,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Answers read-only questions without changing the business information."
+        },
+        {
+          "id": "write",
+          "label": "Write model / store",
+          "x": 700,
+          "y": 65,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Holds the authoritative information used when making changes."
+        },
+        {
+          "id": "read",
+          "label": "Read projection / store",
+          "x": 700,
+          "y": 345,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Holds information arranged for convenient reading. It is a derived copy in this example, so it may lag behind the write store."
+        }
+      ],
+      "edges": [
+        {
+          "source": "ui",
+          "target": "command",
+          "label": "change state",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "ui",
+          "target": "query",
+          "label": "read data",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "command",
+          "target": "write",
+          "label": "validate + write",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "query",
+          "target": "read",
+          "label": "query",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "write",
+          "target": "read",
+          "label": "projection update",
+          "points": [],
+          "asynchronous": true
+        }
+      ],
+      "source": "L18-27",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "Use one path for changing information and another for reading it. A command asks for a change, such as “place this order”. A query asks for information, such as “show my orders”. The reading side can keep a convenient copy shaped for screens or reports.",
+      "walkthrough": "The client sends a change to the command handler, which checks it and updates the write store. A later update refreshes the read copy. Requests to view information go through the query handler to that copy. In this illustrated arrangement, a screen may briefly show old information while the copy catches up."
+    },
+    {
+      "id": "event-sourcing",
+      "title": "Event sourcing",
+      "memory": "Store the history; rebuild current state.",
+      "meaning": "Persist an ordered stream of domain events and derive state by replaying it. This is a persistence pattern that can pair with command and query responsibility segregation.",
+      "use": "Business history, auditability and reconstructing prior state where its added complexity is justified.",
+      "cost": "Event versioning, replay correctness, ordering and snapshot/projection management.",
+      "trap": "An event-driven system need not use event sourcing; an ordinary audit log is not automatically the authoritative event store.",
+      "steps": [
+        "Draw a command handler appending domain events.",
+        "Draw the event store as the authoritative history.",
+        "Draw replay/projection into current state; show a reader of that state."
+      ],
+      "nodes": [
+        {
+          "id": "command",
+          "label": "Command handler",
+          "x": 30,
+          "y": 200,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Validates the requested action and decides which business events should be saved."
+        },
+        {
+          "id": "store",
+          "label": "Event store\nOrdered domain history",
+          "x": 300,
+          "y": 200,
+          "w": 164,
+          "h": 74,
+          "kind": "db",
+          "responsibility": "Keeps the ordered, authoritative history of business events."
+        },
+        {
+          "id": "projection",
+          "label": "Replay / projector",
+          "x": 570,
+          "y": 200,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Applies the recorded events to calculate current information. Can rebuild derived information from the history."
+        },
+        {
+          "id": "state",
+          "label": "Current-state view",
+          "x": 780,
+          "y": 200,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Shows the calculated present situation, such as an order’s current status or an account’s balance."
+        }
+      ],
+      "edges": [
+        {
+          "source": "command",
+          "target": "store",
+          "label": "append events",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "store",
+          "target": "projection",
+          "label": "replay",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "projection",
+          "target": "state",
+          "label": "derive state",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-11",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "Keep the history of meaningful changes as the main record. Instead of only saving “the account balance is 80”, save changes such as “100 deposited” and “20 withdrawn”. The present state can be rebuilt by applying those changes in order.",
+      "walkthrough": "The command handler checks an action and appends the resulting event to the event store. The projector reads those events in order and builds a current-state view. Replaying the history can rebuild that view; it must not send the original payments or emails again."
+    },
+    {
+      "id": "mvc",
+      "title": "Model–view–controller",
+      "memory": "Input → controller → model; view displays.",
+      "meaning": "A controller coordinates input, the model holds domain/state behaviour, and the view renders the result. This shows a common model–view–controller interaction variant.",
+      "use": "Separating input handling, business state and presentation.",
+      "cost": "Responsibility can drift into a large controller or business-heavy view.",
+      "trap": "model–view–controller variants differ in update flow; a folder called Controller does not prove the separation.",
+      "steps": [
+        "Place a user/input entry, Controller, Model and View.",
+        "Draw input to Controller and action to Model.",
+        "Draw model data to View; Controller selects/coordinates the view."
+      ],
+      "nodes": [
+        {
+          "id": "user",
+          "label": "User input",
+          "x": 45,
+          "y": 190,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "The action entered by a person, such as submitting a form or clicking a button."
+        },
+        {
+          "id": "controller",
+          "label": "Controller",
+          "x": 305,
+          "y": 190,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Receives input, chooses the operation to run and coordinates the resulting display."
+        },
+        {
+          "id": "model",
+          "label": "Model\nDomain + state",
+          "x": 680,
+          "y": 60,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Holds business information and behaviour. Applies rules independently of how the screen looks."
+        },
+        {
+          "id": "view",
+          "label": "View\nRendered output",
+          "x": 680,
+          "y": 325,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Renders the information as the screen or page the person sees."
+        }
+      ],
+      "edges": [
+        {
+          "source": "user",
+          "target": "controller",
+          "label": "input",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "controller",
+          "target": "model",
+          "label": "action",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "model",
+          "target": "view",
+          "label": "data",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "controller",
+          "target": "view",
+          "label": "select / coordinate",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-28",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "Separate handling input, business information and displaying output. The controller decides what to do with the input. The model represents business information and rules. The view displays a result. This makes it easier to change the screen without rewriting the business rules.",
+      "walkthrough": "A person submits an action. The controller asks the model to perform the relevant work, then selects or coordinates the view. The view uses model data to display the result. This is one common interaction arrangement; other implementations can update the view differently."
+    },
+    {
+      "id": "mvp",
+      "title": "Model–view–presenter",
+      "memory": "View reports actions; presenter drives the view.",
+      "meaning": "The presenter handles presentation coordination, calls the model and updates the view through an explicit interface.",
+      "use": "Testable presentation logic with a relatively passive view.",
+      "cost": "Extra interfaces and synchronising view updates.",
+      "trap": "The presenter coordinates behaviour; it is not merely a rendered template.",
+      "steps": [
+        "Draw View, Presenter and Model.",
+        "Connect View → Presenter for user actions.",
+        "Connect Presenter → Model for work and Presenter → View for explicit display updates."
+      ],
+      "nodes": [
+        {
+          "id": "view",
+          "label": "View",
+          "x": 60,
+          "y": 195,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Displays information and passes user actions to the presenter. Keeps presentation decisions minimal."
+        },
+        {
+          "id": "presenter",
+          "label": "Presenter",
+          "x": 400,
+          "y": 195,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Coordinates the screen’s behaviour, requests business work and explicitly updates the view."
+        },
+        {
+          "id": "model",
+          "label": "Model",
+          "x": 735,
+          "y": 195,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Provides business information and rules without depending on the screen."
+        }
+      ],
+      "edges": [
+        {
+          "source": "view",
+          "target": "presenter",
+          "label": "user actions",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "presenter",
+          "target": "view",
+          "label": "display updates",
+          "points": [
+            [
+              482,
+              335
+            ],
+            [
+              142,
+              335
+            ]
+          ],
+          "asynchronous": false
+        },
+        {
+          "source": "presenter",
+          "target": "model",
+          "label": "domain operations",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-30",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "The view focuses on showing things and reporting user actions. A presenter does the thinking needed to coordinate that screen: it asks the model for work, prepares the result and explicitly tells the view what to display.",
+      "walkthrough": "A button click travels from the view to the presenter. The presenter calls the model, receives the result and tells the view how to update. The screen can be replaced by a simple test substitute when checking presenter behaviour."
+    },
+    {
+      "id": "mvvm",
+      "title": "Model–view–view-model",
+      "memory": "View binds to viewmodel state + commands.",
+      "meaning": "The view model exposes presentation-ready state and commands. Binding connects the view to that state; the model remains responsible for domain behaviour.",
+      "use": "Interfaces with significant reactive state and testable presentation transformations.",
+      "cost": "Binding/debugging complexity and keeping business rules out of the view model.",
+      "trap": "Using a frontend framework alone does not make the implementation model–view–view-model.",
+      "steps": [
+        "Draw View, ViewModel and Model.",
+        "Label View ↔ ViewModel with binding/state and commands.",
+        "Connect ViewModel to Model for domain operations."
+      ],
+      "nodes": [
+        {
+          "id": "view",
+          "label": "View",
+          "x": 60,
+          "y": 195,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Displays values from the view model and connects user actions to its available commands."
+        },
+        {
+          "id": "vm",
+          "label": "ViewModel\nState + commands",
+          "x": 400,
+          "y": 195,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Prepares screen-ready values, tracks presentation state and exposes actions. Uses the model for business work."
+        },
+        {
+          "id": "model",
+          "label": "Model\nDomain behaviour",
+          "x": 735,
+          "y": 195,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Owns business information and rules, independently of the displayed screen."
+        }
+      ],
+      "edges": [
+        {
+          "source": "view",
+          "target": "vm",
+          "label": "commands",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "vm",
+          "target": "view",
+          "label": "binding / state",
+          "points": [
+            [
+              482,
+              335
+            ],
+            [
+              142,
+              335
+            ]
+          ],
+          "asynchronous": false
+        },
+        {
+          "source": "vm",
+          "target": "model",
+          "label": "domain operations",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-29",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "A view model holds information in a form the screen can directly use, together with actions the screen can invoke. Binding means connecting a displayed value to a view-model value so changes can update the screen automatically.",
+      "walkthrough": "The person activates an action in the view. The view model calls the model to do business work and updates its display-ready information. The binding connection reflects that change in the view, instead of the view model manually updating every screen element."
+    },
+    {
+      "id": "mvt",
+      "title": "Model–view–template",
+      "memory": "Django view coordinates; template renders.",
+      "meaning": "In this server-rendered example, routing sends a request to a View, which obtains model data and gives context to a Template.",
+      "use": "Server-rendered, content-oriented applications.",
+      "cost": "Complex client-side interactions may require additional frontend state management.",
+      "trap": "The Django View is controller-like; Template is the renderer. Do not swap these roles.",
+      "steps": [
+        "Draw browser → web address router → Django View.",
+        "Connect the View to the Model.",
+        "Draw View → Template for context, then Template → browser for the rendered response."
+      ],
+      "nodes": [
+        {
+          "id": "browser",
+          "label": "Browser",
+          "x": 30,
+          "y": 190,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Requests a page and displays the returned page to the person."
+        },
+        {
+          "id": "router",
+          "label": "web address router",
+          "x": 250,
+          "y": 190,
+          "w": 164,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Matches the requested web address to the correct view function."
+        },
+        {
+          "id": "view",
+          "label": "Django View",
+          "x": 490,
+          "y": 190,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Handles the request, performs the appropriate model work and chooses the template and values to supply."
+        },
+        {
+          "id": "model",
+          "label": "Model",
+          "x": 750,
+          "y": 45,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Represents business information and provides the operations for accessing or changing it."
+        },
+        {
+          "id": "template",
+          "label": "Template",
+          "x": 750,
+          "y": 345,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Defines the page layout and inserts the values supplied by the view. Produces the page content, rather than deciding the business rules."
+        }
+      ],
+      "edges": [
+        {
+          "source": "browser",
+          "target": "router",
+          "label": "web request request",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "router",
+          "target": "view",
+          "label": "route",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "view",
+          "target": "model",
+          "label": "query / action",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "view",
+          "target": "template",
+          "label": "context",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "template",
+          "target": "browser",
+          "label": "web page response",
+          "points": [
+            [
+              832,
+              450
+            ],
+            [
+              112,
+              450
+            ]
+          ],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-29",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "This example builds a web page on the server. A router chooses which request-handling function should run. In Django that function is called a view. It gets information from the model and passes it to a template, which creates the page.",
+      "walkthrough": "The browser requests a page. The address router selects the Django view. The view reads or changes model information and supplies values to the template. The template produces the rendered page, which the server sends back to the browser. The return arrow summarises that response."
+    },
+    {
+      "id": "master-worker",
+      "title": "Coordinator / master–worker",
+      "memory": "One coordinator distributes work to many workers.",
+      "meaning": "A coordinator divides tasks among workers and collects results. The source overview calls a related arrangement master–slave; this example focuses on work distribution.",
+      "use": "Parallel independent processing tasks.",
+      "cost": "Coordinator bottleneck/failure, scheduling and duplicate task recovery.",
+      "trap": "Parallel workers do not remove a single coordinator failure dependency.",
+      "steps": [
+        "Draw one coordinator and several workers.",
+        "Fan task arrows out to workers.",
+        "Label returned results and describe how failed tasks are retried safely."
+      ],
+      "nodes": [
+        {
+          "id": "client",
+          "label": "Task source",
+          "x": 30,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "ui",
+          "responsibility": "Provides the job that needs to be processed."
+        },
+        {
+          "id": "coord",
+          "label": "Coordinator",
+          "x": 315,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Splits or schedules work, assigns tasks, tracks progress and collects results."
+        },
+        {
+          "id": "w1",
+          "label": "Worker 1",
+          "x": 730,
+          "y": 45,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Performs an assigned task and returns its result."
+        },
+        {
+          "id": "w2",
+          "label": "Worker 2",
+          "x": 730,
+          "y": 205,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Performs another assigned task, potentially at the same time as the other workers."
+        },
+        {
+          "id": "w3",
+          "label": "Worker 3",
+          "x": 730,
+          "y": 365,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Provides additional processing capacity and reports its task result."
+        }
+      ],
+      "edges": [
+        {
+          "source": "client",
+          "target": "coord",
+          "label": "submit job",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "coord",
+          "target": "w1",
+          "label": "task / result",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "coord",
+          "target": "w2",
+          "label": "task / result",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "coord",
+          "target": "w3",
+          "label": "task / result",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L18-34",
+      "category": "Architecture",
+      "groups": [],
+      "explanation": "Split a large job into smaller tasks and give them to several workers. A coordinator decides who does what and collects the results. Workers can process independent tasks at the same time, which can shorten the overall job.",
+      "walkthrough": "The task source submits a job. The coordinator assigns tasks to workers, tracks completion and collects their results. If a worker fails, the coordinator can reassign its task. Repeated tasks must be safe, and the coordinator itself needs a recovery plan."
+    },
+    {
+      "id": "saga",
+      "title": "Saga with orchestration",
+      "memory": "Local commits + business compensation.",
+      "meaning": "A coordinator tracks a business process across several services. Each service saves its own changes; failures trigger compensating actions instead of one transaction rolling everything back.",
+      "use": "Workflows across independently owned stores, such as booking and payment.",
+      "cost": "Compensation can fail or be impossible; reconciliation and idempotency are necessary.",
+      "trap": "Refund is a new business action, not erasing every consequence of the original payment.",
+      "steps": [
+        "Draw a Saga coordinator.",
+        "Connect reserve, charge and confirm participants with numbered actions.",
+        "Label compensation paths: release reservation / refund when final confirmation fails."
+      ],
+      "nodes": [
+        {
+          "id": "coord",
+          "label": "Saga coordinator",
+          "x": 375,
+          "y": 50,
+          "w": 164,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Tracks which steps succeeded, decides the next step and arranges compensation or recovery when something fails."
+        },
+        {
+          "id": "reserve",
+          "label": "1. Reserve inventory\nOwn local transaction",
+          "x": 40,
+          "y": 295,
+          "w": 164,
+          "h": 94,
+          "kind": "app",
+          "responsibility": "Reserves stock using its own saved changes. Releases that reservation when compensation is required."
+        },
+        {
+          "id": "pay",
+          "label": "2. Charge payment\nOwn local transaction",
+          "x": 390,
+          "y": 295,
+          "w": 164,
+          "h": 94,
+          "kind": "app",
+          "responsibility": "Charges the customer and records the result. Refunds a successful charge when the workflow requires it."
+        },
+        {
+          "id": "confirm",
+          "label": "3. Confirm order\nOwn local transaction",
+          "x": 740,
+          "y": 295,
+          "w": 164,
+          "h": 90,
+          "kind": "app",
+          "responsibility": "Finalises and records the order once the earlier steps permit confirmation."
+        }
+      ],
+      "edges": [
+        {
+          "source": "coord",
+          "target": "reserve",
+          "label": "reserve / release",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "coord",
+          "target": "pay",
+          "label": "charge / refund",
+          "points": [],
+          "caption": [
+            555,
+            245
+          ],
+          "asynchronous": false
+        },
+        {
+          "source": "coord",
+          "target": "confirm",
+          "label": "confirm / result",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L22-25",
+      "category": "Supporting pattern",
+      "groups": [],
+      "explanation": "A saga is a business process spread across services, where each step saves its own changes. A coordinator tracks the steps. If a later step fails, earlier steps may need a compensating action, such as releasing stock or refunding money.",
+      "walkthrough": "First reserve inventory, then charge the customer, then confirm the order. If payment fails, release the inventory. If confirmation fails after payment succeeds, the workflow may refund the customer and release stock. Compensation is new business work and can also fail; it does not magically erase the past."
+    },
+    {
+      "id": "choreography",
+      "title": "Event choreography",
+      "memory": "No central boss; services react to facts.",
+      "meaning": "Participants react to events and publish their results. The broker transports events but does not necessarily decide business workflow order.",
+      "use": "Loosely coupled workflows with clear event ownership and manageable coordination.",
+      "cost": "Harder global tracing, cycles and ambiguous failure/compensation ownership.",
+      "trap": "Choreography is not simply orchestration with the coordinator renamed Event Bus.",
+      "steps": [
+        "Draw services around an event broker.",
+        "Label each publication and reaction.",
+        "Write who handles failure and compensation; do not hide those responsibilities in the broker."
+      ],
+      "nodes": [
+        {
+          "id": "order",
+          "label": "Order service",
+          "x": 35,
+          "y": 190,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Creates an order and publishes the starting event. The wider design must specify how order status is updated from later outcomes."
+        },
+        {
+          "id": "broker",
+          "label": "Event broker",
+          "x": 385,
+          "y": 190,
+          "w": 164,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Delivers published events to the interested services. Does not own the business workflow decisions."
+        },
+        {
+          "id": "inventory",
+          "label": "Inventory service",
+          "x": 745,
+          "y": 45,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Reacts to order creation, attempts a reservation and publishes the result. Owns inventory recovery rules."
+        },
+        {
+          "id": "pay",
+          "label": "Payment service",
+          "x": 745,
+          "y": 345,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Reacts to a successful reservation, attempts payment and publishes the result. Owns payment and refund rules."
+        }
+      ],
+      "edges": [
+        {
+          "source": "order",
+          "target": "broker",
+          "label": "Order created",
+          "points": [],
+          "asynchronous": true
+        },
+        {
+          "source": "broker",
+          "target": "inventory",
+          "label": "Order created",
+          "points": [],
+          "asynchronous": true
+        },
+        {
+          "source": "inventory",
+          "target": "broker",
+          "label": "Reserved / Failed",
+          "points": [
+            [
+              827,
+              110
+            ],
+            [
+              467,
+              110
+            ]
+          ],
+          "asynchronous": true
+        },
+        {
+          "source": "broker",
+          "target": "pay",
+          "label": "Reserved",
+          "points": [],
+          "asynchronous": true
+        },
+        {
+          "source": "pay",
+          "target": "broker",
+          "label": "Paid / Failed",
+          "points": [
+            [
+              827,
+              450
+            ],
+            [
+              467,
+              450
+            ]
+          ],
+          "asynchronous": true
+        }
+      ],
+      "source": "L18-22",
+      "category": "Supporting pattern",
+      "groups": [],
+      "explanation": "Services cooperate by reacting to events instead of following instructions from one central workflow controller. Each service owns its reaction and publishes the outcome. The broker moves messages; it does not decide the business sequence.",
+      "walkthrough": "The order service announces that an order was created. Inventory reacts by reserving stock and announcing success or failure. Payment reacts to a successful reservation and publishes its payment result. Completing the wider order process also needs subscribers for those results and explicit rules for failures and compensation."
+    },
+    {
+      "id": "resilience",
+      "title": "Slow-dependency resilience",
+      "memory": "Bound calls; keep accepted work; resolve pending state.",
+      "meaning": "Timeouts, breaker and bulkhead limit the effect of a failed provider. Durable pending work can be processed later and reconciled.",
+      "use": "Surviving a slow external payment/eligibility service without exhausting web workers.",
+      "cost": "Pending user experience, backlog, repeated delivery and operational recovery.",
+      "trap": "Retries are unsafe without stable identity and remote-result reconciliation; a queue alone can lose accepted work before publication.",
+      "steps": [
+        "Draw the checkout handler, protection against slow calls and the external payment service.",
+        "Draw pending state/outbox + queue → worker as the fallback path.",
+        "Label idempotency, bounded retry and final-state reconciliation."
+      ],
+      "nodes": [
+        {
+          "id": "api",
+          "label": "Checkout handler",
+          "x": 25,
+          "y": 65,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Receives checkout requests and returns a clear completed or pending status. Must preserve accepted work and its operation identifier."
+        },
+        {
+          "id": "guard",
+          "label": "Timeout + breaker\nBounded bulkhead",
+          "x": 330,
+          "y": 65,
+          "w": 210,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Limits waiting time and simultaneous calls. Stops repeated calls temporarily when the provider is failing."
+        },
+        {
+          "id": "provider",
+          "label": "External payment service",
+          "x": 740,
+          "y": 65,
+          "w": 164,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Performs the actual payment and reports its outcome. Must support safe repeated requests or a way to check earlier outcomes."
+        },
+        {
+          "id": "state",
+          "label": "Pending record\n+ message outbox",
+          "x": 25,
+          "y": 325,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Saves the pending business record and outgoing message together, so neither is saved without the other. An outbox is the saved list of messages still to send."
+        },
+        {
+          "id": "queue",
+          "label": "Durable queue",
+          "x": 335,
+          "y": 325,
+          "w": 164,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Keeps unfinished work until a worker handles it. Delivery can repeat, so processing must tolerate duplicates."
+        },
+        {
+          "id": "worker",
+          "label": "Worker + result checking\nStable operation identifier",
+          "x": 690,
+          "y": 325,
+          "w": 240,
+          "h": 74,
+          "kind": "app",
+          "responsibility": "Checks uncertain outcomes, performs limited retries and updates the final result. Uses one stable identifier for the same operation; retries also need the waiting and capacity limits."
+        }
+      ],
+      "edges": [
+        {
+          "source": "api",
+          "target": "guard",
+          "label": "bounded call",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "guard",
+          "target": "provider",
+          "label": "request",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "api",
+          "target": "state",
+          "label": "defer on failure",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "state",
+          "target": "queue",
+          "label": "outbox relay",
+          "points": [],
+          "asynchronous": true
+        },
+        {
+          "source": "queue",
+          "target": "worker",
+          "label": "delivery",
+          "points": [],
+          "asynchronous": true
+        },
+        {
+          "source": "worker",
+          "target": "provider",
+          "label": "bounded retry",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L22-25",
+      "category": "Supporting pattern",
+      "groups": [],
+      "explanation": "Protect the application when a service it depends on becomes slow. A timeout stops waiting after a limit. A circuit breaker temporarily stops calls to a failing service. A bulkhead limits how many calls can be active, preserving capacity for other work. Accepted unfinished work is saved so it can be completed later.",
+      "walkthrough": "Checkout attempts a protected payment call. If it cannot obtain a clear result, it keeps a pending record and an outgoing message together, then forwards the message to a saved queue. A worker checks the payment outcome and retries only when appropriate. The same operation identifier must be used for the initial attempt and retries to avoid charging twice."
+    },
+    {
+      "id": "two-zones",
+      "title": "Two-zone deployment",
+      "memory": "Replicas must live in different failure domains.",
+      "meaning": "A load balancer sends traffic to application instances in separate zones. A stateful primary and standby have explicit replication/failover policies. Both zones normally write to the primary; the standby becomes writable only after promotion during failover.",
+      "use": "Availability targets requiring survival of a single zone failure.",
+      "cost": "Extra cost, replication latency/lag and failover complexity.",
+      "trap": "Two containers on one host are not independent failure domains; replicas are not historical backups.",
+      "steps": [
+        "Draw a load balancer and two zone enclosures.",
+        "Place application replicas and primary/standby state in different zones.",
+        "Label replication mode, failover and acceptable data loss and recovery time; mention independent backups."
+      ],
+      "nodes": [
+        {
+          "id": "lb",
+          "label": "Load balancer",
+          "x": 395,
+          "y": 25,
+          "w": 164,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Checks which application copies are healthy and sends requests to them."
+        },
+        {
+          "id": "a1",
+          "label": "Application replicas · zone A",
+          "x": 150,
+          "y": 190,
+          "w": 164,
+          "h": 74,
+          "kind": "app",
+          "responsibility": "Runs application work in the first zone. Other copies can take over its traffic if that zone fails."
+        },
+        {
+          "id": "a2",
+          "label": "Application replicas · zone B",
+          "x": 640,
+          "y": 190,
+          "w": 164,
+          "h": 74,
+          "kind": "app",
+          "responsibility": "Runs application work in a separate zone so the same zone failure should not stop both sets of copies."
+        },
+        {
+          "id": "db1",
+          "label": "database primary",
+          "x": 150,
+          "y": 355,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Normally accepts database reads and writes and copies its changes to the standby."
+        },
+        {
+          "id": "db2",
+          "label": "database standby",
+          "x": 640,
+          "y": 355,
+          "w": 164,
+          "h": 62,
+          "kind": "db",
+          "responsibility": "Keeps a copy of database changes. Becomes the active database only after controlled promotion; independent historical backups are still needed."
+        }
+      ],
+      "edges": [
+        {
+          "source": "lb",
+          "target": "a1",
+          "label": "route",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "lb",
+          "target": "a2",
+          "label": "route",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "a1",
+          "target": "db1",
+          "label": "database protocol",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "a2",
+          "target": "db1",
+          "label": "normal writes to primary",
+          "points": [
+            [
+              475,
+              300
+            ]
+          ],
+          "asynchronous": false
+        },
+        {
+          "source": "a2",
+          "target": "db2",
+          "label": "after failover",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "db1",
+          "target": "db2",
+          "label": "replication policy",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L28-34",
+      "category": "Deployment pattern",
+      "groups": [
+        {
+          "label": "Zone A · separate failure domain",
+          "x": 100,
+          "y": 135,
+          "w": 285,
+          "h": 315
+        },
+        {
+          "label": "Zone B · separate failure domain",
+          "x": 590,
+          "y": 135,
+          "w": 285,
+          "h": 315
+        }
+      ],
+      "explanation": "Run copies of the application in two locations that can fail independently. A load balancer directs requests to working copies. The main database has a standby copy in the other zone so database service can be restored after a failure.",
+      "walkthrough": "Normally both zones use the primary database, whose changes are copied to the standby. If one zone fails, traffic can go to healthy application copies. If the primary database fails, the standby must be promoted under a controlled recovery procedure. How changes are copied determines how much recent data might be lost.",
+      "boundaryExplanation": "Each enclosure is a location that can fail independently. Application copies and database copies are placed in different zones so one zone failure should not remove every copy."
+    },
+    {
+      "id": "blue-green",
+      "title": "Blue/green deployment",
+      "memory": "Run old + new; switch traffic after validation.",
+      "meaning": "Two application environments allow a verified new version to receive traffic while the old one is retained for controlled rollback.",
+      "use": "Reducing interruption and risk during releases.",
+      "cost": "Extra capacity and compatible shared-state/schema changes.",
+      "trap": "Switching traffic back cannot automatically undo an incompatible database migration.",
+      "steps": [
+        "Draw entry/traffic switch.",
+        "Draw Blue (current) and Green (candidate) environments.",
+        "Label traffic to Blue and the validated switch to Green; state the database compatibility assumption."
+      ],
+      "nodes": [
+        {
+          "id": "entry",
+          "label": "Traffic switch",
+          "x": 390,
+          "y": 35,
+          "w": 164,
+          "h": 62,
+          "kind": "infra",
+          "responsibility": "Directs customer traffic to the chosen environment and controls the switch between versions."
+        },
+        {
+          "id": "blue",
+          "label": "Blue environment\nCurrent version",
+          "x": 135,
+          "y": 230,
+          "w": 164,
+          "h": 62,
+          "kind": "app",
+          "responsibility": "Runs the current application version and is kept available for a possible return to it."
+        },
+        {
+          "id": "green",
+          "label": "Green environment\nNew version",
+          "x": 665,
+          "y": 230,
+          "w": 164,
+          "h": 74,
+          "kind": "app",
+          "responsibility": "Runs the candidate version for checks before it receives customer traffic."
+        },
+        {
+          "id": "db",
+          "label": "Shared saved information\nCompatible with both versions",
+          "x": 360,
+          "y": 375,
+          "w": 240,
+          "h": 74,
+          "kind": "db",
+          "responsibility": "Keeps saved information in a form both versions can use. Database changes and recovery need their own compatibility plan."
+        }
+      ],
+      "edges": [
+        {
+          "source": "entry",
+          "target": "blue",
+          "label": "live traffic",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "entry",
+          "target": "green",
+          "label": "switch after validation",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "blue",
+          "target": "db",
+          "label": "read / write",
+          "points": [],
+          "asynchronous": false
+        },
+        {
+          "source": "green",
+          "target": "db",
+          "label": "read / write",
+          "points": [],
+          "asynchronous": false
+        }
+      ],
+      "source": "L23-20",
+      "category": "Deployment pattern",
+      "groups": [],
+      "explanation": "Keep the current application version running while preparing a new version in a separate environment. Test the new environment, then switch customer traffic to it. Keeping the old environment can make a return to the previous version faster if a problem appears.",
+      "walkthrough": "Customers initially reach the blue environment. The green environment is checked before the traffic switch sends customers to it. Both versions must understand the shared saved information. Switching back to blue can restore the old application, but cannot automatically reverse incompatible changes already made to the database."
+    }
+  ]
+}

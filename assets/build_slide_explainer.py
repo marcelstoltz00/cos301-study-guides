@@ -31,8 +31,11 @@ def build():
     data={'decks':decks,'slideCount':sum(len(d['slides']) for d in decks)}
     (SLIDES/'explanations.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
     encoded=json.dumps(data,ensure_ascii=False).replace('</','<\\/')
+    from build_architecture_atlas import build as build_atlas
+    section, atlas_css, atlas_js = build_atlas()
     template=(ASSETS/'slide-explainer.html').read_text()
-    template=template.replace('/* SLIDE_CSS */',(ASSETS/'slide-explainer.css').read_text()).replace('/* SLIDE_DATA */',encoded).replace('/* SLIDE_JS */',(ASSETS/'slide-explainer.js').read_text())
+    template=template.replace('/* SLIDE_CSS */',(ASSETS/'slide-explainer.css').read_text()+atlas_css).replace('/* SLIDE_DATA */',encoded).replace('/* SLIDE_JS */',(ASSETS/'slide-explainer.js').read_text()+atlas_js)
+    template=template.replace('<!-- ARCHITECTURE_SECTION -->',section)
     (ROOT/'slide-explainer.html').write_text(template)
     (SLIDES/'all-explanations.md').write_text('\n'.join(markdown)+'\n')
     print(f"Built slide-explainer.html: {len(decks)} PDFs, {data['slideCount']} individually explained pages.")

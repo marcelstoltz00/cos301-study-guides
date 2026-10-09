@@ -44,6 +44,7 @@ def nav_html(current_id):
     links = ['<a href="index.html" class="%s">Home</a>' % ("active" if current_id is None else "")]
     links.append('<a href="ct4-practice-test.html">CT4 Practice Test</a>')
     links.append('<a href="slide-explainer.html">Slides Explained</a>')
+    links.append('<a href="architecture-atlas.html">Architecture Diagrams</a>')
     links.append('<a href="index.html#practice-papers">Example Papers</a>')
     for lec in LECTURES:
         cls = "active" if lec["id"] == current_id else ""
@@ -320,6 +321,12 @@ def build_index():
             f"</a>"
         )
     special_cards = [
+      '<a class="special-card" href="architecture-atlas.html">'
+      '<div class="id">ST2 · Draw in draw.io</div>'
+      '<div class="tag">20 editable diagrams</div>'
+      '<h3>Architecture Drawing Revision</h3>'
+      '<p>Learn each diagram with a memory cue, drawing steps, use case and trade-off. Hide diagrams to practise, then download editable draw.io pages.</p>'
+      '</a>',
       '<a class="special-card" href="slide-explainer.html">'
       '<div class="id">Every root PDF · Original slides + easy explanations</div>'
       '<div class="tag">358 slides · 12 PDFs</div>'

@@ -10,6 +10,14 @@ L17–L25 and the existing SOA/Microservices guides cover the earlier material (
 
 [Open the side-by-side slide viewer](slide-explainer.html) for all 358 pages from the 12 PDFs in the workspace root. Each original slide has its own easy explanation and simple example, including diagrams, code, exercises and introductions. Search all lectures, jump between slides, enlarge images and save understood markers locally. [Source limits and maintenance instructions](slide-explainer/README.md) document nine unavailable Menti pages and the unrecorded live security demo. The viewer works offline directly from disk.
 
+## Architecture drawing revision
+
+[Open the architecture atlas](architecture-atlas.html), also included as a new section in the slide viewer. It contains 20 original diagrams for the architecture styles, UI patterns and supporting workflow/deployment patterns in the material. Each has a memory cue, plain-language explanation, walkthrough, responsibilities for every diagram part, drawing order, use case, trade-off, common mistake and related slide. Diagram labels and atlas teaching text use full words instead of acronyms. Hide/reveal diagrams for recall practice; click a diagram to enlarge it.
+
+[Download all 20 editable draw.io pages](architecture-diagrams/all-architectures.drawio), or download each diagram individually. In draw.io use **File → Open From → Device**, then select a page tab. The files contain editable shapes and connectors. The HTML and SVG diagrams work offline.
+
+Edit `data/architecture-atlas.json` and run `python3 assets/build.py` to regenerate the diagrams, draw.io files and both HTML views. `assets/build_architecture_atlas.py` keeps the diagrams and downloads aligned.
+
 ## Example assessment papers
 
 The supplied CT3 and ST1 exports informed four original practice papers. See [the assessment-style review](assessment-style-review.md) for the observed formats and the assumptions used. Saved reference responses are not treated as a memorandum.
