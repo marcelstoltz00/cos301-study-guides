@@ -1,0 +1,149 @@
+README.md
+  s_7a0856d91dc111::t_48fe6182cdb36a 15,17
+architecture-atlas.html
+  s_7a0856d91dc111::t_c4e105d6c361d6 4-7,9,11-12,16-18,22-24,28-30,34-36,40-42,46-48,52-54,58-60,64-66,70-72,76-78,82-84,88-90,94-98,100-102,106-108,112-114,118-120,124-126,130-276,279-312
+architecture-diagrams/all-architectures.drawio
+  s_7a0856d91dc111::t_3f264c3c429286 2
+architecture-diagrams/cache-aside.drawio
+  s_7a0856d91dc111::t_f0b71b835f8297 1-2
+architecture-diagrams/cache-aside.svg
+  s_7a0856d91dc111::t_50bda70a3a56ba 1
+architecture-diagrams/distributed-monolith.drawio
+  s_7a0856d91dc111::t_b59836b283924d 1-2
+architecture-diagrams/distributed-monolith.svg
+  s_7a0856d91dc111::t_0b4b9a56cdf6c3 1
+architecture-diagrams/financial-portal.drawio
+  s_7a0856d91dc111::t_6ecb66ffa1f761 1-2
+architecture-diagrams/financial-portal.svg
+  s_7a0856d91dc111::t_31366d0fed4609 1
+architecture-diagrams/hybrid-search.drawio
+  s_7a0856d91dc111::t_735e1fe6befe4c 1-2
+architecture-diagrams/hybrid-search.svg
+  s_7a0856d91dc111::t_752a651cf4aec4 1
+architecture-diagrams/hybrid-training.drawio
+  s_7a0856d91dc111::t_55fe0688cba971 1-2
+architecture-diagrams/hybrid-training.svg
+  s_7a0856d91dc111::t_92b69dfdc673af 1
+architecture-diagrams/hybrid-workflows.drawio
+  s_7a0856d91dc111::t_364139a7da63e0 1-2
+architecture-diagrams/hybrid-workflows.svg
+  s_7a0856d91dc111::t_1875b8c94db0fa 1
+architecture-diagrams/master-worker.svg
+  s_7a0856d91dc111::t_6908cc9f5f9c1c 1
+architecture-diagrams/micro-frontends.drawio
+  s_7a0856d91dc111::t_f6afeab2316b45 1-2
+architecture-diagrams/micro-frontends.svg
+  s_7a0856d91dc111::t_a14e66fc04dffe 1
+architecture-diagrams/model-validation.drawio
+  s_7a0856d91dc111::t_bf907b248dcb88 1-2
+architecture-diagrams/model-validation.svg
+  s_7a0856d91dc111::t_b9d12168713214 1
+architecture-diagrams/mvt.drawio
+  s_7a0856d91dc111::t_c91669681ea285 2
+architecture-diagrams/mvt.svg
+  s_7a0856d91dc111::t_9850a552e5cf99 1
+architecture-diagrams/mvvm.drawio
+  s_7a0856d91dc111::t_dd53ab24d42f97 2
+architecture-diagrams/mvvm.svg
+  s_7a0856d91dc111::t_bc64845dff74c5 1
+architecture-diagrams/observer.drawio
+  s_7a0856d91dc111::t_aa3d26196b8e3b 1-2
+architecture-diagrams/observer.svg
+  s_7a0856d91dc111::t_de11955e812694 1
+architecture-diagrams/outbox-stream.drawio
+  s_7a0856d91dc111::t_55e55d8976dcea 1-2
+architecture-diagrams/outbox-stream.svg
+  s_7a0856d91dc111::t_676ea81acc99ab 1
+architecture-diagrams/perimeter-tiers.drawio
+  s_7a0856d91dc111::t_15bbb0bffbd0c0 1-2
+architecture-diagrams/perimeter-tiers.svg
+  s_7a0856d91dc111::t_6eda5d5f47d772 1
+architecture-diagrams/primary-replicas.drawio
+  s_7a0856d91dc111::t_eeb47c5d800fbc 1-2
+architecture-diagrams/primary-replicas.svg
+  s_7a0856d91dc111::t_7fbfd89d40f907 1
+architecture-diagrams/provider-adapters.drawio
+  s_7a0856d91dc111::t_6055d8c5669140 1-2
+architecture-diagrams/provider-adapters.svg
+  s_7a0856d91dc111::t_6e473fd1a960f8 1
+architecture-diagrams/proxy-decorator.drawio
+  s_7a0856d91dc111::t_5cc3c40f5a232c 1-2
+architecture-diagrams/proxy-decorator.svg
+  s_7a0856d91dc111::t_aeec5cd2a48745 1
+architecture-diagrams/read-through.drawio
+  s_7a0856d91dc111::t_5e102a44c077dd 1-2
+architecture-diagrams/read-through.svg
+  s_7a0856d91dc111::t_7618c1ba9cc028 1
+architecture-diagrams/refresh-ahead.drawio
+  s_7a0856d91dc111::t_c027acac489d57 1-2
+architecture-diagrams/refresh-ahead.svg
+  s_7a0856d91dc111::t_579f1919358997 1
+architecture-diagrams/road-security.drawio
+  s_7a0856d91dc111::t_41188a2901957a 1-2
+architecture-diagrams/road-security.svg
+  s_7a0856d91dc111::t_6b983a7c8f1c79 1
+architecture-diagrams/section.html
+  s_7a0856d91dc111::t_aae331a13c9216 2,4-5,9-11,15-17,21-23,27-29,33-35,39-41,45-47,51-53,57-59,63-65,69-71,75-77,81-83,87-91,93-95,99-101,105-107,111-113,117-119,123-269
+architecture-diagrams/single-host.drawio
+  s_7a0856d91dc111::t_c31757e23e1750 1-2
+architecture-diagrams/single-host.svg
+  s_7a0856d91dc111::t_8207cf91b35dd5 1
+architecture-diagrams/soa.drawio
+  s_7a0856d91dc111::t_167a48a45f9012 2
+architecture-diagrams/soa.svg
+  s_7a0856d91dc111::t_f3526d9feef048 1
+architecture-diagrams/strangler.drawio
+  s_7a0856d91dc111::t_07df1362edf6f1 1-2
+architecture-diagrams/strangler.svg
+  s_7a0856d91dc111::t_b1234de6446741 1
+architecture-diagrams/token-vault.drawio
+  s_7a0856d91dc111::t_21ea74e3874016 1-2
+architecture-diagrams/token-vault.svg
+  s_7a0856d91dc111::t_8b0112c06b7c52 1
+architecture-diagrams/two-regions.drawio
+  s_7a0856d91dc111::t_638d9528f66555 1-2
+architecture-diagrams/two-regions.svg
+  s_7a0856d91dc111::t_402277153276d4 1
+architecture-diagrams/webhook.drawio
+  s_7a0856d91dc111::t_98ed484fc63866 1-2
+architecture-diagrams/webhook.svg
+  s_7a0856d91dc111::t_49c98285a75432 1
+architecture-diagrams/write-through.drawio
+  s_7a0856d91dc111::t_585ed039578662 1-2
+architecture-diagrams/write-through.svg
+  s_7a0856d91dc111::t_b57a6d8d948ff1 1
+architecture-diagrams/zero-trust-mesh.drawio
+  s_7a0856d91dc111::t_031c4e03eb63a1 1-2
+architecture-diagrams/zero-trust-mesh.svg
+  s_7a0856d91dc111::t_2fe3a6c6de13a8 1
+assets/architecture-atlas.css
+  s_7a0856d91dc111::t_e9dc4f772caf78 4-7
+assets/architecture-atlas.js
+  s_7a0856d91dc111::t_e07eab52ff238a 1-34
+assets/build.py
+  s_7a0856d91dc111::t_99cc827b57befa 326
+assets/build_architecture_atlas.py
+  s_7a0856d91dc111::t_ebf873eb36ce77 98-99,106-108,111-113,115,117-118
+data/architecture-atlas.json
+  s_7a0856d91dc111::t_33d44bd7afc080 69-75,185-189,273-279,369-374,593-600,701-708,812-816,830-835,943-948,1123-1128,1211-1214,1242,1297-1301,1372,1418-1421,1427,1519,1521-1525,1990-1994,2085-4534,4536-4550
+index.html
+  s_7a0856d91dc111::t_647bb19bfb2687 726
+slide-explainer.html
+  s_7a0856d91dc111::t_53445563902c9e 10-13,40,42-43,47-49,53-55,59-61,65-67,71-73,77-79,83-85,89-91,95-97,101-103,107-109,113-115,119-121,125-129,131-133,137-139,143-145,149-151,155-157,161-307,366-399
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "878a6a17b9db09e97e2b6332d8f97f71283cebe2",
+  "prompts": {},
+  "sessions": {
+    "s_7a0856d91dc111": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11ab9-6aa4-7012-a344-15e708fd0fee",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "marcelstoltz00 <marcelstoltz00@gmail.com>"
+    }
+  }
+}
