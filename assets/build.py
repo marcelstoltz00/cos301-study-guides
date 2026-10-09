@@ -323,7 +323,7 @@ def build_index():
     special_cards = [
       '<a class="special-card" href="architecture-atlas.html">'
       '<div class="id">ST2 · Draw in draw.io</div>'
-      '<div class="tag">20 editable diagrams</div>'
+      f'<div class="tag">{len(json.loads((DATA_DIR / "architecture-atlas.json").read_text())["items"])} editable diagrams</div>'
       '<h3>Architecture Drawing Revision</h3>'
       '<p>Learn each diagram with a memory cue, drawing steps, use case and trade-off. Hide diagrams to practise, then download editable draw.io pages.</p>'
       '</a>',
