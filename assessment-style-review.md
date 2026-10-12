@@ -1,5 +1,7 @@
 # Assessment-style review: CT3 and ST1
 
+The later supplied **actual CT4** is analysed separately in [CT4 styles and calculations](ct4-style-analysis.md). It informs [ST2 Example 5](st2-example-5.html) and [ST2 Example 6](st2-example-6.html), each with 100 practice marks and worked calculations. The CT3-informed CT4 examples below predate that actual CT4 reference.
+
 ## What was reviewed
 
 The question text, question types, visible mark allocations and displayed options in the supplied `CT3.html` and `ST1.html` exports were reviewed. These are saved assessment/submission fragments, not standalone teaching pages. Displayed student responses and previously selected answers are **not an authoritative answer key** and were not copied into the new memoranda.

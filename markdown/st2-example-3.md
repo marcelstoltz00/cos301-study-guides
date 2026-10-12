@@ -6,7 +6,7 @@ Original authored 110-mark practice paper in the style of the supplied extended 
 
 This paper contains written scenario questions only. Use the model answers and rubrics for self-assessment; no automatic written-answer grading or negative marking applies.
 
-Written answers are self-assessed using the rubric. Suggested word limits carry no automatic penalty.
+Fixed result fields are automatically marked where provided. Drawings and open-ended reasoning use separate self-assessed rubric marks. Working is retained for review, not automatically judged. Suggested word limits carry no automatic penalty.
 
 [Interactive and printable paper](../st2-example-3.html)
 
@@ -20,6 +20,7 @@ Naledi is demonstrating LabLink, an equipment-loan application, to an evaluator 
 
 1. Identify five poor demonstration practices. For each, explain its effect on assessment and how Naledi should change her next demonstration. (15 marks)
 
+
 ### Question 2 — 15 marks
 
 The last microscope is promised twice
@@ -28,9 +29,12 @@ At 08:00, 9,000 students request scarce equipment. LabLink keeps each web worker
 
 1. Explain both failures and explicitly name the compromised NFRs. Explain why adding servers alone is insufficient. (5 marks)
 
+
 2. Propose a design that remains responsive and prevents duplicate confirmed loans. Name specific tactics or patterns. (7 marks)
 
+
 3. Identify one new cost or risk in your solution and explain a concrete mitigation. (3 marks)
+
 
 ### Question 3 — 10 marks
 
@@ -40,9 +44,12 @@ LabLink tracks Students, EquipmentItems and Loans. Each item has an asset number
 
 1. Identify five suitable domain concepts, distinguish an entity from a value object, and correct the domain-modelling mistake. (4 marks)
 
+
 2. State two associations with multiplicities, explain the active-loan constraint, and justify composition versus ordinary association for the checklist and accessory. (4 marks)
 
+
 3. Distinguish logical layers from deployment tiers and explain why folders do not establish tier separation. (2 marks)
+
 
 ### Question 4 — 8 marks
 
@@ -52,7 +59,9 @@ The student, technician and administrator screens use different colours and butt
 
 1. Explain how a brand style guide differs from an implemented design system. Propose tokens and components that would address this scenario. (4 marks)
 
+
 2. Identify four distinct usability or accessibility problems and give a specific correction for each. (4 marks)
+
 
 ### Question 5 — 10 marks
 
@@ -62,9 +71,12 @@ LabLink’s CI script runs tests but converts every failing exit code to success
 
 1. Explain four pipeline or deployment weaknesses and give a matching correction for each. (4 marks)
 
+
 2. Describe a DevSecOps delivery loop with appropriate security checks and operational feedback. Distinguish continuous delivery from continuous deployment. (4 marks)
 
+
 3. Why do the mock tests not prove database integration, and how could the team check whether an assertion can detect a defect? (2 marks)
+
 
 ### Question 6 — 10 marks
 
@@ -74,9 +86,12 @@ A LabLink report claims that all quality targets passed because average response
 
 1. Assess the performance claim and propose four distinct test activities with their purposes. (5 marks)
 
+
 2. Distinguish SQA from quality control, and faults from failures. Recommend one useful coding standard and explain the limitation of coverage. (3 marks)
 
+
 3. Explain how TDD and regression testing could help after the leak is fixed. (2 marks)
+
 
 ### Question 7 — 10 marks
 
@@ -86,9 +101,12 @@ A student changes /loans/42 to /loans/43 and reads another student’s personal 
 
 1. Distinguish asset, threat, vulnerability and risk using this scenario; explain authentication versus authorisation. (4 marks)
 
+
 2. Propose three implementation controls and explain why HTTPS alone does not resolve them. (3 marks)
 
+
 3. Explain red, blue and purple team responsibilities and propose security verification earlier in development. (3 marks)
+
 
 ### Question 8 — 8 marks
 
@@ -98,9 +116,12 @@ LabLink integrates with a legacy finance system, a university identity service a
 
 1. Specify what an API contract must describe, distinguish OpenAPI from Swagger tooling and SOAP/WSDL, and explain how contract-first mocks and tests help. (4 marks)
 
+
 2. Propose a compatible change strategy and isolate finance-specific code. Explain one benefit and one cost of SOA/ESB integration here. (2 marks)
 
+
 3. Distinguish orchestration from choreography and explain how a saga handles a failed final confirmation. (2 marks)
+
 
 ### Question 9 — 8 marks
 
@@ -110,9 +131,12 @@ LabLink runs two web containers, a queue and its only database on one physical h
 
 1. Explain the shared failure domain and describe the deployment-diagram information needed to assess this architecture. (3 marks)
 
+
 2. Calculate whether the recovery drill meets RTO and RPO, and explain why a live replica is not a historical backup. (3 marks)
 
+
 3. Recommend a deployment/recovery improvement and an evidence-producing drill, with one cost. (2 marks)
+
 
 ### Question 10 — 6 marks
 
@@ -122,7 +146,9 @@ A manager wants to replace LabLink with a no-code workflow because a prototype t
 
 1. Compare no-code, low-code and vibe coding for this project, identifying a suitable bounded use and one platform risk. (3 marks)
 
+
 2. Recommend an architectural starting point and a responsible validation/ownership plan, including one trade-off. (3 marks)
+
 
 ### Question 11 — 10 marks
 
@@ -132,9 +158,12 @@ LabLink must add a new eligibility provider without changes outside its integrat
 
 1. Write one complete quality-attribute scenario from the requirements, using source, stimulus, environment, artifact, response and response measure. (3 marks)
 
+
 2. Distinguish a tactic from a pattern. Outline an ADR with a justified alternative, trade-off and an automated fitness check for provider replacement. (4 marks)
 
+
 3. Explain a safer legacy migration, one sensitivity/trade-off point and the influence of team structure on architecture. (3 marks)
+
 
 ---
 
@@ -146,19 +175,23 @@ Part 1 (15 marks): 1. Self-promotion and an overlong introduction consume eviden
 
 - 3 each for five distinct practices: 1 identification, 1 scenario-specific assessment effect, 1 practical correction. Accept other distinct supported practices, including unsupported claims or lack of contingency planning. Do not count the same timing failure twice.
 
+
 ### Question 2 — 15 marks
 
 Part 1 (5 marks): Workers remain held by slow outbound calls, exhausting concurrency and causing queued or rejected requests: response-time performance, availability and resilience suffer. Expiry makes the item eligible again; a late completion is trusted without an atomic ownership/state check, violating functional booking correctness and data integrity/consistency and undermining reliability. More servers can postpone exhaustion but cannot bound downstream latency or repair the reservation race.
 
 - 2: worker exhaustion and linked quality attributes. 2: expiry/late-completion race and integrity or reliability. 1: limit of scaling alone. Treat single-loan correctness as a functional invariant as well as its quality impact.
 
+
 Part 2 (7 marks): Accept a durable pending request and process eligibility asynchronously through a bounded queue. Commit pending state and an outbox record together so a crash cannot lose accepted work between the database and queue. Bound dependency time with timeouts, isolate outbound concurrency with a bulkhead, and open a circuit breaker on repeated failures. Apply backpressure/admission limits rather than accepting unlimited work. Confirm in a database transaction only if the reservation token/version still belongs to that request and is unexpired; enforce at most one active loan per item. A late result must fail confirmation or initiate a new safe attempt, never override a new owner. Use operation IDs for idempotent retries and display pending/failed/confirmed status honestly.
 
 - 2: durable asynchronous acceptance with atomic publication/outbox or an equally sound alternative. 2: bounded dependency work, isolation and overload control. 2: atomic reservation validation and active-loan invariant. 1: duplicate-safe processing and truthful status.
 
+
 Part 3 (3 marks): At-least-once delivery can repeat eligibility processing or confirmation after a lost acknowledgement. Store a unique operation ID and completion state, enforce the business constraint transactionally, and acknowledge after durable completion. Alternatively discuss stale pending states, queue backlog or operational complexity with monitoring, reconciliation and bounded admission.
 
 - 1: risk introduced by proposed design. 1: explains its mechanism. 1: matching mitigation.
+
 
 ### Question 3 — 10 marks
 
@@ -166,13 +199,16 @@ Part 1 (4 marks): Student, EquipmentItem, Loan, ReturnChecklist and Deposit are 
 
 - 1: five grounded concepts. 1: entity identity. 1: value equality. 1: business versus implementation distinction.
 
+
 Part 2 (4 marks): Student 1—Loan 0..* and EquipmentItem 1—Loan 0..*: every loan has exactly one of each. Historical multiplicity does not enforce active exclusivity; separately require at most one active loan per item. The loan-owned checklist can be composition under its stated dependent lifetime. Accessories have independent existence, so ordinary association or justified shared aggregation fits; mandatory composition does not.
 
 - 1: both historical multiplicities in both directions. 1: separate active invariant. 1: checklist composition grounded in lifetime. 1: independent accessory relationship.
 
+
 Part 3 (2 marks): Layers separate responsibilities and dependencies within software; tiers describe separately deployed runtime parts. Three folders may implement layers in one process. Deployment nodes/processes and communication boundaries are needed to establish three tiers.
 
 - 1: layers versus tiers. 1: applies distinction to folders.
+
 
 ### Question 4 — 8 marks
 
@@ -180,9 +216,11 @@ Part 1 (4 marks): A brand guide defines identity and visual rules; a design syst
 
 - 1: distinction. 1: semantic tokens tied to inconsistency. 1: reusable components and states. 1: coherent component composition/atomic design.
 
+
 Part 2 (4 marks): Colour-only errors need text and programmatic error associations. Icon-only controls need accessible names. The modal needs a visible keyboard focus and deliberate focus management/return. Excess competing actions and unclear grouping need a primary-action hierarchy, meaningful proximity/spacing and a pending/success/error response after submission. Accept inconsistent semantic colour as a separate problem when corrected explicitly.
 
 - 1 each: four distinct problem–correction pairs grounded in the scenario.
+
 
 ### Question 5 — 10 marks
 
@@ -190,13 +228,16 @@ Part 1 (4 marks): Propagate failed test exit status and enforce required protect
 
 - 1 each: four distinct weakness–correction pairs; each correction must address the stated weakness.
 
+
 Part 2 (4 marks): Plan with threats and quality targets; code/review with standards and secret scanning; build with dependency/SAST and artifact checks; test integrations and a running app with DAST; release/promote the same verified artifact; deploy with controlled rollback; operate and monitor latency, errors, vulnerabilities and incidents to feed planning. Continuous delivery keeps verified changes releasable with a release decision; continuous deployment automatically releases changes passing the defined gates.
 
 - 2: relevant checks across development and running-system stages. 1: operational feedback into planning. 1: delivery/deployment distinction.
 
+
 Part 3 (2 marks): Mocks cannot expose real schema, transaction or driver mismatches. Exercise a representative real database boundary and deliberately introduce a controlled wrong result or mutation to confirm that the relevant assertion fails.
 
 - 1: real integration limitation. 1: deliberate defect/mutation validates assertion sensitivity.
+
 
 ### Question 6 — 10 marks
 
@@ -204,13 +245,16 @@ Part 1 (5 marks): Exactly 100/10,000 = 1% errors fails a strict below-1% thresho
 
 - 1: correct error calculation/threshold and rejects mean-only evidence. 1 each: four correctly distinguished activities tied to risks.
 
+
 Part 2 (3 marks): SQA improves development processes through standards, reviews and enforced checks; quality control inspects/tests outputs. A fault is a defect in an artifact; a failure is observed incorrect behaviour when conditions activate it. Require explicit error handling rather than swallowing exceptions. Line coverage shows execution, not meaningful assertions or correctness on untested conditions.
 
 - 1: QA/QC distinction. 1: fault/failure distinction. 1: justified standard and coverage limitation.
 
+
 Part 3 (2 marks): First write a focused failing test demonstrating the leak/incorrect cleanup, implement the smallest fix to pass, then refactor while preserving the tests. Add the reproducer and relevant long-running/resource checks to regression testing so future changes reveal recurrence.
 
 - 1: red–green–refactor linked to defect. 1: regression evidence for recurrence.
+
 
 ### Question 7 — 10 marks
 
@@ -218,13 +262,16 @@ Part 1 (4 marks): Loan personal data is an asset; an unauthorised student seekin
 
 - 2: all four risk terms mapped coherently. 2: identity versus per-object permission and scenario application.
 
+
 Part 2 (3 marks): Enforce server-side ownership/role checks; use parameterised SQL and appropriate validation; use salted adaptive password hashing rather than reversible password storage, with secrets removed from source and exposed keys rotated. HTTPS protects data in transit; it does not fix access logic, query construction or stored-credential handling.
 
 - 1 each: three appropriate controls with a coherent transport-versus-application/storage distinction.
 
+
 Part 3 (3 marks): The red team exercises authorised attack paths; the blue team monitors, detects and responds; purple-team collaboration shares evidence to improve prevention and detection. Threat-model the object boundary early, review code, use SAST/dependency/secret checks and targeted dynamic/manual access and injection tests; retest fixes within the agreed scope.
 
 - 1: red and blue roles. 1: purple collaboration and scope. 1: earlier verification matched to weaknesses.
+
 
 ### Question 8 — 8 marks
 
@@ -232,13 +279,16 @@ Part 1 (4 marks): The contract defines methods/paths, request and response schem
 
 - 1: contract substance. 1: OpenAPI/tooling versus SOAP/WSDL. 1: contract-first parallel workflow. 1: tests and mock limitation.
 
+
 Part 2 (2 marks): Keep the old field/version during migration, document the new representation and test consumers before retiring it. Place finance translation behind an adapter and stable domain-facing interface. SOA/ESB mediation can bridge legacy protocols and centralise routing/transformation; a central bus also adds coupling, an operational bottleneck or a concentrated failure point.
 
 - 1: compatibility migration and adapter boundary. 1: scenario-linked SOA/ESB benefit and cost.
 
+
 Part 3 (2 marks): Orchestration uses a coordinator to command steps; choreography lets participants react to events. A saga uses local transactions and compensating business actions, such as refunding a collected deposit and releasing a still-owned reservation after failed confirmation. Compensation is not an automatic ACID rollback and needs idempotency, retry/reconciliation and possibly manual recovery.
 
 - 1: coordination distinction. 1: meaningful compensation and its limits.
+
 
 ### Question 9 — 8 marks
 
@@ -246,13 +296,16 @@ Part 1 (3 marks): Containers isolate processes but all depend on one host/power 
 
 - 1: common host failure. 1: scope/nodes/artifacts/external actors. 1: useful links/trust/state/failure-domain annotations.
 
+
 Part 2 (3 marks): Actual restoration is 40 minutes versus a maximum 20, so RTO fails. The recoverable data-loss window is 30 minutes versus 5, so RPO fails. A live replica can copy deletion/corruption and shares this host failure; an independently retained historical backup preserves earlier recoverable states.
 
 - 1: RTO comparison. 1: RPO comparison. 1: replication/backup distinction.
 
+
 Part 3 (2 marks): Place redundant stateless instances and durable state protection across independent failure domains, retain off-host historical backups or point-in-time logs, and test failover/restore with measured recovery and missing-record windows. The added infrastructure, replication management and drills cost money and operational effort; monitor replication lag and verify backup recovery rather than assuming redundancy meets targets.
 
 - 1: placement and recovery changes matched to failure. 1: measured drill and explicit cost.
+
 
 ### Question 10 — 6 marks
 
@@ -260,9 +313,11 @@ Part 1 (3 marks): No-code uses visual configuration with little/no handwritten c
 
 - 1: three approaches distinguished. 1: justified bounded use. 1: platform risk and relevant mitigation.
 
+
 Part 2 (3 marks): A modular monolith fits the small team, shared release cadence and moderate traffic while preserving loan/payment boundaries without distributed operations. Review generated logic and dependencies, enforce object permissions, test concurrent claims and failure/retry paths, maintain audit records, name an owner and document rollback/export. This sacrifices independent deployment/scaling; revisit extraction when real requirements justify it.
 
 - 1: architecture justified by team/workload. 1: concrete verification and accountable ownership. 1: explicit architectural trade-off.
+
 
 ### Question 11 — 10 marks
 
@@ -270,11 +325,14 @@ Part 1 (3 marks): Source: student clients. Stimulus: checkout/loan requests arri
 
 - 1: source/stimulus/environment. 1: artifact/response. 1: measurable response and meaningful measurement boundary.
 
+
 Part 2 (4 marks): A tactic targets a quality response, such as isolating volatility; a pattern organises collaborating structures, such as Adapter/Strategy around an eligibility interface. The ADR records context and constraints, a decision to isolate provider SDKs behind adapters, an alternative of direct imports and the consequence of added indirection/interface maintenance. Enforce a static rule forbidding provider-SDK imports outside adapters and add contract tests. A modular monolith is a defensible broader alternative to twelve services given this team.
 
 - 1: tactic/pattern distinction. 1: context and decision. 1: real alternative and accepted cost. 1: enforceable fitness check tied to boundary.
 
+
 Part 3 (3 marks): Use a strangler façade to replace one capability at a time with reversible routing and reconciled data instead of a big-bang cutover. Queue/concurrency or timeout settings are sensitivity points; increased isolation can trade latency/cost/complexity against resilience. Team communication and ownership tend to shape system boundaries (Conway’s law); choose boundaries this small team can operate, rather than inventing twelve independently owned services.
 
 - 1: incremental strangler migration and data/routing concern. 1: explained sensitivity or trade-off point. 1: Conway/team capacity linked to boundary choice.
+
 

@@ -6,7 +6,7 @@ Original practice paper based on the reference assessment style. Not an official
 
 Each correct selection earns the question marks divided by the number of correct options. Each incorrect selection deducts the same amount. Omitted options earn zero. Each question is floored at zero. This explicit practice rule is not asserted to be the original marking formula.
 
-Written answers are self-assessed using the rubric. Suggested word limits carry no automatic penalty.
+Fixed result fields are automatically marked where provided. Drawings and open-ended reasoning use separate self-assessed rubric marks. Working is retained for review, not automatically judged. Suggested word limits carry no automatic penalty.
 
 [Interactive and printable paper](../ct4-example-2.html)
 
@@ -139,17 +139,20 @@ Correct: B.
 
 A namespace is not, by itself, either of those isolation boundaries.
 
+
 ### Question 2 — 0.5 marks
 
 Correct: B.
 
 Requests can bypass the client; the server must enforce its own constraints.
 
+
 ### Question 3 — 0.5 marks
 
 Correct: A.
 
 Injection prevention and object authorisation are separate responsibilities.
+
 
 ### Question 4 — 4 marks
 
@@ -164,11 +167,13 @@ Correct: B.
 
 Specific inputs, states or conditions may be required to activate a defect.
 
+
 ### Question 6 — 0.5 marks
 
 Correct: B.
 
 Multiplexed streams may remain pinned to the backend selected for that connection.
+
 
 ### Question 7 — 2 marks
 
@@ -183,11 +188,13 @@ Correct: B.
 
 Every mandatory acceptance criterion matters, and fast failures can distort latency summaries.
 
+
 ### Question 9 — 0.5 marks
 
 Correct: A.
 
 The narrower definition concerns largely accepting generated behaviour without inspecting its code; the tool alone does not determine the workflow.
+
 
 ### Question 10 — 3 marks
 
@@ -195,11 +202,13 @@ Correct: A, C, D.
 
 Rationale, bounded evidence and rehearsed honest demonstrations help an audience assess the work. Popularity and misrepresented status do not.
 
+
 ### Question 11 — 0.5 marks
 
 Correct: B.
 
 Record export and portability of runnable behaviour are distinct concerns.
+
 
 ### Question 12 — 4 marks
 

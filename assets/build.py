@@ -13,7 +13,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "assets"
 DATA_DIR = ROOT / "data"
 OUT_DIR = ROOT
-MOCK_PAPERS = ["ct4-example-1", "ct4-example-2", "st2-example-1", "st2-example-2", "st2-example-3", "st2-example-4"]
+MOCK_PAPERS = ["ct4-example-1", "ct4-example-2", "st2-example-1", "st2-example-2", "st2-example-3", "st2-example-4", "st2-example-5", "st2-example-6"]
 
 LECTURES = [
     {"id": "L17", "nav": "L17 · Design Systems & CI"},
@@ -406,6 +406,7 @@ def build_mock_papers():
             "<!-- STYLE -->": style,
             "<!-- DATA -->": json.dumps(paper).replace("</", "<\\/"),
             "<!-- SCRIPT -->": script,
+            "<!-- MEMO_LINK -->": (f'<a class="btn" href="markdown/{paper_id}-memo.md">Read full memorandum</a>' if paper.get("separateMemo") else ""),
         }
         out = template
         for marker, value in replacements.items():
@@ -418,7 +419,7 @@ def build_mock_papers():
 def build_mock_markdown(paper):
     lines = [f'# {paper["title"]}', '', f'Scope: {paper["scope"]}. Total: {paper["totalMarks"]} marks.', '',
              paper["notes"], '', paper["multiRule"], '',
-             'Written answers are self-assessed using the rubric. Suggested word limits carry no automatic penalty.', '',
+             'Fixed result fields are automatically marked where provided. Drawings and open-ended reasoning use separate self-assessed rubric marks. Working is retained for review, not automatically judged. Suggested word limits carry no automatic penalty.', '',
              f'[Interactive and printable paper](../{paper["id"]}.html)', '', '## Question paper', '']
     for q in paper["questions"]:
         lines += [f'### Question {q["number"]} — {q["marks"]} marks', '', q["prompt"], '']
@@ -428,26 +429,38 @@ def build_mock_markdown(paper):
         if q["type"] in ("single", "multi"):
             lines += [f'- {chr(65+i)}. {option}' for i, option in enumerate(q["options"])] + ['']
         elif q["type"] == "essay":
-            lines += [part["prompt"] + '\n' for part in q["parts"]]
+            for part in q["parts"]:
+                lines += [part["prompt"], '']
+                for check in part.get("checks", []):
+                    lines += [f'- {check["prompt"]} ({check["marks"]} automatic marks)' + (': ' + ' · '.join(check['options']) if check.get('options') else '')]
+                lines += ['']
         else:
             if q["type"] == "matching":
                 lines += ['Answer bank: ' + ' · '.join(q["options"]), '']
             lines += [f'{i+1}. {item["prompt"]}' for i, item in enumerate(q["items"])] + ['']
+    memo_start = len(lines)
     lines += ['---', '', '## Model answers and marking guide', '']
     for q in paper["questions"]:
         lines += [f'### Question {q["number"]} — {q["marks"]} marks', '']
         if q["type"] in ("single", "multi"):
             lines += ['Correct: ' + ', '.join(chr(65+i) for i in q["correct"]) + '.', '', q["explanation"], '']
+            lines += [f'- {chr(65+i)}. {"Correct" if i in q["correct"] else "Incorrect"}: {explanation}' for i, explanation in enumerate(q.get('optionExplanations', []))] + ['']
         elif q["type"] == "essay":
             for i, part in enumerate(q["parts"]):
                 lines += [f'Part {i+1} ({part["marks"]} marks): {part["answer"]}', '']
                 lines += ['- ' + line for line in part["rubric"]] + ['']
+                for check in part.get('checks', []):
+                    lines += [f'- **{check["prompt"]}: {check["answer"]}** ({check["marks"]} automatic marks). {check["explanation"]}']
+                lines += ['']
         else:
             for i, item in enumerate(q["items"]):
                 answer = item["answer"] if q["type"] == "matching" else ' / '.join(item["answers"])
                 lines += [f'{i+1}. **{answer}** — {item["explanation"]}']
             lines += ['']
     (ROOT / "markdown" / f'{paper["id"]}.md').write_text('\n'.join(lines) + '\n')
+    if paper.get('separateMemo'):
+        memo = [f'# {paper["title"]} — Memorandum', '', f'Total: {paper["totalMarks"]} marks. {paper["notes"]}', '', paper['multiRule'], '', f'[Question paper](../{paper["id"]}.html)', ''] + lines[memo_start+2:]
+        (ROOT / 'markdown' / f'{paper["id"]}-memo.md').write_text('\n'.join(memo) + '\n')
 
 
 if __name__ == "__main__":

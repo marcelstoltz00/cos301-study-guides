@@ -6,7 +6,7 @@ Original practice paper based on the reference assessment style. Not an official
 
 Each correct selection earns the question marks divided by the number of correct options. Each incorrect selection deducts the same amount. Omitted options earn zero. Each question is floored at zero. This explicit practice rule is not asserted to be the original marking formula.
 
-Written answers are self-assessed using the rubric. Suggested word limits carry no automatic penalty.
+Fixed result fields are automatically marked where provided. Drawings and open-ended reasoning use separate self-assessed rubric marks. Working is retained for review, not automatically judged. Suggested word limits carry no automatic penalty.
 
 [Interactive and printable paper](../ct4-example-1.html)
 
@@ -167,11 +167,13 @@ Correct: B.
 
 Replica count alone says nothing about shared host placement or state dependencies.
 
+
 ### Question 2 — 0.5 marks
 
 Correct: B.
 
 Identity does not grant permission for every operation or record; internal reachability is not permission.
+
 
 ### Question 3 — 6 marks
 
@@ -185,11 +187,13 @@ Correct: A, D, E, F.
 
 The four supported statements concern shared placement, replication lag, history and poison-message handling. A shared region still matters, and the delivery model permits duplicates.
 
+
 ### Question 5 — 0.5 marks
 
 Correct: A.
 
 An inventory supports investigation; security still needs appropriate review, testing and response.
+
 
 ### Question 6 — 4 marks
 
@@ -204,11 +208,13 @@ Correct: A.
 
 An unused process document is weak assurance; demonstrated compliance and process improvement matter.
 
+
 ### Question 8 — 0.5 marks
 
 Correct: B.
 
 A demo provides limited evidence for selected conditions. Other quality claims need suitable measurements or checks.
+
 
 ### Question 9 — 2 marks
 
@@ -223,17 +229,20 @@ Correct: B.
 
 The implementation mechanism changes; accountability for permissions and failures remains.
 
+
 ### Question 11 — 0.5 marks
 
 Correct: A.
 
 Faster recovery reduces time unavailable without necessarily increasing MTTF.
 
+
 ### Question 12 — 3 marks
 
 Correct: A, B, D.
 
 Performance claims need conditions, measurement scope and acceptance rules. A vendor label or screenshot supplies none of those by itself.
+
 
 ### Question 13 — 4 marks
 

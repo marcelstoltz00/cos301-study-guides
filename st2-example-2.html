@@ -677,7 +677,6 @@ body {
  .mock-part .mock-print-space { min-height: 90px; }
  .mock-diagram { overflow: visible; }
  .mock-diagram svg { min-width: 0; width: 100%; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
- .mock-diagram svg text { fill: #f2f6ff; }
  body:not(.print-memo) .mock-memo { display: none !important; }
  .print-memo .mock-memo { display: block; border-top: 1px solid #888; }
  .print-memo .mock-memo summary { color: black; }
@@ -695,7 +694,9 @@ body {
 <a href="st2-example-1.html">ST2 EXAMPLE 1</a>
 <a href="st2-example-2.html" class="active" aria-current="page">ST2 EXAMPLE 2</a>
 <a href="st2-example-3.html">ST2 EXAMPLE 3</a>
-<a href="st2-example-4.html">ST2 EXAMPLE 4</a></div></div></nav>
+<a href="st2-example-4.html">ST2 EXAMPLE 4</a>
+<a href="st2-example-5.html">ST2 EXAMPLE 5</a>
+<a href="st2-example-6.html">ST2 EXAMPLE 6</a></div></div></nav>
 <main class="page mock-page">
 <header class="mock-hero">
 <p class="mock-kicker">Original practice assessment · COS301</p>
@@ -709,6 +710,7 @@ body {
 <button type="button" class="btn" id="hide-memos">Hide marking guides</button>
 <button type="button" class="btn" id="print-paper">Print blank paper</button>
 <button type="button" class="btn" id="print-memo">Print marking guide</button>
+
 <button type="button" class="btn" id="reset-paper">Reset this paper</button>
 </div>
 <p id="storage-status" role="status" class="mock-note"></p>
@@ -717,14 +719,16 @@ body {
 </header>
 <div id="paper-questions"></div>
 <noscript><p>Enable JavaScript for this interactive paper. A readable paper and memorandum are also available in the <a href="markdown/st2-example-2.md">Markdown version</a>.</p></noscript>
-<footer class="page-footer"><a href="index.html">All study guides and papers</a><a href="assessment-style-review.md">How these examples follow CT3 and ST1</a></footer>
+<footer class="page-footer"><a href="index.html">All study guides and papers</a><a href="assessment-style-review.md">CT3 and ST1 style review</a><a href="ct4-style-analysis.md">Actual CT4 style and calculation analysis</a></footer>
 </main>
 <script type="application/json" id="mock-data">{"id": "st2-example-2", "title": "ST2 Example 2", "scope": "L17\u2013L33 and L35, including SOA and Microservices", "reference": "ST1.html", "totalMarks": 36, "questions": [{"type": "essay", "marks": 10, "prompt": "An exhibition platform manages Exhibitions, Bookings and Visitors. Each booking belongs to exactly one visitor and one exhibition. A visitor can hold multiple historical bookings. An exhibition has a capacity and cannot accept more active bookings than that capacity. A visitor\u2019s address may change without changing their identity. Each booking contains a quoted Money value consisting of amount and currency. Curators manage exhibitions. Separate your answers with blank lines.", "parts": [{"prompt": "1. Identify six plausible domain concepts, including at least one value object. (3 marks)", "marks": 3, "answer": "Exhibition, Booking, Visitor, Curator, Money and Address are plausible. Money or Address can be modelled as a value object when identity is defined by its constituent values.", "rubric": ["0.5 each: six grounded concepts, with at least one defensible value object."]}, {"prompt": "2. For any four concepts, give two suitable attributes each. (2 marks)", "marks": 2, "answer": "Exhibition: exhibitionId, capacity. Booking: bookingId, status. Visitor: visitorId, name. Money: amount, currency.", "rubric": ["0.5 per concept with two suitable attributes, for four concepts."]}, {"prompt": "3. Explain two associations and distinguish Visitor identity from Money equality. (3 marks)", "marks": 3, "answer": "Each Booking refers to one Visitor and one Exhibition; each may have many historical Bookings. Visitor identity persists after its address changes. Two Money values are equal by amount and currency under the chosen representation.", "rubric": ["1 each: two correct associations.", "1: identity versus value distinction using the scenario."]}, {"prompt": "4. State two multiplicities and express the active-capacity constraint separately. (2 marks)", "marks": 2, "answer": "Visitor 1 to Booking 0..*; Exhibition 1 to Booking 0..* over history. Active bookings for an exhibition must not exceed its capacity; a fixed history multiplicity is not a substitute for that invariant.", "rubric": ["1: both multiplicities correct.", "1: active capacity expressed as a business invariant rather than an incorrect fixed history count."]}], "topics": ["L18"], "id": "q2", "number": 1}, {"type": "matching", "marks": 4, "prompt": "Match each architectural concept to the distinction it captures.", "options": ["Other services use the owning service boundary rather than querying its tables directly", "A business action that counteracts a completed local step where possible", "Separate processes or deployments that remain tightly coupled in change or operation", "Consumers depend on an agreed interface rather than provider internals"], "items": [{"prompt": "Service contract", "answer": "Consumers depend on an agreed interface rather than provider internals", "explanation": "Service contract: Consumers depend on an agreed interface rather than provider internals."}, {"prompt": "Database ownership per service", "answer": "Other services use the owning service boundary rather than querying its tables directly", "explanation": "Database ownership per service: Other services use the owning service boundary rather than querying its tables directly."}, {"prompt": "Saga compensation", "answer": "A business action that counteracts a completed local step where possible", "explanation": "Saga compensation: A business action that counteracts a completed local step where possible."}, {"prompt": "Distributed monolith", "answer": "Separate processes or deployments that remain tightly coupled in change or operation", "explanation": "Distributed monolith: Separate processes or deployments that remain tightly coupled in change or operation."}], "topics": ["L25", "SOA", "MS"], "id": "q3", "number": 2}, {"type": "essay", "marks": 6, "prompt": "For each scenario, choose the most suitable primary mechanism from cross-domain replica, historical backup/restore, idempotent processing, or none of the above. Give one sentence explaining the distinguishing property needed. Marks: one for the choice and one for the justification.", "parts": [{"prompt": "1. A mistaken deletion has already propagated to all live database replicas; valid records from before the deletion are needed. (2 marks)", "marks": 2, "answer": "Historical backup/restore: an earlier recoverable state is needed because current replicas contain the same deletion.", "rubric": ["1: historical backup/restore or point-in-time recovery.", "1: explains why current replicas do not preserve the required history."]}, {"prompt": "2. A payment message is delivered again after the worker recorded success but lost its queue acknowledgement. (2 marks)", "marks": 2, "answer": "Idempotent processing: stable operation identity and duplicate handling prevent repetition of the completed business effect.", "rubric": ["1: idempotent processing.", "1: links repeated delivery/uncertain acknowledgement to one intended effect."]}, {"prompt": "3. A user with a valid session can read records belonging to another tenant. (2 marks)", "marks": 2, "answer": "None of the above: the primary missing control is server-side object/tenant authorisation.", "rubric": ["1: none of the above.", "1: explains the resource-scope access rule rather than availability or duplicate handling."]}], "topics": ["L28", "L29", "MS"], "id": "q4", "number": 3}, {"type": "matching", "marks": 4, "prompt": "Match each practice or concept to its direct purpose.", "options": ["The user\u2019s understanding of how the task and system work", "Security activities and learning throughout delivery and operation", "Manage changes that would otherwise break existing consumers", "Reusable implemented interface decisions and components"], "items": [{"prompt": "Design system", "answer": "Reusable implemented interface decisions and components", "explanation": "Design system: Reusable implemented interface decisions and components."}, {"prompt": "User mental model", "answer": "The user\u2019s understanding of how the task and system work", "explanation": "User mental model: The user\u2019s understanding of how the task and system work."}, {"prompt": "DevSecOps feedback", "answer": "Security activities and learning throughout delivery and operation", "explanation": "DevSecOps feedback: Security activities and learning throughout delivery and operation."}, {"prompt": "Contract versioning/migration", "answer": "Manage changes that would otherwise break existing consumers", "explanation": "Contract versioning/migration: Manage changes that would otherwise break existing consumers."}], "topics": ["L17", "L20", "L21", "L25"], "id": "q6", "number": 4}, {"type": "multi", "marks": 5, "prompt": "Which statements about software quality, testing and measurement are valid? Select all that apply. Negative marking applies.", "options": ["A static fault can exist without an observed failure on the inputs tested.", "SQA consists only of the final system test.", "Reducing mean repair time can improve availability without increasing mean operating time.", "Replacing the integration boundary with a mock proves that real boundary works.", "A predictor metric needs contextual interpretation rather than being treated as proof.", "Regression testing can include performance and security checks.", "A requirement stated as \u201cerrors below 1%\u201d is satisfied by exactly 1% errors.", "A long-running soak test can reveal resource accumulation missed by a short test.", "A red-team exercise can ignore agreed authorisation and scope because realistic attacks are its goal."], "correct": [0, 2, 4, 5, 7], "explanation": "These distinctions separate defects from observations, process assurance from testing, and useful metrics from overclaims. Strict thresholds, real integration and assertion quality need explicit attention. Security exercises still need agreed authorisation and scope.", "topics": ["L19", "L30", "L32", "L24"], "id": "q7", "number": 5}, {"type": "short", "marks": 2, "prompt": "For each scenario, write only the most specific testing term. Use the explicitly stated purpose.", "items": [{"prompt": "1. Demand jumps abruptly from 20 requests/s to 800 requests/s and then drops, to observe the response to sudden change.", "answers": ["spike testing", "spike"], "explanation": "The distinguishing feature is the abrupt load change."}, {"prompt": "2. Testers keep increasing demand beyond the known sustainable capacity to inspect overload failure and subsequent recovery.", "answers": ["stress testing", "stress"], "explanation": "The explicit purpose is behaviour beyond capacity, not merely an expected large workload."}], "topics": ["L32"], "id": "q8", "number": 6}, {"type": "essay", "marks": 5, "prompt": "A university operates a large media-processing platform. Upload validation, transcoding and catalogue browsing have different scaling demands. Separate experienced teams own the capabilities, need independent releases and can support distributed operations. Long-running transcoding should not block acceptance of valid uploads. The system must expose an accurate processing status to users.", "parts": [{"prompt": "1. Recommend an architectural approach and name the communication style suitable for the long-running work. (2 marks)", "marks": 2, "answer": "Services aligned with independently owned capabilities, with asynchronous queued/event-driven transcoding. A well-justified microservices approach fits independent release and scaling requirements.", "rubric": ["1: suitable independently deployable service approach.", "1: asynchronous queued/event-driven long-running processing."]}, {"prompt": "2. Give three scenario-specific reasons, including one limitation or cost the team must handle. (3 marks)", "marks": 3, "answer": "Separate transcoding capacity can scale without duplicating the whole platform. Service boundaries support the teams\u2019 independent release cadence. Asynchronous work requires pending/completed states, duplicate handling, monitoring and recovery rather than assuming immediate success.", "rubric": ["1: independent capacity linked to workload differences.", "1: independent release/ownership linked to teams.", "1: relevant async/distributed cost and its consequence; accept other well-supported trade-offs."]}], "topics": ["L20", "L23", "L28", "SOA", "MS"], "id": "q11", "number": 7}], "storageKey": "cos301-st2-example-2-v1", "notes": "Original practice paper based on the reference assessment style. Not an official paper or prediction. No official duration was available in the supplied export.", "multiRule": "Each correct selection earns the question marks divided by the number of correct options. Each incorrect selection deducts the same amount. Omitted options earn zero. Each question is floored at zero. This explicit practice rule is not asserted to be the original marking formula."}</script>
 <script>
 (function () {
  'use strict';
  const paper = JSON.parse(document.getElementById('mock-data').textContent);
- const hasObjective = paper.questions.some(q=>q.type!=='essay');
+ const autoMarks = q => q.type==='essay' ? q.parts.reduce((sum,p)=>sum+(p.checks||[]).reduce((n,c)=>n+c.marks,0),0) : q.marks;
+ const selfMax = p => p.marks-(p.checks||[]).reduce((n,c)=>n+c.marks,0);
+ const hasObjective = paper.questions.some(q=>autoMarks(q)>0);
  document.getElementById('mark-all').hidden = !hasObjective;
  const node = (tag, cls, text) => {const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  const normal = s => String(s ?? '').trim().toLowerCase().replace(/\s+/g,' ').replace(/\.$/,'');
@@ -738,14 +742,23 @@ body {
   if(!state[q.id]||typeof state[q.id]!=='object'||Array.isArray(state[q.id]))state[q.id]={};
   const s=state[q.id];
   for(const key of ['answers','drafts','selfMarks'])if(!Array.isArray(s[key]))s[key]=[];
+  if(!s.checkAnswers||typeof s.checkAnswers!=='object'||Array.isArray(s.checkAnswers))s.checkAnswers={};
   if(q.options&&['single','multi'].includes(q.type)){
    s.answers=[...new Set(s.answers.filter(x=>Number.isInteger(x)&&x>=0&&x<q.options.length))];
    if(q.type==='single')s.answers=s.answers.slice(0,1);
   }
   return s;
  }
+ function checkCorrect(check,value){
+  if(check.type!=='number')return (check.answers||[check.answer]).some(a=>normal(a)===normal(value));
+  const raw=String(value??'').trim();
+  if(!/^[+-]?(?:(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(raw))return false;
+  const parsed=Number(raw.replace(/,/g,''));
+  return Number.isFinite(parsed)&&Math.abs(parsed-check.answer)<=(check.tolerance||0)+Number.EPSILON*Math.max(1,Math.abs(check.answer))*4;
+ }
  function score(q){
   const s=current(q);
+  if(q.type==='essay')return q.parts.reduce((sum,p,i)=>sum+(p.checks||[]).reduce((n,c,j)=>n+(checkCorrect(c,s.checkAnswers[`${i}-${j}`])?c.marks:0),0),0);
   if(q.type==='single')return s.answers.length===1&&s.answers[0]===q.correct[0]?q.marks:0;
   if(q.type==='multi'){
    const hits=s.answers.filter(i=>q.correct.includes(i)).length;
@@ -754,12 +767,12 @@ body {
   return q.items.reduce((sum,item,i)=>sum+(q.type==='matching'?s.answers[i]===item.answer:item.answers.some(a=>normal(a)===normal(s.answers[i]))) * q.marks/q.items.length,0);
  }
  function updateScore(){
-  const objective=paper.questions.filter(q=>q.type!=='essay'),written=paper.questions.filter(q=>q.type==='essay');
-  const objectiveMax=objective.reduce((s,q)=>s+q.marks,0);const writtenMax=written.reduce((s,q)=>s+q.marks,0);
+  const objective=paper.questions.filter(q=>autoMarks(q)>0),written=paper.questions.filter(q=>q.type==='essay'&&q.parts.some(p=>selfMax(p)>0));
+  const objectiveMax=objective.reduce((s,q)=>s+autoMarks(q),0);const writtenMax=written.reduce((s,q)=>s+q.parts.reduce((n,p)=>n+selfMax(p),0),0);
   const graded=objective.filter(q=>current(q).marked===true);const obj=graded.reduce((s,q)=>s+score(q),0);
   let self=0, assessed=0,partCount=0;
-  written.forEach(q=>q.parts.forEach((p,i)=>{partCount++;const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=p.marks&&Number.isInteger(value*2)){self+=value;assessed++;}}));
-  const target=document.getElementById('paper-score');target.replaceChildren(node('div','',`Objective: ${fmt(obj)} / ${fmt(objectiveMax)} marks · ${graded.length} / ${objective.length} questions marked`));
+  written.forEach(q=>q.parts.forEach((p,i)=>{const max=selfMax(p);if(max<=0)return;partCount++;const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=max&&Number.isInteger(value*2)){self+=value;assessed++;}}));
+  const target=document.getElementById('paper-score');target.replaceChildren(node('div','',`Automatically marked: ${fmt(obj)} / ${fmt(objectiveMax)} marks · ${graded.length} / ${objective.length} questions marked`));
   if(!hasObjective)target.replaceChildren();
   if(written.length){target.append(node('div','',`Written answers (self-assessed): ${fmt(self)} / ${fmt(writtenMax)} marks · ${assessed} / ${partCount} parts assessed`),node('strong','',`Combined practice total: ${fmt(obj+self)} / ${paper.totalMarks}`),node('div','mock-note','Unmarked work contributes zero to this running total. Written-answer marks are your assessment, not an automated judgement.'));}
  }
@@ -771,14 +784,17 @@ body {
   if(q.type==='essay')q.parts.forEach((part,i)=>{
    memo.append(node('h3','',`Part ${i+1} · ${part.marks} marks`));addText(memo,part.answer);
    const list=node('ul');part.rubric.forEach(text=>list.append(node('li','',text)));memo.append(list);
-   const self=node('div','mock-self');const label=node('label','',`Your self-assessed mark for part ${i+1} (0–${part.marks})`);const input=node('input');Object.assign(input,{type:'number',min:'0',max:String(part.marks),step:'0.5',id:`${q.id}-mark-${i}`});label.htmlFor=input.id;
-   const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=part.marks&&Number.isInteger(value*2))input.value=String(value);
+   (part.checks||[]).forEach(check=>addText(memo,`${check.prompt}: ${check.answer} · ${fmt(check.marks)} marks. ${check.explanation}`));
+   const max=selfMax(part);if(max<=0)return;
+   const self=node('div','mock-self');const label=node('label','',`Your self-assessed reasoning/drawing mark for part ${i+1} (0–${max}; automatic marks are counted separately)`);const input=node('input');Object.assign(input,{type:'number',min:'0',max:String(max),step:'0.5',id:`${q.id}-mark-${i}`});label.htmlFor=input.id;
+   const value=current(q).selfMarks[i];if(typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=max&&Number.isInteger(value*2))input.value=String(value);
    const msg=node('p','mock-note');msg.setAttribute('role','status');
-   input.addEventListener('input',()=>{const valid=input.value!==''&&input.validity.valid&&Number.isFinite(input.valueAsNumber);current(q).selfMarks[i]=valid?input.valueAsNumber:null;input.setAttribute('aria-invalid',String(input.value!==''&&!valid));msg.textContent=input.value!==''&&!valid?`Enter 0 to ${part.marks} in half-mark steps. Invalid marks are not counted.`:'';save();updateScore();});
+   input.addEventListener('input',()=>{const valid=input.value!==''&&input.validity.valid&&Number.isFinite(input.valueAsNumber);current(q).selfMarks[i]=valid?input.valueAsNumber:null;input.setAttribute('aria-invalid',String(input.value!==''&&!valid));msg.textContent=input.value!==''&&!valid?`Enter 0 to ${max} in half-mark steps. Invalid marks are not counted.`:'';save();updateScore();});
    self.append(label,input,msg);memo.append(self);
   });
   else if(q.type==='single'||q.type==='multi'){
    addText(memo,`Correct option${q.correct.length>1?'s':''}: ${q.correct.map(i=>String.fromCharCode(65+i)).join(', ')}.`);q.correct.forEach(i=>addText(memo,`${String.fromCharCode(65+i)}. ${q.options[i]}`));addText(memo,q.explanation);
+   (q.optionExplanations||[]).forEach((text,i)=>addText(memo,`${String.fromCharCode(65+i)}. ${q.correct.includes(i)?'Correct':'Incorrect'}: ${text}`));
    if(q.type==='multi')addText(memo,`Scoring: +${fmt(q.marks/q.correct.length)} per correct selection, −${fmt(q.marks/q.correct.length)} per incorrect selection; minimum 0, maximum ${q.marks}.`);
   }else q.items.forEach((item,i)=>{memo.append(node('h3','',`${i+1}. ${q.type==='matching'?item.answer:item.answers.join(' / ')} · ${fmt(q.marks/q.items.length)} marks`));addText(memo,item.explanation);});
   card.append(memo);memoElements.push(memo);
@@ -793,7 +809,18 @@ body {
    const fieldset=node('fieldset');fieldset.append(node('legend','',q.type==='multi'?'Select all correct options':'Select one option'));
    q.options.forEach((text,i)=>{const label=node('label','mock-option');const input=node('input');input.type=q.type==='single'?'radio':'checkbox';input.name=q.id;input.checked=s.answers.includes(i);input.addEventListener('change',()=>{s.answers=q.type==='single'?[i]:input.checked?[...new Set([...s.answers,i])]:s.answers.filter(x=>x!==i);change(q);});label.append(input,node('span','',`${String.fromCharCode(65+i)}. ${text}`));fieldset.append(label);});card.append(fieldset);
   }else if(q.type==='essay'){
-   q.parts.forEach((part,i)=>{const block=node('div','mock-part'),label=node('label','',part.prompt),textarea=node('textarea');textarea.id=`${q.id}-draft-${i}`;label.htmlFor=textarea.id;textarea.value=typeof s.drafts[i]==='string'?s.drafts[i]:'';textarea.addEventListener('input',()=>{s.drafts[i]=textarea.value;save();wordViews.forEach(fn=>fn());});block.append(label,textarea,node('div','mock-print-space'));card.append(block);});
+   q.parts.forEach((part,i)=>{
+    const block=node('div','mock-part');block.append(node('p','',part.prompt));
+    (part.checks||[]).forEach((check,j)=>{
+     const row=node('div','mock-row'),label=node('label','',`${check.prompt} · ${fmt(check.marks)} automatic marks`);let input;
+     if(check.type==='select'){input=node('select');const blank=node('option','','Choose an answer');blank.value='';input.append(blank);check.options.forEach(text=>{const opt=node('option','',text);opt.value=text;input.append(opt);});}
+     else{input=node('input');input.type='text';input.autocomplete='off';if(check.type==='number')input.inputMode='decimal';}
+     const key=`${i}-${j}`;input.id=`${q.id}-check-${key}`;label.htmlFor=input.id;input.value=typeof s.checkAnswers[key]==='string'?s.checkAnswers[key]:'';
+     input.addEventListener(check.type==='select'?'change':'input',()=>{s.checkAnswers[key]=input.value;change(q);});
+     row.append(label,input);if(check.options)row.append(node('p','mock-print-bank',`Choices: ${check.options.join(' · ')}`));row.append(node('div','mock-print-space'));block.append(row);
+    });
+    const label=node('label','','Working / explanation (kept for review)'),textarea=node('textarea');textarea.id=`${q.id}-draft-${i}`;label.htmlFor=textarea.id;textarea.value=typeof s.drafts[i]==='string'?s.drafts[i]:'';textarea.addEventListener('input',()=>{s.drafts[i]=textarea.value;save();wordViews.forEach(fn=>fn());});block.append(label,textarea,node('div','mock-print-space'));card.append(block);
+   });
    const word=node('p','mock-word-count');const update=()=>{const count=s.drafts.join(' ').trim().split(/\s+/).filter(Boolean).length;word.textContent=`${count} words${q.wordLimit?` · suggested maximum ${q.wordLimit}; no automatic penalty`:''}`;word.classList.toggle('mock-invalid',Boolean(q.wordLimit&&count>q.wordLimit));};wordViews.push(update);update();card.append(word);
   }else{
    if(q.type==='matching'){
@@ -806,9 +833,14 @@ body {
     input.id=`${q.id}-answer-${i}`;label.htmlFor=input.id;input.value=typeof s.answers[i]==='string'?s.answers[i]:'';input.addEventListener(q.type==='matching'?'change':'input',()=>{s.answers[i]=input.value;change(q);});row.append(label,input,node('div','mock-print-space'));card.append(row);
    });
   }
-  if(q.type!=='essay'){
+  if(autoMarks(q)>0){
    const check=node('button','btn','Mark this question');check.type='button';check.addEventListener('click',()=>mark(q));const feedback=node('div','mock-result');feedback.setAttribute('role','status');
-   const update=()=>{feedback.hidden=s.marked!==true;feedback.textContent=s.marked===true?`${fmt(score(q))} / ${fmt(q.marks)} marks. Open the marking guide for the answer and reasoning. Changing a response clears this marking result.`:'';};markViews.set(q.id,update);update();card.append(check,feedback);
+   const update=()=>{
+    feedback.hidden=s.marked!==true;feedback.replaceChildren();if(s.marked!==true)return;
+    feedback.append(node('p','',`${fmt(score(q))} / ${fmt(autoMarks(q))} automatic marks. Changing an answer clears this marking result.`));
+    if(q.type==='essay')q.parts.forEach((p,i)=>(p.checks||[]).forEach((c,j)=>addText(feedback,`Part ${i+1} · ${c.prompt}: ${checkCorrect(c,s.checkAnswers[`${i}-${j}`])?'Correct':'Incorrect or unanswered'}. Answer: ${c.answer}. ${c.explanation}`)));
+    else addText(feedback,'Open the marking guide for every answer and explanation.');
+   };markViews.set(q.id,update);update();card.append(check,feedback);
   }
   addMemo(card,q);document.getElementById('paper-questions').append(card);
   const jump=node('a','',`Q${q.number} · ${fmt(q.marks)}`);jump.href='#'+q.id;document.getElementById('question-links').append(jump);
@@ -819,10 +851,11 @@ body {
  addText(instructions,`Style reference: ${paper.reference}. The questions and diagrams in this paper are newly authored. Saved responses in the reference export were not treated as an authoritative memorandum.`);
  addText(instructions,paper.multiRule);
  if(hasObjective)addText(instructions,'Matching rows and short-answer subparts share their question’s marks equally. Short answers ignore case, extra spaces and a final full stop; accepted alternatives are shown in the marking guide. Equivalent written reasoning may earn credit under the rubric. Use the rubric to review a defensible alternative the exact-match marker does not recognise.');
- addText(instructions,'Written responses are not automatically graded. Enter optional self-assessed marks after consulting the model answer. Any word maximum is practice guidance, not an automatically applied penalty. Blank printing omits your saved answers and all marking guides. Marking-guide printing includes the paper and model answers, without your private drafts.');
+ addText(instructions,'Fixed-answer calculation fields are automatically marked where supplied. Enter numbers in the units shown, without unit suffixes; properly grouped thousands commas are accepted. Rounding instructions and tolerances are stated in the paper. Automatic marks assess entered results, not the method in your working. Open-ended reasoning and drawings use separate self-assessed marks and are not automatically judged. Any word maximum is practice guidance. Blank printing omits saved answers and marking guides; marking-guide printing includes answers without private drafts.');
  addText(instructions,'Some topic guides are general coverage because lecture notes were unavailable. CT4 is limited to L28–L33 plus L35 revision. ST2 samples L17–L33 and L35, including existing SOA and Microservices material.');
  paper.questions.forEach(renderQuestion);updateScore();status.textContent='Drafts, selections and self-assessment save locally for this paper.';
- document.getElementById('mark-all').addEventListener('click',()=>{paper.questions.filter(q=>q.type!=='essay').forEach(q=>{current(q).marked=true;markViews.get(q.id)();});save();updateScore();});
+ document.getElementById('mark-all').textContent='Auto-mark answers';
+ document.getElementById('mark-all').addEventListener('click',()=>{paper.questions.filter(q=>autoMarks(q)>0).forEach(q=>{current(q).marked=true;markViews.get(q.id)();});save();updateScore();});
  document.getElementById('show-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=true));
  document.getElementById('hide-memos').addEventListener('click',()=>memoElements.forEach(m=>m.open=false));
  document.getElementById('reset-paper').addEventListener('click',()=>{if(window.confirm('Clear only this paper’s answers, drafts and self-assessed marks?')){state={};save();location.reload();}});

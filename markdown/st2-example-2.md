@@ -6,7 +6,7 @@ Original practice paper based on the reference assessment style. Not an official
 
 Each correct selection earns the question marks divided by the number of correct options. Each incorrect selection deducts the same amount. Omitted options earn zero. Each question is floored at zero. This explicit practice rule is not asserted to be the original marking formula.
 
-Written answers are self-assessed using the rubric. Suggested word limits carry no automatic penalty.
+Fixed result fields are automatically marked where provided. Drawings and open-ended reasoning use separate self-assessed rubric marks. Working is retained for review, not automatically judged. Suggested word limits carry no automatic penalty.
 
 [Interactive and printable paper](../st2-example-2.html)
 
@@ -18,11 +18,15 @@ An exhibition platform manages Exhibitions, Bookings and Visitors. Each booking 
 
 1. Identify six plausible domain concepts, including at least one value object. (3 marks)
 
+
 2. For any four concepts, give two suitable attributes each. (2 marks)
+
 
 3. Explain two associations and distinguish Visitor identity from Money equality. (3 marks)
 
+
 4. State two multiplicities and express the active-capacity constraint separately. (2 marks)
+
 
 ### Question 2 — 4 marks
 
@@ -41,9 +45,12 @@ For each scenario, choose the most suitable primary mechanism from cross-domain 
 
 1. A mistaken deletion has already propagated to all live database replicas; valid records from before the deletion are needed. (2 marks)
 
+
 2. A payment message is delivered again after the worker recorded success but lost its queue acknowledgement. (2 marks)
 
+
 3. A user with a valid session can read records belonging to another tenant. (2 marks)
+
 
 ### Question 4 — 4 marks
 
@@ -83,7 +90,9 @@ A university operates a large media-processing platform. Upload validation, tran
 
 1. Recommend an architectural approach and name the communication style suitable for the long-running work. (2 marks)
 
+
 2. Give three scenario-specific reasons, including one limitation or cost the team must handle. (3 marks)
+
 
 ---
 
@@ -95,19 +104,23 @@ Part 1 (3 marks): Exhibition, Booking, Visitor, Curator, Money and Address are p
 
 - 0.5 each: six grounded concepts, with at least one defensible value object.
 
+
 Part 2 (2 marks): Exhibition: exhibitionId, capacity. Booking: bookingId, status. Visitor: visitorId, name. Money: amount, currency.
 
 - 0.5 per concept with two suitable attributes, for four concepts.
+
 
 Part 3 (3 marks): Each Booking refers to one Visitor and one Exhibition; each may have many historical Bookings. Visitor identity persists after its address changes. Two Money values are equal by amount and currency under the chosen representation.
 
 - 1 each: two correct associations.
 - 1: identity versus value distinction using the scenario.
 
+
 Part 4 (2 marks): Visitor 1 to Booking 0..*; Exhibition 1 to Booking 0..* over history. Active bookings for an exhibition must not exceed its capacity; a fixed history multiplicity is not a substitute for that invariant.
 
 - 1: both multiplicities correct.
 - 1: active capacity expressed as a business invariant rather than an incorrect fixed history count.
+
 
 ### Question 2 — 4 marks
 
@@ -123,15 +136,18 @@ Part 1 (2 marks): Historical backup/restore: an earlier recoverable state is nee
 - 1: historical backup/restore or point-in-time recovery.
 - 1: explains why current replicas do not preserve the required history.
 
+
 Part 2 (2 marks): Idempotent processing: stable operation identity and duplicate handling prevent repetition of the completed business effect.
 
 - 1: idempotent processing.
 - 1: links repeated delivery/uncertain acknowledgement to one intended effect.
 
+
 Part 3 (2 marks): None of the above: the primary missing control is server-side object/tenant authorisation.
 
 - 1: none of the above.
 - 1: explains the resource-scope access rule rather than availability or duplicate handling.
+
 
 ### Question 4 — 4 marks
 
@@ -146,6 +162,7 @@ Correct: A, C, E, F, H.
 
 These distinctions separate defects from observations, process assurance from testing, and useful metrics from overclaims. Strict thresholds, real integration and assertion quality need explicit attention. Security exercises still need agreed authorisation and scope.
 
+
 ### Question 6 — 2 marks
 
 1. **spike testing / spike** — The distinguishing feature is the abrupt load change.
@@ -158,9 +175,11 @@ Part 1 (2 marks): Services aligned with independently owned capabilities, with a
 - 1: suitable independently deployable service approach.
 - 1: asynchronous queued/event-driven long-running processing.
 
+
 Part 2 (3 marks): Separate transcoding capacity can scale without duplicating the whole platform. Service boundaries support the teams’ independent release cadence. Asynchronous work requires pending/completed states, duplicate handling, monitoring and recovery rather than assuming immediate success.
 
 - 1: independent capacity linked to workload differences.
 - 1: independent release/ownership linked to teams.
 - 1: relevant async/distributed cost and its consequence; accept other well-supported trade-offs.
+
 

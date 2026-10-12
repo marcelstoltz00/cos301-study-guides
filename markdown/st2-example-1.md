@@ -6,7 +6,7 @@ Original practice paper based on the reference assessment style. Not an official
 
 Each correct selection earns the question marks divided by the number of correct options. Each incorrect selection deducts the same amount. Omitted options earn zero. Each question is floored at zero. This explicit practice rule is not asserted to be the original marking formula.
 
-Written answers are self-assessed using the rubric. Suggested word limits carry no automatic penalty.
+Fixed result fields are automatically marked where provided. Drawings and open-ended reasoning use separate self-assessed rubric marks. Working is retained for review, not automatically judged. Suggested word limits carry no automatic penalty.
 
 [Interactive and printable paper](../st2-example-1.html)
 
@@ -18,9 +18,12 @@ Scenario: You are the architect for CampusCart, a university marketplace. Studen
 
 1. Identify the quality concern addressed by the latency/error requirement, and name two measurement conditions that must be recorded. (3 marks)
 
+
 2. State one authentication rule and one object-authorisation rule for order access; explain why one does not replace the other. (4 marks)
 
+
 3. Propose three verification activities, each linked to a different requirement in the scenario. (3 marks)
+
 
 ### Question 2 — 10 marks
 
@@ -28,11 +31,15 @@ A library lends equipment kits. Each kit has a persistent asset number and can b
 
 1. Identify six plausible domain classes. (3 marks)
 
+
 2. For any four classes, give two suitable attributes each. (2 marks)
+
 
 3. Describe three associations and their business meaning. (3 marks)
 
+
 4. State multiplicities for two associations and distinguish historical loans from the active-loan constraint. (2 marks)
+
 
 ### Question 3 — 4 marks
 
@@ -51,9 +58,12 @@ For each scenario, choose the most suitable test type from load, stress, soak, o
 
 1. A portal is exercised for 30 minutes at its documented expected peak of 200 requests/s to check its latency and error targets. (2 marks)
 
+
 2. A service is run continuously at a stable, ordinary workload for 12 hours because memory use appears to accumulate slowly. (2 marks)
 
+
 3. The team sends another student’s record ID using a valid student session to determine whether the server blocks unauthorised access. (2 marks)
+
 
 ### Question 5 — 4 marks
 
@@ -105,7 +115,9 @@ A four-person team is building a departmental booking application with moderate,
 
 1. Recommend the most suitable architectural starting point and state its defining property. (2 marks)
 
+
 2. Give three reasons tied to this scenario. (3 marks)
+
 
 ---
 
@@ -118,15 +130,18 @@ Part 1 (3 marks): Performance efficiency/capacity under a stated workload. Recor
 - 1: relevant performance quality concern.
 - 1 each: two distinct measurement conditions relevant to interpreting the result.
 
+
 Part 2 (4 marks): Verify a caller’s session or credentials before protected access. Then check whether that caller owns the requested order or has the applicable staff permission. Authentication establishes identity; the object rule limits that identity’s actions and resource scope.
 
 - 1: verified identity rule.
 - 1: resource/role-scoped authorisation rule.
 - 2: explains the separate purpose of each with the scenario.
 
+
 Part 3 (3 marks): Run the defined peak workload and compare latency/errors; send direct order requests as owner and non-owner; interrupt a payment worker and verify pending orders later complete without duplicate payment effects.
 
 - 1 each: three relevant activities linked to performance, access scope and outage/retry behaviour.
+
 
 ### Question 2 — 10 marks
 
@@ -134,18 +149,22 @@ Part 1 (3 marks): Borrower, Kit, Loan, Accessory, StaffMember and Inspection are
 
 - 0.5 each: six plausible domain concepts, not UI widgets or database infrastructure.
 
+
 Part 2 (2 marks): Kit: assetNumber, condition. Loan: checkoutDate, dueDate. Borrower: borrowerId, name. Inspection: inspectedAt, findings.
 
 - 0.5 per class with two suitable attributes, for four classes.
+
 
 Part 3 (3 marks): A Borrower participates in Loans; a Loan records use of one Kit; an Inspection is performed by a StaffMember. A Kit–Accessory association can also be described as a grouping of replaceable items, without claiming mandatory shared lifetime.
 
 - 1 each: three meaningful associations explained in the domain.
 
+
 Part 4 (2 marks): Borrower 1 to Loan 0..*, with each loan belonging to exactly one borrower. Kit 1 to Loan 0..* over history, with an additional invariant of at most one active loan per kit.
 
 - 1: a correct first multiplicity in both directions.
 - 1: correct Kit–Loan history multiplicity plus the separate active-loan constraint.
+
 
 ### Question 3 — 4 marks
 
@@ -161,15 +180,18 @@ Part 1 (2 marks): Load testing: the demand represents a defined expected operati
 - 1: load.
 - 1: expected/peak workload tied to acceptance targets.
 
+
 Part 2 (2 marks): Soak testing: sustained operation is intended to expose time-dependent leakage or degradation.
 
 - 1: soak/endurance.
 - 1: duration and accumulation mechanism.
 
+
 Part 3 (2 marks): None of the above: this is a targeted security/object-authorisation test, not a workload-shape test.
 
 - 1: none of the above.
 - 1: explains permission enforcement as the property under test.
+
 
 ### Question 5 — 4 marks
 
@@ -183,6 +205,7 @@ Part 3 (2 marks): None of the above: this is a targeted security/object-authoris
 Correct: A, C, E, F, G.
 
 Contracts, implemented design decisions, explicit topology, honest presentation scope and maintained workflows supply bounded evidence. Schemas do not prove permissions, coverage does not prove meaningful assertions, and automated scanning does not reproduce the scope of an authorised adversary exercise.
+
 
 ### Question 7 — 2 marks
 
@@ -204,7 +227,9 @@ Part 1 (2 marks): A modular monolith: one deployable application with intentiona
 - 1: modular monolith or equivalently justified single-deployment modular design.
 - 1: clear internal boundaries within one deployment.
 
+
 Part 2 (3 marks): It fits the shared release cadence; avoids unnecessary network/partial-failure and operational overhead for a small team; preserves internal separation and testability without requiring independent deployments.
 
 - 1 each: three distinct scenario-linked reasons. Accept defensible alternatives only when their additional costs are addressed.
+
 
